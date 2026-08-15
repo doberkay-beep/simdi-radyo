@@ -1,0 +1,41 @@
+[
+  {
+    "slug": "fip",
+    "name": "FIP",
+    "city": null,
+    "frequency": null,
+    "stream_url": "http://direct.fipradio.fr/live/fip-midfi.mp3",
+    "homepage": "https://www.fip.fr",
+    "accent_color": "#e5124b",
+    "band": "int",
+    "metadata_quality": "good",
+    "is_active": true,
+    "sort_order": 200
+  },
+  {
+    "slug": "kexp",
+    "name": "KEXP 90.3 FM",
+    "city": "Seattle",
+    "frequency": "90.3",
+    "stream_url": "https://kexp-mp3-128.streamguys1.com/kexp128.mp3",
+    "homepage": "https://www.kexp.org",
+    "accent_color": "#f5a300",
+    "band": "int",
+    "metadata_quality": "good",
+    "is_active": true,
+    "sort_order": 210
+  },
+  {
+    "slug": "worldwide-fm",
+    "name": "Worldwide FM",
+    "city": "Londra",
+    "frequency": null,
+    "stream_url": "https://worldwidefm.out.airtime.pro/worldwidefm_a",
+    "homepage": "https://worldwidefm.net",
+    "accent_color": "#111111",
+    "band": "int",
+    "metadata_quality": "good",
+    "is_active": true,
+    "sort_order": 220
+  }
+]

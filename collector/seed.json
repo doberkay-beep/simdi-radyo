@@ -13,17 +13,17 @@
     "sort_order": 100
   },
   {
-    "slug": "fip",
-    "name": "FIP",
-    "city": null,
+    "slug": "somafm-indie-pop",
+    "name": "SomaFM Indie Pop",
+    "city": "San Francisco",
     "frequency": null,
-    "stream_url": "https://icecast.radiofrance.fr/fip-midfi.mp3",
-    "homepage": "https://www.fip.fr",
-    "accent_color": "#e5124b",
+    "stream_url": "https://ice1.somafm.com/indiepop-128-mp3",
+    "homepage": "https://somafm.com/indiepop/",
+    "accent_color": "#c65b7c",
     "band": "int",
     "metadata_quality": "good",
     "is_active": true,
-    "sort_order": 200
+    "sort_order": 110
   },
   {
     "slug": "kexp",
@@ -37,18 +37,5 @@
     "metadata_quality": "good",
     "is_active": true,
     "sort_order": 210
-  },
-  {
-    "slug": "worldwide-fm",
-    "name": "Worldwide FM",
-    "city": "Londra",
-    "frequency": null,
-    "stream_url": "https://worldwidefm.out.airtime.pro/worldwidefm_a",
-    "homepage": "https://worldwidefm.net",
-    "accent_color": "#111111",
-    "band": "int",
-    "metadata_quality": "good",
-    "is_active": true,
-    "sort_order": 220
   }
 ]

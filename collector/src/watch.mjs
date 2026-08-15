@@ -25,7 +25,8 @@ async function tur(stations) {
         const p = parseTitle(res.title);
         satir = p.artist === p.title ? p.title : `${p.artist} — ${p.title}`;
       } else {
-        satir = "(bilgi yok)";
+        // Teşhis için nedeni de göster (none: metaint yok, dead: http-404, vb.)
+        satir = `(bilgi yok — ${res.status}${res.reason ? ": " + res.reason : ""})`;
       }
     } catch {
       satir = "(bağlanılamadı)";

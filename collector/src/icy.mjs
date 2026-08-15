@@ -17,7 +17,8 @@ export function parseStreamTitle(metaBuf) {
 }
 
 // Tek akışı yoklar. Döner: { status: 'ok'|'none'|'dead', title?, reason? }
-export function probeIcy(streamUrl, { timeout = 8000 } = {}) {
+// redirects: 301/302/... yönlendirmelerini kaç kez takip edeceği.
+export function probeIcy(streamUrl, { timeout = 8000, redirects = 3 } = {}) {
   return new Promise((resolve) => {
     let settled = false;
     let socket;
@@ -31,6 +32,24 @@ export function probeIcy(streamUrl, { timeout = 8000 } = {}) {
         // kapanıyoruz zaten
       }
       resolve(result);
+    };
+
+    // Yönlendirmeyi takip et: mevcut soketi kapat, hedef adresi yeniden yokla.
+    const followRedirect = (location) => {
+      if (settled) return;
+      settled = true;
+      try {
+        if (socket) socket.destroy();
+      } catch {
+        // kapanıyoruz zaten
+      }
+      let next;
+      try {
+        next = new URL(location, streamUrl).toString();
+      } catch {
+        return resolve({ status: "dead", reason: "gecersiz-yonlendirme" });
+      }
+      probeIcy(next, { timeout, redirects: redirects - 1 }).then(resolve);
     };
 
     let u;
@@ -93,6 +112,20 @@ export function probeIcy(streamUrl, { timeout = 8000 } = {}) {
           headers[lines[i].slice(0, c).trim().toLowerCase()] = lines[i].slice(c + 1).trim();
         }
         headersParsed = true;
+
+        // Durum kodu ("HTTP/1.0 200 OK" ya da "ICY 200 OK").
+        const codeMatch = (lines[0] || "").match(/\b(\d{3})\b/);
+        const code = codeMatch ? Number(codeMatch[1]) : 0;
+
+        // Yönlendirme → takip et.
+        if ([301, 302, 303, 307, 308].includes(code) && headers["location"] && redirects > 0) {
+          return followRedirect(headers["location"]);
+        }
+        // 2xx dışı ve yönlendirme değilse: erişilemedi.
+        if (code && (code < 200 || code >= 300)) {
+          return finish({ status: "dead", reason: `http-${code}` });
+        }
+
         const metaHeader = headers["icy-metaint"];
         if (!metaHeader) return finish({ status: "none", reason: "metaint-yok" });
         metaint = parseInt(metaHeader, 10);

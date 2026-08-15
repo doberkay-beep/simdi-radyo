@@ -1,10 +1,23 @@
 [
   {
+    "slug": "somafm-groove-salad",
+    "name": "SomaFM Groove Salad",
+    "city": "San Francisco",
+    "frequency": null,
+    "stream_url": "https://ice1.somafm.com/groovesalad-128-mp3",
+    "homepage": "https://somafm.com/groovesalad/",
+    "accent_color": "#5b8c5a",
+    "band": "int",
+    "metadata_quality": "good",
+    "is_active": true,
+    "sort_order": 100
+  },
+  {
     "slug": "fip",
     "name": "FIP",
     "city": null,
     "frequency": null,
-    "stream_url": "http://direct.fipradio.fr/live/fip-midfi.mp3",
+    "stream_url": "https://icecast.radiofrance.fr/fip-midfi.mp3",
     "homepage": "https://www.fip.fr",
     "accent_color": "#e5124b",
     "band": "int",

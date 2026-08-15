@@ -1,0 +1,28 @@
+[
+  {
+    "slug": "acik-radyo",
+    "name": "Açık Radyo",
+    "city": "İstanbul",
+    "frequency": "95.0",
+    "stream_url": "http://.../stream",
+    "homepage": "https://acikradyo.com.tr",
+    "accent_color": "#e63946",
+    "band": "tr",
+    "metadata_quality": "good",
+    "is_active": true,
+    "sort_order": 10
+  },
+  {
+    "slug": "fip",
+    "name": "FIP",
+    "city": null,
+    "frequency": null,
+    "stream_url": "http://direct.fipradio.fr/live/fip-midfi.mp3",
+    "homepage": "https://www.fip.fr",
+    "accent_color": "#c1121f",
+    "band": "int",
+    "metadata_quality": "good",
+    "is_active": true,
+    "sort_order": 200
+  }
+]

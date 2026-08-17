@@ -4,6 +4,7 @@
 //
 // Çalıştır: npm run seed   (yani node --env-file=.env.local src/seed.mjs)
 
+import "./env.mjs"; // .env.local'i (varsa) supabase.mjs'den ÖNCE yükle
 import { readFile } from "node:fs/promises";
 import { fileURLToPath } from "node:url";
 import { dirname, join } from "node:path";

@@ -5,6 +5,7 @@
 // yazmaz — plays'e yalnızca başlık gerçekten değişince yeni satır eklenir.
 // Bu kural arşivin temizliğini belirler.
 
+import "./env.mjs"; // .env.local'i (varsa) supabase.mjs'den ÖNCE yükle
 import { probeIcy } from "./icy.mjs";
 import { parseTitle } from "./parse.mjs";
 import {

@@ -5,12 +5,12 @@
   "type": "module",
   "description": "ŞİMDİ toplayıcı worker — radyoların çalan parçasını arşive yazar",
   "scripts": {
-    "start": "node --env-file=.env.local src/worker.mjs",
-    "seed": "node --env-file=.env.local src/seed.mjs",
+    "start": "node src/worker.mjs",
+    "seed": "node src/seed.mjs",
     "test": "node src/parse.test.mjs"
   },
   "engines": {
-    "node": ">=20.6"
+    "node": ">=20.12"
   },
   "dependencies": {
     "@supabase/supabase-js": "^2.45.0"

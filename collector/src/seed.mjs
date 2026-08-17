@@ -15,7 +15,7 @@ const seedPath = join(here, "..", "seed.json");
 
 const ALLOWED = new Set([
   "slug", "name", "city", "frequency", "stream_url", "homepage",
-  "accent_color", "band", "metadata_quality", "is_active", "sort_order",
+  "accent_color", "band", "genre", "metadata_quality", "is_active", "sort_order",
 ]);
 
 function validate(list) {

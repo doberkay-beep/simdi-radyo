@@ -10,7 +10,8 @@
     "band": "tr",
     "metadata_quality": "good",
     "is_active": true,
-    "sort_order": 10
+    "sort_order": 10,
+    "genre": "arabesk"
   },
   {
     "slug": "virgin-radio",
@@ -23,7 +24,8 @@
     "band": "tr",
     "metadata_quality": "good",
     "is_active": true,
-    "sort_order": 20
+    "sort_order": 20,
+    "genre": "pop"
   },
   {
     "slug": "damar-turk-fm",
@@ -36,7 +38,8 @@
     "band": "tr",
     "metadata_quality": "good",
     "is_active": true,
-    "sort_order": 30
+    "sort_order": 30,
+    "genre": "arabesk"
   },
   {
     "slug": "radyo-7",
@@ -49,7 +52,8 @@
     "band": "tr",
     "metadata_quality": "good",
     "is_active": true,
-    "sort_order": 40
+    "sort_order": 40,
+    "genre": "türkçe pop"
   },
   {
     "slug": "turkulerle-turkiye",
@@ -62,7 +66,8 @@
     "band": "tr",
     "metadata_quality": "good",
     "is_active": true,
-    "sort_order": 50
+    "sort_order": 50,
+    "genre": "türkü"
   },
   {
     "slug": "radyo-siran",
@@ -75,7 +80,8 @@
     "band": "tr",
     "metadata_quality": "good",
     "is_active": true,
-    "sort_order": 60
+    "sort_order": 60,
+    "genre": "türkü"
   },
   {
     "slug": "metro-fm",
@@ -88,7 +94,8 @@
     "band": "tr",
     "metadata_quality": "good",
     "is_active": true,
-    "sort_order": 70
+    "sort_order": 70,
+    "genre": "pop"
   },
   {
     "slug": "ankara-havalari",
@@ -101,7 +108,8 @@
     "band": "tr",
     "metadata_quality": "good",
     "is_active": true,
-    "sort_order": 80
+    "sort_order": 80,
+    "genre": "türkü"
   },
   {
     "slug": "altin-sarkilar",
@@ -114,7 +122,8 @@
     "band": "tr",
     "metadata_quality": "good",
     "is_active": true,
-    "sort_order": 90
+    "sort_order": 90,
+    "genre": "nostalji"
   },
   {
     "slug": "dinamo-sleep",
@@ -127,7 +136,8 @@
     "band": "tr",
     "metadata_quality": "good",
     "is_active": true,
-    "sort_order": 100
+    "sort_order": 100,
+    "genre": "elektronik"
   },
   {
     "slug": "super-fm",
@@ -140,7 +150,8 @@
     "band": "tr",
     "metadata_quality": "good",
     "is_active": true,
-    "sort_order": 110
+    "sort_order": 110,
+    "genre": "pop"
   },
   {
     "slug": "90lar",
@@ -153,7 +164,8 @@
     "band": "tr",
     "metadata_quality": "good",
     "is_active": true,
-    "sort_order": 120
+    "sort_order": 120,
+    "genre": "nostalji"
   },
   {
     "slug": "pal-station",
@@ -166,7 +178,8 @@
     "band": "tr",
     "metadata_quality": "good",
     "is_active": true,
-    "sort_order": 130
+    "sort_order": 130,
+    "genre": "elektronik"
   },
   {
     "slug": "pop-90",
@@ -179,7 +192,8 @@
     "band": "tr",
     "metadata_quality": "good",
     "is_active": true,
-    "sort_order": 140
+    "sort_order": 140,
+    "genre": "nostalji"
   },
   {
     "slug": "dinamo-deep",
@@ -192,7 +206,8 @@
     "band": "tr",
     "metadata_quality": "good",
     "is_active": true,
-    "sort_order": 150
+    "sort_order": 150,
+    "genre": "elektronik"
   },
   {
     "slug": "joy-fm",
@@ -205,7 +220,8 @@
     "band": "tr",
     "metadata_quality": "good",
     "is_active": true,
-    "sort_order": 160
+    "sort_order": 160,
+    "genre": "pop"
   },
   {
     "slug": "alem-fm",
@@ -218,7 +234,8 @@
     "band": "tr",
     "metadata_quality": "good",
     "is_active": true,
-    "sort_order": 180
+    "sort_order": 180,
+    "genre": "türkçe pop"
   },
   {
     "slug": "dost-radyo",
@@ -231,7 +248,8 @@
     "band": "tr",
     "metadata_quality": "good",
     "is_active": true,
-    "sort_order": 190
+    "sort_order": 190,
+    "genre": "türkü"
   },
   {
     "slug": "dinamo-caffe",
@@ -244,7 +262,8 @@
     "band": "tr",
     "metadata_quality": "good",
     "is_active": true,
-    "sort_order": 200
+    "sort_order": 200,
+    "genre": "elektronik"
   },
   {
     "slug": "dinamo-discotheque",
@@ -257,7 +276,8 @@
     "band": "tr",
     "metadata_quality": "good",
     "is_active": true,
-    "sort_order": 220
+    "sort_order": 220,
+    "genre": "elektronik"
   },
   {
     "slug": "somafm-groove-salad",
@@ -270,7 +290,8 @@
     "band": "int",
     "metadata_quality": "good",
     "is_active": true,
-    "sort_order": 300
+    "sort_order": 300,
+    "genre": "elektronik"
   },
   {
     "slug": "somafm-indie-pop",
@@ -283,7 +304,8 @@
     "band": "int",
     "metadata_quality": "good",
     "is_active": true,
-    "sort_order": 310
+    "sort_order": 310,
+    "genre": "alternatif"
   },
   {
     "slug": "radio-paradise",
@@ -296,7 +318,8 @@
     "band": "int",
     "metadata_quality": "good",
     "is_active": true,
-    "sort_order": 320
+    "sort_order": 320,
+    "genre": "pop"
   },
   {
     "slug": "radio-paradise-rock",
@@ -309,7 +332,8 @@
     "band": "int",
     "metadata_quality": "good",
     "is_active": true,
-    "sort_order": 330
+    "sort_order": 330,
+    "genre": "rock"
   },
   {
     "slug": "tsf-jazz",
@@ -322,7 +346,8 @@
     "band": "int",
     "metadata_quality": "good",
     "is_active": true,
-    "sort_order": 340
+    "sort_order": 340,
+    "genre": "caz"
   },
   {
     "slug": "radio-swiss-classic",
@@ -335,7 +360,8 @@
     "band": "int",
     "metadata_quality": "good",
     "is_active": true,
-    "sort_order": 350
+    "sort_order": 350,
+    "genre": "klasik"
   },
   {
     "slug": "somafm-secret-agent",
@@ -348,7 +374,8 @@
     "band": "int",
     "metadata_quality": "good",
     "is_active": true,
-    "sort_order": 360
+    "sort_order": 360,
+    "genre": "caz"
   },
   {
     "slug": "somafm-metal",
@@ -361,6 +388,7 @@
     "band": "int",
     "metadata_quality": "good",
     "is_active": true,
-    "sort_order": 370
+    "sort_order": 370,
+    "genre": "rock"
   }
 ]

@@ -17,6 +17,7 @@ type Station = {
   frequency: string | null;
   accentColor: string | null;
   band: "tr" | "int" | "own";
+  genre: string | null;
   nowPlaying: NowPlaying;
 };
 
@@ -48,6 +49,7 @@ export default function NowList() {
   const [playing, setPlaying] = useState<string | null>(null);
   const [status, setStatus] = useState<"idle" | "loading" | "error">("loading");
   const [now, setNow] = useState(0); // göreli zaman için; ilk render'da 0
+  const [genre, setGenre] = useState<string | null>(null); // seçili tür filtresi
   const audioRef = useRef<HTMLAudioElement | null>(null);
 
   async function load() {
@@ -77,6 +79,21 @@ export default function NowList() {
     [stations, playing],
   );
   const accent = current?.accentColor || DEFAULT_ACCENT;
+
+  // Türleri say, çoktan aza sırala (filtre çipleri için).
+  const genres = useMemo(() => {
+    const counts = new Map<string, number>();
+    for (const s of stations) {
+      if (s.genre) counts.set(s.genre, (counts.get(s.genre) ?? 0) + 1);
+    }
+    return [...counts.entries()].sort((a, b) => b[1] - a[1]).map(([g]) => g);
+  }, [stations]);
+
+  // Seçili türe göre süz.
+  const shown = useMemo(
+    () => (genre ? stations.filter((s) => s.genre === genre) : stations),
+    [stations, genre],
+  );
 
   function toggle(s: Station) {
     const audio = audioRef.current;
@@ -116,6 +133,29 @@ export default function NowList() {
           </div>
         </header>
 
+        {/* Tür filtresi çipleri */}
+        {genres.length > 0 && (
+          <div className="mb-6 flex flex-wrap gap-2">
+            {[null, ...genres].map((g) => {
+              const active = genre === g;
+              return (
+                <button
+                  key={g ?? "all"}
+                  onClick={() => setGenre(g)}
+                  className="rounded-full border px-3 py-1 text-xs transition-colors"
+                  style={{
+                    borderColor: active ? "var(--fg)" : "var(--line)",
+                    background: active ? "var(--fg)" : "transparent",
+                    color: active ? "var(--bg)" : "var(--muted)",
+                  }}
+                >
+                  {g ?? "tümü"}
+                </button>
+              );
+            })}
+          </div>
+        )}
+
         {status === "loading" && (
           <p style={{ color: "var(--muted)" }}>Yükleniyor…</p>
         )}
@@ -126,7 +166,7 @@ export default function NowList() {
         )}
 
         <ul className="flex flex-col">
-          {stations.map((s) => {
+          {shown.map((s) => {
             const np = s.nowPlaying;
             const isPlaying = playing === s.slug;
             const c = s.accentColor || DEFAULT_ACCENT;

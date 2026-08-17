@@ -10,7 +10,7 @@
     "test": "node src/parse.test.mjs"
   },
   "engines": {
-    "node": ">=20.12"
+    "node": ">=22"
   },
   "dependencies": {
     "@supabase/supabase-js": "^2.45.0"

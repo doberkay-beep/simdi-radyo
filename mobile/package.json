@@ -9,11 +9,11 @@
     "ios": "expo start --ios"
   },
   "dependencies": {
-    "expo": "~57.0.14",
-    "expo-audio": "~57.0.3",
-    "expo-status-bar": "~57.0.1",
+    "expo": "~56.0.20",
+    "expo-audio": "~56.0.13",
+    "expo-status-bar": "~56.0.4",
     "react": "19.2.3",
-    "react-native": "0.86.2"
+    "react-native": "0.85.3"
   },
   "devDependencies": {
     "@types/react": "~19.2.2",

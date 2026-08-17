@@ -23,10 +23,12 @@ export function probeIcy(
   return new Promise((resolve) => {
     let settled = false;
     let socket: net.Socket | tls.TLSSocket | undefined;
+    let deadline: ReturnType<typeof setTimeout>;
 
     const finish = (result: IcyResult) => {
       if (settled) return;
       settled = true;
+      clearTimeout(deadline);
       try {
         socket?.destroy();
       } catch {
@@ -34,6 +36,9 @@ export function probeIcy(
       }
       resolve(result);
     };
+
+    // Mutlak süre sınırı — sürekli ses akıtıp metadata vermeyen istasyonlar asmasın.
+    deadline = setTimeout(() => finish({ status: "dead", reason: "sure-doldu" }), timeout);
 
     let u: URL;
     try {

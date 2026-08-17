@@ -32,8 +32,8 @@ const GENRES = {
 };
 
 const PER_TAG = 6; // her etiket için en çok kaç istasyon
-const BATCH = 8; // aynı anda kaç yoklama (daha hızlı)
-const TIMEOUT = 5000; // ölü istasyonda daha az bekle
+const BATCH = 12; // aynı anda kaç yoklama (daha hızlı)
+const TIMEOUT = 5000; // her istasyon en çok bu kadar (mutlak sınır)
 const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
 
 async function resolveServers() {
@@ -158,6 +158,7 @@ async function main() {
   }
   console.log(`\nRapor → ${out}`);
   console.log("İyi (good) olanları seçip bana ver, seed.json'a türleriyle ekleyeyim.");
+  process.exit(0); // artık soket kalsa da temiz çık
 }
 
 function s_name(s) {

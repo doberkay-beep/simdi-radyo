@@ -22,10 +22,12 @@ export function probeIcy(streamUrl, { timeout = 8000, redirects = 3 } = {}) {
   return new Promise((resolve) => {
     let settled = false;
     let socket;
+    let deadline;
 
     const finish = (result) => {
       if (settled) return;
       settled = true;
+      clearTimeout(deadline);
       try {
         if (socket) socket.destroy();
       } catch {
@@ -33,6 +35,11 @@ export function probeIcy(streamUrl, { timeout = 8000, redirects = 3 } = {}) {
       }
       resolve(result);
     };
+
+    // Mutlak süre sınırı: veri gelse de gelmese de bu süre sonunda biter.
+    // (socket.setTimeout veri geldikçe sıfırlanır; sürekli ses akıtan ama
+    // metadata vermeyen istasyonlar bu olmadan asılı kalabilir.)
+    deadline = setTimeout(() => finish({ status: "dead", reason: "sure-doldu" }), timeout);
 
     // Yönlendirmeyi takip et: mevcut soketi kapat, hedef adresi yeniden yokla.
     const followRedirect = (location) => {

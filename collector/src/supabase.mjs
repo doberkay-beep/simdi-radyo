@@ -79,3 +79,20 @@ export async function upsertStations(rows) {
   if (error) throw error;
   return data ?? [];
 }
+
+// Katalogda (seed) OLMAYAN aktif istasyonları pasifleştirir.
+// Silmez — arşivleri (plays) korunur, sadece listede görünmez. Katalog bizim:
+// seed.json tek doğ­ru kaynak. Döner: pasifleştirilen slug listesi.
+export async function deactivateMissing(keepSlugs) {
+  const { data, error } = await supa.from("stations").select("slug").eq("is_active", true);
+  if (error) throw error;
+  const keep = new Set(keepSlugs);
+  const toOff = (data ?? []).map((r) => r.slug).filter((s) => !keep.has(s));
+  if (toOff.length === 0) return [];
+  const { error: uErr } = await supa
+    .from("stations")
+    .update({ is_active: false })
+    .in("slug", toOff);
+  if (uErr) throw uErr;
+  return toOff;
+}

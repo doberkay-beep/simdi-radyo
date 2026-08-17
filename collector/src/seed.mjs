@@ -8,7 +8,7 @@ import "./env.mjs"; // .env.local'i (varsa) supabase.mjs'den ÖNCE yükle
 import { readFile } from "node:fs/promises";
 import { fileURLToPath } from "node:url";
 import { dirname, join } from "node:path";
-import { upsertStations } from "./supabase.mjs";
+import { upsertStations, deactivateMissing } from "./supabase.mjs";
 
 const here = dirname(fileURLToPath(import.meta.url));
 const seedPath = join(here, "..", "seed.json");
@@ -48,6 +48,11 @@ async function main() {
   validate(list);
   const written = await upsertStations(list);
   console.log(`${written.length} istasyon veritabanına yazıldı (slug'a göre upsert).`);
+
+  const off = await deactivateMissing(list.map((s) => s.slug));
+  if (off.length) {
+    console.log(`Katalogda yok, pasifleştirildi (arşivi korunur): ${off.join(", ")}`);
+  }
 }
 
 main().catch((err) => {

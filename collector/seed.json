@@ -247,19 +247,6 @@
     "sort_order": 200
   },
   {
-    "slug": "kurd1-fm",
-    "name": "Kurd1 FM",
-    "city": null,
-    "frequency": null,
-    "stream_url": "https://listen.radioking.com/radio/119251/stream/158701",
-    "homepage": null,
-    "accent_color": "#c0392b",
-    "band": "tr",
-    "metadata_quality": "good",
-    "is_active": true,
-    "sort_order": 210
-  },
-  {
     "slug": "dinamo-discotheque",
     "name": "dinamo.fm discotheque",
     "city": null,
@@ -297,5 +284,83 @@
     "metadata_quality": "good",
     "is_active": true,
     "sort_order": 310
+  },
+  {
+    "slug": "radio-paradise",
+    "name": "Radio Paradise",
+    "city": null,
+    "frequency": null,
+    "stream_url": "https://stream.radioparadise.com/mp3-128",
+    "homepage": "https://radioparadise.com",
+    "accent_color": "#b0413e",
+    "band": "int",
+    "metadata_quality": "good",
+    "is_active": true,
+    "sort_order": 320
+  },
+  {
+    "slug": "radio-paradise-rock",
+    "name": "Radio Paradise Rock",
+    "city": null,
+    "frequency": null,
+    "stream_url": "https://stream.radioparadise.com/rock-128",
+    "homepage": "https://radioparadise.com",
+    "accent_color": "#7d2e2e",
+    "band": "int",
+    "metadata_quality": "good",
+    "is_active": true,
+    "sort_order": 330
+  },
+  {
+    "slug": "tsf-jazz",
+    "name": "TSF Jazz",
+    "city": "Paris",
+    "frequency": null,
+    "stream_url": "https://tsfjazz.ice.infomaniak.ch/tsfjazz-high.mp3",
+    "homepage": "https://www.tsfjazz.com",
+    "accent_color": "#2f6f9f",
+    "band": "int",
+    "metadata_quality": "good",
+    "is_active": true,
+    "sort_order": 340
+  },
+  {
+    "slug": "radio-swiss-classic",
+    "name": "Radio Swiss Classic",
+    "city": null,
+    "frequency": null,
+    "stream_url": "http://stream.srg-ssr.ch/m/rsc_de/mp3_128",
+    "homepage": "https://www.radioswissclassic.ch",
+    "accent_color": "#6b5b95",
+    "band": "int",
+    "metadata_quality": "good",
+    "is_active": true,
+    "sort_order": 350
+  },
+  {
+    "slug": "somafm-secret-agent",
+    "name": "SomaFM Secret Agent",
+    "city": "San Francisco",
+    "frequency": null,
+    "stream_url": "https://ice1.somafm.com/secretagent-128-mp3",
+    "homepage": "https://somafm.com/secretagent/",
+    "accent_color": "#b08d57",
+    "band": "int",
+    "metadata_quality": "good",
+    "is_active": true,
+    "sort_order": 360
+  },
+  {
+    "slug": "somafm-metal",
+    "name": "SomaFM Metal Detector",
+    "city": "San Francisco",
+    "frequency": null,
+    "stream_url": "https://ice1.somafm.com/metal-128-mp3",
+    "homepage": "https://somafm.com/metal/",
+    "accent_color": "#555b6e",
+    "band": "int",
+    "metadata_quality": "good",
+    "is_active": true,
+    "sort_order": 370
   }
 ]

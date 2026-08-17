@@ -19,6 +19,9 @@ import {
 const POLL_INTERVAL_MS = Number(process.env.POLL_INTERVAL_MS) || 25_000;
 const PROBE_TIMEOUT_MS = Number(process.env.PROBE_TIMEOUT_MS) || 8_000;
 const MAX_FAILURES = Number(process.env.MAX_FAILURES) || 20;
+// >0 ise worker bu süre kadar çalışıp çıkar (zamanlanmış çalışma, ör. GitHub
+// Actions). 0/boş ise sonsuza kadar çalışır (yerel ya da Railway/Fly).
+const RUN_DURATION_MS = Number(process.env.RUN_DURATION_MS) || 0;
 
 const delay = (ms) => new Promise((r) => setTimeout(r, ms));
 const log = (...a) => console.log(new Date().toISOString(), ...a);
@@ -96,7 +99,8 @@ async function main() {
     log("! now_playing okunamadı (devam ediliyor):", err.message);
   }
 
-  // Sonsuz döngü. Her turda aktif listeyi tazeler (pasifleşenler düşer).
+  // Döngü. Her turda aktif listeyi tazeler (pasifleşenler düşer).
+  const startedAt = Date.now();
   for (;;) {
     const start = Date.now();
     let stations = [];
@@ -106,6 +110,12 @@ async function main() {
       log("! istasyon listesi alınamadı, tur atlanıyor:", err.message);
     }
     if (stations.length) await cycle(stations);
+
+    // Zamanlanmış çalışmada süre dolduysa temiz çık.
+    if (RUN_DURATION_MS && Date.now() - startedAt >= RUN_DURATION_MS) {
+      log("Süre doldu, çıkılıyor (zamanlanmış çalışma).");
+      return;
+    }
     const elapsed = Date.now() - start;
     await delay(Math.max(0, POLL_INTERVAL_MS - elapsed));
   }

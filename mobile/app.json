@@ -1,0 +1,16 @@
+{
+  "expo": {
+    "name": "ŞİMDİ",
+    "slug": "simdi",
+    "version": "0.1.0",
+    "orientation": "portrait",
+    "userInterfaceStyle": "dark",
+    "backgroundColor": "#0a0a0b",
+    "ios": {
+      "supportsTablet": true
+    },
+    "android": {
+      "package": "co.berkaydogan.simdi"
+    }
+  }
+}

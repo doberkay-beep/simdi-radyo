@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useMemo, useRef, useState } from "react";
+import Link from "next/link";
 
 type NowPlaying = {
   artist: string | null;
@@ -101,12 +102,17 @@ export default function NowList() {
               radyoda şu an ne çalıyor
             </p>
           </div>
-          <div className="flex items-center gap-2 text-xs" style={{ color: "var(--muted)" }}>
-            <span
-              className="live-dot inline-block h-2 w-2 rounded-full"
-              style={{ background: playing ? accent : "#3ddc84" }}
-            />
-            canlı
+          <div className="flex flex-col items-end gap-1 text-xs" style={{ color: "var(--muted)" }}>
+            <span className="flex items-center gap-2">
+              <span
+                className="live-dot inline-block h-2 w-2 rounded-full"
+                style={{ background: playing ? accent : "#3ddc84" }}
+              />
+              canlı
+            </span>
+            <Link href="/arsiv" className="underline" style={{ color: "var(--muted)" }}>
+              arşiv →
+            </Link>
           </div>
         </header>
 

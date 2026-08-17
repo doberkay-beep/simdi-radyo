@@ -50,6 +50,8 @@ export default function NowList() {
   const [status, setStatus] = useState<"idle" | "loading" | "error">("loading");
   const [now, setNow] = useState(0); // göreli zaman için; ilk render'da 0
   const [genre, setGenre] = useState<string | null>(null); // seçili tür filtresi
+  // Çalan istasyonun CANLI çalan bilgisi (toplayıcıdan değil, anlık yoklamadan).
+  const [liveNP, setLiveNP] = useState<NowPlaying>(null);
   const audioRef = useRef<HTMLAudioElement | null>(null);
 
   async function load() {
@@ -73,6 +75,32 @@ export default function NowList() {
       clearInterval(clockTimer);
     };
   }, []);
+
+  // Çalan istasyonu anlık yokla → dinlenenle yazı eşleşsin (toplayıcı ~15 dk'da
+  // bir güncellediği için liste eskiyebiliyor; çalınan istasyon canlı olur).
+  useEffect(() => {
+    if (!playing) {
+      setLiveNP(null);
+      return;
+    }
+    let cancelled = false;
+    const fetchLive = async () => {
+      try {
+        const r = await fetch(`/api/live/${playing}`, { cache: "no-store" });
+        const d = await r.json();
+        if (!cancelled) setLiveNP(d.live ?? null);
+      } catch {
+        // sessizce geç
+      }
+    };
+    setLiveNP(null);
+    fetchLive();
+    const id = setInterval(fetchLive, 20000);
+    return () => {
+      cancelled = true;
+      clearInterval(id);
+    };
+  }, [playing]);
 
   const current = useMemo(
     () => stations.find((s) => s.slug === playing) ?? null,
@@ -167,8 +195,9 @@ export default function NowList() {
 
         <ul className="flex flex-col">
           {shown.map((s) => {
-            const np = s.nowPlaying;
             const isPlaying = playing === s.slug;
+            // Çalan istasyonda canlı bilgi varsa onu göster (taze), yoksa toplayıcıdan.
+            const np = isPlaying && liveNP ? liveNP : s.nowPlaying;
             const c = s.accentColor || DEFAULT_ACCENT;
             const artist = np?.artist?.trim() || null;
             const title = np?.title?.trim() || null;
@@ -257,12 +286,14 @@ export default function NowList() {
             </button>
             <div className="min-w-0 flex-1">
               <div className="truncate text-sm font-semibold">
-                {current.nowPlaying
-                  ? current.nowPlaying.artist && current.nowPlaying.title &&
-                    current.nowPlaying.artist !== current.nowPlaying.title
-                    ? `${current.nowPlaying.artist} — ${current.nowPlaying.title}`
-                    : current.nowPlaying.title || current.nowPlaying.rawTitle
-                  : "—"}
+                {(() => {
+                  // Canlı bilgi varsa onu göster (dinlenenle eşleşsin).
+                  const np = liveNP ?? current.nowPlaying;
+                  if (!np) return "—";
+                  return np.artist && np.title && np.artist !== np.title
+                    ? `${np.artist} — ${np.title}`
+                    : np.title || np.rawTitle;
+                })()}
               </div>
               <div className="truncate text-xs opacity-80">{current.name}</div>
             </div>

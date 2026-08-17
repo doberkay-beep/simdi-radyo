@@ -31,9 +31,9 @@ const GENRES = {
   "slow / nostalji": ["slow", "nostalji", "oldies"],
 };
 
-const PER_TAG = 8; // her etiket için en çok kaç istasyon
-const BATCH = 5;
-const TIMEOUT = 8000;
+const PER_TAG = 6; // her etiket için en çok kaç istasyon
+const BATCH = 8; // aynı anda kaç yoklama (daha hızlı)
+const TIMEOUT = 5000; // ölü istasyonda daha az bekle
 const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
 
 async function resolveServers() {

@@ -1,5 +1,5 @@
-import { NextResponse } from "next/server";
 import { getSupabase } from "@/lib/supabase";
+import { json } from "@/lib/json";
 
 // Canlı veri okur → istek anında çalışır. Cache'i CDN başlığıyla veriyoruz.
 export const dynamic = "force-dynamic";
@@ -16,7 +16,7 @@ export async function GET() {
     .order("sort_order", { ascending: true });
 
   if (error) {
-    return NextResponse.json({ error: error.message }, { status: 500 });
+    return json({ error: error.message }, { status: 500 });
   }
 
   const stations = (data ?? []).map((s) => {
@@ -41,7 +41,7 @@ export async function GET() {
     };
   });
 
-  return NextResponse.json(
+  return json(
     { stations },
     { headers: { "Cache-Control": "public, s-maxage=10, stale-while-revalidate=30" } },
   );

@@ -1,5 +1,5 @@
-import { NextResponse } from "next/server";
 import { getSupabase } from "@/lib/supabase";
+import { json } from "@/lib/json";
 
 export const dynamic = "force-dynamic";
 
@@ -14,12 +14,12 @@ export async function GET(request: Request) {
   let ts: string;
   if (date) {
     if (!/^\d{4}-\d{2}-\d{2}$/.test(date)) {
-      return NextResponse.json({ error: "tarih biçimi YYYY-MM-DD olmalı" }, { status: 400 });
+      return json({ error: "tarih biçimi YYYY-MM-DD olmalı" }, { status: 400 });
     }
     const t = time && /^\d{2}:\d{2}$/.test(time) ? time : "00:00";
     ts = `${date}T${t}:00+03:00`;
     if (Number.isNaN(new Date(ts).getTime())) {
-      return NextResponse.json({ error: "geçersiz tarih/saat" }, { status: 400 });
+      return json({ error: "geçersiz tarih/saat" }, { status: 400 });
     }
   } else {
     ts = new Date().toISOString();
@@ -28,7 +28,7 @@ export async function GET(request: Request) {
   const supabase = getSupabase();
   const { data, error } = await supabase.rpc("archive_at", { ts });
   if (error) {
-    return NextResponse.json({ error: error.message }, { status: 500 });
+    return json({ error: error.message }, { status: 500 });
   }
 
   type Row = {
@@ -52,5 +52,5 @@ export async function GET(request: Request) {
 
   // Geçmiş bir an değişmez → uzun cache. "Şu an" için kısa.
   const cache = date ? "public, s-maxage=300" : "public, s-maxage=10";
-  return NextResponse.json({ at: ts, stations }, { headers: { "Cache-Control": cache } });
+  return json({ at: ts, stations }, { headers: { "Cache-Control": cache } });
 }

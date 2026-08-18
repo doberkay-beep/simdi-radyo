@@ -13,7 +13,7 @@ import { StatusBar } from "expo-status-bar";
 import { useAudioPlayer, setAudioModeAsync } from "expo-audio";
 
 // Yayındaki API. Uygulama veriyi buradan okur.
-const API = "https://berkaydoganco-wnub.vercel.app";
+const API = "https://necaliyor.co";
 const DEFAULT_ACCENT = "#6b7280";
 
 type NowPlaying = {

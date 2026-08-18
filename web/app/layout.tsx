@@ -2,7 +2,7 @@ import type { ReactNode } from "react";
 import "./globals.css";
 
 export const metadata = {
-  metadataBase: new URL("https://berkaydoganco-wnub.vercel.app"),
+  metadataBase: new URL("https://necaliyor.co"),
   title: "ŞİMDİ — radyoda şu an ne çalıyor",
   description: "Türkiye'deki radyolarda şu an çalan parçalar, canlı.",
   openGraph: {

@@ -1,10 +1,9 @@
 # /mobile — Faz 5: ŞİMDİ mobil uygulaması (Expo)
 
 Aynı canlı veriyi telefona taşır: parça listesi, istasyon renkleri, dokununca
-dinleme. Yayındaki API'yi (`berkaydoganco-wnub.vercel.app`) okur — kendi
-sunucusu yoktur.
+dinleme. Yayındaki API'yi (`necaliyor.co`) okur — kendi sunucusu yoktur.
 
-Expo SDK 57 · React Native 0.86 · ses için `expo-audio`.
+Expo SDK 54 · React Native 0.81 · ses için `expo-audio`.
 
 ## Çalıştırma (geliştirme)
 

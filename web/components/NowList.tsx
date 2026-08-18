@@ -79,6 +79,35 @@ export default function NowList() {
   // Çalan istasyonun CANLI çalan bilgisi (toplayıcıdan değil, anlık yoklamadan).
   const [liveNP, setLiveNP] = useState<NowPlaying>(null);
   const audioRef = useRef<HTMLAudioElement | null>(null);
+  // Otomatik yeniden bağlanma için: dinlenmek istenen istasyon ve deneme sayacı.
+  const playingRef = useRef<string | null>(null);
+  const retriesRef = useRef(0);
+  const reconnectRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+  // Yayın kesilirse (üst akış düşer, ağ takılır, ekran uyanır) kendiliğinden
+  // yeniden bağlan. Gerçekten ölü istasyonda birkaç denemeden sonra vazgeç.
+  function reconnect() {
+    const audio = audioRef.current;
+    const slug = playingRef.current;
+    if (!audio || !slug) return;
+    if (retriesRef.current >= 6) {
+      setPlaying(null);
+      return;
+    }
+    retriesRef.current += 1;
+    if (reconnectRef.current) clearTimeout(reconnectRef.current);
+    reconnectRef.current = setTimeout(() => {
+      if (playingRef.current !== slug) return;
+      audio.src = `/api/stream/${slug}?r=${Date.now()}`;
+      audio.play().catch(() => {});
+    }, 800);
+  }
+
+  // Dinlenmek istenen istasyonu takip et; yeni seçimde sayacı sıfırla.
+  useEffect(() => {
+    playingRef.current = playing;
+    if (playing) retriesRef.current = 0;
+  }, [playing]);
 
   async function load() {
     try {
@@ -370,8 +399,15 @@ export default function NowList() {
         </div>
       )}
 
-      {/* Sadece bu satırdan ses çıkar; görünmez */}
-      <audio ref={audioRef} onEnded={() => setPlaying(null)} onError={() => setPlaying(null)} />
+      {/* Sadece bu satırdan ses çıkar; görünmez. Kesilirse yeniden bağlanır. */}
+      <audio
+        ref={audioRef}
+        onPlaying={() => {
+          retriesRef.current = 0;
+        }}
+        onEnded={reconnect}
+        onError={reconnect}
+      />
     </div>
   );
 }

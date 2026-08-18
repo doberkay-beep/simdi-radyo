@@ -1,6 +1,9 @@
 import { getSupabase } from "@/lib/supabase";
 
 // Ses akışı proxy'si. Sürekli akıştır — istek anında çalışır, cache'lenmez.
+// EDGE runtime: Node serverless fonksiyonu ~10-60 sn sonra kesilirdi (yayın
+// "arada duruyordu"); Edge, veri aktıkça uzun uzun akıtabilir.
+export const runtime = "edge";
 export const dynamic = "force-dynamic";
 
 // GET /api/stream/[slug]

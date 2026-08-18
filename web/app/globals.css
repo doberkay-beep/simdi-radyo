@@ -83,3 +83,14 @@ body {
   50% { opacity: 0.35; }
 }
 .live-dot { animation: pulse 1.8s ease-in-out infinite; }
+
+/* Satır: fareyle üzerine gelince çok hafif aydınlanır (masaüstü dokunuşu).
+   Çalan satırın kendi (inline) rengi olduğu için ona dokunmaz. */
+.station-row { transition: background 220ms ease, box-shadow 220ms ease; }
+.station-row:hover { background: color-mix(in srgb, var(--fg) 5%, transparent); }
+
+/* Başlık altı ince vurgu çizgisi — çalan renge göre belirginleşir. */
+.title-underline { transition: opacity 600ms ease; }
+
+/* Alt çalma çubuğu yukarı doğru yumuşak gölge (yüzer gibi). */
+.nowbar-float { box-shadow: 0 -12px 32px -12px rgba(0, 0, 0, 0.5); }

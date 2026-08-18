@@ -336,7 +336,11 @@ export default function NowList() {
         <header className="mb-6 flex items-start justify-between">
           <div>
             <h1 className="text-4xl font-black tracking-tight">ŞİMDİ</h1>
-            <p className="mt-1 text-sm" style={{ color: "var(--muted)" }}>
+            <span
+              className="title-underline mt-1 block h-[2px] rounded-full"
+              style={{ width: 40, background: accent, opacity: playing ? 1 : 0.25 }}
+            />
+            <p className="mt-1.5 text-sm" style={{ color: "var(--muted)" }}>
               radyoda şu an ne çalıyor
             </p>
           </div>
@@ -420,12 +424,13 @@ export default function NowList() {
             return (
               <li key={s.slug}>
                 <div
-                  className="group flex w-full items-center border-b"
+                  className="station-row group flex w-full items-center border-b"
                   style={{
                     borderColor: "var(--line)",
                     background: isPlaying
-                      ? `color-mix(in srgb, ${c} 12%, transparent)`
-                      : "transparent",
+                      ? `color-mix(in srgb, ${c} 13%, transparent)`
+                      : undefined,
+                    boxShadow: isPlaying ? `inset 3px 0 0 ${c}` : undefined,
                   }}
                 >
                   <button
@@ -503,7 +508,7 @@ export default function NowList() {
       {/* Alt çalma çubuğu — çalan istasyonun renginde */}
       {current && (
         <div
-          className="fixed inset-x-0 bottom-0 z-10 border-t"
+          className="nowbar-float fixed inset-x-0 bottom-0 z-10 border-t"
           style={{ background: accent, borderColor: "rgba(255,255,255,0.15)" }}
         >
           <div

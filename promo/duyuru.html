@@ -1,0 +1,110 @@
+<!doctype html>
+<html lang="tr">
+<head>
+<meta charset="utf-8" />
+<style>
+  @font-face { font-family: "Bricolage"; src: url("file:///root/.claude/skills/synced/canvas-design/canvas-fonts/BricolageGrotesque-Bold.ttf"); font-weight: 700; }
+  @font-face { font-family: "Lora"; src: url("file:///root/.claude/skills/synced/canvas-design/canvas-fonts/Lora-Italic.ttf"); font-style: italic; }
+  @font-face { font-family: "Lora"; src: url("file:///root/.claude/skills/synced/canvas-design/canvas-fonts/Lora-Regular.ttf"); font-weight: 400; }
+  @font-face { font-family: "JBMono"; src: url("file:///root/.claude/skills/synced/canvas-design/canvas-fonts/JetBrainsMono-Regular.ttf"); }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html, body { width: 1080px; height: 1350px; }
+  body {
+    background: #0a0a0b;
+    color: #ececee;
+    position: relative;
+    overflow: hidden;
+    padding: 82px 88px;
+    display: flex;
+    flex-direction: column;
+  }
+  /* çok hafif sıcak kor, çubukların ardında */
+  .glow {
+    position: absolute; left: 50%; top: 60%; width: 900px; height: 900px;
+    transform: translate(-50%, -50%);
+    background: radial-gradient(circle, rgba(255,150,80,0.10) 0%, rgba(255,150,80,0) 62%);
+    pointer-events: none;
+  }
+  .toprow {
+    display: flex; justify-content: space-between; align-items: center;
+    font-family: "JBMono", monospace; font-size: 20px; letter-spacing: 3px;
+    color: #8a8a92; text-transform: uppercase;
+  }
+  .rule { height: 1px; background: rgba(236,236,238,0.12); }
+  .kicker {
+    font-family: "JBMono", monospace; font-size: 20px; letter-spacing: 6px;
+    color: #ffb257; text-transform: uppercase;
+  }
+  .wordmark {
+    font-family: "Bricolage", sans-serif; font-weight: 700;
+    font-size: 280px; line-height: 0.92; letter-spacing: -6px; color: #f4f3f1;
+  }
+  .tagline {
+    font-family: "Lora", serif; font-style: italic; font-size: 44px;
+    color: #b9b9c0;
+  }
+  /* çubuklar + sayfa satırları */
+  .stage { position: relative; height: 360px; display: flex; align-items: flex-end; gap: 20px; }
+  .bar { width: 40px; border-radius: 20px; }
+  .lines { position: absolute; left: 0; bottom: -34px; width: 100%; display: flex; flex-direction: column; gap: 13px; }
+  .ln { height: 3px; background: rgba(236,236,238,0.11); border-radius: 2px; }
+  .poem {
+    font-family: "Lora", serif; font-style: italic; font-size: 46px; line-height: 1.35;
+    color: #dedee2; max-width: 760px;
+  }
+  .poem .soft { color: #8a8a92; }
+  .bottomrow {
+    display: flex; justify-content: space-between; align-items: center;
+    font-family: "JBMono", monospace; font-size: 21px; letter-spacing: 2px; color: #8a8a92;
+  }
+  .url { color: #f4f3f1; letter-spacing: 3px; }
+  .spacer { flex: 1; }
+</style>
+</head>
+<body>
+  <div class="glow"></div>
+
+  <div class="toprow">
+    <span>necaliyor.co</span>
+    <span>Türkiye</span>
+  </div>
+  <div class="rule" style="margin-top:22px"></div>
+
+  <div class="spacer"></div>
+
+  <div class="kicker">Canlı Radyo</div>
+  <div class="wordmark" style="margin-top:20px">ŞİMDİ</div>
+  <div class="tagline" style="margin-top:40px">radyoda şu an ne çalıyor</div>
+
+  <div class="spacer"></div>
+
+  <!-- kelimeler sese dönüşür: satırlardan yükselen çubuklar -->
+  <div class="stage">
+    <div class="bar" style="height:150px; background:linear-gradient(#ff8a5b,#ff9a58)"></div>
+    <div class="bar" style="height:250px; background:linear-gradient(#ff9a58,#ffab54)"></div>
+    <div class="bar" style="height:340px; background:linear-gradient(#ffab54,#ffbe50)"></div>
+    <div class="bar" style="height:200px; background:linear-gradient(#ffbe50,#ffc94e)"></div>
+    <div class="bar" style="height:290px; background:linear-gradient(#ffc94e,#ffd24d)"></div>
+    <div class="bar" style="height:120px; background:linear-gradient(#ffd24d,#ffd94c)"></div>
+    <div class="lines">
+      <div class="ln" style="width:100%"></div>
+      <div class="ln" style="width:92%"></div>
+      <div class="ln" style="width:97%"></div>
+      <div class="ln" style="width:70%"></div>
+    </div>
+  </div>
+
+  <div class="spacer"></div>
+  <div class="spacer"></div>
+
+  <div class="poem">Önce kelimeler.<br><span class="soft">Şimdi frekanslar.</span></div>
+
+  <div class="spacer"></div>
+
+  <div class="rule" style="margin-bottom:22px"></div>
+  <div class="bottomrow">
+    <span>bir yazarın radyo girişimi</span>
+    <span class="url">necaliyor.co</span>
+  </div>
+</body>
+</html>

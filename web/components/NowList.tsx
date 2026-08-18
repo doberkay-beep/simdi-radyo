@@ -149,6 +149,37 @@ export default function NowList() {
     [stations, genre],
   );
 
+  // Kilit ekranı / medya kontrolleri: sayfa başlığı yerine gerçek şarkı +
+  // istasyon + uygulama ikonunu göster (telefonda arka planda çalarken).
+  useEffect(() => {
+    if (typeof navigator === "undefined" || !("mediaSession" in navigator)) return;
+    const ms = navigator.mediaSession;
+    if (!current) {
+      ms.metadata = null;
+      ms.playbackState = "none";
+      return;
+    }
+    const np = liveNP ?? current.nowPlaying;
+    const track =
+      np && np.artist && np.title && np.artist !== np.title
+        ? `${np.artist} — ${np.title}`
+        : (np && (np.title || np.rawTitle)) || "canlı yayın";
+    try {
+      ms.metadata = new MediaMetadata({
+        title: track,
+        artist: current.name,
+        album: "ŞİMDİ",
+        artwork: [
+          { src: "/icon.png", sizes: "512x512", type: "image/png" },
+          { src: "/apple-icon.png", sizes: "180x180", type: "image/png" },
+        ],
+      });
+      ms.playbackState = "playing";
+    } catch {
+      // MediaMetadata desteklenmiyorsa sessizce geç
+    }
+  }, [current, liveNP]);
+
   function toggle(s: Station) {
     const audio = audioRef.current;
     if (!audio) return;

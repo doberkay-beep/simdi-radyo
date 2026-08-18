@@ -71,15 +71,34 @@ const haveSlugs = new Set(stations.map((s) => s.slug));
 const haveUrls = new Set(stations.map((s) => (s.stream_url || "").replace(/\/+$/, "")));
 const haveNames = new Set(stations.map((s) => (s.name || "").toLocaleLowerCase("tr").trim()));
 
-console.log("En popüler TR istasyonları çekiliyor...");
+// Türe göre de tara (az olan türleri de doldursun).
+const TAGS = [
+  "türkçe pop", "türkü", "arabesk", "sanat müziği", "caz", "jazz", "klasik",
+  "classical", "rock", "türk rock", "metal", "elektronik", "electronic", "house",
+  "alternatif", "indie", "nostalji", "slow", "oldies", "pop", "tasavvuf",
+];
+
+console.log("En popüler TR istasyonları çekiliyor (genel + türe göre)...");
 const byClick = await rb(`/json/stations/bycountrycodeexact/TR?hidebroken=true&order=clickcount&reverse=true&limit=${LIMIT}`);
 const byVotes = await rb(`/json/stations/bycountrycodeexact/TR?hidebroken=true&order=votes&reverse=true&limit=${LIMIT}`);
 
 const byUuid = new Map();
-for (const s of [...byClick, ...byVotes]) {
-  if (!s.stationuuid || !(s.url_resolved || s.url)) continue;
-  if (s.hls === 1 || s.hls === true) continue;
-  if (!byUuid.has(s.stationuuid)) byUuid.set(s.stationuuid, s);
+const push = (arr) => {
+  for (const s of arr) {
+    if (!s.stationuuid || !(s.url_resolved || s.url)) continue;
+    if (s.hls === 1 || s.hls === true) continue;
+    if (!byUuid.has(s.stationuuid)) byUuid.set(s.stationuuid, s);
+  }
+};
+push(byClick);
+push(byVotes);
+for (const tag of TAGS) {
+  push(
+    await rb(
+      `/json/stations/search?countrycode=TR&tag=${encodeURIComponent(tag)}` +
+        `&hidebroken=true&order=clickcount&reverse=true&limit=20`,
+    ),
+  );
 }
 
 // Katalogda olmayanları ele.

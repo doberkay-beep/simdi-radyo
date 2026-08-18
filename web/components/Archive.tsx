@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import Link from "next/link";
+import ThemeToggle from "./ThemeToggle";
 
 type Row = {
   slug: string;
@@ -63,9 +64,12 @@ export default function Archive() {
                 o an radyoda ne çalıyordu
               </p>
             </div>
-            <Link href="/" className="text-sm underline" style={{ color: "var(--muted)" }}>
-              ← şimdi
-            </Link>
+            <span className="flex items-center gap-3">
+              <ThemeToggle />
+              <Link href="/" className="text-sm underline" style={{ color: "var(--muted)" }}>
+                ← şimdi
+              </Link>
+            </span>
           </div>
 
           {/* Tarih + saat seçici */}

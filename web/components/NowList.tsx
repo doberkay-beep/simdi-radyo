@@ -2,6 +2,7 @@
 
 import { useEffect, useMemo, useRef, useState } from "react";
 import Link from "next/link";
+import ThemeToggle from "./ThemeToggle";
 
 type NowPlaying = {
   artist: string | null;
@@ -148,12 +149,15 @@ export default function NowList() {
             </p>
           </div>
           <div className="flex flex-col items-end gap-1 text-xs" style={{ color: "var(--muted)" }}>
-            <span className="flex items-center gap-2">
-              <span
-                className="live-dot inline-block h-2 w-2 rounded-full"
-                style={{ background: playing ? accent : "#3ddc84" }}
-              />
-              canlı
+            <span className="flex items-center gap-3">
+              <ThemeToggle />
+              <span className="flex items-center gap-2">
+                <span
+                  className="live-dot inline-block h-2 w-2 rounded-full"
+                  style={{ background: playing ? accent : "#3ddc84" }}
+                />
+                canlı
+              </span>
             </span>
             <Link href="/arsiv" className="underline" style={{ color: "var(--muted)" }}>
               arşiv →
@@ -252,7 +256,13 @@ export default function NowList() {
                       <span style={{ color: c }}>{s.name}</span>
                       {s.frequency ? ` · ${s.frequency}` : ""}
                       {s.city ? ` · ${s.city}` : ""}
-                      {np ? ` · ${since(np.updatedAt, now || Date.now())}` : ""}
+                      {np
+                        ? isPlaying && liveNP
+                          ? " · canlı"
+                          : np.updatedAt
+                            ? ` · ${since(np.updatedAt, now || Date.now())}`
+                            : ""
+                        : ""}
                     </span>
                   </span>
                 </button>

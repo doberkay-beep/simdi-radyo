@@ -18,6 +18,33 @@ function parseTitle(raw: string) {
   return { artist: a, title: t };
 }
 
+const low = (s: string) => s.replace(/\s+/g, " ").trim().toLocaleLowerCase("tr");
+const JUNK = new Set([
+  "unknown", "n/a", "na", "-", "--", "...", "no title", "bilgi yok",
+  "reklam", "reklamlar", "canlı yayın", "canli yayin", "live", "live stream",
+  "default", "default title",
+]);
+
+// Ham başlığı temizle (worker'daki normalizeTitle'ın özeti). Çöpse "" döner.
+function normalizeTitle(raw: string, stationName = ""): string {
+  let s = (raw || "").replace(/\s+/g, " ").trim();
+  if (!s) return "";
+  s = s.replace(/^(now playing|şimdi çalıyor|çalan|nowplaying)\s*[:\-–]\s*/i, "").trim();
+  if (!s) return "";
+  const l = low(s);
+  if (/^(https?:\/\/|www\.)\S+$/i.test(s)) return "";
+  if (JUNK.has(l) || l.includes("adw_ad") || l.includes("advertisement")) return "";
+  if (stationName && l === low(stationName)) return "";
+  // Çift ayraçlı tekrar: "A - B - A - B" → "A - B".
+  const parts = s.split(" - ");
+  if (parts.length >= 2 && parts.length % 2 === 0) {
+    const half = parts.length / 2;
+    const a = parts.slice(0, half).join(" - ");
+    if (low(a) === low(parts.slice(half).join(" - ")) && a) return a;
+  }
+  return s;
+}
+
 // GET /api/live/[slug] — istasyonun ŞU ANKİ çalan başlığını canlı çeker.
 // Kullanıcı bir istasyonu çaldığında, dinlediğiyle yazının eşleşmesi için.
 export async function GET(request: Request, ctx: { params: Promise<{ slug: string }> }) {
@@ -26,7 +53,7 @@ export async function GET(request: Request, ctx: { params: Promise<{ slug: strin
 
   const { data, error } = await supabase
     .from("stations")
-    .select("stream_url, is_active")
+    .select("stream_url, is_active, name")
     .eq("slug", slug)
     .maybeSingle();
 
@@ -39,6 +66,8 @@ export async function GET(request: Request, ctx: { params: Promise<{ slug: strin
   if (res.status !== "ok" || !res.title) {
     return json({ live: null, reason: res.status }, { headers });
   }
-  const p = parseTitle(res.title);
-  return json({ live: { artist: p.artist, title: p.title, rawTitle: res.title } }, { headers });
+  const clean = normalizeTitle(res.title, data.name);
+  if (!clean) return json({ live: null, reason: "junk" }, { headers });
+  const p = parseTitle(clean);
+  return json({ live: { artist: p.artist, title: p.title, rawTitle: clean } }, { headers });
 }

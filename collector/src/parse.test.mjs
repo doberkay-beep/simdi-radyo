@@ -2,7 +2,7 @@
 // Çalıştır: npm test   (yani node src/parse.test.mjs)
 
 import assert from "node:assert/strict";
-import { parseTitle } from "./parse.mjs";
+import { parseTitle, normalizeTitle } from "./parse.mjs";
 
 let failed = 0;
 const check = (name, fn) => {
@@ -54,6 +54,36 @@ check("bir taraf boşsa bölme sayılmaz", () => {
   const r = parseTitle(" - Parça");
   assert.equal(r.artist, "- Parça");
   assert.equal(r.title, "- Parça");
+});
+
+// --- normalizeTitle (A2: çöp/çift başlık temizliği) ---
+check("normalize: gerçek parça dokunulmaz", () => {
+  assert.equal(normalizeTitle("Sezen Aksu - Firuze"), "Sezen Aksu - Firuze");
+});
+check("normalize: çift ayraçlı başlık teke iner", () => {
+  assert.equal(
+    normalizeTitle("Sezen Aksu - Firuze - Sezen Aksu - Firuze"),
+    "Sezen Aksu - Firuze",
+  );
+});
+check("normalize: ayraçsız birebir tekrar teke iner", () => {
+  assert.equal(normalizeTitle("Gülpembe Gülpembe"), "Gülpembe");
+});
+check("normalize: 'Now Playing:' öneki atılır", () => {
+  assert.equal(normalizeTitle("Now Playing: MFÖ - Ali Desidero"), "MFÖ - Ali Desidero");
+});
+check("normalize: reklam çöpü boş döner", () => {
+  assert.equal(normalizeTitle("Reklam"), "");
+  assert.equal(normalizeTitle("adw_ad='true'"), "");
+});
+check("normalize: tek başına URL çöp", () => {
+  assert.equal(normalizeTitle("https://radyo.example.com"), "");
+});
+check("normalize: istasyon adının kendisi çöp", () => {
+  assert.equal(normalizeTitle("Radyo 45'lik", "Radyo 45'lik"), "");
+});
+check("normalize: 'Unknown' çöp", () => {
+  assert.equal(normalizeTitle("Unknown"), "");
 });
 
 console.log(failed === 0 ? "\nTüm testler geçti." : `\n${failed} test başarısız.`);

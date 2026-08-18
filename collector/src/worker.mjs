@@ -7,7 +7,7 @@
 
 import "./env.mjs"; // .env.local'i (varsa) supabase.mjs'den ÖNCE yükle
 import { probeIcy } from "./icy.mjs";
-import { parseTitle } from "./parse.mjs";
+import { parseTitle, normalizeTitle } from "./parse.mjs";
 import {
   loadActiveStations,
   loadNowPlaying,
@@ -61,13 +61,16 @@ async function probeAndStore(station) {
 
   const raw = res.title.trim();
   if (!raw) return; // boş başlık yazma
-  if (lastRaw.get(station.id) === raw) return; // değişmediyse hiçbir şey yazma
+  // Reklam/istasyon adı/URL gibi çöpü ve iki kez yapışmış başlığı temizle.
+  const clean = normalizeTitle(raw, station.name);
+  if (!clean) return; // anlamsız başlık — yaz(ma), önceki iyi başlık kalsın
+  if (lastRaw.get(station.id) === clean) return; // değişmediyse hiçbir şey yazma
 
-  const parsed = parseTitle(raw);
+  const parsed = parseTitle(clean);
   try {
     await insertPlay(station.id, parsed); // arşive ekle
     await upsertNowPlaying(station.id, parsed); // "şimdi çalan"ı güncelle
-    lastRaw.set(station.id, raw);
+    lastRaw.set(station.id, clean);
     log(`♪ ${station.slug}: ${parsed.artist} — ${parsed.title}`);
   } catch (err) {
     // Yazma hatasında lastRaw güncellenmez ki sonraki turda tekrar denensin.

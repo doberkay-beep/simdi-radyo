@@ -852,5 +852,47 @@
     "is_active": true,
     "sort_order": 670,
     "genre": "rock"
+  },
+  {
+    "band": "int",
+    "metadata_quality": "good",
+    "is_active": true,
+    "city": "Seattle",
+    "frequency": null,
+    "homepage": "https://www.kexp.org",
+    "slug": "kexp",
+    "name": "KEXP",
+    "stream_url": "https://kexp-mp3-128.streamguys1.com/kexp128.mp3",
+    "accent_color": "#f0532b",
+    "genre": "alternatif",
+    "sort_order": 680
+  },
+  {
+    "band": "int",
+    "metadata_quality": "good",
+    "is_active": true,
+    "city": "Paris",
+    "frequency": null,
+    "homepage": "https://www.fip.fr",
+    "slug": "fip",
+    "name": "FIP",
+    "stream_url": "https://icecast.radiofrance.fr/fip-midfi.mp3",
+    "accent_color": "#e40a5d",
+    "genre": "alternatif",
+    "sort_order": 690
+  },
+  {
+    "band": "int",
+    "metadata_quality": "good",
+    "is_active": true,
+    "city": "Londra",
+    "frequency": null,
+    "homepage": "https://www.nts.live",
+    "slug": "nts-1",
+    "name": "NTS 1",
+    "stream_url": "https://stream-relay-geo.ntslive.net/stream",
+    "accent_color": "#d43a3a",
+    "genre": "alternatif",
+    "sort_order": 700
   }
 ]

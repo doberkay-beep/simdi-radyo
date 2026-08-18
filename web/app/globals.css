@@ -106,6 +106,10 @@ body {
 /* Marka yazı tipi — "ŞİMDİ" kelime işareti. */
 .brand { font-family: var(--font-brand), ui-sans-serif, system-ui, sans-serif; }
 
+/* Yatay şeritte kaydırma çubuğunu gizle. */
+.no-scrollbar { scrollbar-width: none; -ms-overflow-style: none; }
+.no-scrollbar::-webkit-scrollbar { display: none; }
+
 /* Alt çalma çubuğu: yukarı doğru yumuşak gölge + aşağıdan yumuşak giriş. */
 @keyframes slideUp {
   from { transform: translateY(100%); opacity: 0; }

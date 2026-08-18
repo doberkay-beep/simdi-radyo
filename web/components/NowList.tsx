@@ -46,6 +46,36 @@ function since(iso: string, now: number): string {
 const DEFAULT_ACCENT = "#6b7280";
 const FAV_KEY = "favoriler";
 
+// Yabancı istasyonların bayrağı (slug'a göre). Yeni yabancı eklenince buraya da eklenir.
+const FLAG: Record<string, string> = {
+  kexp: "🇺🇸",
+  fip: "🇫🇷",
+  "nts-1": "🇬🇧",
+  los40: "🇪🇸",
+  "radio-number-one": "🇮🇹",
+  "virgin-radio-italia": "🇮🇹",
+  "tsf-jazz": "🇫🇷",
+  "radio-swiss-classic": "🇨🇭",
+  "radio-paradise": "🇺🇸",
+  "radio-paradise-rock": "🇺🇸",
+  "somafm-groove-salad": "🇺🇸",
+  "somafm-indie-pop": "🇺🇸",
+  "somafm-secret-agent": "🇺🇸",
+  "somafm-metal": "🇺🇸",
+  "diana-krall": "🇺🇸",
+  "italo-power": "🇮🇹",
+};
+
+// Günün saatine göre selamlama.
+function greeting(h: number): string {
+  if (h < 6) return "İyi geceler";
+  if (h < 11) return "Günaydın";
+  if (h < 18) return "İyi günler";
+  if (h < 22) return "İyi akşamlar";
+  return "İyi geceler";
+}
+const pad2 = (n: number) => String(n).padStart(2, "0");
+
 // Şarkı bilgisi vermeyen istasyonlar için türe uygun "havalı" cümleler.
 const TAGLINES: Record<string, string[]> = {
   caz: ["kadehler, duman ve saksofon", "gece yarısı bir kulüpte", "swing'in tam kıvamı"],
@@ -90,6 +120,7 @@ export default function NowList() {
   const [genre, setGenre] = useState<string | null>(null); // seçili tür filtresi
   const [query, setQuery] = useState(""); // isimle arama
   const [region, setRegion] = useState<"all" | "tr" | "int">("all"); // ülke ayrımı
+  const [featuredSlug, setFeaturedSlug] = useState<string | null>(null); // "ne dinlesem" önerisi
   const [favs, setFavs] = useState<Set<string>>(new Set()); // favori slug'lar
   const [phase, setPhase] = useState<"idle" | "connecting" | "playing" | "error">("idle");
   const [sleepUntil, setSleepUntil] = useState<number | null>(null); // uyku zamanlayıcı
@@ -248,6 +279,31 @@ export default function NowList() {
   const trCount = useMemo(() => stations.filter((s) => s.band !== "int").length, [stations]);
   const intCount = useMemo(() => stations.filter((s) => s.band === "int").length, [stations]);
 
+  // "Ne dinlesem?" — liste gelince rastgele bir istasyon öner.
+  useEffect(() => {
+    if (!featuredSlug && stations.length) {
+      setFeaturedSlug(stations[Math.floor(Math.random() * stations.length)].slug);
+    }
+  }, [stations, featuredSlug]);
+  const featured = useMemo(
+    () => stations.find((s) => s.slug === featuredSlug) ?? null,
+    [stations, featuredSlug],
+  );
+  function suggestAnother() {
+    if (stations.length) setFeaturedSlug(stations[Math.floor(Math.random() * stations.length)].slug);
+  }
+
+  // "Şu an çalanlar" şeridi — gerçekten parça bilgisi olan istasyonlar.
+  const nowStrip = useMemo(
+    () => stations.filter((s) => s.nowPlaying && (s.nowPlaying.title || s.nowPlaying.artist)).slice(0, 14),
+    [stations],
+  );
+
+  // Saat (Türkiye saati = kullanıcının cihaz saati). now ile ~20 sn'de tazelenir.
+  const clockD = new Date(now || Date.now());
+  const clock = `${pad2(clockD.getHours())}:${pad2(clockD.getMinutes())}`;
+  const selam = greeting(clockD.getHours());
+
   // Deep link ile gelen istasyonu bir kez çalmayı dene (liste yüklenince).
   useEffect(() => {
     if (deepTriedRef.current || !deepLinkRef.current || playing) return;
@@ -355,7 +411,25 @@ export default function NowList() {
       className={`spread min-h-screen ${playing ? "" : "aurora"}`}
       style={playing ? { ["--accent" as string]: accent } : undefined}
     >
-      <div className="mx-auto max-w-2xl px-5 pb-32 pt-10">
+      {/* Geniş ekranda yan boşluklara çok soluk dev kelime işareti (ambient). */}
+      <div
+        aria-hidden
+        className="brand pointer-events-none fixed inset-0 z-0 hidden select-none items-center justify-center overflow-hidden lg:flex"
+      >
+        <span
+          style={{
+            fontSize: "40vw",
+            lineHeight: 1,
+            letterSpacing: "-0.05em",
+            color: "var(--fg)",
+            opacity: 0.03,
+          }}
+        >
+          ŞİMDİ
+        </span>
+      </div>
+
+      <div className="relative z-10 mx-auto max-w-2xl px-5 pb-32 pt-10">
         {/* Başlık — logo yok, sadece kelime işareti */}
         <header className="mb-6 flex items-start justify-between">
           <div>
@@ -398,6 +472,13 @@ export default function NowList() {
             </span>
           </div>
         </header>
+
+        {/* Selamlama + saat + sayaçlar */}
+        {now > 0 && (
+          <p className="mb-4 text-sm" style={{ color: "var(--muted)" }}>
+            {selam} · {clock} · {stations.length} radyo · {genres.length} tür
+          </p>
+        )}
 
         {/* Arama */}
         <input
@@ -458,6 +539,89 @@ export default function NowList() {
                 </button>
               );
             })}
+          </div>
+        )}
+
+        {/* "Ne dinlesem?" — boştayken rastgele bir istasyon öner */}
+        {!playing && featured && (
+          (() => {
+            const fc = featured.accentColor || DEFAULT_ACCENT;
+            return (
+              <div
+                className="mb-5 flex items-center gap-4 rounded-2xl border p-4"
+                style={{
+                  borderColor: "var(--line)",
+                  background: `color-mix(in srgb, ${fc} 10%, transparent)`,
+                }}
+              >
+                <span
+                  className="flex h-14 w-14 shrink-0 items-center justify-center rounded-xl text-lg font-bold"
+                  style={{
+                    background: `linear-gradient(135deg, ${fc}, color-mix(in srgb, ${fc} 50%, #000))`,
+                    color: readableOn(fc),
+                  }}
+                >
+                  {featured.name.trim().charAt(0).toLocaleUpperCase("tr")}
+                </span>
+                <span className="min-w-0 flex-1">
+                  <span className="block text-xs uppercase tracking-wide" style={{ color: "var(--muted)" }}>
+                    ne dinlesem?{" "}
+                    <button onClick={suggestAnother} className="underline">
+                      başka öner
+                    </button>
+                  </span>
+                  <span className="block truncate text-lg font-semibold">{featured.name}</span>
+                  <span className="block truncate text-xs" style={{ color: "var(--muted)" }}>
+                    {[featured.genre, featured.frequency, featured.city].filter(Boolean).join(" · ") || "canlı radyo"}
+                  </span>
+                </span>
+                <button
+                  onClick={() => toggle(featured)}
+                  className="shrink-0 rounded-full px-5 py-2.5 text-sm font-semibold"
+                  style={{ background: fc, color: readableOn(fc) }}
+                >
+                  ▶ Çal
+                </button>
+              </div>
+            );
+          })()
+        )}
+
+        {/* "Şu an çalanlar" yatay şerit */}
+        {!playing && nowStrip.length > 0 && (
+          <div className="mb-6">
+            <p className="mb-2 text-xs uppercase tracking-wide" style={{ color: "var(--muted)" }}>
+              şu an çalanlar
+            </p>
+            <div className="no-scrollbar -mx-5 overflow-x-auto px-5">
+              <div className="flex gap-2 pb-1">
+                {nowStrip.map((s) => {
+                  const c = s.accentColor || DEFAULT_ACCENT;
+                  const np = s.nowPlaying!;
+                  const txt =
+                    np.artist && np.title && np.artist !== np.title
+                      ? `${np.artist} — ${np.title}`
+                      : np.title || np.artist || "";
+                  return (
+                    <button
+                      key={s.slug}
+                      onClick={() => toggle(s)}
+                      className="shrink-0 rounded-xl border px-3 py-2 text-left"
+                      style={{
+                        borderColor: "var(--line)",
+                        background: `color-mix(in srgb, ${c} 8%, transparent)`,
+                        maxWidth: 230,
+                      }}
+                    >
+                      <span className="block truncate text-xs font-semibold">{txt}</span>
+                      <span className="mt-0.5 block truncate text-[11px]" style={{ color: c }}>
+                        {s.name}
+                      </span>
+                    </button>
+                  );
+                })}
+              </div>
+            </div>
           </div>
         )}
 
@@ -551,6 +715,7 @@ export default function NowList() {
                         </span>
                       )}
                       <span className="mt-0.5 block truncate text-xs" style={{ color: "var(--muted)" }}>
+                        {s.band === "int" ? `${FLAG[s.slug] || "🌍"} ` : ""}
                         <span style={{ color: c }}>{s.name}</span>
                         {s.frequency ? ` · ${s.frequency}` : ""}
                         {s.city ? ` · ${s.city}` : ""}

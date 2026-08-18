@@ -658,6 +658,20 @@
     "sort_order": 450
   },
   {
+    "slug": "baba-radyo",
+    "name": "Baba Radyo",
+    "city": "İstanbul",
+    "frequency": "105.6",
+    "stream_url": "https://sc.rcast.net/230870",
+    "homepage": "https://www.babaradyo.com",
+    "accent_color": "#8a2b2b",
+    "band": "tr",
+    "genre": "arabesk",
+    "metadata_quality": "good",
+    "is_active": true,
+    "sort_order": 455
+  },
+  {
     "band": "tr",
     "metadata_quality": "good",
     "is_active": true,

@@ -44,6 +44,7 @@ function since(iso: string, now: number): string {
 }
 
 const DEFAULT_ACCENT = "#6b7280";
+const FAV_KEY = "favoriler";
 
 // Şarkı bilgisi vermeyen istasyonlar için türe uygun "havalı" cümleler.
 const TAGLINES: Record<string, string[]> = {
@@ -70,12 +71,27 @@ function tagline(genre: string | null, slug: string): string {
   return pool[h % pool.length];
 }
 
+// Çalan parçadan Spotify/YouTube araması için sorgu üret.
+function trackQuery(np: NowPlaying): string | null {
+  if (!np) return null;
+  const a = np.artist?.trim() || null;
+  const t = np.title?.trim() || null;
+  if (a && t && a !== t) return `${a} ${t}`;
+  return t || np.rawTitle || null;
+}
+
+const low = (s: string) => s.toLocaleLowerCase("tr");
+
 export default function NowList() {
   const [stations, setStations] = useState<Station[]>([]);
   const [playing, setPlaying] = useState<string | null>(null);
   const [status, setStatus] = useState<"idle" | "loading" | "error">("loading");
   const [now, setNow] = useState(0); // göreli zaman için; ilk render'da 0
   const [genre, setGenre] = useState<string | null>(null); // seçili tür filtresi
+  const [query, setQuery] = useState(""); // isimle arama
+  const [favs, setFavs] = useState<Set<string>>(new Set()); // favori slug'lar
+  const [phase, setPhase] = useState<"idle" | "connecting" | "playing" | "error">("idle");
+  const [sleepUntil, setSleepUntil] = useState<number | null>(null); // uyku zamanlayıcı
   // Çalan istasyonun CANLI çalan bilgisi (toplayıcıdan değil, anlık yoklamadan).
   const [liveNP, setLiveNP] = useState<NowPlaying>(null);
   const audioRef = useRef<HTMLAudioElement | null>(null);
@@ -83,6 +99,34 @@ export default function NowList() {
   const playingRef = useRef<string | null>(null);
   const retriesRef = useRef(0);
   const reconnectRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const giveUpRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  // Deep link (?ist=slug) ile açılınca o istasyonu bir kez çalmayı dene.
+  const deepLinkRef = useRef<string | null>(null);
+  const deepTriedRef = useRef(false);
+
+  // Favorileri yükle (localStorage).
+  useEffect(() => {
+    try {
+      const raw = localStorage.getItem(FAV_KEY);
+      if (raw) setFavs(new Set(JSON.parse(raw)));
+    } catch {
+      // yok say
+    }
+  }, []);
+
+  function toggleFav(slug: string) {
+    setFavs((prev) => {
+      const next = new Set(prev);
+      if (next.has(slug)) next.delete(slug);
+      else next.add(slug);
+      try {
+        localStorage.setItem(FAV_KEY, JSON.stringify([...next]));
+      } catch {
+        // yok say
+      }
+      return next;
+    });
+  }
 
   // Yayın kesilirse (üst akış düşer, ağ takılır, ekran uyanır) kendiliğinden
   // yeniden bağlan. Gerçekten ölü istasyonda birkaç denemeden sonra vazgeç.
@@ -91,10 +135,13 @@ export default function NowList() {
     const slug = playingRef.current;
     if (!audio || !slug) return;
     if (retriesRef.current >= 6) {
-      setPlaying(null);
+      setPhase("error");
+      if (giveUpRef.current) clearTimeout(giveUpRef.current);
+      giveUpRef.current = setTimeout(() => setPlaying(null), 2600);
       return;
     }
     retriesRef.current += 1;
+    setPhase("connecting");
     if (reconnectRef.current) clearTimeout(reconnectRef.current);
     reconnectRef.current = setTimeout(() => {
       if (playingRef.current !== slug) return;
@@ -107,6 +154,7 @@ export default function NowList() {
   useEffect(() => {
     playingRef.current = playing;
     if (playing) retriesRef.current = 0;
+    if (!playing) setPhase("idle");
   }, [playing]);
 
   async function load() {
@@ -122,6 +170,12 @@ export default function NowList() {
 
   useEffect(() => {
     setNow(Date.now());
+    try {
+      const ist = new URLSearchParams(window.location.search).get("ist");
+      if (ist) deepLinkRef.current = ist;
+    } catch {
+      // yok say
+    }
     load();
     const dataTimer = setInterval(load, 15000);
     const clockTimer = setInterval(() => setNow(Date.now()), 20000);
@@ -172,11 +226,55 @@ export default function NowList() {
     return [...counts.entries()].sort((a, b) => b[1] - a[1]).map(([g]) => g);
   }, [stations]);
 
-  // Seçili türe göre süz.
-  const shown = useMemo(
-    () => (genre ? stations.filter((s) => s.genre === genre) : stations),
-    [stations, genre],
-  );
+  // Tür + arama süz, sonra favorileri en üste al.
+  const shown = useMemo(() => {
+    const q = low(query.trim());
+    let list = genre ? stations.filter((s) => s.genre === genre) : stations;
+    if (q) {
+      list = list.filter((s) =>
+        [s.name, s.city, s.frequency, s.genre].some((v) => v && low(v).includes(q)),
+      );
+    }
+    // Favoriler üstte (kararlı sıra).
+    return [...list].sort((a, b) => Number(favs.has(b.slug)) - Number(favs.has(a.slug)));
+  }, [stations, genre, query, favs]);
+
+  // Deep link ile gelen istasyonu bir kez çalmayı dene (liste yüklenince).
+  useEffect(() => {
+    if (deepTriedRef.current || !deepLinkRef.current || playing) return;
+    const s = stations.find((x) => x.slug === deepLinkRef.current);
+    if (s) {
+      deepTriedRef.current = true;
+      toggle(s);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [stations]);
+
+  // Uyku zamanlayıcı: süre dolunca yayını durdur.
+  useEffect(() => {
+    if (!sleepUntil) return;
+    const ms = sleepUntil - Date.now();
+    if (ms <= 0) {
+      audioRef.current?.pause();
+      setPlaying(null);
+      setSleepUntil(null);
+      return;
+    }
+    const id = setTimeout(() => {
+      audioRef.current?.pause();
+      setPlaying(null);
+      setSleepUntil(null);
+    }, ms);
+    return () => clearTimeout(id);
+  }, [sleepUntil]);
+
+  function cycleSleep() {
+    // kapalı → 15 → 30 → 60 → kapalı
+    const remain = sleepUntil ? Math.ceil((sleepUntil - Date.now()) / 60000) : 0;
+    const nextMin = remain <= 0 ? 15 : remain <= 15 ? 30 : remain <= 30 ? 60 : 0;
+    setSleepUntil(nextMin ? Date.now() + nextMin * 60000 : null);
+  }
+  const sleepRemain = sleepUntil ? Math.max(0, Math.ceil((sleepUntil - (now || Date.now())) / 60000)) : 0;
 
   // Kilit ekranı / medya kontrolleri: sayfa başlığı yerine gerçek şarkı +
   // istasyon + uygulama ikonunu göster (telefonda arka planda çalarken).
@@ -212,21 +310,30 @@ export default function NowList() {
   function toggle(s: Station) {
     const audio = audioRef.current;
     if (!audio) return;
+    if (giveUpRef.current) clearTimeout(giveUpRef.current);
     if (playing === s.slug) {
       audio.pause();
       setPlaying(null);
       return;
     }
     setPlaying(s.slug);
+    setPhase("connecting");
     audio.src = `/api/stream/${s.slug}`;
-    audio.play().catch(() => setPlaying(null));
+    audio.play().catch(() => {
+      // Otomatik çalma engellendiyse (deep link) sessizce bırak.
+      setPlaying(null);
+    });
   }
+
+  // Alt çubuktaki parça metni (canlı bilgi öncelikli).
+  const barNp = current ? liveNP ?? current.nowPlaying : null;
+  const barQuery = trackQuery(barNp);
 
   return (
     <div className="spread min-h-screen" style={{ ["--accent" as string]: accent }}>
       <div className="mx-auto max-w-2xl px-5 pb-32 pt-10">
         {/* Başlık — logo yok, sadece kelime işareti */}
-        <header className="mb-8 flex items-end justify-between">
+        <header className="mb-6 flex items-start justify-between">
           <div>
             <h1 className="text-4xl font-black tracking-tight">ŞİMDİ</h1>
             <p className="mt-1 text-sm" style={{ color: "var(--muted)" }}>
@@ -235,6 +342,15 @@ export default function NowList() {
           </div>
           <div className="flex flex-col items-end gap-1 text-xs" style={{ color: "var(--muted)" }}>
             <span className="flex items-center gap-3">
+              <button
+                onClick={cycleSleep}
+                title="uyku zamanlayıcı"
+                aria-label="uyku zamanlayıcı"
+                className="leading-none"
+                style={{ color: sleepUntil ? "var(--fg)" : "var(--muted)" }}
+              >
+                {sleepUntil ? `🌙 ${sleepRemain}dk` : "🌙"}
+              </button>
               <ThemeToggle />
               <span className="flex items-center gap-2">
                 <span
@@ -249,6 +365,16 @@ export default function NowList() {
             </Link>
           </div>
         </header>
+
+        {/* Arama */}
+        <input
+          type="search"
+          value={query}
+          onChange={(e) => setQuery(e.target.value)}
+          placeholder="İstasyon ara…"
+          className="mb-4 w-full rounded-lg border px-4 py-2.5 text-sm outline-none"
+          style={{ background: "transparent", borderColor: "var(--line)", color: "var(--fg)" }}
+        />
 
         {/* Tür filtresi çipleri */}
         {genres.length > 0 && (
@@ -273,31 +399,28 @@ export default function NowList() {
           </div>
         )}
 
-        {status === "loading" && (
-          <p style={{ color: "var(--muted)" }}>Yükleniyor…</p>
-        )}
+        {status === "loading" && <p style={{ color: "var(--muted)" }}>Yükleniyor…</p>}
         {status === "error" && (
-          <p style={{ color: "var(--muted)" }}>
-            Bağlanılamadı. Toplayıcı ve API çalışıyor mu?
-          </p>
+          <p style={{ color: "var(--muted)" }}>Bağlanılamadı. Toplayıcı ve API çalışıyor mu?</p>
+        )}
+        {status === "idle" && shown.length === 0 && (
+          <p style={{ color: "var(--muted)" }}>Eşleşen istasyon yok.</p>
         )}
 
         <ul className="flex flex-col">
           {shown.map((s) => {
             const isPlaying = playing === s.slug;
-            // Çalan istasyonda canlı bilgi varsa onu göster (taze), yoksa toplayıcıdan.
             const np = isPlaying && liveNP ? liveNP : s.nowPlaying;
             const c = s.accentColor || DEFAULT_ACCENT;
             const artist = np?.artist?.trim() || null;
             const title = np?.title?.trim() || null;
-            // Sanatçı = parça ise (ayrılamamış) tek satır göster.
             const sameArtistTitle = artist && title && artist === title;
+            const isFav = favs.has(s.slug);
 
             return (
               <li key={s.slug}>
-                <button
-                  onClick={() => toggle(s)}
-                  className="group flex w-full items-center gap-4 border-b py-4 text-left transition-colors"
+                <div
+                  className="group flex w-full items-center border-b"
                   style={{
                     borderColor: "var(--line)",
                     background: isPlaying
@@ -305,55 +428,72 @@ export default function NowList() {
                       : "transparent",
                   }}
                 >
-                  {/* Renk çubuğu + çalma göstergesi */}
-                  <span className="flex h-10 w-6 shrink-0 items-center justify-center">
-                    {isPlaying ? (
-                      <span className="eq flex items-end gap-[2px]" aria-hidden>
-                        <span /><span /><span /><span />
-                      </span>
-                    ) : (
-                      <span
-                        className="h-8 w-[3px] rounded-full opacity-70 transition-opacity group-hover:opacity-100"
-                        style={{ background: c }}
-                      />
-                    )}
-                  </span>
-
-                  {/* Parça ön planda, istasyon ikincil */}
-                  <span className="min-w-0 flex-1">
-                    {np ? (
-                      sameArtistTitle ? (
-                        <span className="block truncate text-[17px] font-semibold">{title}</span>
-                      ) : (
-                        <span className="block truncate text-[17px]">
-                          <span className="font-semibold">{artist ?? title}</span>
-                          {artist && title && (
-                            <span style={{ color: "var(--muted)" }}> — {title}</span>
-                          )}
+                  <button
+                    onClick={() => toggle(s)}
+                    className="flex min-w-0 flex-1 items-center gap-4 py-4 pl-0 pr-2 text-left"
+                  >
+                    {/* Renk çubuğu + çalma göstergesi */}
+                    <span className="flex h-10 w-6 shrink-0 items-center justify-center">
+                      {isPlaying ? (
+                        <span className="eq flex items-end gap-[2px]" aria-hidden>
+                          <span /><span /><span /><span />
                         </span>
-                      )
-                    ) : (
-                      <span
-                        className="block truncate text-[17px] italic"
-                        style={{ color: "var(--muted)" }}
-                      >
-                        {tagline(s.genre, s.slug)}
-                      </span>
-                    )}
-                    <span className="mt-0.5 block truncate text-xs" style={{ color: "var(--muted)" }}>
-                      <span style={{ color: c }}>{s.name}</span>
-                      {s.frequency ? ` · ${s.frequency}` : ""}
-                      {s.city ? ` · ${s.city}` : ""}
-                      {np
-                        ? isPlaying && liveNP
-                          ? " · canlı"
-                          : np.updatedAt
-                            ? ` · ${since(np.updatedAt, now || Date.now())}`
-                            : ""
-                        : ""}
+                      ) : (
+                        <span
+                          className="h-8 w-[3px] rounded-full opacity-70 transition-opacity group-hover:opacity-100"
+                          style={{ background: c }}
+                        />
+                      )}
                     </span>
-                  </span>
-                </button>
+
+                    {/* Parça ön planda, istasyon ikincil */}
+                    <span className="min-w-0 flex-1">
+                      {np ? (
+                        sameArtistTitle ? (
+                          <span className="block truncate text-[17px] font-semibold">{title}</span>
+                        ) : (
+                          <span className="block truncate text-[17px]">
+                            <span className="font-semibold">{artist ?? title}</span>
+                            {artist && title && (
+                              <span style={{ color: "var(--muted)" }}> — {title}</span>
+                            )}
+                          </span>
+                        )
+                      ) : (
+                        <span
+                          className="block truncate text-[17px] italic"
+                          style={{ color: "var(--muted)" }}
+                        >
+                          {tagline(s.genre, s.slug)}
+                        </span>
+                      )}
+                      <span className="mt-0.5 block truncate text-xs" style={{ color: "var(--muted)" }}>
+                        <span style={{ color: c }}>{s.name}</span>
+                        {s.frequency ? ` · ${s.frequency}` : ""}
+                        {s.city ? ` · ${s.city}` : ""}
+                        {isPlaying && phase === "connecting"
+                          ? " · bağlanıyor…"
+                          : np
+                            ? isPlaying && liveNP
+                              ? " · canlı"
+                              : np.updatedAt
+                                ? ` · ${since(np.updatedAt, now || Date.now())}`
+                                : ""
+                            : ""}
+                      </span>
+                    </span>
+                  </button>
+
+                  {/* Favori yıldızı — ayrı düğme (çalmayı tetiklemez) */}
+                  <button
+                    onClick={() => toggleFav(s.slug)}
+                    aria-label={isFav ? "favoriden çıkar" : "favorilere ekle"}
+                    className="shrink-0 px-2 py-4 text-lg leading-none transition-colors"
+                    style={{ color: isFav ? "#ffcf4d" : "var(--muted)" }}
+                  >
+                    {isFav ? "★" : "☆"}
+                  </button>
+                </div>
               </li>
             );
           })}
@@ -367,7 +507,7 @@ export default function NowList() {
           style={{ background: accent, borderColor: "rgba(255,255,255,0.15)" }}
         >
           <div
-            className="mx-auto flex max-w-2xl items-center gap-4 px-5 py-3"
+            className="mx-auto flex max-w-2xl items-center gap-3 px-5 py-3"
             style={{ color: readableOn(accent) }}
           >
             <button
@@ -376,7 +516,6 @@ export default function NowList() {
               className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full"
               style={{ background: "rgba(0,0,0,0.18)", color: readableOn(accent) }}
             >
-              {/* pause simgesi */}
               <span className="flex gap-[3px]">
                 <span className="h-4 w-[3px] rounded-sm" style={{ background: readableOn(accent) }} />
                 <span className="h-4 w-[3px] rounded-sm" style={{ background: readableOn(accent) }} />
@@ -384,17 +523,44 @@ export default function NowList() {
             </button>
             <div className="min-w-0 flex-1">
               <div className="truncate text-sm font-semibold">
-                {(() => {
-                  // Canlı bilgi varsa onu göster (dinlenenle eşleşsin).
-                  const np = liveNP ?? current.nowPlaying;
-                  if (!np) return tagline(current.genre, current.slug);
-                  return np.artist && np.title && np.artist !== np.title
-                    ? `${np.artist} — ${np.title}`
-                    : np.title || np.rawTitle;
-                })()}
+                {phase === "error"
+                  ? "yayına ulaşılamadı"
+                  : phase === "connecting" && !barQuery
+                    ? "bağlanıyor…"
+                    : barNp
+                      ? barNp.artist && barNp.title && barNp.artist !== barNp.title
+                        ? `${barNp.artist} — ${barNp.title}`
+                        : barNp.title || barNp.rawTitle
+                      : tagline(current.genre, current.slug)}
               </div>
               <div className="truncate text-xs opacity-80">{current.name}</div>
             </div>
+
+            {/* Şarkıyı Spotify / YouTube'da aç */}
+            {barQuery && (
+              <div className="flex shrink-0 items-center gap-2">
+                <a
+                  href={`https://open.spotify.com/search/${encodeURIComponent(barQuery)}`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  aria-label="Spotify'da ara"
+                  className="rounded-full px-2.5 py-1 text-xs font-semibold"
+                  style={{ background: "rgba(0,0,0,0.18)", color: readableOn(accent) }}
+                >
+                  Spotify
+                </a>
+                <a
+                  href={`https://www.youtube.com/results?search_query=${encodeURIComponent(barQuery)}`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  aria-label="YouTube'da ara"
+                  className="rounded-full px-2.5 py-1 text-xs font-semibold"
+                  style={{ background: "rgba(0,0,0,0.18)", color: readableOn(accent) }}
+                >
+                  YouTube
+                </a>
+              </div>
+            )}
           </div>
         </div>
       )}
@@ -402,8 +568,12 @@ export default function NowList() {
       {/* Sadece bu satırdan ses çıkar; görünmez. Kesilirse yeniden bağlanır. */}
       <audio
         ref={audioRef}
+        onWaiting={() => {
+          if (playingRef.current) setPhase("connecting");
+        }}
         onPlaying={() => {
           retriesRef.current = 0;
+          setPhase("playing");
         }}
         onEnded={reconnect}
         onError={reconnect}

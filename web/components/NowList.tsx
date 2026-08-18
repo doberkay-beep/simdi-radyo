@@ -45,6 +45,31 @@ function since(iso: string, now: number): string {
 
 const DEFAULT_ACCENT = "#6b7280";
 
+// Şarkı bilgisi vermeyen istasyonlar için türe uygun "havalı" cümleler.
+const TAGLINES: Record<string, string[]> = {
+  caz: ["kadehler, duman ve saksofon", "gece yarısı bir kulüpte", "swing'in tam kıvamı"],
+  klasik: ["yaylılar ve sonsuzluk", "bir konser salonunun sükûneti", "notaların en zarifi"],
+  elektronik: ["şafağa kadar süren bir set", "bas, ışık, tekrar", "dört dörtlük bir groove"],
+  rock: ["gitarlar sonuna kadar açık", "distortion ve ter", "sahnenin en önü"],
+  metal: ["duvarları titreten riffler", "sonuna kadar aç"],
+  pop: ["radyonun en parlak yüzü", "nakaratı hazır tut", "listelerin zirvesi"],
+  "türkçe pop": ["camlar açık, yol uzun", "en sevilen nakaratlar", "hepimizin şarkısı"],
+  türkü: ["bir bağlama, bir uzun hava", "toprak kokan ezgiler", "yürekten yakılan türküler"],
+  arabesk: ["bir sigara, bir dert, bir şarkı", "gecenin en hüzünlü sesi", "kalbe dokunan sözler"],
+  tsm: ["makamlar ve incelik", "bir başka zarafet"],
+  nostalji: ["eski bir kasetin sıcaklığı", "yıllar öncesine bir bilet", "unutulmayanlar"],
+  alternatif: ["keşfedilmeyi bekleyen sesler", "listelerin dışında bir yer", "farklı bir frekans"],
+};
+const DEFAULT_TAGLINES = ["müzik hiç durmaz", "sadece dinle", "frekans açık"];
+
+// Slug'a göre sabit (titremeyen) cümle seç.
+function tagline(genre: string | null, slug: string): string {
+  const pool = (genre && TAGLINES[genre]) || DEFAULT_TAGLINES;
+  let h = 0;
+  for (let i = 0; i < slug.length; i++) h = (h * 31 + slug.charCodeAt(i)) >>> 0;
+  return pool[h % pool.length];
+}
+
 export default function NowList() {
   const [stations, setStations] = useState<Station[]>([]);
   const [playing, setPlaying] = useState<string | null>(null);
@@ -248,8 +273,11 @@ export default function NowList() {
                         </span>
                       )
                     ) : (
-                      <span className="block text-[17px]" style={{ color: "var(--muted)" }}>
-                        —
+                      <span
+                        className="block truncate text-[17px] italic"
+                        style={{ color: "var(--muted)" }}
+                      >
+                        {tagline(s.genre, s.slug)}
                       </span>
                     )}
                     <span className="mt-0.5 block truncate text-xs" style={{ color: "var(--muted)" }}>
@@ -299,7 +327,7 @@ export default function NowList() {
                 {(() => {
                   // Canlı bilgi varsa onu göster (dinlenenle eşleşsin).
                   const np = liveNP ?? current.nowPlaying;
-                  if (!np) return "—";
+                  if (!np) return tagline(current.genre, current.slug);
                   return np.artist && np.title && np.artist !== np.title
                     ? `${np.artist} — ${np.title}`
                     : np.title || np.rawTitle;

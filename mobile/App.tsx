@@ -50,6 +50,30 @@ function trackLine(np: NowPlaying, fallback: string): string {
   return np.title || np.rawTitle || fallback;
 }
 
+// Şarkı bilgisi vermeyen istasyonlar için türe uygun "havalı" cümleler.
+const TAGLINES: Record<string, string[]> = {
+  caz: ["kadehler, duman ve saksofon", "gece yarısı bir kulüpte", "swing'in tam kıvamı"],
+  klasik: ["yaylılar ve sonsuzluk", "bir konser salonunun sükûneti", "notaların en zarifi"],
+  elektronik: ["şafağa kadar süren bir set", "bas, ışık, tekrar", "dört dörtlük bir groove"],
+  rock: ["gitarlar sonuna kadar açık", "distortion ve ter", "sahnenin en önü"],
+  metal: ["duvarları titreten riffler", "sonuna kadar aç"],
+  pop: ["radyonun en parlak yüzü", "nakaratı hazır tut", "listelerin zirvesi"],
+  "türkçe pop": ["camlar açık, yol uzun", "en sevilen nakaratlar", "hepimizin şarkısı"],
+  türkü: ["bir bağlama, bir uzun hava", "toprak kokan ezgiler", "yürekten yakılan türküler"],
+  arabesk: ["bir sigara, bir dert, bir şarkı", "gecenin en hüzünlü sesi", "kalbe dokunan sözler"],
+  tsm: ["makamlar ve incelik", "bir başka zarafet"],
+  nostalji: ["eski bir kasetin sıcaklığı", "yıllar öncesine bir bilet", "unutulmayanlar"],
+  alternatif: ["keşfedilmeyi bekleyen sesler", "listelerin dışında bir yer", "farklı bir frekans"],
+};
+const DEFAULT_TAGLINES = ["müzik hiç durmaz", "sadece dinle", "frekans açık"];
+
+function tagline(genre: string | null, slug: string): string {
+  const pool = (genre && TAGLINES[genre]) || DEFAULT_TAGLINES;
+  let h = 0;
+  for (let i = 0; i < slug.length; i++) h = (h * 31 + slug.charCodeAt(i)) >>> 0;
+  return pool[h % pool.length];
+}
+
 export default function App() {
   const [stations, setStations] = useState<Station[]>([]);
   const [playing, setPlaying] = useState<string | null>(null);
@@ -214,7 +238,12 @@ export default function App() {
                         </Text>
                       )
                     ) : (
-                      <Text style={[styles.track, { color: C.muted }]}>—</Text>
+                      <Text
+                        style={[styles.track, { color: C.muted, fontStyle: "italic" }]}
+                        numberOfLines={1}
+                      >
+                        {tagline(s.genre, s.slug)}
+                      </Text>
                     )}
                     <Text style={[styles.sub, { color: C.muted }]} numberOfLines={1}>
                       <Text style={{ color: c }}>{s.name}</Text>
@@ -242,7 +271,7 @@ export default function App() {
                 style={{ color: readableOn(accent), fontWeight: "700", fontSize: 14 }}
                 numberOfLines={1}
               >
-                {trackLine(liveNP ?? current.nowPlaying, current.name)}
+                {trackLine(liveNP ?? current.nowPlaying, tagline(current.genre, current.slug))}
               </Text>
               <Text style={{ color: readableOn(accent), opacity: 0.8, fontSize: 12 }} numberOfLines={1}>
                 {current.name}

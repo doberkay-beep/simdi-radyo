@@ -31,12 +31,33 @@ body {
   -webkit-font-smoothing: antialiased;
 }
 
-/* Çalan istasyonun renginin sayfaya yayıldığı yumuşak arka plan. */
+/* --accent'i KAYITLI özel özellik yap → renk animasyona/geçişe açılır.
+   (Kayıtsız custom property'ler geçiş yapamaz; istasyon değişince renk
+   sıçrar. @property ile yumuşakça erir.) */
+@property --accent {
+  syntax: "<color>";
+  inherits: true;
+  initial-value: #6b7280;
+}
+
+/* Çalan istasyonun rengi sayfaya yayılır: üstten ve alttan (çalma çubuğuna
+   doğru) yumuşak bir kor. Ortası temiz kalır ki metin okunsun. İstasyon
+   değişince renk 800 ms'de erir. */
 .spread {
   background:
-    radial-gradient(120% 60% at 50% -10%, color-mix(in srgb, var(--accent) 22%, transparent), transparent 70%),
+    radial-gradient(130% 72% at 50% -16%, color-mix(in srgb, var(--accent) 30%, transparent), transparent 72%),
+    radial-gradient(120% 55% at 50% 116%, color-mix(in srgb, var(--accent) 16%, transparent), transparent 70%),
     var(--bg);
-  transition: --accent 600ms ease;
+  transition: --accent 800ms ease;
+}
+
+/* Açık temada aynı kor daha nazik olsun (parlak renkler beyaz üstünde
+   fazla baskın durmasın). */
+:root[data-theme="light"] .spread {
+  background:
+    radial-gradient(130% 72% at 50% -16%, color-mix(in srgb, var(--accent) 18%, transparent), transparent 72%),
+    radial-gradient(120% 55% at 50% 116%, color-mix(in srgb, var(--accent) 10%, transparent), transparent 70%),
+    var(--bg);
 }
 
 /* Çalan parçanın yanındaki ekolayzır çubukları. */

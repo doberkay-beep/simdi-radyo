@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import {
   View,
   Text,
@@ -6,6 +6,7 @@ import {
   Pressable,
   ActivityIndicator,
   SafeAreaView,
+  ScrollView,
   StyleSheet,
 } from "react-native";
 import { StatusBar } from "expo-status-bar";
@@ -19,7 +20,6 @@ type NowPlaying = {
   artist: string | null;
   title: string | null;
   rawTitle: string | null;
-  updatedAt: string;
 } | null;
 
 type Station = {
@@ -29,17 +29,19 @@ type Station = {
   frequency: string | null;
   accentColor: string | null;
   band: string;
+  genre: string | null;
   nowPlaying: NowPlaying;
 };
 
-// Rengin üstünde siyah mı beyaz mı okunur?
+const DARK = { bg: "#0a0a0b", fg: "#ececee", muted: "#8a8a92", line: "#1c1c20" };
+const LIGHT = { bg: "#faf9f7", fg: "#1a1a1e", muted: "#6f6f77", line: "#e6e4df" };
+
 function readableOn(hex: string): string {
   const h = hex.replace("#", "");
   const r = parseInt(h.slice(0, 2), 16);
   const g = parseInt(h.slice(2, 4), 16);
   const b = parseInt(h.slice(4, 6), 16);
-  const lum = (0.299 * r + 0.587 * g + 0.114 * b) / 255;
-  return lum > 0.6 ? "#0a0a0b" : "#ffffff";
+  return (0.299 * r + 0.587 * g + 0.114 * b) / 255 > 0.6 ? "#0a0a0b" : "#ffffff";
 }
 
 function trackLine(np: NowPlaying, fallback: string): string {
@@ -52,9 +54,12 @@ export default function App() {
   const [stations, setStations] = useState<Station[]>([]);
   const [playing, setPlaying] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
+  const [genre, setGenre] = useState<string | null>(null);
+  const [dark, setDark] = useState(true);
+  const [liveNP, setLiveNP] = useState<NowPlaying>(null);
   const player = useAudioPlayer();
+  const C = dark ? DARK : LIGHT;
 
-  // Sessiz modda da ses çıksın.
   useEffect(() => {
     setAudioModeAsync({ playsInSilentMode: true }).catch(() => {});
   }, []);
@@ -65,7 +70,7 @@ export default function App() {
       const data = await res.json();
       setStations(data.stations ?? []);
     } catch {
-      // sessizce geç; bir sonraki turda tekrar dener
+      // sessizce geç
     }
     setLoading(false);
   }
@@ -75,6 +80,42 @@ export default function App() {
     const id = setInterval(load, 15000);
     return () => clearInterval(id);
   }, []);
+
+  // Çalan istasyonu canlı yokla (dinlenenle yazı eşleşsin).
+  useEffect(() => {
+    if (!playing) {
+      setLiveNP(null);
+      return;
+    }
+    let cancelled = false;
+    const fetchLive = async () => {
+      try {
+        const r = await fetch(`${API}/api/live/${playing}`);
+        const d = await r.json();
+        if (!cancelled) setLiveNP(d.live ?? null);
+      } catch {
+        // sessizce geç
+      }
+    };
+    setLiveNP(null);
+    fetchLive();
+    const id = setInterval(fetchLive, 20000);
+    return () => {
+      cancelled = true;
+      clearInterval(id);
+    };
+  }, [playing]);
+
+  const genres = useMemo(() => {
+    const counts = new Map<string, number>();
+    for (const s of stations) if (s.genre) counts.set(s.genre, (counts.get(s.genre) ?? 0) + 1);
+    return [...counts.entries()].sort((a, b) => b[1] - a[1]).map(([g]) => g);
+  }, [stations]);
+
+  const shown = useMemo(
+    () => (genre ? stations.filter((s) => s.genre === genre) : stations),
+    [stations, genre],
+  );
 
   const current = stations.find((s) => s.slug === playing) ?? null;
   const accent = current?.accentColor || DEFAULT_ACCENT;
@@ -95,61 +136,94 @@ export default function App() {
   }
 
   return (
-    <View style={styles.root}>
-      <StatusBar style="light" />
+    <View style={{ flex: 1, backgroundColor: C.bg }}>
+      <StatusBar style={dark ? "light" : "dark"} />
       <SafeAreaView style={{ flex: 1 }}>
         <View style={styles.header}>
           <View>
-            <Text style={styles.h1}>ŞİMDİ</Text>
-            <Text style={styles.tag}>radyoda şu an ne çalıyor</Text>
+            <Text style={[styles.h1, { color: C.fg }]}>ŞİMDİ</Text>
+            <Text style={[styles.tag, { color: C.muted }]}>radyoda şu an ne çalıyor</Text>
           </View>
-          <Text style={styles.live}>● canlı</Text>
+          <View style={{ alignItems: "flex-end", gap: 6 }}>
+            <Pressable onPress={() => setDark(!dark)} hitSlop={10}>
+              <Text style={{ color: C.muted, fontSize: 16 }}>{dark ? "☀︎" : "☾"}</Text>
+            </Pressable>
+            <Text style={{ color: "#3ddc84", fontSize: 12 }}>● canlı</Text>
+          </View>
         </View>
 
+        {/* Tür çipleri */}
+        {genres.length > 0 && (
+          <ScrollView
+            horizontal
+            showsHorizontalScrollIndicator={false}
+            contentContainerStyle={styles.chips}
+          >
+            {[null, ...genres].map((g) => {
+              const active = genre === g;
+              return (
+                <Pressable
+                  key={g ?? "all"}
+                  onPress={() => setGenre(g)}
+                  style={[
+                    styles.chip,
+                    { borderColor: active ? C.fg : C.line, backgroundColor: active ? C.fg : "transparent" },
+                  ]}
+                >
+                  <Text style={{ color: active ? C.bg : C.muted, fontSize: 12 }}>{g ?? "tümü"}</Text>
+                </Pressable>
+              );
+            })}
+          </ScrollView>
+        )}
+
         {loading ? (
-          <ActivityIndicator color="#888" style={{ marginTop: 40 }} />
+          <ActivityIndicator color={C.muted} style={{ marginTop: 40 }} />
         ) : (
           <FlatList
-            data={stations}
+            data={shown}
             keyExtractor={(s) => s.slug}
             contentContainerStyle={{ paddingBottom: current ? 96 : 24 }}
             renderItem={({ item: s }) => {
               const c = s.accentColor || DEFAULT_ACCENT;
               const isPlaying = playing === s.slug;
-              const np = s.nowPlaying;
+              const np = isPlaying && liveNP ? liveNP : s.nowPlaying;
               const artist = np?.artist?.trim() || null;
               const title = np?.title?.trim() || null;
               const same = !!artist && !!title && artist === title;
               return (
                 <Pressable
                   onPress={() => toggle(s)}
-                  style={[styles.row, isPlaying && { backgroundColor: c + "22" }]}
+                  style={[
+                    styles.row,
+                    { borderBottomColor: C.line },
+                    isPlaying && { backgroundColor: c + "22" },
+                  ]}
                 >
                   <View style={[styles.bar, { backgroundColor: c }]} />
                   <View style={{ flex: 1 }}>
                     {np ? (
                       same ? (
-                        <Text style={styles.trackBold} numberOfLines={1}>
+                        <Text style={[styles.trackBold, { color: C.fg }]} numberOfLines={1}>
                           {title}
                         </Text>
                       ) : (
-                        <Text style={styles.track} numberOfLines={1}>
+                        <Text style={[styles.track, { color: C.fg }]} numberOfLines={1}>
                           <Text style={styles.trackBold}>{artist ?? title}</Text>
-                          {artist && title ? (
-                            <Text style={{ color: "#8a8a92" }}> — {title}</Text>
-                          ) : null}
+                          {artist && title ? <Text style={{ color: C.muted }}> — {title}</Text> : null}
                         </Text>
                       )
                     ) : (
-                      <Text style={[styles.track, { color: "#8a8a92" }]}>—</Text>
+                      <Text style={[styles.track, { color: C.muted }]}>—</Text>
                     )}
-                    <Text style={styles.sub} numberOfLines={1}>
+                    <Text style={[styles.sub, { color: C.muted }]} numberOfLines={1}>
                       <Text style={{ color: c }}>{s.name}</Text>
                       {s.frequency ? ` · ${s.frequency}` : ""}
                       {s.city ? ` · ${s.city}` : ""}
+                      {isPlaying && liveNP ? " · canlı" : ""}
                     </Text>
                   </View>
-                  <Text style={{ color: isPlaying ? c : "#555", fontSize: 16, marginLeft: 8 }}>
+                  <Text style={{ color: isPlaying ? c : C.muted, fontSize: 16, marginLeft: 8 }}>
                     {isPlaying ? "❚❚" : "▶"}
                   </Text>
                 </Pressable>
@@ -168,7 +242,7 @@ export default function App() {
                 style={{ color: readableOn(accent), fontWeight: "700", fontSize: 14 }}
                 numberOfLines={1}
               >
-                {trackLine(current.nowPlaying, current.name)}
+                {trackLine(liveNP ?? current.nowPlaying, current.name)}
               </Text>
               <Text style={{ color: readableOn(accent), opacity: 0.8, fontSize: 12 }} numberOfLines={1}>
                 {current.name}
@@ -183,7 +257,6 @@ export default function App() {
 }
 
 const styles = StyleSheet.create({
-  root: { flex: 1, backgroundColor: "#0a0a0b" },
   header: {
     flexDirection: "row",
     justifyContent: "space-between",
@@ -192,9 +265,10 @@ const styles = StyleSheet.create({
     paddingTop: 16,
     paddingBottom: 12,
   },
-  h1: { color: "#ececee", fontSize: 34, fontWeight: "900", letterSpacing: -1 },
-  tag: { color: "#8a8a92", fontSize: 13, marginTop: 2 },
-  live: { color: "#3ddc84", fontSize: 12 },
+  h1: { fontSize: 34, fontWeight: "900", letterSpacing: -1 },
+  tag: { fontSize: 13, marginTop: 2 },
+  chips: { paddingHorizontal: 20, paddingBottom: 12, gap: 8 },
+  chip: { borderWidth: 1, borderRadius: 999, paddingHorizontal: 12, paddingVertical: 6 },
   row: {
     flexDirection: "row",
     alignItems: "center",
@@ -202,12 +276,11 @@ const styles = StyleSheet.create({
     paddingVertical: 14,
     paddingHorizontal: 20,
     borderBottomWidth: StyleSheet.hairlineWidth,
-    borderBottomColor: "#1c1c20",
   },
   bar: { width: 3, height: 34, borderRadius: 2 },
-  track: { color: "#ececee", fontSize: 16 },
-  trackBold: { color: "#ececee", fontSize: 16, fontWeight: "600" },
-  sub: { color: "#8a8a92", fontSize: 12, marginTop: 3 },
+  track: { fontSize: 16 },
+  trackBold: { fontSize: 16, fontWeight: "600" },
+  sub: { fontSize: 12, marginTop: 3 },
   nowbar: {
     position: "absolute",
     left: 0,

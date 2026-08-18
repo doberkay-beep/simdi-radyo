@@ -17,6 +17,14 @@ type Row = {
 const DEFAULT_ACCENT = "#6b7280";
 const pad = (n: number) => String(n).padStart(2, "0");
 
+function readableOn(hex: string): string {
+  const h = hex.replace("#", "");
+  const r = parseInt(h.slice(0, 2), 16);
+  const g = parseInt(h.slice(2, 4), 16);
+  const b = parseInt(h.slice(4, 6), 16);
+  return (0.299 * r + 0.587 * g + 0.114 * b) / 255 > 0.6 ? "#0a0a0b" : "#ffffff";
+}
+
 export default function Archive() {
   const [date, setDate] = useState("");
   const [time, setTime] = useState("");
@@ -129,9 +137,14 @@ export default function Archive() {
                     style={{ borderColor: "var(--line)" }}
                   >
                     <span
-                      className="h-8 w-[3px] shrink-0 rounded-full"
-                      style={{ background: c }}
-                    />
+                      className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl text-sm font-bold"
+                      style={{
+                        background: `linear-gradient(135deg, ${c}, color-mix(in srgb, ${c} 50%, #000))`,
+                        color: readableOn(c),
+                      }}
+                    >
+                      {r.name.trim().charAt(0).toLocaleUpperCase("tr")}
+                    </span>
                     <span className="min-w-0 flex-1">
                       {same ? (
                         <span className="block truncate text-[17px] font-semibold">{title}</span>

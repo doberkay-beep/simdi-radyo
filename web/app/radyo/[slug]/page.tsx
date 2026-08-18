@@ -2,11 +2,20 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { getSupabase } from "@/lib/supabase";
+import StationPlayer from "@/components/StationPlayer";
 
-// Her istasyona kendi SEO sayfası ("X Radyo canlı dinle") + doğrudan çal linki.
+// Her istasyona kendi SEO sayfası ("X Radyo canlı dinle") + gerçek çalan oynatıcı.
 export const revalidate = 60;
 
 const DEFAULT_ACCENT = "#6b7280";
+
+function readableOn(hex: string): string {
+  const h = hex.replace("#", "");
+  const r = parseInt(h.slice(0, 2), 16);
+  const g = parseInt(h.slice(2, 4), 16);
+  const b = parseInt(h.slice(4, 6), 16);
+  return (0.299 * r + 0.587 * g + 0.114 * b) / 255 > 0.6 ? "#0a0a0b" : "#ffffff";
+}
 
 type Station = {
   slug: string;
@@ -108,9 +117,17 @@ export default async function StationPage({ params }: { params: Promise<{ slug: 
         </header>
 
         <div className="flex items-center gap-4">
-          <span className="h-14 w-[6px] shrink-0 rounded-full" style={{ background: accent }} />
+          <span
+            className="flex h-16 w-16 shrink-0 items-center justify-center rounded-2xl text-2xl font-bold"
+            style={{
+              background: `linear-gradient(135deg, ${accent}, color-mix(in srgb, ${accent} 50%, #000))`,
+              color: readableOn(accent),
+            }}
+          >
+            {s.name.trim().charAt(0).toLocaleUpperCase("tr")}
+          </span>
           <div>
-            <h1 className="text-4xl font-black tracking-tight">{s.name}</h1>
+            <h1 className="brand text-4xl font-bold tracking-tight">{s.name}</h1>
             <p className="mt-1 text-sm" style={{ color: "var(--muted)" }}>
               {[s.genre, s.frequency, s.city].filter(Boolean).join(" · ") || "canlı radyo"}
             </p>
@@ -124,13 +141,7 @@ export default async function StationPage({ params }: { params: Promise<{ slug: 
           <div className="mt-1 text-2xl font-semibold">{track ?? "canlı yayın"}</div>
         </div>
 
-        <Link
-          href={`/?ist=${slug}`}
-          className="mt-6 inline-flex items-center gap-2 rounded-full px-6 py-3 text-base font-semibold"
-          style={{ background: accent, color: "#0a0a0b" }}
-        >
-          ▶ Canlı Dinle
-        </Link>
+        <StationPlayer slug={slug} name={s.name} accent={accent} />
 
         <div className="mt-10 text-sm leading-relaxed" style={{ color: "var(--muted)" }}>
           <p>

@@ -19,8 +19,20 @@ type Station = {
   accentColor: string | null;
   band: "tr" | "int" | "own";
   genre: string | null;
+  homepage: string | null;
   nowPlaying: NowPlaying;
 };
+
+// İstasyonun resmî sitesinden logo (favicon) — kapak olarak.
+function faviconOf(homepage: string | null): string | null {
+  if (!homepage) return null;
+  try {
+    const host = new URL(homepage).hostname;
+    return `https://www.google.com/s2/favicons?domain=${host}&sz=64`;
+  } catch {
+    return null;
+  }
+}
 
 // Bir hex rengin üzerinde siyah mı beyaz mı metin okunur, ona karar verir.
 function readableOn(hex: string): string {
@@ -124,9 +136,16 @@ export default function NowList() {
   const [favs, setFavs] = useState<Set<string>>(new Set()); // favori slug'lar
   const [phase, setPhase] = useState<"idle" | "connecting" | "playing" | "error">("idle");
   const [sleepUntil, setSleepUntil] = useState<number | null>(null); // uyku zamanlayıcı
+  const [favOnly, setFavOnly] = useState(false); // sadece favoriler
+  const [sort, setSort] = useState<"liste" | "az" | "tur">("liste"); // sıralama
+  const [volume, setVolume] = useState(1); // ses seviyesi 0..1
+  const [muted, setMuted] = useState(false); // sessiz
+  const [history, setHistory] = useState<string[]>([]); // son dinlenenler (slug)
+  const [scrolled, setScrolled] = useState(false); // yapışkan mini başlık için
   // Çalan istasyonun CANLI çalan bilgisi (toplayıcıdan değil, anlık yoklamadan).
   const [liveNP, setLiveNP] = useState<NowPlaying>(null);
   const audioRef = useRef<HTMLAudioElement | null>(null);
+  const searchRef = useRef<HTMLInputElement | null>(null);
   // Otomatik yeniden bağlanma için: dinlenmek istenen istasyon ve deneme sayacı.
   const playingRef = useRef<string | null>(null);
   const retriesRef = useRef(0);
@@ -153,6 +172,50 @@ export default function NowList() {
       else next.add(slug);
       try {
         localStorage.setItem(FAV_KEY, JSON.stringify([...next]));
+      } catch {
+        // yok say
+      }
+      return next;
+    });
+  }
+
+  // Ses + geçmiş tercihlerini yükle.
+  useEffect(() => {
+    try {
+      const v = localStorage.getItem("ses");
+      if (v != null) setVolume(Math.min(1, Math.max(0, Number(v))));
+      const m = localStorage.getItem("sessiz");
+      if (m === "1") setMuted(true);
+      const h = localStorage.getItem("gecmis");
+      if (h) setHistory(JSON.parse(h));
+    } catch {
+      // yok say
+    }
+  }, []);
+
+  // Ses seviyesini uygula + kaydet.
+  useEffect(() => {
+    if (audioRef.current) audioRef.current.volume = muted ? 0 : volume;
+    try {
+      localStorage.setItem("ses", String(volume));
+      localStorage.setItem("sessiz", muted ? "1" : "0");
+    } catch {
+      // yok say
+    }
+  }, [volume, muted]);
+
+  // Kaydırınca yapışkan mini başlık.
+  useEffect(() => {
+    const onScroll = () => setScrolled(window.scrollY > 220);
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => window.removeEventListener("scroll", onScroll);
+  }, []);
+
+  function pushHistory(slug: string) {
+    setHistory((prev) => {
+      const next = [slug, ...prev.filter((s) => s !== slug)].slice(0, 12);
+      try {
+        localStorage.setItem("gecmis", JSON.stringify(next));
       } catch {
         // yok say
       }
@@ -249,16 +312,16 @@ export default function NowList() {
   );
   const accent = current?.accentColor || DEFAULT_ACCENT;
 
-  // Türleri say, çoktan aza sırala (filtre çipleri için).
+  // Türleri say, çoktan aza sırala ([tür, adet] — çiplerde sayı göster).
   const genres = useMemo(() => {
     const counts = new Map<string, number>();
     for (const s of stations) {
       if (s.genre) counts.set(s.genre, (counts.get(s.genre) ?? 0) + 1);
     }
-    return [...counts.entries()].sort((a, b) => b[1] - a[1]).map(([g]) => g);
+    return [...counts.entries()].sort((a, b) => b[1] - a[1]);
   }, [stations]);
 
-  // Ülke + tür + arama süz, sonra favorileri en üste al.
+  // Ülke + tür + arama + favori süz, sonra sırala.
   const shown = useMemo(() => {
     const q = low(query.trim());
     let list = stations;
@@ -266,14 +329,30 @@ export default function NowList() {
       list = list.filter((s) => (region === "int" ? s.band === "int" : s.band !== "int"));
     }
     if (genre) list = list.filter((s) => s.genre === genre);
+    if (favOnly) list = list.filter((s) => favs.has(s.slug));
     if (q) {
       list = list.filter((s) =>
         [s.name, s.city, s.frequency, s.genre].some((v) => v && low(v).includes(q)),
       );
     }
-    // Favoriler üstte (kararlı sıra).
-    return [...list].sort((a, b) => Number(favs.has(b.slug)) - Number(favs.has(a.slug)));
-  }, [stations, region, genre, query, favs]);
+    const out = [...list];
+    if (sort === "az") {
+      out.sort((a, b) => a.name.localeCompare(b.name, "tr"));
+    } else if (sort === "tur") {
+      out.sort(
+        (a, b) =>
+          (a.genre || "zzz").localeCompare(b.genre || "zzz", "tr") ||
+          a.name.localeCompare(b.name, "tr"),
+      );
+    } else {
+      // liste sırası: favoriler en üstte
+      out.sort((a, b) => Number(favs.has(b.slug)) - Number(favs.has(a.slug)));
+    }
+    return out;
+  }, [stations, region, genre, query, favs, favOnly, sort]);
+
+  // Türe göre gruplama sadece "tür" sıralamasında, filtre/arama yokken.
+  const grouped = sort === "tur" && !genre && !favOnly && !query.trim();
 
   // Ülkeye göre sayılar (segment etiketleri için).
   const trCount = useMemo(() => stations.filter((s) => s.band !== "int").length, [stations]);
@@ -292,6 +371,29 @@ export default function NowList() {
   function suggestAnother() {
     if (stations.length) setFeaturedSlug(stations[Math.floor(Math.random() * stations.length)].slug);
   }
+
+  // Klavye kısayolları: boşluk = çal/dur, "/" = arama, Esc = arama kapat.
+  useEffect(() => {
+    const onKey = (e: KeyboardEvent) => {
+      const el = e.target as HTMLElement | null;
+      const tag = el?.tagName;
+      if (tag === "INPUT" || tag === "TEXTAREA") {
+        if (e.key === "Escape") el?.blur();
+        return;
+      }
+      if (e.key === "/") {
+        e.preventDefault();
+        searchRef.current?.focus();
+      } else if (e.code === "Space") {
+        e.preventDefault();
+        if (current) toggle(current);
+        else if (featured) toggle(featured);
+      }
+    };
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [current, featured]);
 
   // "Şu an çalanlar" şeridi — gerçekten parça bilgisi olan istasyonlar.
   const nowStrip = useMemo(
@@ -384,6 +486,55 @@ export default function NowList() {
     meta.setAttribute("content", playing ? accent : "#0a0a0b");
   }, [accent, playing]);
 
+  // Sekme başlığı çalanı göstersin + favicon çalarken renklensin.
+  useEffect(() => {
+    if (typeof document === "undefined") return;
+    const base = "ŞİMDİ — radyoda şu an ne çalıyor";
+    const np = current ? liveNP ?? current.nowPlaying : null;
+    if (current && np) {
+      const t =
+        np.artist && np.title && np.artist !== np.title
+          ? `${np.artist} — ${np.title}`
+          : np.title || np.rawTitle || current.name;
+      document.title = `♪ ${t} · ŞİMDİ`;
+    } else if (current) {
+      document.title = `♪ ${current.name} · ŞİMDİ`;
+    } else {
+      document.title = base;
+    }
+    // Favicon: çalarken istasyon renginde küçük bir ekolayzer çiz.
+    try {
+      const link =
+        (document.querySelector('link[rel="icon"]') as HTMLLinkElement) ||
+        Object.assign(document.createElement("link"), { rel: "icon" });
+      if (!link.parentNode) document.head.appendChild(link);
+      if (current) {
+        const cv = document.createElement("canvas");
+        cv.width = cv.height = 64;
+        const ctx = cv.getContext("2d");
+        if (ctx) {
+          ctx.fillStyle = accent;
+          ctx.beginPath();
+          ctx.roundRect(0, 0, 64, 64, 14);
+          ctx.fill();
+          ctx.fillStyle = readableOn(accent);
+          const hs = [26, 44, 34];
+          [14, 28, 42].forEach((x, i) => {
+            const h = hs[i];
+            ctx.beginPath();
+            ctx.roundRect(x, 56 - h, 8, h, 4);
+            ctx.fill();
+          });
+          link.href = cv.toDataURL("image/png");
+        }
+      } else {
+        link.href = "/icon.png";
+      }
+    } catch {
+      // yok say
+    }
+  }, [current, liveNP, accent]);
+
   function toggle(s: Station) {
     const audio = audioRef.current;
     if (!audio) return;
@@ -395,7 +546,9 @@ export default function NowList() {
     }
     setPlaying(s.slug);
     setPhase("connecting");
+    pushHistory(s.slug);
     audio.src = `/api/stream/${s.slug}`;
+    audio.volume = muted ? 0 : volume;
     audio.play().catch(() => {
       // Otomatik çalma engellendiyse (deep link) sessizce bırak.
       setPlaying(null);
@@ -427,6 +580,39 @@ export default function NowList() {
         >
           ŞİMDİ
         </span>
+      </div>
+
+      {/* Kaydırınca beliren yapışkan mini başlık */}
+      <div
+        className="fixed inset-x-0 top-0 z-20 border-b backdrop-blur transition-transform duration-300"
+        style={{
+          background: "color-mix(in srgb, var(--bg) 82%, transparent)",
+          borderColor: "var(--line)",
+          transform: scrolled ? "translateY(0)" : "translateY(-100%)",
+        }}
+      >
+        <div className="mx-auto flex max-w-2xl items-center gap-3 px-5 py-2.5">
+          <button
+            onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
+            className="brand text-lg font-bold tracking-tight"
+            aria-label="başa dön"
+          >
+            ŞİMDİ
+          </button>
+          {current && (
+            <span className="min-w-0 flex-1 truncate text-xs" style={{ color: "var(--muted)" }}>
+              <span style={{ color: accent }}>▶</span>{" "}
+              {(() => {
+                const np = liveNP ?? current.nowPlaying;
+                return np
+                  ? np.artist && np.title && np.artist !== np.title
+                    ? `${np.artist} — ${np.title}`
+                    : np.title || np.rawTitle || current.name
+                  : current.name;
+              })()}
+            </span>
+          )}
+        </div>
       </div>
 
       <div className="relative z-10 mx-auto max-w-2xl px-5 pb-32 pt-10">
@@ -482,10 +668,11 @@ export default function NowList() {
 
         {/* Arama */}
         <input
+          ref={searchRef}
           type="search"
           value={query}
           onChange={(e) => setQuery(e.target.value)}
-          placeholder="İstasyon ara…"
+          placeholder="İstasyon ara…  (/ ile hızlı ara, boşluk çal/dur)"
           className="mb-4 w-full rounded-lg border px-4 py-2.5 text-sm outline-none"
           style={{ background: "transparent", borderColor: "var(--line)", color: "var(--fg)" }}
         />
@@ -519,15 +706,47 @@ export default function NowList() {
           })}
         </div>
 
-        {/* Tür filtresi çipleri */}
+        {/* Favori filtresi + sıralama */}
+        <div className="mb-4 flex flex-wrap items-center gap-3 text-xs">
+          <button
+            onClick={() => setFavOnly((v) => !v)}
+            className="rounded-full border px-3 py-1 transition-colors"
+            style={{
+              borderColor: favOnly ? "#ffcf4d" : "var(--line)",
+              color: favOnly ? "#ffcf4d" : "var(--muted)",
+            }}
+          >
+            {favOnly ? "★ favoriler" : "☆ favoriler"}
+          </button>
+          <button
+            onClick={() => setSort((s) => (s === "liste" ? "az" : s === "az" ? "tur" : "liste"))}
+            className="rounded-full border px-3 py-1 transition-colors"
+            style={{ borderColor: "var(--line)", color: "var(--muted)" }}
+          >
+            sıra: {sort === "liste" ? "öne çıkan" : sort === "az" ? "A-Z" : "tür"}
+          </button>
+        </div>
+
+        {/* Tür filtresi çipleri (sayılı) */}
         {genres.length > 0 && (
           <div className="mb-6 flex flex-wrap gap-2">
-            {[null, ...genres].map((g) => {
+            <button
+              onClick={() => setGenre(null)}
+              className="rounded-full border px-3 py-1 text-xs transition-colors"
+              style={{
+                borderColor: genre === null ? "var(--fg)" : "var(--line)",
+                background: genre === null ? "var(--fg)" : "transparent",
+                color: genre === null ? "var(--bg)" : "var(--muted)",
+              }}
+            >
+              tümü
+            </button>
+            {genres.map(([g, n]) => {
               const active = genre === g;
               return (
                 <button
-                  key={g ?? "all"}
-                  onClick={() => setGenre(g)}
+                  key={g}
+                  onClick={() => setGenre(active ? null : g)}
                   className="rounded-full border px-3 py-1 text-xs transition-colors"
                   style={{
                     borderColor: active ? "var(--fg)" : "var(--line)",
@@ -535,7 +754,7 @@ export default function NowList() {
                     color: active ? "var(--bg)" : "var(--muted)",
                   }}
                 >
-                  {g ?? "tümü"}
+                  {g} <span style={{ opacity: 0.6 }}>{n}</span>
                 </button>
               );
             })}
@@ -625,6 +844,48 @@ export default function NowList() {
           </div>
         )}
 
+        {/* "Son dinlediklerin" yatay şerit */}
+        {!playing && (() => {
+          const items = history
+            .map((slug) => stations.find((s) => s.slug === slug))
+            .filter((s): s is Station => !!s)
+            .slice(0, 12);
+          if (!items.length) return null;
+          return (
+            <div className="mb-6">
+              <p className="mb-2 text-xs uppercase tracking-wide" style={{ color: "var(--muted)" }}>
+                son dinlediklerin
+              </p>
+              <div className="no-scrollbar -mx-5 overflow-x-auto px-5">
+                <div className="flex gap-2 pb-1">
+                  {items.map((s) => {
+                    const c = s.accentColor || DEFAULT_ACCENT;
+                    return (
+                      <button
+                        key={s.slug}
+                        onClick={() => toggle(s)}
+                        className="press flex shrink-0 items-center gap-2 rounded-xl border py-2 pl-2 pr-3"
+                        style={{ borderColor: "var(--line)" }}
+                      >
+                        <span
+                          className="flex h-7 w-7 items-center justify-center rounded-lg text-xs font-bold"
+                          style={{
+                            background: `linear-gradient(135deg, ${c}, color-mix(in srgb, ${c} 50%, #000))`,
+                            color: readableOn(c),
+                          }}
+                        >
+                          {s.name.trim().charAt(0).toLocaleUpperCase("tr")}
+                        </span>
+                        <span className="text-xs font-medium">{s.name}</span>
+                      </button>
+                    );
+                  })}
+                </div>
+              </div>
+            </div>
+          );
+        })()}
+
         {status === "loading" && (
           <ul className="flex flex-col">
             {Array.from({ length: 8 }).map((_, i) => (
@@ -642,11 +903,27 @@ export default function NowList() {
           <p style={{ color: "var(--muted)" }}>Bağlanılamadı. Toplayıcı ve API çalışıyor mu?</p>
         )}
         {status === "idle" && shown.length === 0 && (
-          <p style={{ color: "var(--muted)" }}>Eşleşen istasyon yok.</p>
+          <div style={{ color: "var(--muted)" }}>
+            <p>Eşleşen istasyon yok.</p>
+            {(query || genre || favOnly || region !== "all") && (
+              <button
+                onClick={() => {
+                  setQuery("");
+                  setGenre(null);
+                  setFavOnly(false);
+                  setRegion("all");
+                }}
+                className="mt-2 underline"
+                style={{ color: "var(--fg)" }}
+              >
+                filtreleri temizle
+              </button>
+            )}
+          </div>
         )}
 
         <ul className="flex flex-col">
-          {shown.map((s) => {
+          {shown.map((s, i) => {
             const isPlaying = playing === s.slug;
             const np = isPlaying && liveNP ? liveNP : s.nowPlaying;
             const c = s.accentColor || DEFAULT_ACCENT;
@@ -654,22 +931,32 @@ export default function NowList() {
             const title = np?.title?.trim() || null;
             const sameArtistTitle = artist && title && artist === title;
             const isFav = favs.has(s.slug);
+            const showHeader = grouped && shown[i - 1]?.genre !== s.genre;
 
             return (
               <li key={s.slug}>
+                {showHeader && (
+                  <div
+                    className="mb-1 mt-4 px-1 text-xs uppercase tracking-wide"
+                    style={{ color: "var(--muted)" }}
+                  >
+                    {s.genre || "diğer"}
+                  </div>
+                )}
                 <div
-                  className="station-row group flex w-full items-center border-b"
+                  className="station-row row-in group flex w-full items-center border-b"
                   style={{
                     borderColor: "var(--line)",
                     background: isPlaying
                       ? `color-mix(in srgb, ${c} 13%, transparent)`
                       : undefined,
                     boxShadow: isPlaying ? `inset 3px 0 0 ${c}` : undefined,
+                    animationDelay: `${Math.min(i, 18) * 22}ms`,
                   }}
                 >
                   <button
                     onClick={() => toggle(s)}
-                    className="flex min-w-0 flex-1 items-center gap-4 py-3 pl-1 pr-2 text-left"
+                    className="press flex min-w-0 flex-1 items-center gap-4 py-3 pl-1 pr-2 text-left"
                   >
                     {/* İstasyonun renginden türeyen kapak karesi */}
                     <span
@@ -684,12 +971,25 @@ export default function NowList() {
                           <span /><span /><span /><span />
                         </span>
                       ) : (
-                        <span
-                          className="text-[15px] font-bold"
-                          style={{ color: readableOn(c), opacity: 0.92 }}
-                        >
-                          {s.name.trim().charAt(0).toLocaleUpperCase("tr")}
-                        </span>
+                        <>
+                          <span
+                            className="text-[15px] font-bold"
+                            style={{ color: readableOn(c), opacity: 0.92 }}
+                          >
+                            {s.name.trim().charAt(0).toLocaleUpperCase("tr")}
+                          </span>
+                          {faviconOf(s.homepage) && (
+                            <img
+                              src={faviconOf(s.homepage)!}
+                              alt=""
+                              loading="lazy"
+                              className="absolute inset-0 m-auto h-7 w-7 rounded-md object-contain"
+                              onError={(e) => {
+                                e.currentTarget.style.display = "none";
+                              }}
+                            />
+                          )}
+                        </>
                       )}
                     </span>
 
@@ -732,11 +1032,20 @@ export default function NowList() {
                     </span>
                   </button>
 
+                  {/* İstasyon sayfası (SEO/paylaş) — fareyle belirir */}
+                  <Link
+                    href={`/radyo/${s.slug}`}
+                    aria-label={`${s.name} sayfası`}
+                    className="shrink-0 px-1 py-4 text-sm leading-none opacity-0 transition-opacity group-hover:opacity-100"
+                    style={{ color: "var(--muted)" }}
+                  >
+                    ↗
+                  </Link>
                   {/* Favori yıldızı — ayrı düğme (çalmayı tetiklemez) */}
                   <button
                     onClick={() => toggleFav(s.slug)}
                     aria-label={isFav ? "favoriden çıkar" : "favorilere ekle"}
-                    className="shrink-0 px-2 py-4 text-lg leading-none transition-colors"
+                    className="press shrink-0 px-2 py-4 text-lg leading-none transition-colors"
                     style={{ color: isFav ? "#ffcf4d" : "var(--muted)" }}
                   >
                     {isFav ? "★" : "☆"}
@@ -756,12 +1065,15 @@ export default function NowList() {
         >
           <div
             className="mx-auto flex max-w-2xl items-center gap-3 px-5 py-3"
-            style={{ color: readableOn(accent) }}
+            style={{
+              color: readableOn(accent),
+              paddingBottom: "calc(0.75rem + env(safe-area-inset-bottom))",
+            }}
           >
             <button
               onClick={() => toggle(current)}
               aria-label="Durdur"
-              className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full"
+              className="press flex h-10 w-10 shrink-0 items-center justify-center rounded-full"
               style={{ background: "rgba(0,0,0,0.18)", color: readableOn(accent) }}
             >
               <span className="flex gap-[3px]">
@@ -769,6 +1081,16 @@ export default function NowList() {
                 <span className="h-4 w-[3px] rounded-sm" style={{ background: readableOn(accent) }} />
               </span>
             </button>
+            {/* Canlı dalga (çalarken) */}
+            {phase === "playing" && (
+              <span
+                className="eq hidden items-end gap-[2px] sm:flex"
+                style={{ ["--eq-color" as string]: readableOn(accent) }}
+                aria-hidden
+              >
+                <span /><span /><span /><span /><span />
+              </span>
+            )}
             <div className="min-w-0 flex-1">
               <div className="truncate text-sm font-semibold">
                 {phase === "error"
@@ -782,6 +1104,32 @@ export default function NowList() {
                       : tagline(current.genre, current.slug)}
               </div>
               <div className="truncate text-xs opacity-80">{current.name}</div>
+            </div>
+
+            {/* Ses seviyesi + sessize alma (geniş ekranda) */}
+            <div className="hidden shrink-0 items-center gap-2 md:flex">
+              <button
+                onClick={() => setMuted((m) => !m)}
+                aria-label={muted ? "sesi aç" : "sessize al"}
+                className="press text-base leading-none"
+                style={{ color: readableOn(accent) }}
+              >
+                {muted || volume === 0 ? "🔇" : "🔊"}
+              </button>
+              <input
+                type="range"
+                min={0}
+                max={1}
+                step={0.05}
+                value={muted ? 0 : volume}
+                onChange={(e) => {
+                  setVolume(Number(e.target.value));
+                  setMuted(false);
+                }}
+                aria-label="ses seviyesi"
+                className="h-1 w-20 cursor-pointer accent-current"
+                style={{ color: readableOn(accent) }}
+              />
             </div>
 
             {/* Şarkıyı Spotify / YouTube'da aç */}

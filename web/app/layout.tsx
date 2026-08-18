@@ -35,7 +35,7 @@ export default function RootLayout({ children }: { children: ReactNode }) {
         {/* Tema seçimini boyamadan önce uygula (flaş olmasın). */}
         <script
           dangerouslySetInnerHTML={{
-            __html: `try{if(localStorage.getItem('tema')==='light')document.documentElement.dataset.theme='light'}catch(e){}`,
+            __html: `try{var t=localStorage.getItem('tema');var l=t==='light'||((!t||t==='system')&&matchMedia('(prefers-color-scheme: light)').matches);if(l)document.documentElement.dataset.theme='light'}catch(e){}`,
           }}
         />
       </head>

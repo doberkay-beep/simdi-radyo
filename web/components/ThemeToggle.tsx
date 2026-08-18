@@ -2,35 +2,67 @@
 
 import { useEffect, useState } from "react";
 
-// Açık/kapalı tema düğmesi. Seçim localStorage'da 'tema' altında hatırlanır.
-// İlk yükleme flaş'ını layout'taki inline script önler.
+type Pref = "system" | "light" | "dark";
+
+// Uygular: seçim 'light'/'dark' ise onu, 'system' ise cihaz tercihini kullanır.
+// Mevcut CSS koyu-varsayılan + [data-theme="light"] olduğundan, açık istendiğinde
+// data-theme=light konur, koyu istendiğinde kaldırılır.
+function apply(pref: Pref) {
+  const root = document.documentElement;
+  const light =
+    pref === "light" ||
+    (pref === "system" && window.matchMedia("(prefers-color-scheme: light)").matches);
+  if (light) root.dataset.theme = "light";
+  else delete root.dataset.theme;
+}
+
+const ICON: Record<Pref, string> = { system: "🖥", light: "☀︎", dark: "☾" };
+const LABEL: Record<Pref, string> = { system: "sistem teması", light: "açık tema", dark: "koyu tema" };
+
 export default function ThemeToggle() {
-  const [dark, setDark] = useState(true);
+  const [pref, setPref] = useState<Pref>("system");
 
   useEffect(() => {
-    setDark(document.documentElement.dataset.theme !== "light");
+    let p: Pref = "system";
+    try {
+      const v = localStorage.getItem("tema") as Pref | null;
+      if (v === "light" || v === "dark" || v === "system") p = v;
+    } catch {
+      // yok say
+    }
+    setPref(p);
+    apply(p);
   }, []);
 
-  function toggle() {
-    const next = dark ? "light" : "dark";
-    setDark(!dark);
-    if (next === "light") document.documentElement.dataset.theme = "light";
-    else delete document.documentElement.dataset.theme;
+  // Sistem modunda cihaz teması değişince yansıt.
+  useEffect(() => {
+    if (pref !== "system") return;
+    const mq = window.matchMedia("(prefers-color-scheme: light)");
+    const onChange = () => apply("system");
+    mq.addEventListener("change", onChange);
+    return () => mq.removeEventListener("change", onChange);
+  }, [pref]);
+
+  function cycle() {
+    const next: Pref = pref === "system" ? "light" : pref === "light" ? "dark" : "system";
+    setPref(next);
+    apply(next);
     try {
       localStorage.setItem("tema", next);
     } catch {
-      // özel mod vb. — sorun değil
+      // yok say
     }
   }
 
   return (
     <button
-      onClick={toggle}
-      aria-label={dark ? "Açık temaya geç" : "Karanlık temaya geç"}
-      className="text-base leading-none"
+      onClick={cycle}
+      aria-label={`Tema: ${LABEL[pref]} (değiştir)`}
+      title={LABEL[pref]}
+      className="press text-base leading-none"
       style={{ color: "var(--muted)" }}
     >
-      {dark ? "☀︎" : "☾"}
+      {ICON[pref]}
     </button>
   );
 }

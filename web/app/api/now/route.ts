@@ -10,7 +10,7 @@ export async function GET() {
   const { data, error } = await supabase
     .from("stations")
     .select(
-      "slug, name, city, frequency, accent_color, band, genre, now_playing(artist, title, raw_title, updated_at)",
+      "slug, name, city, frequency, accent_color, band, genre, homepage, now_playing(artist, title, raw_title, updated_at)",
     )
     .eq("is_active", true)
     .order("sort_order", { ascending: true });
@@ -31,6 +31,7 @@ export async function GET() {
       accentColor: s.accent_color,
       band: s.band,
       genre: s.genre ?? null,
+      homepage: s.homepage ?? null,
       nowPlaying: np
         ? {
             artist: np.artist,

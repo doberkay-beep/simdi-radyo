@@ -60,6 +60,17 @@ body {
     var(--bg);
 }
 
+/* Hiçbir şey çalmazken zemin ölü kalmasın: renk yumuşakça gezinsin (aurora).
+   Yumuşak, doygunluğu düşük tonlar — sakin bir lav lambası gibi. */
+@keyframes aurora {
+  0% { --accent: #5b6cb8; }
+  25% { --accent: #b8794c; }
+  50% { --accent: #4f8f7d; }
+  75% { --accent: #8a5b9c; }
+  100% { --accent: #5b6cb8; }
+}
+.spread.aurora { animation: aurora 26s ease-in-out infinite; }
+
 /* Çalan parçanın yanındaki ekolayzır çubukları. */
 @keyframes eq {
   0%, 100% { transform: scaleY(0.35); }
@@ -138,7 +149,8 @@ body {
   .eq span,
   .live-dot,
   .skeleton,
-  .nowbar-float { animation: none !important; }
+  .nowbar-float,
+  .spread.aurora { animation: none !important; }
   .spread,
   .station-row,
   .title-underline { transition: none !important; }

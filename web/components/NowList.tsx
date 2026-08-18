@@ -89,6 +89,7 @@ export default function NowList() {
   const [now, setNow] = useState(0); // göreli zaman için; ilk render'da 0
   const [genre, setGenre] = useState<string | null>(null); // seçili tür filtresi
   const [query, setQuery] = useState(""); // isimle arama
+  const [region, setRegion] = useState<"all" | "tr" | "int">("all"); // ülke ayrımı
   const [favs, setFavs] = useState<Set<string>>(new Set()); // favori slug'lar
   const [phase, setPhase] = useState<"idle" | "connecting" | "playing" | "error">("idle");
   const [sleepUntil, setSleepUntil] = useState<number | null>(null); // uyku zamanlayıcı
@@ -226,10 +227,14 @@ export default function NowList() {
     return [...counts.entries()].sort((a, b) => b[1] - a[1]).map(([g]) => g);
   }, [stations]);
 
-  // Tür + arama süz, sonra favorileri en üste al.
+  // Ülke + tür + arama süz, sonra favorileri en üste al.
   const shown = useMemo(() => {
     const q = low(query.trim());
-    let list = genre ? stations.filter((s) => s.genre === genre) : stations;
+    let list = stations;
+    if (region !== "all") {
+      list = list.filter((s) => (region === "int" ? s.band === "int" : s.band !== "int"));
+    }
+    if (genre) list = list.filter((s) => s.genre === genre);
     if (q) {
       list = list.filter((s) =>
         [s.name, s.city, s.frequency, s.genre].some((v) => v && low(v).includes(q)),
@@ -237,7 +242,11 @@ export default function NowList() {
     }
     // Favoriler üstte (kararlı sıra).
     return [...list].sort((a, b) => Number(favs.has(b.slug)) - Number(favs.has(a.slug)));
-  }, [stations, genre, query, favs]);
+  }, [stations, region, genre, query, favs]);
+
+  // Ülkeye göre sayılar (segment etiketleri için).
+  const trCount = useMemo(() => stations.filter((s) => s.band !== "int").length, [stations]);
+  const intCount = useMemo(() => stations.filter((s) => s.band === "int").length, [stations]);
 
   // Deep link ile gelen istasyonu bir kez çalmayı dene (liste yüklenince).
   useEffect(() => {
@@ -342,7 +351,10 @@ export default function NowList() {
   const barQuery = trackQuery(barNp);
 
   return (
-    <div className="spread min-h-screen" style={{ ["--accent" as string]: accent }}>
+    <div
+      className={`spread min-h-screen ${playing ? "" : "aurora"}`}
+      style={playing ? { ["--accent" as string]: accent } : undefined}
+    >
       <div className="mx-auto max-w-2xl px-5 pb-32 pt-10">
         {/* Başlık — logo yok, sadece kelime işareti */}
         <header className="mb-6 flex items-start justify-between">
@@ -396,6 +408,35 @@ export default function NowList() {
           className="mb-4 w-full rounded-lg border px-4 py-2.5 text-sm outline-none"
           style={{ background: "transparent", borderColor: "var(--line)", color: "var(--fg)" }}
         />
+
+        {/* Ülke ayrımı: Tümü / Türkiye / Yabancı */}
+        <div
+          className="mb-4 inline-flex rounded-full border p-0.5 text-xs"
+          style={{ borderColor: "var(--line)" }}
+        >
+          {(
+            [
+              ["all", `Tümü ${stations.length}`],
+              ["tr", `Türkiye ${trCount}`],
+              ["int", `Yabancı ${intCount}`],
+            ] as const
+          ).map(([key, label]) => {
+            const active = region === key;
+            return (
+              <button
+                key={key}
+                onClick={() => setRegion(key)}
+                className="rounded-full px-3 py-1 transition-colors"
+                style={{
+                  background: active ? "var(--fg)" : "transparent",
+                  color: active ? "var(--bg)" : "var(--muted)",
+                }}
+              >
+                {label}
+              </button>
+            );
+          })}
+        </div>
 
         {/* Tür filtresi çipleri */}
         {genres.length > 0 && (

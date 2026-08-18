@@ -104,7 +104,7 @@ export default async function StationPage({ params }: { params: Promise<{ slug: 
           <Link href="/" className="text-sm underline" style={{ color: "var(--muted)" }}>
             ← tüm radyolar
           </Link>
-          <span className="text-sm font-black tracking-tight">ŞİMDİ</span>
+          <span className="brand text-sm font-bold tracking-tight">ŞİMDİ</span>
         </header>
 
         <div className="flex items-center gap-4">

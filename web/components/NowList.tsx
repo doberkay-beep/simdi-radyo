@@ -307,6 +307,18 @@ export default function NowList() {
     }
   }, [current, liveNP]);
 
+  // Tarayıcı tema rengi (mobil adres çubuğu) çalan istasyona göre boyansın.
+  useEffect(() => {
+    if (typeof document === "undefined") return;
+    let meta = document.querySelector('meta[name="theme-color"]');
+    if (!meta) {
+      meta = document.createElement("meta");
+      meta.setAttribute("name", "theme-color");
+      document.head.appendChild(meta);
+    }
+    meta.setAttribute("content", playing ? accent : "#0a0a0b");
+  }, [accent, playing]);
+
   function toggle(s: Station) {
     const audio = audioRef.current;
     if (!audio) return;
@@ -335,16 +347,16 @@ export default function NowList() {
         {/* Başlık — logo yok, sadece kelime işareti */}
         <header className="mb-6 flex items-start justify-between">
           <div>
-            <h1 className="text-4xl font-black tracking-tight">ŞİMDİ</h1>
+            <h1 className="brand text-[42px] font-bold leading-none tracking-tight">ŞİMDİ</h1>
             <span
-              className="title-underline mt-1 block h-[2px] rounded-full"
+              className="title-underline mt-2 block h-[2px] rounded-full"
               style={{ width: 40, background: accent, opacity: playing ? 1 : 0.25 }}
             />
-            <p className="mt-1.5 text-sm" style={{ color: "var(--muted)" }}>
+            <p className="mt-2 text-sm" style={{ color: "var(--muted)" }}>
               radyoda şu an ne çalıyor
             </p>
           </div>
-          <div className="flex flex-col items-end gap-1 text-xs" style={{ color: "var(--muted)" }}>
+          <div className="flex flex-col items-end gap-1.5 text-xs" style={{ color: "var(--muted)" }}>
             <span className="flex items-center gap-3">
               <button
                 onClick={cycleSleep}
@@ -364,9 +376,14 @@ export default function NowList() {
                 canlı
               </span>
             </span>
-            <Link href="/arsiv" className="underline" style={{ color: "var(--muted)" }}>
-              arşiv →
-            </Link>
+            <span className="flex items-center gap-3">
+              <Link href="/hakkinda" className="underline" style={{ color: "var(--muted)" }}>
+                geliştirici
+              </Link>
+              <Link href="/arsiv" className="underline" style={{ color: "var(--muted)" }}>
+                arşiv →
+              </Link>
+            </span>
           </div>
         </header>
 
@@ -403,7 +420,19 @@ export default function NowList() {
           </div>
         )}
 
-        {status === "loading" && <p style={{ color: "var(--muted)" }}>Yükleniyor…</p>}
+        {status === "loading" && (
+          <ul className="flex flex-col">
+            {Array.from({ length: 8 }).map((_, i) => (
+              <li key={i} className="flex items-center gap-4 border-b py-3" style={{ borderColor: "var(--line)" }}>
+                <span className="skeleton h-11 w-11 shrink-0 rounded-xl" />
+                <span className="min-w-0 flex-1">
+                  <span className="skeleton block h-4" style={{ width: `${55 + ((i * 7) % 35)}%` }} />
+                  <span className="skeleton mt-2 block h-3" style={{ width: `${30 + ((i * 5) % 25)}%` }} />
+                </span>
+              </li>
+            ))}
+          </ul>
+        )}
         {status === "error" && (
           <p style={{ color: "var(--muted)" }}>Bağlanılamadı. Toplayıcı ve API çalışıyor mu?</p>
         )}
@@ -435,19 +464,27 @@ export default function NowList() {
                 >
                   <button
                     onClick={() => toggle(s)}
-                    className="flex min-w-0 flex-1 items-center gap-4 py-4 pl-0 pr-2 text-left"
+                    className="flex min-w-0 flex-1 items-center gap-4 py-3 pl-1 pr-2 text-left"
                   >
-                    {/* Renk çubuğu + çalma göstergesi */}
-                    <span className="flex h-10 w-6 shrink-0 items-center justify-center">
+                    {/* İstasyonun renginden türeyen kapak karesi */}
+                    <span
+                      className="relative flex h-11 w-11 shrink-0 items-center justify-center overflow-hidden rounded-xl"
+                      style={{
+                        background: `linear-gradient(135deg, ${c}, color-mix(in srgb, ${c} 50%, #000))`,
+                        ["--eq-color" as string]: readableOn(c),
+                      }}
+                    >
                       {isPlaying ? (
                         <span className="eq flex items-end gap-[2px]" aria-hidden>
                           <span /><span /><span /><span />
                         </span>
                       ) : (
                         <span
-                          className="h-8 w-[3px] rounded-full opacity-70 transition-opacity group-hover:opacity-100"
-                          style={{ background: c }}
-                        />
+                          className="text-[15px] font-bold"
+                          style={{ color: readableOn(c), opacity: 0.92 }}
+                        >
+                          {s.name.trim().charAt(0).toLocaleUpperCase("tr")}
+                        </span>
                       )}
                     </span>
 

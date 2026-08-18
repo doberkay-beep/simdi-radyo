@@ -13,7 +13,7 @@ export default function Hakkinda() {
       <div className="mx-auto max-w-2xl px-5 pb-24 pt-10">
         <header className="mb-10 flex items-end justify-between">
           <div>
-            <h1 className="text-4xl font-black tracking-tight">
+            <h1 className="brand text-4xl font-bold tracking-tight">
               ŞİMDİ <span style={{ color: "var(--muted)" }}>· hakkında</span>
             </h1>
           </div>
@@ -52,10 +52,25 @@ export default function Hakkinda() {
         </div>
 
         <div className="mt-12 border-t pt-6 text-sm" style={{ borderColor: "var(--line)", color: "var(--muted)" }}>
-          <Link href="/" className="underline" style={{ color: "var(--fg)" }}>
-            necaliyor.co
-          </Link>{" "}
-          — radyoda şu an ne çalıyor
+          <p>
+            Geliştiren:{" "}
+            <a
+              href="https://berkaydogan.co"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="underline"
+              style={{ color: "var(--fg)" }}
+            >
+              Berkay Doğan
+            </a>{" "}
+            — yazar. Meraklarını arada koda döküyor.
+          </p>
+          <p className="mt-2">
+            <Link href="/" className="underline" style={{ color: "var(--fg)" }}>
+              necaliyor.co
+            </Link>{" "}
+            — radyoda şu an ne çalıyor
+          </p>
         </div>
       </div>
     </div>

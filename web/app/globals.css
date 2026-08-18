@@ -68,8 +68,8 @@ body {
 .eq span {
   display: inline-block;
   width: 3px;
-  height: 14px;
-  background: var(--accent);
+  height: 16px;
+  background: var(--eq-color, var(--accent));
   border-radius: 2px;
   transform-origin: bottom;
   animation: eq 900ms ease-in-out infinite;
@@ -92,5 +92,54 @@ body {
 /* Başlık altı ince vurgu çizgisi — çalan renge göre belirginleşir. */
 .title-underline { transition: opacity 600ms ease; }
 
-/* Alt çalma çubuğu yukarı doğru yumuşak gölge (yüzer gibi). */
-.nowbar-float { box-shadow: 0 -12px 32px -12px rgba(0, 0, 0, 0.5); }
+/* Marka yazı tipi — "ŞİMDİ" kelime işareti. */
+.brand { font-family: var(--font-brand), ui-sans-serif, system-ui, sans-serif; }
+
+/* Alt çalma çubuğu: yukarı doğru yumuşak gölge + aşağıdan yumuşak giriş. */
+@keyframes slideUp {
+  from { transform: translateY(100%); opacity: 0; }
+  to { transform: translateY(0); opacity: 1; }
+}
+.nowbar-float {
+  box-shadow: 0 -12px 32px -12px rgba(0, 0, 0, 0.5);
+  animation: slideUp 340ms cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+
+/* Yükleniyor iskeleti — yumuşak parıltı. */
+@keyframes shimmer {
+  0% { background-position: 200% 0; }
+  100% { background-position: -200% 0; }
+}
+.skeleton {
+  background: linear-gradient(
+    90deg,
+    color-mix(in srgb, var(--fg) 6%, transparent) 25%,
+    color-mix(in srgb, var(--fg) 13%, transparent) 37%,
+    color-mix(in srgb, var(--fg) 6%, transparent) 63%
+  );
+  background-size: 200% 100%;
+  animation: shimmer 1.5s ease-in-out infinite;
+  border-radius: 6px;
+}
+
+/* Zemine neredeyse görünmez film greni. */
+.grain {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 60;
+  opacity: 0.04;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+:root[data-theme="light"] .grain { opacity: 0.03; mix-blend-mode: multiply; }
+
+/* Hareket hassasiyeti: animasyon/geçişleri kıs. */
+@media (prefers-reduced-motion: reduce) {
+  .eq span,
+  .live-dot,
+  .skeleton,
+  .nowbar-float { animation: none !important; }
+  .spread,
+  .station-row,
+  .title-underline { transition: none !important; }
+}

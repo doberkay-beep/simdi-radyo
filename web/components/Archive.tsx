@@ -57,7 +57,7 @@ export default function Archive() {
         <header className="mb-6">
           <div className="flex items-end justify-between">
             <div>
-              <h1 className="text-4xl font-black tracking-tight">
+              <h1 className="brand text-4xl font-bold tracking-tight">
                 ŞİMDİ <span style={{ color: "var(--muted)" }}>· arşiv</span>
               </h1>
               <p className="mt-1 text-sm" style={{ color: "var(--muted)" }}>

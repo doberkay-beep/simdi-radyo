@@ -1,6 +1,16 @@
 import type { ReactNode } from "react";
+import localFont from "next/font/local";
 import { Analytics } from "@vercel/analytics/next";
 import "./globals.css";
+
+// Marka yazı tipi — "ŞİMDİ" kelime işareti için (duyuru görselleriyle aynı dil).
+// Yerelden yükleniyor (ağ bağımlılığı yok, Türkçe harfleri destekler).
+const brand = localFont({
+  src: "../assets/BricolageGrotesque-Bold.ttf",
+  weight: "700",
+  variable: "--font-brand",
+  display: "swap",
+});
 
 export const metadata = {
   metadataBase: new URL("https://necaliyor.co"),
@@ -14,9 +24,13 @@ export const metadata = {
   },
 };
 
+export const viewport = {
+  themeColor: "#0a0a0b",
+};
+
 export default function RootLayout({ children }: { children: ReactNode }) {
   return (
-    <html lang="tr" suppressHydrationWarning>
+    <html lang="tr" className={brand.variable} suppressHydrationWarning>
       <head>
         {/* Tema seçimini boyamadan önce uygula (flaş olmasın). */}
         <script
@@ -27,6 +41,8 @@ export default function RootLayout({ children }: { children: ReactNode }) {
       </head>
       <body>
         {children}
+        {/* Zemine neredeyse görünmez doku — derinlik hissi. */}
+        <div className="grain" aria-hidden />
         <Analytics />
       </body>
     </html>

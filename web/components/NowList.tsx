@@ -6,6 +6,7 @@ import ThemeToggle from "./ThemeToggle";
 import {
   selamla,
   EPIGRAFLAR,
+  DIZELER,
   YUKLENIYOR,
   TUR_EPIGRAF,
   FISILTI,
@@ -148,6 +149,8 @@ export default function NowList() {
   const [welcomed, setWelcomed] = useState(true); // ilk giriş perdesi (true=gizli)
   const [favToast, setFavToast] = useState(""); // favori onay fısıltısı
   const [showKeys, setShowKeys] = useState(false); // kısayol kartı
+  const [focus, setFocus] = useState(false); // sessizlik / odak modu
+  const [odakDize, setOdakDize] = useState(0); // odakta dönen dize
   // Çalan istasyonun CANLI çalan bilgisi (toplayıcıdan değil, anlık yoklamadan).
   const [liveNP, setLiveNP] = useState<NowPlaying>(null);
   const audioRef = useRef<HTMLAudioElement | null>(null);
@@ -242,6 +245,18 @@ export default function NowList() {
       // yok say
     }
   }
+
+  // Odak modunda dize yavaşça dönsün; çalma durursa moddan çık.
+  useEffect(() => {
+    if (!focus) return;
+    if (!playing) {
+      setFocus(false);
+      return;
+    }
+    setOdakDize(Math.floor(Date.now() / 11000) % DIZELER.length);
+    const id = setInterval(() => setOdakDize((d) => (d + 1) % DIZELER.length), 11000);
+    return () => clearInterval(id);
+  }, [focus, playing]);
 
   function pushHistory(slug: string) {
     setHistory((prev) => {
@@ -419,8 +434,11 @@ export default function NowList() {
       } else if (e.key === "?") {
         e.preventDefault();
         setShowKeys((v) => !v);
+      } else if (e.key === "f" || e.key === "F") {
+        if (current) setFocus((v) => !v);
       } else if (e.key === "Escape") {
         setShowKeys(false);
+        setFocus(false);
       } else if (e.code === "Space") {
         e.preventDefault();
         if (current) toggle(current);
@@ -1169,6 +1187,17 @@ export default function NowList() {
               <div className="truncate text-xs opacity-80">{current.name}</div>
             </div>
 
+            {/* Sessizlik / odak modu */}
+            <button
+              onClick={() => setFocus(true)}
+              aria-label="sessizlik modu"
+              title="sessizlik modu (f)"
+              className="press shrink-0 text-lg leading-none"
+              style={{ color: readableOn(accent) }}
+            >
+              ◐
+            </button>
+
             {/* Ses seviyesi + sessize alma (geniş ekranda) */}
             <div className="hidden shrink-0 items-center gap-2 md:flex">
               <button
@@ -1237,6 +1266,62 @@ export default function NowList() {
         onEnded={reconnect}
         onError={reconnect}
       />
+
+      {/* Sessizlik / Odak Modu — tam ekran, tek istasyon, bir dize */}
+      {focus && current && (
+        <div
+          className="fade-in fixed inset-0 z-50 flex flex-col items-center justify-center px-8 text-center"
+          style={{
+            background: `radial-gradient(60% 50% at 50% 45%, color-mix(in srgb, ${accent} 12%, #08080a), #08080a 75%)`,
+          }}
+        >
+          <button
+            onClick={() => setFocus(false)}
+            aria-label="çık"
+            className="press absolute right-6 top-6 text-2xl"
+            style={{ color: "var(--muted)" }}
+          >
+            ×
+          </button>
+
+          <span
+            className="text-xs uppercase tracking-[0.3em]"
+            style={{ color: accent }}
+          >
+            {current.name}
+          </span>
+
+          <div className="read mt-6 max-w-xl text-3xl leading-snug" style={{ color: "#ececee" }}>
+            {(() => {
+              const np = liveNP ?? current.nowPlaying;
+              if (!np) return tagline(current.genre, current.slug);
+              return np.artist && np.title && np.artist !== np.title
+                ? `${np.artist} — ${np.title}`
+                : np.title || np.rawTitle;
+            })()}
+          </div>
+
+          <div className="mx-auto my-8 h-px w-16" style={{ background: accent, opacity: 0.5 }} />
+
+          <p className="read fade-in max-w-lg text-xl italic" key={odakDize} style={{ color: "#9a9aa2" }}>
+            {DIZELER[odakDize]}
+          </p>
+
+          <div className="absolute bottom-10 flex items-center gap-6">
+            <button
+              onClick={() => toggle(current)}
+              aria-label="duraklat"
+              className="press text-sm"
+              style={{ color: "var(--muted)" }}
+            >
+              {phase === "connecting" ? "bağlanıyor…" : "❚❚ duraklat"}
+            </button>
+            <span className="text-xs" style={{ color: "var(--muted)" }}>
+              çıkmak için Esc
+            </span>
+          </div>
+        </div>
+      )}
 
       {/* Favori onayı — kısa edebi fısıltı */}
       {favToast && (

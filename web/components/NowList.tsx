@@ -12,8 +12,11 @@ import {
   FISILTI,
   HOSGELDIN,
   FAVORI_ONAY,
+  SAIRIN,
   gununDizesi,
 } from "@/lib/sozler";
+
+const SAIR_SET = new Set(SAIRIN.slugs);
 
 type NowPlaying = {
   artist: string | null;
@@ -140,6 +143,7 @@ export default function NowList() {
   const [phase, setPhase] = useState<"idle" | "connecting" | "playing" | "error">("idle");
   const [sleepUntil, setSleepUntil] = useState<number | null>(null); // uyku zamanlayıcı
   const [favOnly, setFavOnly] = useState(false); // sadece favoriler
+  const [sairMode, setSairMode] = useState(false); // Şairin Frekansı seçkisi
   const [sort, setSort] = useState<"liste" | "az" | "tur">("liste"); // sıralama
   const [volume, setVolume] = useState(1); // ses seviyesi 0..1
   const [muted, setMuted] = useState(false); // sessiz
@@ -370,6 +374,11 @@ export default function NowList() {
 
   // Ülke + tür + arama + favori süz, sonra sırala.
   const shown = useMemo(() => {
+    // Şairin Frekansı: seçkiyi kendi sırasında göster (diğer filtreleri yok say).
+    if (sairMode) {
+      const byslug = new Map(stations.map((s) => [s.slug, s]));
+      return SAIRIN.slugs.map((sl) => byslug.get(sl)).filter((s): s is Station => !!s);
+    }
     const q = low(query.trim());
     let list = stations;
     if (region !== "all") {
@@ -396,10 +405,10 @@ export default function NowList() {
       out.sort((a, b) => Number(favs.has(b.slug)) - Number(favs.has(a.slug)));
     }
     return out;
-  }, [stations, region, genre, query, favs, favOnly, sort]);
+  }, [stations, region, genre, query, favs, favOnly, sort, sairMode]);
 
   // Türe göre gruplama sadece "tür" sıralamasında, filtre/arama yokken.
-  const grouped = sort === "tur" && !genre && !favOnly && !query.trim();
+  const grouped = sort === "tur" && !genre && !favOnly && !query.trim() && !sairMode;
 
   // Ülkeye göre sayılar (segment etiketleri için).
   const trCount = useMemo(() => stations.filter((s) => s.band !== "int").length, [stations]);
@@ -777,8 +786,19 @@ export default function NowList() {
           })}
         </div>
 
-        {/* Favori filtresi + sıralama */}
+        {/* Favori filtresi + sıralama + Şairin Frekansı */}
         <div className="mb-4 flex flex-wrap items-center gap-3 text-xs">
+          <button
+            onClick={() => setSairMode((v) => !v)}
+            className="rounded-full border px-3 py-1 transition-colors"
+            style={{
+              borderColor: sairMode ? "var(--accent)" : "var(--line)",
+              color: sairMode ? "var(--fg)" : "var(--muted)",
+              background: sairMode ? "color-mix(in srgb, var(--accent) 14%, transparent)" : "transparent",
+            }}
+          >
+            ✍ şairin frekansı
+          </button>
           <button
             onClick={() => setFavOnly((v) => !v)}
             className="rounded-full border px-3 py-1 transition-colors"
@@ -832,8 +852,16 @@ export default function NowList() {
           </div>
         )}
 
+        {/* Şairin Frekansı — girişte edebi tanıtım */}
+        {sairMode && (
+          <div className="fade-in mb-6">
+            <h2 className="brand text-2xl font-bold">✍ {SAIRIN.baslik}</h2>
+            <p className="epigraf mt-1 text-base">{SAIRIN.alt}</p>
+          </div>
+        )}
+
         {/* Türe girince edebi epigraf */}
-        {genre && TUR_EPIGRAF[genre] && (
+        {!sairMode && genre && TUR_EPIGRAF[genre] && (
           <p className="epigraf fade-in mb-5 text-base" key={genre}>
             {TUR_EPIGRAF[genre]}
           </p>
@@ -1096,6 +1124,7 @@ export default function NowList() {
                         </span>
                       )}
                       <span className="mt-0.5 block truncate text-xs" style={{ color: "var(--muted)" }}>
+                        {SAIR_SET.has(s.slug) ? <span title="şairin frekansı">✍ </span> : ""}
                         {s.band === "int" ? `${FLAG[s.slug] || "🌍"} ` : ""}
                         <span style={{ color: c }}>{s.name}</span>
                         {s.frequency ? ` · ${s.frequency}` : ""}

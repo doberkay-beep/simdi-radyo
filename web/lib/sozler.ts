@@ -70,6 +70,27 @@ export const DIZELER = [
   "Radyo, yalnızlığa eşlik eden en eski dosttur.",
 ];
 
+// ── Şairin Frekansı ──
+// Yazarken açık bıraktıklarım. Klasik, akustik, biraz da gürültü.
+// Buradaki slug'ları dilediğin gibi değiştir — bunlar senin seçkin.
+export const SAIRIN = {
+  baslik: "Şairin Frekansı",
+  alt: "yazarken açık bıraktıklarım — klasik, akustik, biraz da gürültü.",
+  slugs: [
+    "borusan-klasik",
+    "itu-klasik",
+    "radio-swiss-classic",
+    "radyo-eksen",
+    "joyturk-rock",
+    "radyo-odtu-rock",
+    "turk-rock-fm",
+    "max-fm",
+    "apacik-radyo",
+    "kexp",
+    "radio-paradise-rock",
+  ] as string[],
+};
+
 // Deterministik günlük seçim (SSR güvenli — rastgelelik yok).
 export function gununDizesi(): string {
   const d = new Date();

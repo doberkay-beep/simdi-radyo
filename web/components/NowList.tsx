@@ -692,6 +692,9 @@ export default function NowList() {
               <Link href="/hakkinda" className="underline" style={{ color: "var(--muted)" }}>
                 geliştirici
               </Link>
+              <Link href="/nabiz" className="underline" style={{ color: "var(--muted)" }}>
+                nabız
+              </Link>
               <Link href="/arsiv" className="underline" style={{ color: "var(--muted)" }}>
                 arşiv →
               </Link>

@@ -3,6 +3,16 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import Link from "next/link";
 import ThemeToggle from "./ThemeToggle";
+import {
+  selamla,
+  EPIGRAFLAR,
+  YUKLENIYOR,
+  TUR_EPIGRAF,
+  FISILTI,
+  HOSGELDIN,
+  FAVORI_ONAY,
+  gununDizesi,
+} from "@/lib/sozler";
 
 type NowPlaying = {
   artist: string | null;
@@ -78,14 +88,6 @@ const FLAG: Record<string, string> = {
   "italo-power": "🇮🇹",
 };
 
-// Günün saatine göre selamlama.
-function greeting(h: number): string {
-  if (h < 6) return "İyi geceler";
-  if (h < 11) return "Günaydın";
-  if (h < 18) return "İyi günler";
-  if (h < 22) return "İyi akşamlar";
-  return "İyi geceler";
-}
 const pad2 = (n: number) => String(n).padStart(2, "0");
 
 // Şarkı bilgisi vermeyen istasyonlar için türe uygun "havalı" cümleler.
@@ -142,6 +144,10 @@ export default function NowList() {
   const [muted, setMuted] = useState(false); // sessiz
   const [history, setHistory] = useState<string[]>([]); // son dinlenenler (slug)
   const [scrolled, setScrolled] = useState(false); // yapışkan mini başlık için
+  const [epi, setEpi] = useState(0); // dönen epigraf
+  const [welcomed, setWelcomed] = useState(true); // ilk giriş perdesi (true=gizli)
+  const [favToast, setFavToast] = useState(""); // favori onay fısıltısı
+  const [showKeys, setShowKeys] = useState(false); // kısayol kartı
   // Çalan istasyonun CANLI çalan bilgisi (toplayıcıdan değil, anlık yoklamadan).
   const [liveNP, setLiveNP] = useState<NowPlaying>(null);
   const audioRef = useRef<HTMLAudioElement | null>(null);
@@ -168,8 +174,13 @@ export default function NowList() {
   function toggleFav(slug: string) {
     setFavs((prev) => {
       const next = new Set(prev);
-      if (next.has(slug)) next.delete(slug);
-      else next.add(slug);
+      if (next.has(slug)) {
+        next.delete(slug);
+      } else {
+        next.add(slug);
+        setFavToast(FAVORI_ONAY);
+        setTimeout(() => setFavToast(""), 1800);
+      }
       try {
         localStorage.setItem(FAV_KEY, JSON.stringify([...next]));
       } catch {
@@ -210,6 +221,27 @@ export default function NowList() {
     window.addEventListener("scroll", onScroll, { passive: true });
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
+
+  // Epigraf yavaşça dönsün + ilk giriş perdesini bir kez göster.
+  useEffect(() => {
+    setEpi(Math.floor(Date.now() / 12000) % EPIGRAFLAR.length);
+    const id = setInterval(() => setEpi((e) => (e + 1) % EPIGRAFLAR.length), 12000);
+    try {
+      if (!localStorage.getItem("karsilandi")) setWelcomed(false);
+    } catch {
+      // yok say
+    }
+    return () => clearInterval(id);
+  }, []);
+
+  function dismissWelcome() {
+    setWelcomed(true);
+    try {
+      localStorage.setItem("karsilandi", "1");
+    } catch {
+      // yok say
+    }
+  }
 
   function pushHistory(slug: string) {
     setHistory((prev) => {
@@ -384,6 +416,11 @@ export default function NowList() {
       if (e.key === "/") {
         e.preventDefault();
         searchRef.current?.focus();
+      } else if (e.key === "?") {
+        e.preventDefault();
+        setShowKeys((v) => !v);
+      } else if (e.key === "Escape") {
+        setShowKeys(false);
       } else if (e.code === "Space") {
         e.preventDefault();
         if (current) toggle(current);
@@ -404,7 +441,7 @@ export default function NowList() {
   // Saat (Türkiye saati = kullanıcının cihaz saati). now ile ~20 sn'de tazelenir.
   const clockD = new Date(now || Date.now());
   const clock = `${pad2(clockD.getHours())}:${pad2(clockD.getMinutes())}`;
-  const selam = greeting(clockD.getHours());
+  const selam = selamla(clockD.getHours());
 
   // Deep link ile gelen istasyonu bir kez çalmayı dene (liste yüklenince).
   useEffect(() => {
@@ -582,6 +619,9 @@ export default function NowList() {
         </span>
       </div>
 
+      {/* Çalarken sayfanın çok yavaş nefes alması */}
+      {playing && <div className="breathe" aria-hidden />}
+
       {/* Kaydırınca beliren yapışkan mini başlık */}
       <div
         className="fixed inset-x-0 top-0 z-20 border-b backdrop-blur transition-transform duration-300"
@@ -659,10 +699,20 @@ export default function NowList() {
           </div>
         </header>
 
-        {/* Selamlama + saat + sayaçlar */}
+        {/* Selamlama (edebi) + saat + sayaçlar */}
         {now > 0 && (
-          <p className="mb-4 text-sm" style={{ color: "var(--muted)" }}>
-            {selam} · {clock} · {stations.length} radyo · {genres.length} tür
+          <div className="mb-5">
+            <p className="epigraf text-[15px]">{selam}</p>
+            <p className="mt-1 text-xs" style={{ color: "var(--muted)" }}>
+              {clock} · {stations.length} radyo · {genres.length} tür
+            </p>
+          </div>
+        )}
+
+        {/* Günün epigrafı — boştayken yavaşça döner */}
+        {!playing && now > 0 && (
+          <p className="epigraf fade-in mb-5 text-lg" key={epi}>
+            — {EPIGRAFLAR[epi]}
           </p>
         )}
 
@@ -759,6 +809,13 @@ export default function NowList() {
               );
             })}
           </div>
+        )}
+
+        {/* Türe girince edebi epigraf */}
+        {genre && TUR_EPIGRAF[genre] && (
+          <p className="epigraf fade-in mb-5 text-base" key={genre}>
+            {TUR_EPIGRAF[genre]}
+          </p>
         )}
 
         {/* "Ne dinlesem?" — boştayken rastgele bir istasyon öner */}
@@ -887,6 +944,8 @@ export default function NowList() {
         })()}
 
         {status === "loading" && (
+          <>
+          <p className="epigraf mb-3 text-sm">{YUKLENIYOR[epi % YUKLENIYOR.length]}</p>
           <ul className="flex flex-col">
             {Array.from({ length: 8 }).map((_, i) => (
               <li key={i} className="flex items-center gap-4 border-b py-3" style={{ borderColor: "var(--line)" }}>
@@ -898,6 +957,7 @@ export default function NowList() {
               </li>
             ))}
           </ul>
+          </>
         )}
         {status === "error" && (
           <p style={{ color: "var(--muted)" }}>Bağlanılamadı. Toplayıcı ve API çalışıyor mu?</p>
@@ -1174,6 +1234,82 @@ export default function NowList() {
         onEnded={reconnect}
         onError={reconnect}
       />
+
+      {/* Favori onayı — kısa edebi fısıltı */}
+      {favToast && (
+        <div
+          className="fade-in fixed left-1/2 z-30 -translate-x-1/2 rounded-full px-4 py-2 text-sm"
+          style={{
+            bottom: current ? 92 : 28,
+            background: "var(--fg)",
+            color: "var(--bg)",
+          }}
+        >
+          {favToast}
+        </div>
+      )}
+
+      {/* Kısayol kartı ( ? ile açılır ) */}
+      {showKeys && (
+        <div
+          className="fixed inset-0 z-40 flex items-center justify-center p-6"
+          style={{ background: "color-mix(in srgb, var(--bg) 70%, transparent)" }}
+          onClick={() => setShowKeys(false)}
+        >
+          <div
+            className="fade-in w-full max-w-sm rounded-2xl border p-6"
+            style={{ background: "var(--bg)", borderColor: "var(--line)" }}
+            onClick={(e) => e.stopPropagation()}
+          >
+            <h2 className="brand mb-4 text-xl font-bold">kısayollar</h2>
+            <ul className="flex flex-col gap-2 text-sm" style={{ color: "var(--fg)" }}>
+              {[
+                ["boşluk", "çal / dur"],
+                ["/", "aramaya git"],
+                ["?", "bu kartı aç/kapat"],
+                ["Esc", "kapat"],
+              ].map(([k, d]) => (
+                <li key={k} className="flex items-center justify-between">
+                  <span style={{ color: "var(--muted)" }}>{d}</span>
+                  <kbd
+                    className="rounded-md border px-2 py-0.5 text-xs"
+                    style={{ borderColor: "var(--line)" }}
+                  >
+                    {k}
+                  </kbd>
+                </li>
+              ))}
+            </ul>
+            <p className="epigraf mt-5 text-sm">{gununDizesi()}</p>
+          </div>
+        </div>
+      )}
+
+      {/* İlk giriş perdesi — bir kez */}
+      {!welcomed && (
+        <div
+          className="fade-in fixed inset-0 z-50 flex flex-col items-center justify-center px-8 text-center"
+          style={{ background: "color-mix(in srgb, var(--bg) 92%, transparent)" }}
+          onClick={dismissWelcome}
+        >
+          <span className="brand text-5xl font-bold tracking-tight">ŞİMDİ</span>
+          <h2 className="read mt-6 text-2xl italic" style={{ color: "var(--fg)" }}>
+            {HOSGELDIN.baslik}
+          </h2>
+          <p className="read mt-2 max-w-md text-lg italic" style={{ color: "var(--muted)" }}>
+            {HOSGELDIN.satir}
+          </p>
+          <button
+            onClick={dismissWelcome}
+            className="press mt-8 rounded-full px-6 py-2.5 text-sm font-semibold"
+            style={{ background: "var(--fg)", color: "var(--bg)" }}
+          >
+            başla
+          </button>
+          {/* uzun sessizlikte fısıltı — ilk perde metniyle aynı ruh */}
+          <span className="sr-only">{FISILTI}</span>
+        </div>
+      )}
     </div>
   );
 }

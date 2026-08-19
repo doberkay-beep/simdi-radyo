@@ -1,5 +1,6 @@
 import Link from "next/link";
 import ThemeToggle from "@/components/ThemeToggle";
+import { gununDizesi } from "@/lib/sozler";
 
 export const metadata = {
   title: "Hakkında — ŞİMDİ",
@@ -25,11 +26,13 @@ export default function Hakkinda() {
           </span>
         </header>
 
+        <p className="dize mb-8 text-lg">{gununDizesi()}</p>
+
         <div
-          className="flex flex-col gap-5 text-[17px] leading-relaxed"
+          className="read flex flex-col gap-5 text-[18px] leading-relaxed"
           style={{ color: "var(--fg)" }}
         >
-          <p>
+          <p className="dropcap">
             <strong>ŞİMDİ</strong>, basit bir merakın ürünü: şu anda radyoda ne çalıyor?
             Onlarca istasyonu tek tek gezmek yerine, hepsinin o an çaldığı parçayı tek bir
             ekranda, canlı görmek istedim.

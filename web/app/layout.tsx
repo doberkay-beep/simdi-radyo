@@ -12,6 +12,16 @@ const brand = localFont({
   display: "swap",
 });
 
+// Edebi "okuma" fontu — mısralar, epigraflar, düzyazı (kitap hissi).
+const read = localFont({
+  src: [
+    { path: "../assets/Lora-Regular.ttf", weight: "400", style: "normal" },
+    { path: "../assets/Lora-Italic.ttf", weight: "400", style: "italic" },
+  ],
+  variable: "--font-read",
+  display: "swap",
+});
+
 export const metadata = {
   metadataBase: new URL("https://necaliyor.co"),
   title: "ŞİMDİ — radyoda şu an ne çalıyor",
@@ -30,7 +40,7 @@ export const viewport = {
 
 export default function RootLayout({ children }: { children: ReactNode }) {
   return (
-    <html lang="tr" className={brand.variable} suppressHydrationWarning>
+    <html lang="tr" className={`${brand.variable} ${read.variable}`} suppressHydrationWarning>
       <head>
         {/* Tema seçimini boyamadan önce uygula (flaş olmasın). */}
         <script

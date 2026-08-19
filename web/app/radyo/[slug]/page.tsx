@@ -3,6 +3,7 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { getSupabase } from "@/lib/supabase";
 import StationPlayer from "@/components/StationPlayer";
+import { TUR_EPIGRAF } from "@/lib/sozler";
 
 // Her istasyona kendi SEO sayfası ("X Radyo canlı dinle") + gerçek çalan oynatıcı.
 export const revalidate = 60;
@@ -143,7 +144,11 @@ export default async function StationPage({ params }: { params: Promise<{ slug: 
 
         <StationPlayer slug={slug} name={s.name} accent={accent} />
 
-        <div className="mt-10 text-sm leading-relaxed" style={{ color: "var(--muted)" }}>
+        {s.genre && TUR_EPIGRAF[s.genre] && (
+          <p className="epigraf mt-8 text-base">{TUR_EPIGRAF[s.genre]}</p>
+        )}
+
+        <div className="read mt-8 text-[15px] leading-relaxed" style={{ color: "var(--muted)" }}>
           <p>
             <strong style={{ color: "var(--fg)" }}>{s.name}</strong> yayınını{" "}
             <Link href={`/?ist=${slug}`} className="underline" style={{ color: "var(--fg)" }}>

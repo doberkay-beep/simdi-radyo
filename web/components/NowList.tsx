@@ -1276,6 +1276,16 @@ export default function NowList() {
                   >
                     ↗
                   </Link>
+                  {/* Anonim kalp — çalmayı tetiklemez */}
+                  <button
+                    onClick={() => kalpAt(s.slug)}
+                    aria-label="kalp gönder"
+                    title="bu istasyona kalp gönder"
+                    className="press shrink-0 px-1.5 py-4 text-sm leading-none"
+                    style={{ color: kalpler[s.slug] ? "#e0475f" : "var(--muted)" }}
+                  >
+                    ♥{kalpler[s.slug] ? <span className="ml-0.5 text-xs tabular-nums">{kalpler[s.slug]}</span> : ""}
+                  </button>
                   {/* Favori yıldızı — ayrı düğme (çalmayı tetiklemez) */}
                   <button
                     onClick={() => toggleFav(s.slug)}

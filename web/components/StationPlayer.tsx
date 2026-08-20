@@ -25,7 +25,35 @@ export default function StationPlayer({
   const [phase, setPhase] = useState<"idle" | "connecting" | "playing" | "error">("idle");
   const [copied, setCopied] = useState(false);
   const [kartAcik, setKartAcik] = useState(false);
+  const [kalp, setKalp] = useState<number | null>(null);
+  const kalpBekle = useRef(0);
   const retries = useRef(0);
+
+  useEffect(() => {
+    let off = false;
+    fetch("/api/kalp", { cache: "no-store" })
+      .then((r) => r.json())
+      .then((d) => !off && d.kalpler && setKalp(Number(d.kalpler[slug] || 0)))
+      .catch(() => {});
+    return () => {
+      off = true;
+    };
+  }, [slug]);
+
+  function kalpAt() {
+    const t = Date.now();
+    if (t - kalpBekle.current < 1200) return;
+    kalpBekle.current = t;
+    setKalp((k) => (k ?? 0) + 1);
+    fetch("/api/kalp", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ slug }),
+    })
+      .then((r) => r.json())
+      .then((d) => typeof d.toplam === "number" && setKalp(d.toplam))
+      .catch(() => {});
+  }
 
   useEffect(() => {
     const a = audioRef.current;
@@ -92,8 +120,16 @@ export default function StationPlayer({
         {phase === "connecting" ? "bağlanıyor…" : phase === "error" ? "yayına ulaşılamadı" : ""}
       </span>
       <button
+        onClick={kalpAt}
+        aria-label="kalp gönder"
+        className="press ml-auto inline-flex items-center gap-1 rounded-full border px-4 py-2 text-sm"
+        style={{ borderColor: "var(--line)", color: kalp ? "#e0475f" : "var(--fg)" }}
+      >
+        ♥ {kalp ?? ""}
+      </button>
+      <button
         onClick={() => setKartAcik(true)}
-        className="press ml-auto rounded-full border px-4 py-2 text-sm"
+        className="press rounded-full border px-4 py-2 text-sm"
         style={{ borderColor: "var(--line)", color: "var(--fg)" }}
       >
         kart

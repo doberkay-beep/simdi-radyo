@@ -70,6 +70,7 @@ export default function Kesif() {
   const [ruh, setRuh] = useState<string>("sakin");
   const [zar, setZar] = useState<Station | null>(null);
   const [tur, setTur] = useState<string | null>(null);
+  const [kalpler, setKalpler] = useState<Record<string, number>>({});
 
   useEffect(() => {
     let off = false;
@@ -81,10 +82,21 @@ export default function Kesif() {
         setStatus("idle");
       })
       .catch(() => !off && setStatus("error"));
+    fetch("/api/kalp", { cache: "no-store" })
+      .then((r) => r.json())
+      .then((d) => !off && d.kalpler && setKalpler(d.kalpler))
+      .catch(() => {});
     return () => {
       off = true;
     };
   }, []);
+
+  // En sevilen istasyonlar (kalbe göre).
+  const enSevilen = useMemo(() => {
+    const withHearts = stations.filter((s) => kalpler[s.slug] > 0);
+    withHearts.sort((a, b) => (kalpler[b.slug] || 0) - (kalpler[a.slug] || 0));
+    return withHearts.slice(0, 6);
+  }, [stations, kalpler]);
 
   // Günün istasyonu — güne göre deterministik (mount sonrası, SSR sorunsuz).
   const gununIst = useMemo(() => {
@@ -168,6 +180,27 @@ export default function Kesif() {
                 </div>
               </div>
             </section>
+
+            {/* En sevilenler — kalbe göre */}
+            {enSevilen.length > 0 && (
+              <section className="mb-10">
+                <h2 className="mb-3 text-xs uppercase tracking-wide" style={{ color: "var(--muted)" }}>
+                  en sevilenler ♥
+                </h2>
+                <div className="grid gap-2 sm:grid-cols-2">
+                  {enSevilen.map((s) => (
+                    <div key={s.slug} className="flex items-center gap-2">
+                      <div className="min-w-0 flex-1">
+                        <Tile s={s} />
+                      </div>
+                      <span className="shrink-0 text-sm font-semibold tabular-nums" style={{ color: "#e0475f" }}>
+                        ♥ {kalpler[s.slug]}
+                      </span>
+                    </div>
+                  ))}
+                </div>
+              </section>
+            )}
 
             {/* Ruh haline göre */}
             <section className="mb-10">

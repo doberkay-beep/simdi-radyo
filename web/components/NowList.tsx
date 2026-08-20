@@ -16,6 +16,8 @@ import {
   gununDizesi,
 } from "@/lib/sozler";
 import KartModal from "./KartModal";
+import DilToggle from "./DilToggle";
+import { useDil } from "@/lib/i18n";
 
 const SAIR_SET = new Set(SAIRIN.slugs);
 
@@ -148,6 +150,7 @@ function trackQuery(np: NowPlaying): string | null {
 const low = (s: string) => s.toLocaleLowerCase("tr");
 
 export default function NowList() {
+  const { t } = useDil();
   const [stations, setStations] = useState<Station[]>([]);
   const [playing, setPlaying] = useState<string | null>(null);
   const [status, setStatus] = useState<"idle" | "loading" | "error">("loading");
@@ -825,30 +828,31 @@ export default function NowList() {
               >
                 {sleepUntil ? `🌙 ${sleepRemain}dk` : "🌙"}
               </button>
+              <DilToggle />
               <ThemeToggle />
               <span className="flex items-center gap-2">
                 <span
                   className="live-dot inline-block h-2 w-2 rounded-full"
                   style={{ background: playing ? accent : "#3ddc84" }}
                 />
-                canlı
+                {t("nav.canli")}
               </span>
             </span>
             <span className="flex items-center gap-3">
               <Link href="/hakkinda" className="underline" style={{ color: "var(--muted)" }}>
-                geliştirici
+                {t("nav.gelistirici")}
               </Link>
               <Link href="/kesif" className="underline" style={{ color: "var(--muted)" }}>
-                keşif
+                {t("nav.kesif")}
               </Link>
               <Link href="/kose" className="underline" style={{ color: "var(--muted)" }}>
-                köşe
+                {t("nav.kose")}
               </Link>
               <Link href="/nabiz" className="underline" style={{ color: "var(--muted)" }}>
-                nabız
+                {t("nav.nabiz")}
               </Link>
               <Link href="/arsiv" className="underline" style={{ color: "var(--muted)" }}>
-                arşiv →
+                {t("nav.arsiv")}
               </Link>
             </span>
           </div>
@@ -877,7 +881,7 @@ export default function NowList() {
           type="search"
           value={query}
           onChange={(e) => setQuery(e.target.value)}
-          placeholder="İstasyon ara…  (/ ile hızlı ara, boşluk çal/dur)"
+          placeholder={t("home.ara")}
           className="mb-4 w-full rounded-lg border px-4 py-2.5 text-sm outline-none"
           style={{ background: "transparent", borderColor: "var(--line)", color: "var(--fg)" }}
         />
@@ -889,9 +893,9 @@ export default function NowList() {
         >
           {(
             [
-              ["all", `Tümü ${stations.length}`],
-              ["tr", `Türkiye ${trCount}`],
-              ["int", `Yabancı ${intCount}`],
+              ["all", `${t("home.hepsi")} ${stations.length}`],
+              ["tr", `${t("home.turkiye")} ${trCount}`],
+              ["int", `${t("home.dunya")} ${intCount}`],
             ] as const
           ).map(([key, label]) => {
             const active = region === key;
@@ -932,7 +936,7 @@ export default function NowList() {
               color: favOnly ? "#ffcf4d" : "var(--muted)",
             }}
           >
-            {favOnly ? "★ favoriler" : "☆ favoriler"}
+            {favOnly ? `★ ${t("home.favoriler")}` : `☆ ${t("home.favoriler")}`}
           </button>
           <button
             onClick={() => setSort((s) => (s === "liste" ? "az" : s === "az" ? "tur" : "liste"))}
@@ -1041,7 +1045,7 @@ export default function NowList() {
         {!playing && nowStrip.length > 0 && (
           <div className="mb-6">
             <p className="mb-2 text-xs uppercase tracking-wide" style={{ color: "var(--muted)" }}>
-              şu an çalanlar
+              {t("home.simdiCalanlar")}
             </p>
             <div className="no-scrollbar -mx-5 overflow-x-auto px-5">
               <div className="flex gap-2 pb-1">

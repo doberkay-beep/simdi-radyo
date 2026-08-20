@@ -3,6 +3,8 @@
 import { useEffect, useMemo, useState } from "react";
 import Link from "next/link";
 import ThemeToggle from "./ThemeToggle";
+import DilToggle from "./DilToggle";
+import { useDil } from "@/lib/i18n";
 
 type Station = {
   slug: string;
@@ -65,6 +67,7 @@ function Tile({ s }: { s: Station }) {
 }
 
 export default function Kesif() {
+  const { t } = useDil();
   const [stations, setStations] = useState<Station[]>([]);
   const [status, setStatus] = useState<"loading" | "idle" | "error">("loading");
   const [ruh, setRuh] = useState<string>("sakin");
@@ -134,19 +137,20 @@ export default function Kesif() {
       <div className="mx-auto max-w-2xl px-5 pb-24 pt-10">
         <header className="mb-6 flex items-start justify-between">
           <div>
-            <h1 className="brand text-4xl font-bold tracking-tight">Keşif</h1>
-            <p className="epigraf mt-2 text-[15px]">rastlantıya bırak — bir frekans seni bulsun.</p>
+            <h1 className="brand text-4xl font-bold tracking-tight">{t("kesif.baslik")}</h1>
+            <p className="epigraf mt-2 text-[15px]">{t("kesif.alt")}</p>
           </div>
           <span className="flex items-center gap-3">
+            <DilToggle />
             <ThemeToggle />
             <Link href="/" className="text-sm underline" style={{ color: "var(--muted)" }}>
-              ← şimdi
+              {t("nav.simdi")}
             </Link>
           </span>
         </header>
 
-        {status === "loading" && <p className="epigraf">istasyonlar getiriliyor…</p>}
-        {status === "error" && <p style={{ color: "var(--muted)" }}>Getirilemedi. Birazdan tekrar dene.</p>}
+        {status === "loading" && <p className="epigraf">{t("kesif.yukleniyor")}</p>}
+        {status === "error" && <p style={{ color: "var(--muted)" }}>{t("kesif.hata")}</p>}
 
         {status === "idle" && (
           <>
@@ -155,7 +159,7 @@ export default function Kesif() {
               {gununIst && (
                 <div className="rounded-2xl border p-5" style={{ borderColor: "var(--line)" }}>
                   <div className="text-xs uppercase tracking-wide" style={{ color: "var(--muted)" }}>
-                    günün istasyonu
+                    {t("kesif.gununIst")}
                   </div>
                   <div className="mt-2">
                     <Tile s={gununIst} />
@@ -165,18 +169,18 @@ export default function Kesif() {
               <div className="rounded-2xl border p-5" style={{ borderColor: "var(--line)" }}>
                 <div className="flex items-center justify-between">
                   <div className="text-xs uppercase tracking-wide" style={{ color: "var(--muted)" }}>
-                    zar at
+                    {t("kesif.zar")}
                   </div>
                   <button
                     onClick={zarAt}
                     className="press rounded-full border px-3 py-1 text-sm"
                     style={{ borderColor: "var(--line)", color: "var(--fg)" }}
                   >
-                    🎲 rastgele
+                    {t("kesif.rastgele")}
                   </button>
                 </div>
                 <div className="mt-2">
-                  {zar ? <Tile s={zar} /> : <p className="epigraf text-sm">zarı at, bir yere düşsün.</p>}
+                  {zar ? <Tile s={zar} /> : <p className="epigraf text-sm">{t("kesif.zarBos")}</p>}
                 </div>
               </div>
             </section>
@@ -185,7 +189,7 @@ export default function Kesif() {
             {enSevilen.length > 0 && (
               <section className="mb-10">
                 <h2 className="mb-3 text-xs uppercase tracking-wide" style={{ color: "var(--muted)" }}>
-                  en sevilenler ♥
+                  {t("kesif.enSevilen")}
                 </h2>
                 <div className="grid gap-2 sm:grid-cols-2">
                   {enSevilen.map((s) => (
@@ -205,7 +209,7 @@ export default function Kesif() {
             {/* Ruh haline göre */}
             <section className="mb-10">
               <h2 className="mb-3 text-xs uppercase tracking-wide" style={{ color: "var(--muted)" }}>
-                ruh haline göre
+                {t("kesif.ruhHali")}
               </h2>
               <div className="mb-4 flex flex-wrap gap-2">
                 {RUHLAR.map((r) => (
@@ -219,23 +223,23 @@ export default function Kesif() {
                       color: ruh === r.key ? "var(--fg)" : "var(--muted)",
                     }}
                   >
-                    {r.ad}
+                    {t(`ruh.${r.key}`)}
                   </button>
                 ))}
               </div>
-              <p className="epigraf mb-3 text-sm">{ruhAktif.alt}</p>
+              <p className="epigraf mb-3 text-sm">{t(`ruh.${ruhAktif.key}.alt`)}</p>
               <div className="grid gap-2 sm:grid-cols-2">
                 {ruhList.map((s) => (
                   <Tile key={s.slug} s={s} />
                 ))}
-                {ruhList.length === 0 && <p className="epigraf text-sm">bu ruhta istasyon yok.</p>}
+                {ruhList.length === 0 && <p className="epigraf text-sm">{t("kesif.ruhBos")}</p>}
               </div>
             </section>
 
             {/* Türe göre gez */}
             <section className="mb-10">
               <h2 className="mb-3 text-xs uppercase tracking-wide" style={{ color: "var(--muted)" }}>
-                türe göre gez
+                {t("kesif.tureGore")}
               </h2>
               <div className="mb-4 flex flex-wrap gap-2">
                 {turler.map(([t, n]) => (

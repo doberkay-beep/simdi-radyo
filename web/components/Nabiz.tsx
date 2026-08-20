@@ -3,6 +3,8 @@
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import ThemeToggle from "./ThemeToggle";
+import DilToggle from "./DilToggle";
+import { useDil } from "@/lib/i18n";
 
 type Sim = {
   title: string;
@@ -47,6 +49,7 @@ function ara(q: string) {
 }
 
 export default function Nabiz() {
+  const { t } = useDil();
   const [data, setData] = useState<Data | null>(null);
   const [status, setStatus] = useState<"loading" | "idle" | "error">("loading");
 
@@ -82,14 +85,15 @@ export default function Nabiz() {
         <header className="mb-6 flex items-start justify-between">
           <div>
             <h1 className="brand text-4xl font-bold tracking-tight">
-              Radyo <span style={{ color: "var(--muted)" }}>Nabzı</span>
+              {t("nabiz.baslik1")} <span style={{ color: "var(--muted)" }}>{t("nabiz.baslik2")}</span>
             </h1>
-            <p className="epigraf mt-2 text-[15px]">Türk radyosunun kalp atışı — canlı.</p>
+            <p className="epigraf mt-2 text-[15px]">{t("nabiz.alt")}</p>
           </div>
           <span className="flex items-center gap-3">
+            <DilToggle />
             <ThemeToggle />
             <Link href="/" className="text-sm underline" style={{ color: "var(--muted)" }}>
-              ← şimdi
+              {t("nav.simdi")}
             </Link>
           </span>
         </header>
@@ -113,7 +117,7 @@ export default function Nabiz() {
         {data && data.moods && data.moods.length > 0 && (
           <section className="mb-10">
             <h2 className="mb-3 text-xs uppercase tracking-wide" style={{ color: "var(--muted)" }}>
-              şu an Türkiye&apos;nin ruh hali
+              {t("nabiz.ruhHali")}
             </h2>
             {/* Tek çubukta oranlı şerit */}
             <div className="flex h-3 w-full overflow-hidden rounded-full" style={{ background: "var(--line)" }}>
@@ -145,22 +149,22 @@ export default function Nabiz() {
         {data && data.trend && data.trend.length > 0 && (
           <section className="mb-10">
             <h2 className="mb-3 text-xs uppercase tracking-wide" style={{ color: "var(--muted)" }}>
-              yükselen ↑
+              {t("nabiz.yukselen")}
             </h2>
             <ul className="flex flex-col gap-2">
-              {data.trend.map((t, i) => (
+              {data.trend.map((it, i) => (
                 <li key={i} className="flex items-center gap-3">
                   <span className="text-sm" style={{ color: "var(--accent)" }}>
                     ↑
                   </span>
                   <span className="min-w-0 flex-1 truncate text-[15px]">
-                    <span className="font-semibold">{t.artist ?? t.title}</span>
-                    {t.artist && t.artist !== t.title && (
-                      <span style={{ color: "var(--muted)" }}> — {t.title}</span>
+                    <span className="font-semibold">{it.artist ?? it.title}</span>
+                    {it.artist && it.artist !== it.title && (
+                      <span style={{ color: "var(--muted)" }}> — {it.title}</span>
                     )}
                   </span>
                   <span className="shrink-0 text-xs tabular-nums" style={{ color: "var(--muted)" }}>
-                    {t.onceki} → {t.son}
+                    {it.onceki} → {it.son}
                   </span>
                 </li>
               ))}
@@ -172,7 +176,7 @@ export default function Nabiz() {
         {data && data.hourly && data.hourly.length > 0 && (
           <section className="mb-10">
             <h2 className="mb-3 text-xs uppercase tracking-wide" style={{ color: "var(--muted)" }}>
-              en hareketli saat (7 gün)
+              {t("nabiz.hareketliSaat")}
             </h2>
             {(() => {
               const map = new Map(data.hourly!.map((h) => [h.saat, h.adet]));
@@ -221,7 +225,7 @@ export default function Nabiz() {
         {data && data.simultaneous.length > 0 && (
           <section className="mb-10">
             <h2 className="mb-3 text-xs uppercase tracking-wide" style={{ color: "var(--muted)" }}>
-              şu an birden fazla istasyonda
+              {t("nabiz.eszamanli")}
             </h2>
             <ul className="flex flex-col gap-3">
               {data.simultaneous.map((g, i) => (
@@ -260,7 +264,7 @@ export default function Nabiz() {
         {data && data.todaySongs.length > 0 && (
           <section className="mb-10">
             <h2 className="mb-3 text-xs uppercase tracking-wide" style={{ color: "var(--muted)" }}>
-              son 24 saatte en çok çalanlar
+              {t("nabiz.enCok")}
             </h2>
             <ol className="flex flex-col gap-2">
               {data.todaySongs.map((s, i) => {
@@ -311,7 +315,7 @@ export default function Nabiz() {
         {data && data.todayArtists.length > 0 && (
           <section className="mb-10">
             <h2 className="mb-3 text-xs uppercase tracking-wide" style={{ color: "var(--muted)" }}>
-              en çok çalan sanatçılar (24 saat)
+              {t("nabiz.sanatcilar")}
             </h2>
             <div className="flex flex-wrap gap-2">
               {data.todayArtists.map((a, i) => (

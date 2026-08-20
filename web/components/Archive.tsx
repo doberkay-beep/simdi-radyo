@@ -3,6 +3,8 @@
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import ThemeToggle from "./ThemeToggle";
+import DilToggle from "./DilToggle";
+import { useDil } from "@/lib/i18n";
 
 type Row = {
   slug: string;
@@ -28,6 +30,7 @@ function readableOn(hex: string): string {
 type AraRow = { artist: string | null; title: string | null; startedAt: string; slug: string | null; name: string; accentColor: string | null };
 
 export default function Archive() {
+  const { t } = useDil();
   const [date, setDate] = useState("");
   const [time, setTime] = useState("");
   const [rows, setRows] = useState<Row[]>([]);
@@ -95,13 +98,14 @@ export default function Archive() {
                 ŞİMDİ <span style={{ color: "var(--muted)" }}>· arşiv</span>
               </h1>
               <p className="mt-1 text-sm" style={{ color: "var(--muted)" }}>
-                o an radyoda ne çalıyordu
+                {t("arsiv.alt")}
               </p>
             </div>
             <span className="flex items-center gap-3">
+              <DilToggle />
               <ThemeToggle />
               <Link href="/" className="text-sm underline" style={{ color: "var(--muted)" }}>
-                ← şimdi
+                {t("nav.simdi")}
               </Link>
             </span>
           </div>
@@ -127,7 +131,7 @@ export default function Archive() {
               className="rounded-md px-4 py-2 text-sm font-semibold"
               style={{ background: "var(--fg)", color: "var(--bg)" }}
             >
-              Göster
+              {t("arsiv.goster")}
             </button>
           </div>
           <p className="mt-2 text-xs" style={{ color: "var(--muted)" }}>
@@ -152,7 +156,7 @@ export default function Archive() {
                   setAraStatus("idle");
                 }
               }}
-              placeholder="arşivde parça / sanatçı ara…"
+              placeholder={t("arsiv.ara")}
               className="flex-1 rounded-md border px-3 py-2 text-sm"
               style={{ background: "transparent", borderColor: "var(--line)", color: "var(--fg)" }}
             />
@@ -161,7 +165,7 @@ export default function Archive() {
               className="rounded-md border px-4 py-2 text-sm"
               style={{ borderColor: "var(--line)", color: "var(--fg)" }}
             >
-              ara
+              {t("arsiv.araBtn")}
             </button>
           </form>
         </header>
@@ -182,7 +186,7 @@ export default function Archive() {
                 className="text-xs underline"
                 style={{ color: "var(--muted)" }}
               >
-                temizle
+                {t("arsiv.temizle")}
               </button>
             </div>
             {araStatus === "loading" && <p style={{ color: "var(--muted)" }}>aranıyor…</p>}

@@ -11,7 +11,30 @@ type Sim = {
 };
 type Song = { title: string; artist: string | null; adet: number };
 type Artist = { artist: string; adet: number };
-type Data = { simultaneous: Sim[]; todaySongs: Song[]; todayArtists: Artist[] };
+type Mood = { tur: string; adet: number; oran: number };
+type Data = {
+  simultaneous: Sim[];
+  todaySongs: Song[];
+  todayArtists: Artist[];
+  moods?: Mood[];
+  calanToplam?: number;
+};
+
+// Tür → renk (ruh halini görselleştirmek için).
+const TUR_RENK: Record<string, string> = {
+  arabesk: "#9c5f7c",
+  caz: "#b98a4a",
+  türkü: "#7d9a5a",
+  nostalji: "#8a7ab0",
+  rock: "#c6503a",
+  klasik: "#6a86b8",
+  elektronik: "#4a90d6",
+  "türkçe pop": "#c65a8a",
+  pop: "#e04a7a",
+  alternatif: "#5f8f8a",
+  tsm: "#b0708a",
+  metal: "#8a5a5a",
+};
 
 const DEFAULT_ACCENT = "#6b7280";
 
@@ -80,6 +103,38 @@ export default function Nabiz() {
               {top.artist && top.artist !== top.title ? `${top.artist} — ${top.title}` : top.title}
             </div>
           </div>
+        )}
+
+        {/* Türkiye'nin ruh hali — şu an çalan türlerin dağılımı */}
+        {data && data.moods && data.moods.length > 0 && (
+          <section className="mb-10">
+            <h2 className="mb-3 text-xs uppercase tracking-wide" style={{ color: "var(--muted)" }}>
+              şu an Türkiye&apos;nin ruh hali
+            </h2>
+            {/* Tek çubukta oranlı şerit */}
+            <div className="flex h-3 w-full overflow-hidden rounded-full" style={{ background: "var(--line)" }}>
+              {data.moods.map((m) => (
+                <div
+                  key={m.tur}
+                  title={`${m.tur} · ${m.adet}`}
+                  style={{ width: `${m.oran * 100}%`, background: TUR_RENK[m.tur] || "var(--accent)" }}
+                />
+              ))}
+            </div>
+            <div className="mt-3 flex flex-wrap gap-x-4 gap-y-1.5 text-sm">
+              {data.moods.map((m) => (
+                <span key={m.tur} className="inline-flex items-center gap-1.5">
+                  <span className="inline-block h-2.5 w-2.5 rounded-full" style={{ background: TUR_RENK[m.tur] || "var(--accent)" }} />
+                  <span>{m.tur}</span>
+                  <span style={{ color: "var(--muted)" }}>{Math.round(m.oran * 100)}%</span>
+                </span>
+              ))}
+            </div>
+            <p className="epigraf mt-3 text-sm">
+              {data.calanToplam ?? 0} istasyonda şu an müzik var
+              {data.moods[0] ? ` — en baskın ses: ${data.moods[0].tur}.` : "."}
+            </p>
+          </section>
         )}
 
         {status === "loading" && <p className="epigraf">nabız ölçülüyor…</p>}

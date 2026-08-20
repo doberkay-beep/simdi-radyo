@@ -14,19 +14,24 @@ export async function GET() {
   // (1) Şu an çalanlar → eşzamanlılık.
   const { data: nowData } = await supabase
     .from("stations")
-    .select("slug, name, accent_color, now_playing(artist, title, raw_title)")
+    .select("slug, name, accent_color, genre, band, now_playing(artist, title, raw_title)")
     .eq("is_active", true);
 
   type St = {
     slug: string;
     name: string;
     accent_color: string | null;
+    genre: string | null;
+    band: string | null;
     now_playing: unknown;
   };
   const groups = new Map<
     string,
     { title: string; artist: string | null; stations: { slug: string; name: string; accentColor: string | null }[] }
   >();
+  // Tür dağılımı: ŞU AN parça çalan istasyonların türleri (Türkiye'nin ruh hali).
+  const turSay = new Map<string, number>();
+  let calanToplam = 0;
   for (const s of (nowData ?? []) as St[]) {
     const raw = s.now_playing;
     const np = (Array.isArray(raw) ? raw[0] : raw) as
@@ -35,10 +40,17 @@ export async function GET() {
     if (!np) continue;
     const t = (np.title || np.raw_title || "").trim();
     if (t.length < 2) continue;
+    if (s.genre) {
+      turSay.set(s.genre, (turSay.get(s.genre) || 0) + 1);
+      calanToplam++;
+    }
     const key = low(t);
     if (!groups.has(key)) groups.set(key, { title: t, artist: np.artist, stations: [] });
     groups.get(key)!.stations.push({ slug: s.slug, name: s.name, accentColor: s.accent_color });
   }
+  const moods = [...turSay.entries()]
+    .map(([tur, adet]) => ({ tur, adet, oran: calanToplam ? adet / calanToplam : 0 }))
+    .sort((a, b) => b.adet - a.adet);
   const simultaneous = [...groups.values()]
     .filter((g) => g.stations.length >= 2)
     .sort((a, b) => b.stations.length - a.stations.length)
@@ -70,7 +82,7 @@ export async function GET() {
   }
 
   return json(
-    { simultaneous, todaySongs, todayArtists },
+    { simultaneous, todaySongs, todayArtists, moods, calanToplam },
     { headers: { "Cache-Control": "public, s-maxage=30, stale-while-revalidate=60" } },
   );
 }

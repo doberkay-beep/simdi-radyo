@@ -1,6 +1,7 @@
 import type { ReactNode } from "react";
 import localFont from "next/font/local";
 import { Analytics } from "@vercel/analytics/next";
+import RegisterSW from "@/components/RegisterSW";
 import "./globals.css";
 
 // Marka yazı tipi — "ŞİMDİ" kelime işareti için (duyuru görselleriyle aynı dil).
@@ -53,6 +54,7 @@ export default function RootLayout({ children }: { children: ReactNode }) {
         {children}
         {/* Zemine neredeyse görünmez doku — derinlik hissi. */}
         <div className="grain" aria-hidden />
+        <RegisterSW />
         <Analytics />
       </body>
     </html>

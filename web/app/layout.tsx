@@ -26,12 +26,20 @@ const read = localFont({
 export const metadata = {
   metadataBase: new URL("https://necaliyor.co"),
   title: "ŞİMDİ — radyoda şu an ne çalıyor",
-  description: "Türkiye'deki radyolarda şu an çalan parçalar, canlı.",
+  description:
+    "Türkiye'deki (ve seçili yabancı) radyolarda şu an çalan parçalar, canlı. What's playing right now on Turkish radio.",
+  keywords: ["radyo", "canlı radyo", "şu an çalan", "Turkish radio", "now playing", "live radio"],
+  alternates: {
+    canonical: "/",
+    languages: { "tr-TR": "/", "en": "/", "x-default": "/" },
+  },
   openGraph: {
     title: "ŞİMDİ — radyoda şu an ne çalıyor",
-    description: "Türkiye'deki radyolarda şu an çalan parçalar, canlı.",
+    description:
+      "Türkiye'deki radyolarda şu an çalan parçalar, canlı. Now playing on Turkish & world radio.",
     type: "website",
     locale: "tr_TR",
+    alternateLocale: ["en_US"],
   },
 };
 

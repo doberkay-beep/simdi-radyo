@@ -25,11 +25,37 @@ function readableOn(hex: string): string {
   return (0.299 * r + 0.587 * g + 0.114 * b) / 255 > 0.6 ? "#0a0a0b" : "#ffffff";
 }
 
+type AraRow = { artist: string | null; title: string | null; startedAt: string; slug: string | null; name: string; accentColor: string | null };
+
 export default function Archive() {
   const [date, setDate] = useState("");
   const [time, setTime] = useState("");
   const [rows, setRows] = useState<Row[]>([]);
   const [status, setStatus] = useState<"loading" | "idle" | "empty" | "error">("loading");
+  // Arşiv araması
+  const [q, setQ] = useState("");
+  const [araRows, setAraRows] = useState<AraRow[] | null>(null);
+  const [araStatus, setAraStatus] = useState<"idle" | "loading" | "empty">("idle");
+
+  async function araYap(term: string) {
+    const t = term.trim();
+    if (t.length < 2) {
+      setAraRows(null);
+      setAraStatus("idle");
+      return;
+    }
+    setAraStatus("loading");
+    try {
+      const res = await fetch(`/api/ara?q=${encodeURIComponent(t)}`, { cache: "no-store" });
+      const data = await res.json();
+      const list: AraRow[] = data.rows ?? [];
+      setAraRows(list);
+      setAraStatus(list.length ? "idle" : "empty");
+    } catch {
+      setAraRows([]);
+      setAraStatus("empty");
+    }
+  }
 
   async function fetchArchive(d: string, t: string) {
     if (!d) return;
@@ -107,7 +133,99 @@ export default function Archive() {
           <p className="mt-2 text-xs" style={{ color: "var(--muted)" }}>
             Saat Türkiye saatidir. Arşiv, toplayıcı çalışmaya başladığı andan itibaren doludur.
           </p>
+
+          {/* Arşivde ara */}
+          <form
+            onSubmit={(e) => {
+              e.preventDefault();
+              araYap(q);
+            }}
+            className="mt-4 flex gap-2"
+          >
+            <input
+              type="search"
+              value={q}
+              onChange={(e) => {
+                setQ(e.target.value);
+                if (!e.target.value.trim()) {
+                  setAraRows(null);
+                  setAraStatus("idle");
+                }
+              }}
+              placeholder="arşivde parça / sanatçı ara…"
+              className="flex-1 rounded-md border px-3 py-2 text-sm"
+              style={{ background: "transparent", borderColor: "var(--line)", color: "var(--fg)" }}
+            />
+            <button
+              type="submit"
+              className="rounded-md border px-4 py-2 text-sm"
+              style={{ borderColor: "var(--line)", color: "var(--fg)" }}
+            >
+              ara
+            </button>
+          </form>
         </header>
+
+        {/* Arama sonuçları */}
+        {araRows !== null && (
+          <section className="mb-8">
+            <div className="mb-3 flex items-center justify-between">
+              <h2 className="text-xs uppercase tracking-wide" style={{ color: "var(--muted)" }}>
+                &quot;{q}&quot; için arşiv
+              </h2>
+              <button
+                onClick={() => {
+                  setQ("");
+                  setAraRows(null);
+                  setAraStatus("idle");
+                }}
+                className="text-xs underline"
+                style={{ color: "var(--muted)" }}
+              >
+                temizle
+              </button>
+            </div>
+            {araStatus === "loading" && <p style={{ color: "var(--muted)" }}>aranıyor…</p>}
+            {araStatus === "empty" && (
+              <p style={{ color: "var(--muted)" }}>Arşivde bu aramaya kayıt yok (henüz).</p>
+            )}
+            {araStatus === "idle" && araRows.length > 0 && (
+              <ul className="flex flex-col">
+                {araRows.map((r, i) => {
+                  const c = r.accentColor || DEFAULT_ACCENT;
+                  const t = new Date(r.startedAt);
+                  const when = `${pad(t.getDate())}.${pad(t.getMonth() + 1)} ${pad(t.getHours())}:${pad(t.getMinutes())}`;
+                  const inner = (
+                    <div className="flex items-center gap-3 border-b py-3" style={{ borderColor: "var(--line)" }}>
+                      <span className="min-w-0 flex-1">
+                        <span className="block truncate text-[15px]">
+                          <span className="font-semibold">{r.artist?.trim() || r.title}</span>
+                          {r.artist && r.title && r.artist !== r.title && (
+                            <span style={{ color: "var(--muted)" }}> — {r.title}</span>
+                          )}
+                        </span>
+                        <span className="mt-0.5 block truncate text-xs" style={{ color: "var(--muted)" }}>
+                          <span style={{ color: c }}>{r.name}</span> · {when}
+                        </span>
+                      </span>
+                    </div>
+                  );
+                  return (
+                    <li key={i}>
+                      {r.slug ? (
+                        <Link href={`/radyo/${r.slug}`} className="press block">
+                          {inner}
+                        </Link>
+                      ) : (
+                        inner
+                      )}
+                    </li>
+                  );
+                })}
+              </ul>
+            )}
+          </section>
+        )}
 
         {status === "loading" && <p style={{ color: "var(--muted)" }}>Yükleniyor…</p>}
         {status === "error" && (

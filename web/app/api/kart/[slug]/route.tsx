@@ -159,7 +159,10 @@ export async function GET(req: Request, { params }: { params: Promise<{ slug: st
         <div
           style={{
             position: "absolute",
-            inset: 0,
+            top: 0,
+            left: 0,
+            right: 0,
+            bottom: 0,
             display: "flex",
             background: `radial-gradient(60% 45% at 82% 8%, ${accent}22, transparent 70%), radial-gradient(70% 60% at 50% 120%, #00000066, transparent)`,
           }}
@@ -268,7 +271,7 @@ export async function GET(req: Request, { params }: { params: Promise<{ slug: st
               maxWidth: L.w - L.pad * 2,
             }}
           >
-            “{dize}”
+            {`“${dize}”`}
           </div>
           <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginTop: 28 }}>
             <div style={{ display: "flex", alignItems: "baseline", gap: 14 }}>

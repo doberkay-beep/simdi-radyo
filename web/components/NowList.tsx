@@ -17,7 +17,7 @@ import {
 } from "@/lib/sozler";
 import KartModal from "./KartModal";
 import DilToggle from "./DilToggle";
-import { useDil } from "@/lib/i18n";
+import { useDil, turAdi } from "@/lib/i18n";
 
 const SAIR_SET = new Set(SAIRIN.slugs);
 
@@ -150,7 +150,7 @@ function trackQuery(np: NowPlaying): string | null {
 const low = (s: string) => s.toLocaleLowerCase("tr");
 
 export default function NowList() {
-  const { t } = useDil();
+  const { t, dil } = useDil();
   const [stations, setStations] = useState<Station[]>([]);
   const [playing, setPlaying] = useState<string | null>(null);
   const [status, setStatus] = useState<"idle" | "loading" | "error">("loading");
@@ -959,7 +959,7 @@ export default function NowList() {
                 color: genre === null ? "var(--bg)" : "var(--muted)",
               }}
             >
-              tümü
+              {t("home.tumu")}
             </button>
             {genres.map(([g, n]) => {
               const active = genre === g;
@@ -974,7 +974,7 @@ export default function NowList() {
                     color: active ? "var(--bg)" : "var(--muted)",
                   }}
                 >
-                  {g} <span style={{ opacity: 0.6 }}>{n}</span>
+                  {turAdi(dil, g)} <span style={{ opacity: 0.6 }}>{n}</span>
                 </button>
               );
             })}

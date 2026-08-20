@@ -4,7 +4,7 @@ import { useEffect, useMemo, useState } from "react";
 import Link from "next/link";
 import ThemeToggle from "./ThemeToggle";
 import DilToggle from "./DilToggle";
-import { useDil } from "@/lib/i18n";
+import { useDil, turAdi } from "@/lib/i18n";
 
 type Station = {
   slug: string;
@@ -67,7 +67,7 @@ function Tile({ s }: { s: Station }) {
 }
 
 export default function Kesif() {
-  const { t } = useDil();
+  const { t, dil } = useDil();
   const [stations, setStations] = useState<Station[]>([]);
   const [status, setStatus] = useState<"loading" | "idle" | "error">("loading");
   const [ruh, setRuh] = useState<string>("sakin");
@@ -252,7 +252,7 @@ export default function Kesif() {
                       background: tur === t ? "color-mix(in srgb, var(--accent) 16%, transparent)" : "transparent",
                     }}
                   >
-                    {turBaslik(t)} <span style={{ color: "var(--muted)" }}>{n}</span>
+                    {turAdi(dil, t)} <span style={{ color: "var(--muted)" }}>{n}</span>
                   </button>
                 ))}
               </div>

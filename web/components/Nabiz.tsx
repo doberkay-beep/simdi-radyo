@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import Link from "next/link";
 import ThemeToggle from "./ThemeToggle";
 import DilToggle from "./DilToggle";
-import { useDil } from "@/lib/i18n";
+import { useDil, turAdi } from "@/lib/i18n";
 
 type Sim = {
   title: string;
@@ -49,7 +49,7 @@ function ara(q: string) {
 }
 
 export default function Nabiz() {
-  const { t } = useDil();
+  const { t, dil } = useDil();
   const [data, setData] = useState<Data | null>(null);
   const [status, setStatus] = useState<"loading" | "idle" | "error">("loading");
 
@@ -133,14 +133,14 @@ export default function Nabiz() {
               {data.moods.map((m) => (
                 <span key={m.tur} className="inline-flex items-center gap-1.5">
                   <span className="inline-block h-2.5 w-2.5 rounded-full" style={{ background: TUR_RENK[m.tur] || "var(--accent)" }} />
-                  <span>{m.tur}</span>
+                  <span>{turAdi(dil, m.tur)}</span>
                   <span style={{ color: "var(--muted)" }}>{Math.round(m.oran * 100)}%</span>
                 </span>
               ))}
             </div>
             <p className="epigraf mt-3 text-sm">
               {data.calanToplam ?? 0} istasyonda şu an müzik var
-              {data.moods[0] ? ` — en baskın ses: ${data.moods[0].tur}.` : "."}
+              {data.moods[0] ? ` — en baskın ses: ${turAdi(dil, data.moods[0].tur)}.` : "."}
             </p>
           </section>
         )}

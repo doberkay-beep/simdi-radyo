@@ -67,7 +67,35 @@ export const SOZLUK: Record<string, { tr: string; en: string }> = {
   "kesif.hata": { tr: "Getirilemedi. Birazdan tekrar dene.", en: "Couldn't load. Try again shortly." },
   "kesif.zarBos": { tr: "zarı at, bir yere düşsün.", en: "roll the dice, let it land." },
   "kesif.ruhBos": { tr: "bu ruhta istasyon yok.", en: "no station for this mood." },
+  // arşiv — geçmişe git
+  "arsiv.gecmiste": { tr: "geçmişte bugün", en: "on this day" },
+  "arsiv.dun": { tr: "dün", en: "yesterday" },
+  "arsiv.haftaOnce": { tr: "1 hafta önce", en: "1 week ago" },
+  "arsiv.ayOnce": { tr: "1 ay önce", en: "1 month ago" },
+  "arsiv.yilOnce": { tr: "1 yıl önce", en: "1 year ago" },
+  "arsiv.simdiye": { tr: "şimdiye dön", en: "back to now" },
 };
+
+// İstasyon türü → görünen ad (dile göre). Veri Türkçe; yalnızca etiket çevrilir.
+const TUR_ADI: Record<string, string> = {
+  arabesk: "arabesque",
+  caz: "jazz",
+  türkü: "folk",
+  nostalji: "nostalgia",
+  rock: "rock",
+  klasik: "classical",
+  elektronik: "electronic",
+  "türkçe pop": "turkish pop",
+  pop: "pop",
+  alternatif: "alternative",
+  tsm: "art music",
+  metal: "metal",
+};
+
+export function turAdi(dil: Dil, tur: string | null | undefined): string {
+  if (!tur) return "";
+  return dil === "en" ? TUR_ADI[tur] || tur : tur;
+}
 
 // Basit çeviri: anahtar yoksa TR'ye düş.
 export function ceviri(dil: Dil, anahtar: string): string {

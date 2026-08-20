@@ -78,6 +78,17 @@ export default function Archive() {
     }
   }
 
+  // Geçmişte bir güne atla (gün cinsinden geriye). 0 = şimdi.
+  function gecmiseGit(gunGeri: number) {
+    const d = new Date();
+    if (gunGeri > 0) d.setDate(d.getDate() - gunGeri);
+    const ds = `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}`;
+    const ts = `${pad(d.getHours())}:${pad(d.getMinutes())}`;
+    setDate(ds);
+    setTime(ts);
+    fetchArchive(ds, ts);
+  }
+
   // İlk açılışta "şu an"ı göster.
   useEffect(() => {
     const now = new Date();
@@ -137,6 +148,37 @@ export default function Archive() {
           <p className="mt-2 text-xs" style={{ color: "var(--muted)" }}>
             Saat Türkiye saatidir. Arşiv, toplayıcı çalışmaya başladığı andan itibaren doludur.
           </p>
+
+          {/* Geçmişte bugün — hızlı sıçrama */}
+          <div className="mt-3 flex flex-wrap items-center gap-2">
+            <span className="text-xs uppercase tracking-wide" style={{ color: "var(--muted)" }}>
+              {t("arsiv.gecmiste")}:
+            </span>
+            {(
+              [
+                [1, t("arsiv.dun")],
+                [7, t("arsiv.haftaOnce")],
+                [30, t("arsiv.ayOnce")],
+                [365, t("arsiv.yilOnce")],
+              ] as const
+            ).map(([g, label]) => (
+              <button
+                key={g}
+                onClick={() => gecmiseGit(g)}
+                className="press rounded-full border px-3 py-1 text-xs"
+                style={{ borderColor: "var(--line)", color: "var(--fg)" }}
+              >
+                {label}
+              </button>
+            ))}
+            <button
+              onClick={() => gecmiseGit(0)}
+              className="press rounded-full border px-3 py-1 text-xs"
+              style={{ borderColor: "var(--line)", color: "var(--muted)" }}
+            >
+              {t("arsiv.simdiye")}
+            </button>
+          </div>
 
           {/* Arşivde ara */}
           <form

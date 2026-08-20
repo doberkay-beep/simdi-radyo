@@ -85,7 +85,13 @@ export async function generateMetadata({
     title: `${s.name} — canlı dinle | ŞİMDİ`,
     description: desc,
     alternates: { canonical: `/radyo/${slug}` },
-    openGraph: { title: `${s.name} — canlı dinle`, description: desc, type: "music.radio_station" },
+    openGraph: {
+      title: `${s.name} — canlı dinle`,
+      description: desc,
+      type: "music.radio_station",
+      images: [{ url: `/api/kart/${slug}`, width: 1200, height: 630, alt: `${s.name} — şimdi çalıyor` }],
+    },
+    twitter: { card: "summary_large_image", images: [`/api/kart/${slug}`] },
   };
 }
 

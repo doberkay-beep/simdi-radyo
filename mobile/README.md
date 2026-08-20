@@ -1,34 +1,41 @@
-# /mobile — Faz 5: ŞİMDİ mobil uygulaması (Expo)
+# ŞİMDİ — Mobil (Expo)
 
-Aynı canlı veriyi telefona taşır: parça listesi, istasyon renkleri, dokununca
-dinleme. Yayındaki API'yi (`necaliyor.co`) okur — kendi sunucusu yoktur.
-
-Expo SDK 54 · React Native 0.81 · ses için `expo-audio`.
+Web ile aynı API'yi (necaliyor.co) kullanan yerel uygulama.
 
 ## Çalıştırma (geliştirme)
 
-Telefonuna **Expo Go** uygulamasını kur (App Store / Play Store). Sonra:
-
 ```bash
 cd mobile
-npm install
+npx expo install   # bağımlılıkları SDK ile hizala
 npx expo start
 ```
 
-Terminalde bir **QR kod** çıkar. Telefonda:
-- **iPhone:** Kamera uygulamasıyla QR'ı okut → Expo Go'da açılır.
-- **Android:** Expo Go içinden "Scan QR code".
+## Push bildirimleri (74)
 
-Bilgisayar ve telefon **aynı Wi-Fi'de** olmalı.
+Kod hazır (`push.ts` + `App.tsx` kaydı + web `/api/push/register`). Gerçekte
+çalışması için:
 
-## Yapısı
-- `App.tsx` — tek ekran: `/api/now`'dan 15 sn'de bir okur, listeler, çalar.
-- `index.ts` — uygulama girişi.
-- `app.json` — Expo ayarları (isim, tema).
-- Ses: `expo-audio` ile `/api/stream/[slug]` proxy'sinden çalar (HTTPS olduğu
-  için iOS'ta sorunsuz).
+1. **Bağımlılıklar:** `npx expo install expo-notifications expo-device expo-constants @react-native-async-storage/async-storage`
+2. **EAS projesi:** `npx eas init` → çıkan `projectId`'yi `app.json`
+   içindeki `extra.eas.projectId` alanına yaz (şu an `REPLACE_...`).
+3. **Gerçek build:** Push jetonu **Expo Go'da üretilmez**; bir dev/EAS build gerekir:
+   `npx eas build --profile development --platform ios` (veya android).
+4. **Supabase:** `web/push.sql`'i bir kez çalıştır (jeton tablosu + RPC).
+5. **Gönderim:** GitHub Actions → "Push gönder" iş akışı kayıtlı cihazlara
+   "yükselen / eşzamanlı" bildirimi yollar (Expo push API). İstersen
+   `.github/workflows/push-send.yml` içindeki `schedule` satırlarını açıp
+   zamanla.
 
-## Notlar
-- API adresi `App.tsx` içinde `API` sabitinde. Alan adı alınca burası güncellenir.
-- Gerçek mağaza yayını (App Store / Play) ayrı bir adımdır (EAS Build);
-  şimdilik Expo Go ile kendi telefonunda çalışır.
+Uygulama açılışta izin ister, jetonu alır ve favori listesiyle birlikte
+siteye kaydeder. İzin verilmezse hiçbir şey olmaz (sessiz).
+
+## Kilit ekranı / arka plan sesi
+
+`app.json`'da iOS `UIBackgroundModes: ["audio"]` ve
+`setAudioModeAsync({ shouldPlayInBackground: true })` ile arka planda çalar.
+
+## Managed Expo dışında kalanlar
+
+- **Home-screen widget (75)** ve **Siri Shortcut (80):** native modül /
+  config-plugin + EAS dev build ister; managed akışta doğrudan yapılamaz.
+  Kilit ekranı oynatma kontrolleri bu ihtiyacın çoğunu karşılar.

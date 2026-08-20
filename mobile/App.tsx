@@ -85,7 +85,27 @@ export default function App() {
   const C = dark ? DARK : LIGHT;
 
   useEffect(() => {
-    setAudioModeAsync({ playsInSilentMode: true }).catch(() => {});
+    // Arka planda / kilit ekranında da çalsın.
+    setAudioModeAsync({ playsInSilentMode: true, shouldPlayInBackground: true }).catch(() => {
+      setAudioModeAsync({ playsInSilentMode: true }).catch(() => {});
+    });
+    // Push bildirimlerine kaydol (favorilerle). Sessizce başarısız olur.
+    (async () => {
+      try {
+        const { pushKaydet } = await import("./push");
+        let favs: string[] = [];
+        try {
+          const AsyncStorage = (await import("@react-native-async-storage/async-storage")).default;
+          const raw = await AsyncStorage.getItem("favoriler");
+          if (raw) favs = JSON.parse(raw);
+        } catch {
+          // favori yoksa boş
+        }
+        await pushKaydet(favs);
+      } catch {
+        // push modülü yoksa geç
+      }
+    })();
   }, []);
 
   async function load() {

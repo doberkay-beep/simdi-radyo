@@ -1,6 +1,7 @@
 import Link from "next/link";
 import type { Metadata } from "next";
 import { DENEMELER, gununDenemesi } from "@/lib/denemeler";
+import { DIZELER, EPIGRAFLAR } from "@/lib/sozler";
 import Muhur from "@/components/Muhur";
 import ThemeToggle from "@/components/ThemeToggle";
 
@@ -67,6 +68,19 @@ export default function Page() {
             </li>
           ))}
         </ul>
+
+        {/* Defter — biriken dizeler ve epigraflar */}
+        <section className="mt-14">
+          <h2 className="brand text-2xl font-bold tracking-tight">Defter</h2>
+          <p className="epigraf mt-1 text-[15px]">yol boyunca düşülen dizeler.</p>
+          <ul className="mt-5 flex flex-col gap-4">
+            {[...DIZELER, ...EPIGRAFLAR].map((d, i) => (
+              <li key={i} className="read border-l-2 pl-4 text-lg italic" style={{ borderColor: "var(--accent)", color: "var(--fg)" }}>
+                {d}
+              </li>
+            ))}
+          </ul>
+        </section>
 
         <Muhur />
       </div>

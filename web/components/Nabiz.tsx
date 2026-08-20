@@ -12,12 +12,16 @@ type Sim = {
 type Song = { title: string; artist: string | null; adet: number };
 type Artist = { artist: string; adet: number };
 type Mood = { tur: string; adet: number; oran: number };
+type Hour = { saat: number; adet: number };
+type Trend = { title: string; artist: string | null; son: number; onceki: number };
 type Data = {
   simultaneous: Sim[];
   todaySongs: Song[];
   todayArtists: Artist[];
   moods?: Mood[];
   calanToplam?: number;
+  hourly?: Hour[];
+  trend?: Trend[];
 };
 
 // Tür → renk (ruh halini görselleştirmek için).
@@ -134,6 +138,77 @@ export default function Nabiz() {
               {data.calanToplam ?? 0} istasyonda şu an müzik var
               {data.moods[0] ? ` — en baskın ses: ${data.moods[0].tur}.` : "."}
             </p>
+          </section>
+        )}
+
+        {/* Yükselen — son 6 saatte önceki 6 saate göre artanlar */}
+        {data && data.trend && data.trend.length > 0 && (
+          <section className="mb-10">
+            <h2 className="mb-3 text-xs uppercase tracking-wide" style={{ color: "var(--muted)" }}>
+              yükselen ↑
+            </h2>
+            <ul className="flex flex-col gap-2">
+              {data.trend.map((t, i) => (
+                <li key={i} className="flex items-center gap-3">
+                  <span className="text-sm" style={{ color: "var(--accent)" }}>
+                    ↑
+                  </span>
+                  <span className="min-w-0 flex-1 truncate text-[15px]">
+                    <span className="font-semibold">{t.artist ?? t.title}</span>
+                    {t.artist && t.artist !== t.title && (
+                      <span style={{ color: "var(--muted)" }}> — {t.title}</span>
+                    )}
+                  </span>
+                  <span className="shrink-0 text-xs tabular-nums" style={{ color: "var(--muted)" }}>
+                    {t.onceki} → {t.son}
+                  </span>
+                </li>
+              ))}
+            </ul>
+          </section>
+        )}
+
+        {/* En hareketli saat — son 7 gün, saate göre çalma yoğunluğu */}
+        {data && data.hourly && data.hourly.length > 0 && (
+          <section className="mb-10">
+            <h2 className="mb-3 text-xs uppercase tracking-wide" style={{ color: "var(--muted)" }}>
+              en hareketli saat (7 gün)
+            </h2>
+            {(() => {
+              const map = new Map(data.hourly!.map((h) => [h.saat, h.adet]));
+              const max = Math.max(1, ...data.hourly!.map((h) => h.adet));
+              const enCok = data.hourly!.reduce((a, b) => (b.adet > a.adet ? b : a));
+              return (
+                <>
+                  <div className="flex items-end gap-[3px]" style={{ height: 72 }}>
+                    {Array.from({ length: 24 }, (_, s) => {
+                      const v = map.get(s) ?? 0;
+                      return (
+                        <div key={s} className="flex flex-1 flex-col items-center justify-end" title={`${s}:00 · ${v}`}>
+                          <div
+                            className="w-full rounded-t"
+                            style={{
+                              height: `${Math.max(2, (v / max) * 72)}px`,
+                              background: s === enCok.saat ? "var(--accent)" : "color-mix(in srgb, var(--accent) 35%, transparent)",
+                            }}
+                          />
+                        </div>
+                      );
+                    })}
+                  </div>
+                  <div className="mt-1 flex justify-between text-[10px]" style={{ color: "var(--muted)" }}>
+                    <span>00</span>
+                    <span>06</span>
+                    <span>12</span>
+                    <span>18</span>
+                    <span>23</span>
+                  </div>
+                  <p className="epigraf mt-2 text-sm">
+                    en çok {String(enCok.saat).padStart(2, "0")}:00 civarı çalıyor.
+                  </p>
+                </>
+              );
+            })()}
           </section>
         )}
 

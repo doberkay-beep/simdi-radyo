@@ -81,8 +81,34 @@ export async function GET() {
     // nabiz.sql henüz çalıştırılmadıysa boş geç
   }
 
+  // (3) Ek analizler — en hareketli saat + yükselen (nabiz-plus.sql; yoksa boş).
+  let hourly: { saat: number; adet: number }[] = [];
+  let trend: { title: string; artist: string | null; son: number; onceki: number }[] = [];
+  try {
+    const [saat, yukselen] = await Promise.all([
+      supabase.rpc("nabiz_saat", { gun: 7 }),
+      supabase.rpc("nabiz_trend"),
+    ]);
+    if (Array.isArray(saat.data)) {
+      hourly = saat.data.map((r: { saat: number; adet: number }) => ({
+        saat: Number(r.saat),
+        adet: Number(r.adet),
+      }));
+    }
+    if (Array.isArray(yukselen.data)) {
+      trend = yukselen.data.map((r: { title: string; artist: string | null; son: number; onceki: number }) => ({
+        title: r.title,
+        artist: r.artist,
+        son: Number(r.son),
+        onceki: Number(r.onceki),
+      }));
+    }
+  } catch {
+    // nabiz-plus.sql henüz çalıştırılmadıysa boş geç
+  }
+
   return json(
-    { simultaneous, todaySongs, todayArtists, moods, calanToplam },
+    { simultaneous, todaySongs, todayArtists, moods, calanToplam, hourly, trend },
     { headers: { "Cache-Control": "public, s-maxage=30, stale-while-revalidate=60" } },
   );
 }

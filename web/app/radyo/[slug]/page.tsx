@@ -43,6 +43,23 @@ async function getStation(slug: string): Promise<Station | null> {
   }
 }
 
+async function getSimilar(slug: string, genre: string | null) {
+  if (!genre) return [];
+  try {
+    const supa = getSupabase();
+    const { data } = await supa
+      .from("stations")
+      .select("slug, name, city, frequency, accent_color, band")
+      .eq("genre", genre)
+      .eq("is_active", true)
+      .neq("slug", slug)
+      .limit(7);
+    return (data ?? []) as { slug: string; name: string; city: string | null; frequency: string | null; accent_color: string | null; band: string | null }[];
+  } catch {
+    return [];
+  }
+}
+
 async function getNowPlaying(slug: string) {
   try {
     const supa = getSupabase();
@@ -102,6 +119,7 @@ export default async function StationPage({ params }: { params: Promise<{ slug: 
   const np = await getNowPlaying(slug);
   const track = trackText(np);
   const accent = s.accent_color || DEFAULT_ACCENT;
+  const similar = await getSimilar(slug, s.genre);
 
   const jsonLd = {
     "@context": "https://schema.org",
@@ -152,6 +170,40 @@ export default async function StationPage({ params }: { params: Promise<{ slug: 
 
         {s.genre && TUR_EPIGRAF[s.genre] && (
           <p className="epigraf mt-8 text-base">{TUR_EPIGRAF[s.genre]}</p>
+        )}
+
+        {similar.length > 0 && (
+          <section className="mt-10">
+            <h2 className="mb-3 text-xs uppercase tracking-wide" style={{ color: "var(--muted)" }}>
+              benzer istasyonlar
+            </h2>
+            <div className="flex flex-col">
+              {similar.map((o) => {
+                const c = o.accent_color || DEFAULT_ACCENT;
+                return (
+                  <Link
+                    key={o.slug}
+                    href={`/radyo/${o.slug}`}
+                    className="press flex items-center gap-3 border-b py-3"
+                    style={{ borderColor: "var(--line)" }}
+                  >
+                    <span
+                      className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg text-sm font-bold"
+                      style={{ background: `linear-gradient(135deg, ${c}, color-mix(in srgb, ${c} 50%, #000))`, color: readableOn(c) }}
+                    >
+                      {o.name.trim().charAt(0).toLocaleUpperCase("tr")}
+                    </span>
+                    <span className="min-w-0">
+                      <span className="block truncate text-[15px] font-semibold">{o.name}</span>
+                      <span className="block truncate text-xs" style={{ color: "var(--muted)" }}>
+                        {[o.band === "int" ? o.city : o.frequency].filter(Boolean).join(" · ") || "canlı"}
+                      </span>
+                    </span>
+                  </Link>
+                );
+              })}
+            </div>
+          </section>
         )}
 
         <div className="read mt-8 text-[15px] leading-relaxed" style={{ color: "var(--muted)" }}>

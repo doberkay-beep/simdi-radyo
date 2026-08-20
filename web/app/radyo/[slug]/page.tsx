@@ -4,7 +4,10 @@ import { notFound } from "next/navigation";
 import { getSupabase } from "@/lib/supabase";
 import StationPlayer from "@/components/StationPlayer";
 import Notlar from "@/components/Notlar";
+import DilToggle from "@/components/DilToggle";
 import { TUR_EPIGRAF } from "@/lib/sozler";
+import { dilSunucu } from "@/lib/dil-sunucu";
+import { ceviri, turAdi } from "@/lib/i18n-core";
 
 // Her istasyona kendi SEO sayfası ("X Radyo canlı dinle") + gerçek çalan oynatıcı.
 export const revalidate = 60;
@@ -121,6 +124,8 @@ export default async function StationPage({ params }: { params: Promise<{ slug: 
   const track = trackText(np);
   const accent = s.accent_color || DEFAULT_ACCENT;
   const similar = await getSimilar(slug, s.genre);
+  const dil = await dilSunucu();
+  const T = (k: string) => ceviri(dil, k);
 
   const jsonLd = {
     "@context": "https://schema.org",
@@ -137,9 +142,12 @@ export default async function StationPage({ params }: { params: Promise<{ slug: 
       <div className="mx-auto max-w-2xl px-5 pb-24 pt-10">
         <header className="mb-10 flex items-center justify-between">
           <Link href="/" className="text-sm underline" style={{ color: "var(--muted)" }}>
-            ← tüm radyolar
+            {T("nav.tumRadyolar")}
           </Link>
-          <span className="brand text-sm font-bold tracking-tight">ŞİMDİ</span>
+          <span className="flex items-center gap-3">
+            <DilToggle />
+            <span className="brand text-sm font-bold tracking-tight">ŞİMDİ</span>
+          </span>
         </header>
 
         <div className="flex items-center gap-4">
@@ -155,16 +163,16 @@ export default async function StationPage({ params }: { params: Promise<{ slug: 
           <div>
             <h1 className="brand text-4xl font-bold tracking-tight">{s.name}</h1>
             <p className="mt-1 text-sm" style={{ color: "var(--muted)" }}>
-              {[s.genre, s.frequency, s.city].filter(Boolean).join(" · ") || "canlı radyo"}
+              {[turAdi(dil, s.genre), s.frequency, s.city].filter(Boolean).join(" · ") || T("radyo.canliRadyo")}
             </p>
           </div>
         </div>
 
         <div className="mt-8 rounded-xl border p-5" style={{ borderColor: "var(--line)" }}>
           <div className="text-xs uppercase tracking-wide" style={{ color: "var(--muted)" }}>
-            şu an çalıyor
+            {T("radyo.simdiCaliyor")}
           </div>
-          <div className="mt-1 text-2xl font-semibold">{track ?? "canlı yayın"}</div>
+          <div className="mt-1 text-2xl font-semibold">{track ?? T("radyo.canliYayin")}</div>
         </div>
 
         <StationPlayer slug={slug} name={s.name} accent={accent} />
@@ -178,7 +186,7 @@ export default async function StationPage({ params }: { params: Promise<{ slug: 
         {similar.length > 0 && (
           <section className="mt-10">
             <h2 className="mb-3 text-xs uppercase tracking-wide" style={{ color: "var(--muted)" }}>
-              benzer istasyonlar
+              {T("radyo.benzer")}
             </h2>
             <div className="flex flex-col">
               {similar.map((o) => {
@@ -199,7 +207,7 @@ export default async function StationPage({ params }: { params: Promise<{ slug: 
                     <span className="min-w-0">
                       <span className="block truncate text-[15px] font-semibold">{o.name}</span>
                       <span className="block truncate text-xs" style={{ color: "var(--muted)" }}>
-                        {[o.band === "int" ? o.city : o.frequency].filter(Boolean).join(" · ") || "canlı"}
+                        {[o.band === "int" ? o.city : o.frequency].filter(Boolean).join(" · ") || T("radyo.canli")}
                       </span>
                     </span>
                   </Link>
@@ -211,15 +219,27 @@ export default async function StationPage({ params }: { params: Promise<{ slug: 
 
         <div className="read mt-8 text-[15px] leading-relaxed" style={{ color: "var(--muted)" }}>
           <p>
-            <strong style={{ color: "var(--fg)" }}>{s.name}</strong> yayınını{" "}
-            <Link href={`/?ist=${slug}`} className="underline" style={{ color: "var(--fg)" }}>
-              necaliyor.co
-            </Link>{" "}
-            üzerinden canlı dinleyebilir, o an çalan parçayı görebilirsin.
+            {dil === "en" ? (
+              <>
+                Listen to <strong style={{ color: "var(--fg)" }}>{s.name}</strong> live on{" "}
+                <Link href={`/?ist=${slug}`} className="underline" style={{ color: "var(--fg)" }}>
+                  necaliyor.co
+                </Link>{" "}
+                and see what&apos;s playing right now.
+              </>
+            ) : (
+              <>
+                <strong style={{ color: "var(--fg)" }}>{s.name}</strong> yayınını{" "}
+                <Link href={`/?ist=${slug}`} className="underline" style={{ color: "var(--fg)" }}>
+                  necaliyor.co
+                </Link>{" "}
+                üzerinden canlı dinleyebilir, o an çalan parçayı görebilirsin.
+              </>
+            )}
             {s.homepage ? (
               <>
                 {" "}
-                Resmî site:{" "}
+                {T("radyo.resmiSite")}{" "}
                 <a href={s.homepage} target="_blank" rel="noopener noreferrer" className="underline" style={{ color: "var(--fg)" }}>
                   {s.homepage.replace(/^https?:\/\//, "")}
                 </a>

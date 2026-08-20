@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
+import { useDil } from "@/lib/i18n";
 
 type Not = { id: number; slug: string; not: string; createdAt: string };
 
@@ -18,6 +19,7 @@ function nezaman(iso: string): string {
 
 // Kalp defteri — bir istasyona kısa anı bırak (140 karakter, link yok).
 export default function Notlar({ slug, accent }: { slug: string; accent: string }) {
+  const { t } = useDil();
   const [notlar, setNotlar] = useState<Not[]>([]);
   const [metin, setMetin] = useState("");
   const [durum, setDurum] = useState<"idle" | "gonderiliyor" | "hata">("idle");
@@ -64,7 +66,7 @@ export default function Notlar({ slug, accent }: { slug: string; accent: string 
   return (
     <section className="mt-10">
       <h2 className="mb-3 text-xs uppercase tracking-wide" style={{ color: "var(--muted)" }}>
-        kalp defteri
+        {t("defter.baslik")}
       </h2>
       <form onSubmit={birak} className="flex gap-2">
         <input
@@ -74,7 +76,7 @@ export default function Notlar({ slug, accent }: { slug: string; accent: string 
             if (durum === "hata") setDurum("idle");
           }}
           maxLength={140}
-          placeholder="bir anı bırak… (140 karakter)"
+          placeholder={t("defter.yer")}
           className="flex-1 rounded-md border px-3 py-2 text-sm"
           style={{ background: "transparent", borderColor: "var(--line)", color: "var(--fg)" }}
         />
@@ -84,12 +86,12 @@ export default function Notlar({ slug, accent }: { slug: string; accent: string 
           className="press rounded-md px-4 py-2 text-sm font-semibold disabled:opacity-50"
           style={{ background: accent, color: "#0a0a0b" }}
         >
-          bırak
+          {t("defter.birak")}
         </button>
       </form>
       {durum === "hata" && (
         <p className="mt-2 text-xs" style={{ color: "var(--muted)" }}>
-          Gönderilemedi — link olmasın, 2–140 karakter olsun.
+          {t("defter.hata")}
         </p>
       )}
 
@@ -107,7 +109,7 @@ export default function Notlar({ slug, accent }: { slug: string; accent: string 
           ))}
         </ul>
       ) : (
-        <p className="epigraf mt-4 text-sm">ilk anıyı sen bırak.</p>
+        <p className="epigraf mt-4 text-sm">{t("defter.ilk")}</p>
       )}
     </section>
   );

@@ -2,6 +2,7 @@
 
 import { useEffect, useRef, useState } from "react";
 import KartModal from "./KartModal";
+import { useDil } from "@/lib/i18n";
 
 function readableOn(hex: string): string {
   const h = hex.replace("#", "");
@@ -21,6 +22,7 @@ export default function StationPlayer({
   name?: string;
   accent: string;
 }) {
+  const { t } = useDil();
   const audioRef = useRef<HTMLAudioElement | null>(null);
   const [phase, setPhase] = useState<"idle" | "connecting" | "playing" | "error">("idle");
   const [copied, setCopied] = useState(false);
@@ -114,10 +116,10 @@ export default function StationPlayer({
         className="press inline-flex items-center gap-2 rounded-full px-6 py-3 text-base font-semibold"
         style={{ background: accent, color: readableOn(accent) }}
       >
-        {on ? "❚❚ Durdur" : "▶ Canlı Dinle"}
+        {on ? t("player.durdur") : t("player.dinle")}
       </button>
       <span className="text-sm" style={{ color: "var(--muted)" }}>
-        {phase === "connecting" ? "bağlanıyor…" : phase === "error" ? "yayına ulaşılamadı" : ""}
+        {phase === "connecting" ? t("player.baglaniyor") : phase === "error" ? t("player.ulasilamadi") : ""}
       </span>
       <button
         onClick={kalpAt}
@@ -132,14 +134,14 @@ export default function StationPlayer({
         className="press rounded-full border px-4 py-2 text-sm"
         style={{ borderColor: "var(--line)", color: "var(--fg)" }}
       >
-        kart
+        {t("player.kart")}
       </button>
       <button
         onClick={share}
         className="press rounded-full border px-4 py-2 text-sm"
         style={{ borderColor: "var(--line)", color: "var(--fg)" }}
       >
-        {copied ? "kopyalandı ✓" : "paylaş"}
+        {copied ? t("player.kopyalandi") : t("player.paylas")}
       </button>
       <audio
         ref={audioRef}

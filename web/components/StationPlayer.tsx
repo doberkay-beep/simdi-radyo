@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
+import KartModal from "./KartModal";
 
 function readableOn(hex: string): string {
   const h = hex.replace("#", "");
@@ -13,6 +14,7 @@ function readableOn(hex: string): string {
 // İstasyon sayfasında gerçek çalan mini oynatıcı (kendi <audio>'su).
 export default function StationPlayer({
   slug,
+  name,
   accent,
 }: {
   slug: string;
@@ -22,7 +24,7 @@ export default function StationPlayer({
   const audioRef = useRef<HTMLAudioElement | null>(null);
   const [phase, setPhase] = useState<"idle" | "connecting" | "playing" | "error">("idle");
   const [copied, setCopied] = useState(false);
-  const [kart, setKart] = useState<"idle" | "hazir" | "yok">("idle");
+  const [kartAcik, setKartAcik] = useState(false);
   const retries = useRef(0);
 
   useEffect(() => {
@@ -75,33 +77,6 @@ export default function StationPlayer({
     }
   }
 
-  // O anki çalan parçanın kartını üret → paylaş (görsel) ya da indir.
-  async function paylasKart() {
-    setKart("idle");
-    try {
-      const res = await fetch(`/api/kart/${slug}?t=${Date.now()}`);
-      if (!res.ok) throw new Error();
-      const blob = await res.blob();
-      const file = new File([blob], `${slug}-simdi.png`, { type: "image/png" });
-      const nav = navigator as Navigator & { canShare?: (d: unknown) => boolean };
-      if (nav.share && nav.canShare && nav.canShare({ files: [file] })) {
-        await nav.share({ files: [file], text: "şimdi çalıyor — necaliyor.co" });
-        return;
-      }
-      const href = URL.createObjectURL(blob);
-      const a = document.createElement("a");
-      a.href = href;
-      a.download = `${slug}-simdi.png`;
-      a.click();
-      URL.revokeObjectURL(href);
-      setKart("hazir");
-      setTimeout(() => setKart("idle"), 1600);
-    } catch {
-      setKart("yok");
-      setTimeout(() => setKart("idle"), 1600);
-    }
-  }
-
   const on = phase === "playing" || phase === "connecting";
 
   return (
@@ -117,11 +92,11 @@ export default function StationPlayer({
         {phase === "connecting" ? "bağlanıyor…" : phase === "error" ? "yayına ulaşılamadı" : ""}
       </span>
       <button
-        onClick={paylasKart}
+        onClick={() => setKartAcik(true)}
         className="press ml-auto rounded-full border px-4 py-2 text-sm"
         style={{ borderColor: "var(--line)", color: "var(--fg)" }}
       >
-        {kart === "hazir" ? "kart indi ✓" : kart === "yok" ? "kart yok" : "kart"}
+        kart
       </button>
       <button
         onClick={share}
@@ -140,6 +115,9 @@ export default function StationPlayer({
         onEnded={reconnect}
         onError={reconnect}
       />
+      {kartAcik && (
+        <KartModal slug={slug} name={name ?? "ŞİMDİ"} accent={accent} onClose={() => setKartAcik(false)} />
+      )}
     </div>
   );
 }

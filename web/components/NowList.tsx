@@ -15,6 +15,7 @@ import {
   SAIRIN,
   gununDizesi,
 } from "@/lib/sozler";
+import KartModal from "./KartModal";
 
 const SAIR_SET = new Set(SAIRIN.slugs);
 
@@ -155,7 +156,7 @@ export default function NowList() {
   const [showKeys, setShowKeys] = useState(false); // kısayol kartı
   const [focus, setFocus] = useState(false); // sessizlik / odak modu
   const [odakDize, setOdakDize] = useState(0); // odakta dönen dize
-  const [kartDurum, setKartDurum] = useState<"idle" | "hazir" | "yok">("idle"); // paylaşılabilir kart
+  const [kartAcik, setKartAcik] = useState(false); // paylaşılabilir kart penceresi
   // Çalan istasyonun CANLI çalan bilgisi (toplayıcıdan değil, anlık yoklamadan).
   const [liveNP, setLiveNP] = useState<NowPlaying>(null);
   const audioRef = useRef<HTMLAudioElement | null>(null);
@@ -429,33 +430,6 @@ export default function NowList() {
     if (stations.length) setFeaturedSlug(stations[Math.floor(Math.random() * stations.length)].slug);
   }
 
-  // Çalan istasyonun o anki kartını üret → paylaş (görsel) ya da indir.
-  async function paylasKart(slug: string) {
-    setKartDurum("idle");
-    try {
-      const res = await fetch(`/api/kart/${slug}?t=${Date.now()}`);
-      if (!res.ok) throw new Error();
-      const blob = await res.blob();
-      const file = new File([blob], `${slug}-simdi.png`, { type: "image/png" });
-      const nav = navigator as Navigator & { canShare?: (d: unknown) => boolean };
-      if (nav.share && nav.canShare && nav.canShare({ files: [file] })) {
-        await nav.share({ files: [file], text: "şimdi çalıyor — necaliyor.co" });
-        return;
-      }
-      const href = URL.createObjectURL(blob);
-      const a = document.createElement("a");
-      a.href = href;
-      a.download = `${slug}-simdi.png`;
-      a.click();
-      URL.revokeObjectURL(href);
-      setKartDurum("hazir");
-      setTimeout(() => setKartDurum("idle"), 1600);
-    } catch {
-      setKartDurum("yok");
-      setTimeout(() => setKartDurum("idle"), 1600);
-    }
-  }
-
   // Klavye kısayolları: boşluk = çal/dur, "/" = arama, Esc = arama kapat.
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => {
@@ -473,9 +447,12 @@ export default function NowList() {
         setShowKeys((v) => !v);
       } else if (e.key === "f" || e.key === "F") {
         if (current) setFocus((v) => !v);
+      } else if (e.key === "k" || e.key === "K") {
+        if (current) setKartAcik((v) => !v);
       } else if (e.key === "Escape") {
         setShowKeys(false);
         setFocus(false);
+        setKartAcik(false);
       } else if (e.code === "Space") {
         e.preventDefault();
         if (current) toggle(current);
@@ -1246,13 +1223,13 @@ export default function NowList() {
 
             {/* Paylaşılabilir kart */}
             <button
-              onClick={() => paylasKart(current.slug)}
+              onClick={() => setKartAcik(true)}
               aria-label="kartı paylaş"
-              title="şu an çalanı kart olarak paylaş"
+              title="şu an çalanı kart olarak paylaş (k)"
               className="press hidden shrink-0 rounded-full px-2.5 py-1 text-xs font-semibold sm:inline-flex"
               style={{ background: "rgba(0,0,0,0.18)", color: readableOn(accent) }}
             >
-              {kartDurum === "hazir" ? "kart ✓" : kartDurum === "yok" ? "—" : "kart"}
+              kart
             </button>
 
             {/* Sessizlik / odak modu */}
@@ -1422,6 +1399,8 @@ export default function NowList() {
               {[
                 ["boşluk", "çal / dur"],
                 ["/", "aramaya git"],
+                ["f", "sessizlik modu"],
+                ["k", "kartı paylaş"],
                 ["?", "bu kartı aç/kapat"],
                 ["Esc", "kapat"],
               ].map(([k, d]) => (
@@ -1439,6 +1418,16 @@ export default function NowList() {
             <p className="epigraf mt-5 text-sm">{gununDizesi()}</p>
           </div>
         </div>
+      )}
+
+      {/* Paylaşılabilir kart penceresi */}
+      {kartAcik && current && (
+        <KartModal
+          slug={current.slug}
+          name={current.name}
+          accent={accent}
+          onClose={() => setKartAcik(false)}
+        />
       )}
 
       {/* İlk giriş perdesi — bir kez */}

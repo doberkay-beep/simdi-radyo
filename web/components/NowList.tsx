@@ -734,6 +734,9 @@ export default function NowList() {
               <Link href="/kesif" className="underline" style={{ color: "var(--muted)" }}>
                 keşif
               </Link>
+              <Link href="/kose" className="underline" style={{ color: "var(--muted)" }}>
+                köşe
+              </Link>
               <Link href="/nabiz" className="underline" style={{ color: "var(--muted)" }}>
                 nabız
               </Link>

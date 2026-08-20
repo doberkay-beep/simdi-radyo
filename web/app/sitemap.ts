@@ -1,5 +1,6 @@
 import type { MetadataRoute } from "next";
 import { getSupabase } from "@/lib/supabase";
+import { DENEMELER } from "@/lib/denemeler";
 
 // Aktif istasyonları da haritaya koy → Google her radyonun sayfasını indeksler.
 export const revalidate = 3600;
@@ -19,6 +20,12 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   return [
     { url: BASE, changeFrequency: "hourly", priority: 1 },
     { url: `${BASE}/kesif`, changeFrequency: "daily", priority: 0.8 },
+    { url: `${BASE}/kose`, changeFrequency: "weekly", priority: 0.6 },
+    ...DENEMELER.map((d) => ({
+      url: `${BASE}/kose/${d.slug}`,
+      changeFrequency: "monthly" as const,
+      priority: 0.5,
+    })),
     { url: `${BASE}/nabiz`, changeFrequency: "hourly", priority: 0.8 },
     { url: `${BASE}/arsiv`, changeFrequency: "daily", priority: 0.5 },
     { url: `${BASE}/hakkinda`, changeFrequency: "monthly", priority: 0.4 },

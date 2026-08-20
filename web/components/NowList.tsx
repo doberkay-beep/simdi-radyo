@@ -173,9 +173,14 @@ export default function NowList() {
   const [focus, setFocus] = useState(false); // sessizlik / odak modu
   const [odakDize, setOdakDize] = useState(0); // odakta dönen dize
   const [kartAcik, setKartAcik] = useState(false); // paylaşılabilir kart penceresi
+  const [geceModu, setGeceModu] = useState(false); // ses eşitleme (Web Audio compressor)
   // Çalan istasyonun CANLI çalan bilgisi (toplayıcıdan değil, anlık yoklamadan).
   const [liveNP, setLiveNP] = useState<NowPlaying>(null);
   const audioRef = useRef<HTMLAudioElement | null>(null);
+  // Web Audio grafiği — SADECE gece modu ilk açıldığında kurulur (opt-in, güvenli).
+  const audioCtxRef = useRef<AudioContext | null>(null);
+  const compRef = useRef<DynamicsCompressorNode | null>(null);
+  const srcNodeRef = useRef<MediaElementAudioSourceNode | null>(null);
   const searchRef = useRef<HTMLInputElement | null>(null);
   // Otomatik yeniden bağlanma için: dinlenmek istenen istasyon ve deneme sayacı.
   const playingRef = useRef<string | null>(null);
@@ -444,6 +449,50 @@ export default function NowList() {
   );
   function suggestAnother() {
     if (stations.length) setFeaturedSlug(stations[Math.floor(Math.random() * stations.length)].slug);
+  }
+
+  // Gece modu: sesi eşitle (yüksek/alçak farkını yumuşat). Web Audio grafiği
+  // yalnızca burada, kullanıcı ilk kez açınca kurulur — normal dinleyici bu
+  // yola hiç girmez, o yüzden olağan oynatma etkilenmez.
+  function geceModuAc(ac: boolean) {
+    const a = audioRef.current;
+    if (!a) return;
+    try {
+      if (!audioCtxRef.current) {
+        const Ctx =
+          window.AudioContext ||
+          (window as unknown as { webkitAudioContext?: typeof AudioContext }).webkitAudioContext;
+        if (!Ctx) throw new Error("Web Audio yok");
+        const ctx = new Ctx();
+        const src = ctx.createMediaElementSource(a); // eleman başına bir kez
+        const comp = ctx.createDynamicsCompressor();
+        src.connect(comp);
+        comp.connect(ctx.destination);
+        audioCtxRef.current = ctx;
+        srcNodeRef.current = src;
+        compRef.current = comp;
+      }
+      audioCtxRef.current.resume?.();
+      const c = compRef.current!;
+      const t = audioCtxRef.current.currentTime;
+      if (ac) {
+        // Eşitle: alçak sesleri kaldır, yüksekleri bastır.
+        c.threshold.setValueAtTime(-30, t);
+        c.knee.setValueAtTime(24, t);
+        c.ratio.setValueAtTime(6, t);
+        c.attack.setValueAtTime(0.004, t);
+        c.release.setValueAtTime(0.25, t);
+      } else {
+        // Şeffaf: grafik bağlı kalır ama etki yok.
+        c.threshold.setValueAtTime(0, t);
+        c.knee.setValueAtTime(0, t);
+        c.ratio.setValueAtTime(1, t);
+      }
+      setGeceModu(ac);
+    } catch {
+      // Web Audio kurulamadıysa sessizce vazgeç; oynatma olağan sürer.
+      setGeceModu(false);
+    }
   }
 
   // Klavye kısayolları: boşluk = çal/dur, "/" = arama, Esc = arama kapat.
@@ -1280,6 +1329,18 @@ export default function NowList() {
 
             {/* Ses seviyesi + sessize alma (geniş ekranda) */}
             <div className="hidden shrink-0 items-center gap-2 md:flex">
+              <button
+                onClick={() => geceModuAc(!geceModu)}
+                aria-label="gece modu — sesi eşitle"
+                title="gece modu: sesi eşitle (yüksek/alçak farkını yumuşat)"
+                className="press rounded-full px-2 py-0.5 text-xs font-semibold"
+                style={{
+                  background: geceModu ? readableOn(accent) : "rgba(0,0,0,0.18)",
+                  color: geceModu ? accent : readableOn(accent),
+                }}
+              >
+                eşitle
+              </button>
               <button
                 onClick={() => setMuted((m) => !m)}
                 aria-label={muted ? "sesi aç" : "sessize al"}

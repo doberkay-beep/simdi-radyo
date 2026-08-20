@@ -174,6 +174,8 @@ export default function NowList() {
   const [odakDize, setOdakDize] = useState(0); // odakta dönen dize
   const [kartAcik, setKartAcik] = useState(false); // paylaşılabilir kart penceresi
   const [geceModu, setGeceModu] = useState(false); // ses eşitleme (Web Audio compressor)
+  const [kalpler, setKalpler] = useState<Record<string, number>>({}); // istasyon kalp toplamları
+  const kalpBekleRef = useRef<Record<string, number>>({}); // spam'e karşı kısa bekleme
   // Çalan istasyonun CANLI çalan bilgisi (toplayıcıdan değil, anlık yoklamadan).
   const [liveNP, setLiveNP] = useState<NowPlaying>(null);
   const audioRef = useRef<HTMLAudioElement | null>(null);
@@ -449,6 +451,40 @@ export default function NowList() {
   );
   function suggestAnother() {
     if (stations.length) setFeaturedSlug(stations[Math.floor(Math.random() * stations.length)].slug);
+  }
+
+  // Kalp toplamlarını getir (açılışta + arada bir).
+  useEffect(() => {
+    let off = false;
+    const load = () =>
+      fetch("/api/kalp", { cache: "no-store" })
+        .then((r) => r.json())
+        .then((d) => !off && d.kalpler && setKalpler(d.kalpler))
+        .catch(() => {});
+    load();
+    const id = setInterval(load, 60000);
+    return () => {
+      off = true;
+      clearInterval(id);
+    };
+  }, []);
+
+  // Bir istasyona kalp gönder — iyimser artır, kısa bekleme ile spam'i kes.
+  function kalpAt(slug: string) {
+    const t = Date.now();
+    if (kalpBekleRef.current[slug] && t - kalpBekleRef.current[slug] < 1200) return;
+    kalpBekleRef.current[slug] = t;
+    setKalpler((k) => ({ ...k, [slug]: (k[slug] || 0) + 1 }));
+    fetch("/api/kalp", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ slug }),
+    })
+      .then((r) => r.json())
+      .then((d) => {
+        if (typeof d.toplam === "number") setKalpler((k) => ({ ...k, [slug]: d.toplam }));
+      })
+      .catch(() => {});
   }
 
   // Gece modu: sesi eşitle (yüksek/alçak farkını yumuşat). Web Audio grafiği
@@ -1304,6 +1340,17 @@ export default function NowList() {
               </div>
               <div className="truncate text-xs opacity-80">{current.name}</div>
             </div>
+
+            {/* Anonim kalp */}
+            <button
+              onClick={() => kalpAt(current.slug)}
+              aria-label="bu istasyona kalp gönder"
+              title="bu istasyona kalp gönder"
+              className="press shrink-0 inline-flex items-center gap-1 rounded-full px-2.5 py-1 text-xs font-semibold"
+              style={{ background: "rgba(0,0,0,0.18)", color: readableOn(accent) }}
+            >
+              ♥ {kalpler[current.slug] ? kalpler[current.slug] : ""}
+            </button>
 
             {/* Paylaşılabilir kart */}
             <button

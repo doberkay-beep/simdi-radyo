@@ -449,6 +449,13 @@ export default function NowList() {
         if (current) setFocus((v) => !v);
       } else if (e.key === "k" || e.key === "K") {
         if (current) setKartAcik((v) => !v);
+      } else if (e.key === "ArrowUp") {
+        e.preventDefault();
+        setMuted(false);
+        setVolume((v) => Math.min(1, Math.round((v + 0.05) * 100) / 100));
+      } else if (e.key === "ArrowDown") {
+        e.preventDefault();
+        setVolume((v) => Math.max(0, Math.round((v - 0.05) * 100) / 100));
       } else if (e.key === "Escape") {
         setShowKeys(false);
         setFocus(false);
@@ -723,6 +730,9 @@ export default function NowList() {
             <span className="flex items-center gap-3">
               <Link href="/hakkinda" className="underline" style={{ color: "var(--muted)" }}>
                 geliştirici
+              </Link>
+              <Link href="/kesif" className="underline" style={{ color: "var(--muted)" }}>
+                keşif
               </Link>
               <Link href="/nabiz" className="underline" style={{ color: "var(--muted)" }}>
                 nabız
@@ -1399,6 +1409,7 @@ export default function NowList() {
               {[
                 ["boşluk", "çal / dur"],
                 ["/", "aramaya git"],
+                ["↑ ↓", "ses aç / kıs"],
                 ["f", "sessizlik modu"],
                 ["k", "kartı paylaş"],
                 ["?", "bu kartı aç/kapat"],

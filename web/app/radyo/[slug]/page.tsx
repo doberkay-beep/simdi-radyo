@@ -3,6 +3,7 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { getSupabase } from "@/lib/supabase";
 import StationPlayer from "@/components/StationPlayer";
+import Notlar from "@/components/Notlar";
 import { TUR_EPIGRAF } from "@/lib/sozler";
 
 // Her istasyona kendi SEO sayfası ("X Radyo canlı dinle") + gerçek çalan oynatıcı.
@@ -167,6 +168,8 @@ export default async function StationPage({ params }: { params: Promise<{ slug: 
         </div>
 
         <StationPlayer slug={slug} name={s.name} accent={accent} />
+
+        <Notlar slug={slug} accent={accent} />
 
         {s.genre && TUR_EPIGRAF[s.genre] && (
           <p className="epigraf mt-8 text-base">{TUR_EPIGRAF[s.genre]}</p>

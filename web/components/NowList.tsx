@@ -19,6 +19,22 @@ import KartModal from "./KartModal";
 
 const SAIR_SET = new Set(SAIRIN.slugs);
 
+// Tür → renk. Bir tür seçilince (henüz bir şey çalmıyorken) arka plan o renge kayar.
+const TUR_RENK: Record<string, string> = {
+  arabesk: "#9c5f7c",
+  caz: "#b98a4a",
+  türkü: "#7d9a5a",
+  nostalji: "#8a7ab0",
+  rock: "#c6503a",
+  klasik: "#6a86b8",
+  elektronik: "#4a90d6",
+  "türkçe pop": "#c65a8a",
+  pop: "#e04a7a",
+  alternatif: "#5f8f8a",
+  tsm: "#b0708a",
+  metal: "#8a5a5a",
+};
+
 type NowPlaying = {
   artist: string | null;
   title: string | null;
@@ -637,8 +653,14 @@ export default function NowList() {
 
   return (
     <div
-      className={`spread min-h-screen ${playing ? "" : "aurora"}`}
-      style={playing ? { ["--accent" as string]: accent } : undefined}
+      className={`spread min-h-screen ${playing ? "" : genre ? "" : "aurora"}`}
+      style={
+        playing
+          ? { ["--accent" as string]: accent }
+          : genre && TUR_RENK[genre]
+            ? { ["--accent" as string]: TUR_RENK[genre] }
+            : undefined
+      }
     >
       {/* Geniş ekranda yan boşluklara çok soluk dev kelime işareti (ambient). */}
       <div
@@ -1341,6 +1363,14 @@ export default function NowList() {
           >
             ×
           </button>
+
+          {/* Büyük saat — sessiz bir ekran koruyucu hissi */}
+          <div
+            className="brand mb-6 text-6xl font-bold tabular-nums sm:text-7xl"
+            style={{ color: "#ececee", letterSpacing: "-0.02em" }}
+          >
+            {clock}
+          </div>
 
           <span
             className="text-xs uppercase tracking-[0.3em]"

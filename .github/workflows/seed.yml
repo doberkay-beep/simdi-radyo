@@ -1,0 +1,27 @@
+name: Katalog yükle (seed)
+
+# collector/seed.json'u veritabanına yükler: yeni istasyonları ekler/günceller,
+# katalogda olmayanları pasifleştirir (arşivleri korunur). Elle tetiklenir.
+# Actions sekmesi → "Katalog yükle (seed)" → Run workflow.
+
+on:
+  workflow_dispatch: {}
+
+jobs:
+  seed:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+      - name: Bağımlılıklar
+        working-directory: collector
+        run: npm install --no-audit --no-fund
+      - name: Kataloğu yükle
+        working-directory: collector
+        env:
+          SUPABASE_URL: https://uiouzizblrkojmsqvbjk.supabase.co
+          SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}
+        run: npm run seed

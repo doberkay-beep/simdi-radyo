@@ -1,0 +1,27 @@
+name: Radyo bul
+
+# radio-browser'da isimle istasyon arar, doğrulanmış çalışan yayın adresini
+# loglara yazar. Yerel ortam radio-browser'ı engellediği için burada koşar.
+# Actions → "Radyo bul" → Run workflow → isim gir (ör. "baba radyo").
+
+on:
+  workflow_dispatch:
+    inputs:
+      q:
+        description: "Aranacak istasyon adı"
+        required: true
+        default: "baba radyo"
+
+jobs:
+  find:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+      - name: Ara
+        env:
+          Q: ${{ inputs.q }}
+        run: node probe/find-remote.mjs

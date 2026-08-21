@@ -1,0 +1,37 @@
+name: Toplayıcı (arşiv)
+
+# ŞİMDİ toplayıcısını GitHub'ın sunucularında çalıştırır (ücretsiz yol).
+# 5 dakikada bir tetiklenir, her seferinde ~4.5 dk yoklayıp arşive yazar.
+# Not: Railway gibi kesintisiz değildir; zamanlama gecikebilir, aralarda
+# küçük boşluklar olabilir. Sürekli/temiz arşiv için kalıcı bir worker daha iyidir.
+
+on:
+  schedule:
+    - cron: "*/5 * * * *" # her 5 dakikada bir (GitHub'ın izin verdiği en sık aralık)
+  workflow_dispatch: {} # Actions sekmesinden elle de tetiklenebilir
+
+# Aynı anda tek çalışma; yeni tetikleme öncekini iptal edip taze başlar.
+concurrency:
+  group: collector
+  cancel-in-progress: true
+
+jobs:
+  collect:
+    runs-on: ubuntu-latest
+    timeout-minutes: 6
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22" # Supabase istemcisi Node 22+ ister (native WebSocket)
+      - name: Bağımlılıklar
+        working-directory: collector
+        run: npm install --no-audit --no-fund
+      - name: Yokla ve arşivle
+        working-directory: collector
+        env:
+          # URL herkese açık; secret anahtar GitHub Secrets'tan gelir.
+          SUPABASE_URL: https://uiouzizblrkojmsqvbjk.supabase.co
+          SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}
+          RUN_DURATION_MS: "280000" # ~4 dk 40 sn çalış, sonra çık
+        run: node src/worker.mjs

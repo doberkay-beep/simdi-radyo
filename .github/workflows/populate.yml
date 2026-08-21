@@ -1,0 +1,27 @@
+name: Popüler radyolar
+
+# radio-browser'dan en popüler TR istasyonlarını çeker, yoklar, katalogda
+# olmayan çalışanları loglara "CAND {...}" olarak yazar. Elle tetiklenir.
+# Actions → "Popüler radyolar" → Run workflow.
+
+on:
+  workflow_dispatch:
+    inputs:
+      limit:
+        description: "Her sıralamadan kaç istasyon (tıklanma + oy)"
+        required: false
+        default: "100"
+
+jobs:
+  populate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 8
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+      - name: Getir ve yokla
+        env:
+          LIMIT: ${{ inputs.limit }}
+        run: node probe/top-remote.mjs

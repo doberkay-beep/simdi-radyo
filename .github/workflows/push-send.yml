@@ -1,0 +1,25 @@
+name: Push gönder
+
+# Kayıtlı mobil cihazlara "yükselen / eşzamanlı" bildirimi yollar (Expo).
+# Elle tetiklenebilir; istenirse cron ile zamanlanabilir.
+
+on:
+  workflow_dispatch: {}
+  # Örnek zamanlama (kapalı): her akşam 20:00 TR (17:00 UTC)
+  # schedule:
+  #   - cron: "0 17 * * *"
+
+jobs:
+  push:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+      - name: Gönder
+        env:
+          SUPABASE_URL: https://uiouzizblrkojmsqvbjk.supabase.co
+          SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}
+        run: node probe/push-send.mjs

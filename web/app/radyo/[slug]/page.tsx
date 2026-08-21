@@ -129,11 +129,22 @@ export default async function StationPage({ params }: { params: Promise<{ slug: 
 
   const jsonLd = {
     "@context": "https://schema.org",
-    "@type": "RadioStation",
-    name: s.name,
-    url: `https://necaliyor.co/radyo/${slug}`,
-    ...(s.genre ? { genre: s.genre } : {}),
-    ...(s.city ? { areaServed: s.city } : {}),
+    "@graph": [
+      {
+        "@type": "RadioStation",
+        name: s.name,
+        url: `https://necaliyor.co/radyo/${slug}`,
+        ...(s.genre ? { genre: s.genre } : {}),
+        ...(s.city ? { areaServed: s.city } : {}),
+      },
+      {
+        "@type": "BreadcrumbList",
+        itemListElement: [
+          { "@type": "ListItem", position: 1, name: "ŞİMDİ", item: "https://necaliyor.co" },
+          { "@type": "ListItem", position: 2, name: s.name, item: `https://necaliyor.co/radyo/${slug}` },
+        ],
+      },
+    ],
   };
 
   return (

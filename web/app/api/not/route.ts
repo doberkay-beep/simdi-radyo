@@ -1,5 +1,6 @@
 import { getSupabase } from "@/lib/supabase";
 import { json } from "@/lib/json";
+import { rateLimit, istemciKimlik } from "@/lib/ratelimit";
 
 export const dynamic = "force-dynamic";
 
@@ -30,6 +31,10 @@ export async function GET(request: Request) {
 
 // POST /api/not  { slug, not }  → bir anı bırak.
 export async function POST(request: Request) {
+  // Dakikada en fazla 6 not / IP (spam'e karşı).
+  if (!rateLimit(`not:${istemciKimlik(request)}`, 6, 60000)) {
+    return json({ error: "çok hızlı — biraz bekle" }, { status: 429 });
+  }
   let slug = "";
   let not = "";
   try {

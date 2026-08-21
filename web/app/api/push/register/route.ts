@@ -1,11 +1,15 @@
 import { getSupabase } from "@/lib/supabase";
 import { json } from "@/lib/json";
+import { rateLimit, istemciKimlik } from "@/lib/ratelimit";
 
 export const dynamic = "force-dynamic";
 
 // POST /api/push/register  { token, platform, favoriler[] }
 // Mobil uygulama açılışta push jetonunu buraya kaydeder.
 export async function POST(request: Request) {
+  if (!rateLimit(`push:${istemciKimlik(request)}`, 20, 60000)) {
+    return json({ error: "çok hızlı" }, { status: 429 });
+  }
   let token = "";
   let platform = "bilinmiyor";
   let favoriler: string[] = [];

@@ -1,5 +1,6 @@
 import { getSupabase } from "@/lib/supabase";
 import { json } from "@/lib/json";
+import { rateLimit, istemciKimlik } from "@/lib/ratelimit";
 
 export const dynamic = "force-dynamic";
 
@@ -21,6 +22,10 @@ export async function GET() {
 
 // POST /api/kalp  { slug }  → bir kalp ekle, yeni toplamı döndür.
 export async function POST(request: Request) {
+  // Dakikada en fazla 30 kalp / IP.
+  if (!rateLimit(`kalp:${istemciKimlik(request)}`, 30, 60000)) {
+    return json({ error: "çok hızlı" }, { status: 429 });
+  }
   let slug = "";
   try {
     const body = await request.json();

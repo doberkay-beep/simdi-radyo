@@ -8,6 +8,7 @@ import DilToggle from "@/components/DilToggle";
 import { TUR_EPIGRAF } from "@/lib/sozler";
 import { dilSunucu } from "@/lib/dil-sunucu";
 import { ceviri, turAdi } from "@/lib/i18n-core";
+import { turSlug } from "@/lib/turler";
 
 // Her istasyona kendi SEO sayfası ("X Radyo canlı dinle") + gerçek çalan oynatıcı.
 export const revalidate = 60;
@@ -176,6 +177,15 @@ export default async function StationPage({ params }: { params: Promise<{ slug: 
             <p className="mt-1 text-sm" style={{ color: "var(--muted)" }}>
               {[turAdi(dil, s.genre), s.frequency, s.city].filter(Boolean).join(" · ") || T("radyo.canliRadyo")}
             </p>
+            {turSlug(s.genre) && (
+              <Link
+                href={`/tur/${turSlug(s.genre)}`}
+                className="mt-1 inline-block text-sm underline"
+                style={{ color: accent }}
+              >
+                {dil === "en" ? `all ${turAdi(dil, s.genre)} stations →` : `tüm ${s.genre} radyoları →`}
+              </Link>
+            )}
           </div>
         </div>
 

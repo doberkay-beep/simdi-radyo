@@ -178,6 +178,7 @@ export default function NowList() {
   const [kartAcik, setKartAcik] = useState(false); // paylaşılabilir kart penceresi
   const [geceModu, setGeceModu] = useState(false); // ses eşitleme (Web Audio compressor)
   const [kalpler, setKalpler] = useState<Record<string, number>>({}); // istasyon kalp toplamları
+  const [yolculuk, setYolculuk] = useState(false); // sesli yolculuk — otomatik zaping
   const kalpBekleRef = useRef<Record<string, number>>({}); // spam'e karşı kısa bekleme
   // Çalan istasyonun CANLI çalan bilgisi (toplayıcıdan değil, anlık yoklamadan).
   const [liveNP, setLiveNP] = useState<NowPlaying>(null);
@@ -455,6 +456,20 @@ export default function NowList() {
   function suggestAnother() {
     if (stations.length) setFeaturedSlug(stations[Math.floor(Math.random() * stations.length)].slug);
   }
+
+  // Sesli yolculuk — açıkken her 30 sn'de başka bir istasyona ışınlan.
+  useEffect(() => {
+    if (!yolculuk || stations.length < 2) return;
+    const hop = () => {
+      const pool = stations.filter((s) => s.slug !== playingRef.current);
+      if (!pool.length) return;
+      toggle(pool[Math.floor(Math.random() * pool.length)]);
+    };
+    hop();
+    const id = setInterval(hop, 30000);
+    return () => clearInterval(id);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [yolculuk, stations]);
 
   // Kalp toplamlarını getir (açılışta + arada bir).
   useEffect(() => {
@@ -827,6 +842,15 @@ export default function NowList() {
                 style={{ color: sleepUntil ? "var(--fg)" : "var(--muted)" }}
               >
                 {sleepUntil ? `🌙 ${sleepRemain}dk` : "🌙"}
+              </button>
+              <button
+                onClick={() => setYolculuk((v) => !v)}
+                title="sesli yolculuk — istasyonlar arası otomatik gezinti"
+                aria-label="sesli yolculuk"
+                className="press leading-none"
+                style={{ color: yolculuk ? "var(--fg)" : "var(--muted)" }}
+              >
+                {yolculuk ? "🧭 gezside" : "🧭"}
               </button>
               <DilToggle />
               <ThemeToggle />

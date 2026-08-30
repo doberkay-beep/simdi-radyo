@@ -66,6 +66,34 @@ async function getSimilar(slug: string, genre: string | null) {
   }
 }
 
+// İstasyonun "kişiliği" — arşivde en çok çaldığı sanatçılar.
+async function getTopArtists(slug: string): Promise<{ artist: string; adet: number }[]> {
+  try {
+    const supa = getSupabase();
+    const { data: st } = await supa.from("stations").select("id").eq("slug", slug).maybeSingle();
+    if (!st) return [];
+    const { data } = await supa
+      .from("plays")
+      .select("artist, title")
+      .eq("station_id", (st as { id: number }).id)
+      .order("started_at", { ascending: false })
+      .limit(500);
+    const say = new Map<string, number>();
+    for (const p of (data ?? []) as { artist: string | null; title: string | null }[]) {
+      const a = p.artist?.trim();
+      if (!a || a.length < 2 || a === p.title) continue;
+      say.set(a, (say.get(a) || 0) + 1);
+    }
+    return [...say.entries()]
+      .map(([artist, adet]) => ({ artist, adet }))
+      .filter((x) => x.adet >= 2)
+      .sort((a, b) => b.adet - a.adet)
+      .slice(0, 6);
+  } catch {
+    return [];
+  }
+}
+
 async function getNowPlaying(slug: string) {
   try {
     const supa = getSupabase();
@@ -126,6 +154,7 @@ export default async function StationPage({ params }: { params: Promise<{ slug: 
   const track = trackText(np);
   const accent = s.accent_color || DEFAULT_ACCENT;
   const similar = await getSimilar(slug, s.genre);
+  const topArtists = await getTopArtists(slug);
   const dil = await dilSunucu();
   const T = (k: string) => ceviri(dil, k);
 
@@ -198,6 +227,28 @@ export default async function StationPage({ params }: { params: Promise<{ slug: 
         </div>
 
         <StationPlayer slug={slug} name={s.name} accent={accent} />
+
+        {topArtists.length > 0 && (
+          <section className="mt-8">
+            <h2 className="mb-3 text-xs uppercase tracking-wide" style={{ color: "var(--muted)" }}>
+              {dil === "en" ? `${s.name}'s frequency` : `${s.name} en çok kimi çalıyor?`}
+            </h2>
+            <div className="flex flex-wrap gap-2">
+              {topArtists.map((a) => (
+                <span
+                  key={a.artist}
+                  className="rounded-full border px-3 py-1 text-sm"
+                  style={{
+                    borderColor: "var(--line)",
+                    fontSize: `${Math.max(0.8, Math.min(1.3, 0.8 + (a.adet / topArtists[0].adet) * 0.5))}rem`,
+                  }}
+                >
+                  {a.artist} <span style={{ color: "var(--muted)" }}>{a.adet}</span>
+                </span>
+              ))}
+            </div>
+          </section>
+        )}
 
         <Notlar slug={slug} accent={accent} />
 

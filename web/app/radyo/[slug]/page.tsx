@@ -4,6 +4,7 @@ import { notFound } from "next/navigation";
 import { getSupabase } from "@/lib/supabase";
 import StationPlayer from "@/components/StationPlayer";
 import Notlar from "@/components/Notlar";
+import EmbedKopya from "@/components/EmbedKopya";
 import DilToggle from "@/components/DilToggle";
 import { TUR_EPIGRAF } from "@/lib/sozler";
 import { dilSunucu } from "@/lib/dil-sunucu";
@@ -199,6 +200,8 @@ export default async function StationPage({ params }: { params: Promise<{ slug: 
         <StationPlayer slug={slug} name={s.name} accent={accent} />
 
         <Notlar slug={slug} accent={accent} />
+
+        <EmbedKopya slug={slug} name={s.name} />
 
         {s.genre && TUR_EPIGRAF[s.genre] && (
           <p className="epigraf mt-8 text-base">{TUR_EPIGRAF[s.genre]}</p>

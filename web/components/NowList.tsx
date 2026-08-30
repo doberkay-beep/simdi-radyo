@@ -875,6 +875,9 @@ export default function NowList() {
               <Link href="/nabiz" className="underline" style={{ color: "var(--muted)" }}>
                 {t("nav.nabiz")}
               </Link>
+              <Link href="/oyun" className="underline" style={{ color: "var(--muted)" }}>
+                {t("nav.oyun")}
+              </Link>
               <Link href="/arsiv" className="underline" style={{ color: "var(--muted)" }}>
                 {t("nav.arsiv")}
               </Link>

@@ -8,6 +8,7 @@ export const SOZLUK: Record<string, { tr: string; en: string }> = {
   "nav.kesif": { tr: "keşif", en: "discover" },
   "nav.kose": { tr: "köşe", en: "essays" },
   "nav.nabiz": { tr: "nabız", en: "pulse" },
+  "nav.oyun": { tr: "oyun", en: "game" },
   "nav.arsiv": { tr: "arşiv →", en: "archive →" },
   "nav.gelistirici": { tr: "geliştirici", en: "about" },
   "nav.simdi": { tr: "← şimdi", en: "← now" },

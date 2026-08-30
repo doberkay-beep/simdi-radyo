@@ -5,6 +5,7 @@ import Link from "next/link";
 import ThemeToggle from "./ThemeToggle";
 import DilToggle from "./DilToggle";
 import { useDil } from "@/lib/i18n";
+import { parcaSlug } from "@/lib/parca";
 
 type Row = {
   slug: string;
@@ -241,30 +242,31 @@ export default function Archive() {
                   const c = r.accentColor || DEFAULT_ACCENT;
                   const t = new Date(r.startedAt);
                   const when = `${pad(t.getDate())}.${pad(t.getMonth() + 1)} ${pad(t.getHours())}:${pad(t.getMinutes())}`;
-                  const inner = (
-                    <div className="flex items-center gap-3 border-b py-3" style={{ borderColor: "var(--line)" }}>
-                      <span className="min-w-0 flex-1">
-                        <span className="block truncate text-[15px]">
-                          <span className="font-semibold">{r.artist?.trim() || r.title}</span>
-                          {r.artist && r.title && r.artist !== r.title && (
-                            <span style={{ color: "var(--muted)" }}> — {r.title}</span>
-                          )}
-                        </span>
-                        <span className="mt-0.5 block truncate text-xs" style={{ color: "var(--muted)" }}>
-                          <span style={{ color: c }}>{r.name}</span> · {when}
-                        </span>
-                      </span>
-                    </div>
-                  );
                   return (
                     <li key={i}>
-                      {r.slug ? (
-                        <Link href={`/radyo/${r.slug}`} className="press block">
-                          {inner}
-                        </Link>
-                      ) : (
-                        inner
-                      )}
+                      <div className="flex items-center gap-3 border-b py-3" style={{ borderColor: "var(--line)" }}>
+                        <span className="min-w-0 flex-1">
+                          <Link
+                            href={`/parca/${parcaSlug(r.title || "")}`}
+                            className="block truncate text-[15px] hover:underline"
+                          >
+                            <span className="font-semibold">{r.artist?.trim() || r.title}</span>
+                            {r.artist && r.title && r.artist !== r.title && (
+                              <span style={{ color: "var(--muted)" }}> — {r.title}</span>
+                            )}
+                          </Link>
+                          <span className="mt-0.5 block truncate text-xs" style={{ color: "var(--muted)" }}>
+                            {r.slug ? (
+                              <Link href={`/radyo/${r.slug}`} className="hover:underline" style={{ color: c }}>
+                                {r.name}
+                              </Link>
+                            ) : (
+                              <span style={{ color: c }}>{r.name}</span>
+                            )}{" "}
+                            · {when}
+                          </span>
+                        </span>
+                      </div>
                     </li>
                   );
                 })}

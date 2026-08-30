@@ -5,6 +5,7 @@ import Link from "next/link";
 import ThemeToggle from "./ThemeToggle";
 import DilToggle from "./DilToggle";
 import { useDil, turAdi } from "@/lib/i18n";
+import { parcaSlug } from "@/lib/parca";
 
 type Sim = {
   title: string;
@@ -278,12 +279,12 @@ export default function Nabiz() {
                       {i + 1}
                     </span>
                     <span className="min-w-0 flex-1">
-                      <span className="block truncate text-[15px]">
+                      <Link href={`/parca/${parcaSlug(s.title)}`} className="block truncate text-[15px] hover:underline">
                         <span className="font-semibold">{s.artist ?? s.title}</span>
                         {s.artist && s.artist !== s.title && (
                           <span style={{ color: "var(--muted)" }}> — {s.title}</span>
                         )}
-                      </span>
+                      </Link>
                       <span
                         className="mt-1 block h-1 rounded-full"
                         style={{

@@ -1,1865 +1,5 @@
 [
  {
-  "slug": "arabesk-fm",
-  "name": "Arabesk FM",
-  "city": null,
-  "frequency": null,
-  "stream_url": "http://yayin.arabeskfm.biz:8042/",
-  "homepage": null,
-  "accent_color": "#8e2f4a",
-  "band": "tr",
-  "metadata_quality": "good",
-  "is_active": true,
-  "sort_order": 10,
-  "genre": "arabesk",
-  "country": "tr"
- },
- {
-  "slug": "virgin-radio",
-  "name": "Virgin Radio",
-  "city": "İstanbul",
-  "frequency": "104.4",
-  "stream_url": "http://29103.live.streamtheworld.com/VIRGIN_RADIO_SC",
-  "homepage": "https://www.virginradio.com.tr",
-  "accent_color": "#e2241a",
-  "band": "tr",
-  "metadata_quality": "good",
-  "is_active": true,
-  "sort_order": 20,
-  "genre": "pop",
-  "country": "tr"
- },
- {
-  "slug": "damar-turk-fm",
-  "name": "Damar Türk FM",
-  "city": null,
-  "frequency": null,
-  "stream_url": "https://live.radyositesihazir.com:10997/",
-  "homepage": null,
-  "accent_color": "#b5342f",
-  "band": "tr",
-  "metadata_quality": "good",
-  "is_active": true,
-  "sort_order": 30,
-  "genre": "arabesk",
-  "country": "tr"
- },
- {
-  "slug": "radyo-7",
-  "name": "Radyo 7",
-  "city": null,
-  "frequency": null,
-  "stream_url": "http://46.20.3.250/;stream",
-  "homepage": "https://www.radyo7.com",
-  "accent_color": "#f0a020",
-  "band": "tr",
-  "metadata_quality": "good",
-  "is_active": true,
-  "sort_order": 40,
-  "genre": "türkçe pop",
-  "country": "tr"
- },
- {
-  "slug": "turkulerle-turkiye",
-  "name": "Türkülerle Türkiye",
-  "city": null,
-  "frequency": null,
-  "stream_url": "http://37.247.98.8/stream/22/;",
-  "homepage": null,
-  "accent_color": "#c85a17",
-  "band": "tr",
-  "metadata_quality": "good",
-  "is_active": true,
-  "sort_order": 50,
-  "genre": "türkü",
-  "country": "tr"
- },
- {
-  "slug": "radyo-siran",
-  "name": "Radyo Şiran",
-  "city": "Gümüşhane",
-  "frequency": null,
-  "stream_url": "https://live.radyositesihazir.com/8078/stream",
-  "homepage": null,
-  "accent_color": "#7a5230",
-  "band": "tr",
-  "metadata_quality": "good",
-  "is_active": true,
-  "sort_order": 60,
-  "genre": "türkü",
-  "country": "tr"
- },
- {
-  "slug": "metro-fm",
-  "name": "Metro FM",
-  "city": "İstanbul",
-  "frequency": "97.2",
-  "stream_url": "http://28503.live.streamtheworld.com:3690/METRO_FMAAC_SC",
-  "homepage": "https://www.metrofm.com.tr",
-  "accent_color": "#1f6feb",
-  "band": "tr",
-  "metadata_quality": "good",
-  "is_active": true,
-  "sort_order": 70,
-  "genre": "pop",
-  "country": "tr"
- },
- {
-  "slug": "ankara-havalari",
-  "name": "Ankara Havaları",
-  "city": "Ankara",
-  "frequency": null,
-  "stream_url": "http://37.247.98.8/stream/30/;",
-  "homepage": null,
-  "accent_color": "#9a2b2b",
-  "band": "tr",
-  "metadata_quality": "good",
-  "is_active": true,
-  "sort_order": 80,
-  "genre": "türkü",
-  "country": "tr"
- },
- {
-  "slug": "altin-sarkilar",
-  "name": "Altın Şarkılar",
-  "city": null,
-  "frequency": null,
-  "stream_url": "http://37.247.98.8/stream/25/;",
-  "homepage": null,
-  "accent_color": "#c99700",
-  "band": "tr",
-  "metadata_quality": "good",
-  "is_active": true,
-  "sort_order": 90,
-  "genre": "nostalji",
-  "country": "tr"
- },
- {
-  "slug": "dinamo-sleep",
-  "name": "dinamo.fm sleep",
-  "city": null,
-  "frequency": null,
-  "stream_url": "http://channels.dinamo.fm/sleep-mp3",
-  "homepage": "https://dinamo.fm",
-  "accent_color": "#3d5a80",
-  "band": "tr",
-  "metadata_quality": "good",
-  "is_active": true,
-  "sort_order": 100,
-  "genre": "elektronik",
-  "country": "tr"
- },
- {
-  "slug": "super-fm",
-  "name": "Süper FM",
-  "city": "İstanbul",
-  "frequency": "94.6",
-  "stream_url": "http://29023.live.streamtheworld.com:3690/SUPER_FMAAC_SC",
-  "homepage": "https://www.superfm.com.tr",
-  "accent_color": "#e5471d",
-  "band": "tr",
-  "metadata_quality": "good",
-  "is_active": true,
-  "sort_order": 110,
-  "genre": "pop",
-  "country": "tr"
- },
- {
-  "slug": "90lar",
-  "name": "90'lar",
-  "city": null,
-  "frequency": null,
-  "stream_url": "http://37.247.98.8/stream/166/",
-  "homepage": null,
-  "accent_color": "#d0468a",
-  "band": "tr",
-  "metadata_quality": "good",
-  "is_active": true,
-  "sort_order": 120,
-  "genre": "nostalji",
-  "country": "tr"
- },
- {
-  "slug": "pal-station",
-  "name": "Pal Station",
-  "city": "İstanbul",
-  "frequency": "100.8",
-  "stream_url": "http://shoutcast.radyogrup.com:1020/",
-  "homepage": "https://www.palstation.com.tr",
-  "accent_color": "#6a2c9c",
-  "band": "tr",
-  "metadata_quality": "good",
-  "is_active": true,
-  "sort_order": 130,
-  "genre": "elektronik",
-  "country": "tr"
- },
- {
-  "slug": "pal-nostalji",
-  "name": "Pal Nostalji",
-  "city": "İstanbul",
-  "frequency": "99.2",
-  "stream_url": "http://shoutcast.radyogrup.com:1010/",
-  "homepage": "https://www.palnostalji.com.tr",
-  "accent_color": "#b06a3c",
-  "band": "tr",
-  "genre": "nostalji",
-  "metadata_quality": "good",
-  "is_active": true,
-  "sort_order": 132,
-  "country": "tr"
- },
- {
-  "band": "tr",
-  "metadata_quality": "good",
-  "is_active": true,
-  "city": "İstanbul",
-  "frequency": null,
-  "homepage": "https://www.palstation.com.tr",
-  "slug": "pal-doga",
-  "name": "Pal Doğa",
-  "stream_url": "http://shoutcast.radyogrup.com:1040/;*.mp3",
-  "accent_color": "#4c9c6a",
-  "genre": "türkü",
-  "sort_order": 136,
-  "country": "tr"
- },
- {
-  "slug": "pop-90",
-  "name": "Pop 90",
-  "city": null,
-  "frequency": null,
-  "stream_url": "http://23623.live.streamtheworld.com:3690/POP90AAC_SC",
-  "homepage": null,
-  "accent_color": "#e06c9f",
-  "band": "tr",
-  "metadata_quality": "good",
-  "is_active": true,
-  "sort_order": 140,
-  "genre": "nostalji",
-  "country": "tr"
- },
- {
-  "slug": "dinamo-deep",
-  "name": "dinamo.fm deep",
-  "city": null,
-  "frequency": null,
-  "stream_url": "http://channels.dinamo.fm/deep-mp3",
-  "homepage": "https://dinamo.fm",
-  "accent_color": "#2a6f6f",
-  "band": "tr",
-  "metadata_quality": "good",
-  "is_active": true,
-  "sort_order": 150,
-  "genre": "elektronik",
-  "country": "tr"
- },
- {
-  "slug": "joy-fm",
-  "name": "Joy FM",
-  "city": "İstanbul",
-  "frequency": "95.0",
-  "stream_url": "http://22193.live.streamtheworld.com:3690/JOY_FMAAC_SC",
-  "homepage": "https://www.joyfm.com.tr",
-  "accent_color": "#0f9d8f",
-  "band": "tr",
-  "metadata_quality": "good",
-  "is_active": true,
-  "sort_order": 160,
-  "genre": "pop",
-  "country": "tr"
- },
- {
-  "slug": "alem-fm",
-  "name": "Alem FM",
-  "city": "İstanbul",
-  "frequency": "103.4",
-  "stream_url": "https://turkmedya.radyotvonline.net/alemfmaac",
-  "homepage": "https://www.alemfm.com",
-  "accent_color": "#1d7a3a",
-  "band": "tr",
-  "metadata_quality": "good",
-  "is_active": true,
-  "sort_order": 180,
-  "genre": "türkçe pop",
-  "country": "tr"
- },
- {
-  "slug": "dost-radyo",
-  "name": "Dost Radyo",
-  "city": null,
-  "frequency": null,
-  "stream_url": "http://yayin1.yayindakiler.com:3156/",
-  "homepage": null,
-  "accent_color": "#4b7a2b",
-  "band": "tr",
-  "metadata_quality": "good",
-  "is_active": true,
-  "sort_order": 190,
-  "genre": "türkü",
-  "country": "tr"
- },
- {
-  "slug": "dinamo-caffe",
-  "name": "dinamo.fm caffe",
-  "city": null,
-  "frequency": null,
-  "stream_url": "http://channels.dinamo.fm/caffe-mp3",
-  "homepage": "https://dinamo.fm",
-  "accent_color": "#8a5a2b",
-  "band": "tr",
-  "metadata_quality": "good",
-  "is_active": true,
-  "sort_order": 200,
-  "genre": "elektronik",
-  "country": "tr"
- },
- {
-  "slug": "dinamo-discotheque",
-  "name": "dinamo.fm discotheque",
-  "city": null,
-  "frequency": null,
-  "stream_url": "http://channels.dinamo.fm/discotheque-mp3",
-  "homepage": "https://dinamo.fm",
-  "accent_color": "#7b3fb5",
-  "band": "tr",
-  "metadata_quality": "good",
-  "is_active": true,
-  "sort_order": 220,
-  "genre": "elektronik",
-  "country": "tr"
- },
- {
-  "slug": "itu-klasik",
-  "name": "İTÜ Klasik",
-  "city": "Ankara",
-  "frequency": null,
-  "stream_url": "http://160.75.86.29:8088/ituklasikmp3",
-  "homepage": null,
-  "accent_color": "#6b5b95",
-  "band": "tr",
-  "genre": "klasik",
-  "metadata_quality": "good",
-  "is_active": true,
-  "sort_order": 230,
-  "country": "tr"
- },
- {
-  "slug": "radio-zetzet",
-  "name": "Radio ZetZet",
-  "city": null,
-  "frequency": null,
-  "stream_url": "http://173.249.25.121:8000/",
-  "homepage": null,
-  "accent_color": "#3f7cac",
-  "band": "tr",
-  "genre": "caz",
-  "metadata_quality": "good",
-  "is_active": true,
-  "sort_order": 240,
-  "country": "tr"
- },
- {
-  "slug": "turku-radyo",
-  "name": "Türkü Radyo",
-  "city": null,
-  "frequency": null,
-  "stream_url": "https://eu8.fastcast4u.com/proxy/ugur4129?mp=/1",
-  "homepage": null,
-  "accent_color": "#b7791f",
-  "band": "tr",
-  "genre": "türkü",
-  "metadata_quality": "good",
-  "is_active": true,
-  "sort_order": 250,
-  "country": "tr"
- },
- {
-  "slug": "sizir-fm",
-  "name": "Sızır FM",
-  "city": null,
-  "frequency": null,
-  "stream_url": "http://stream.radiojar.com/tamm1f7kk48uv",
-  "homepage": null,
-  "accent_color": "#a8642a",
-  "band": "tr",
-  "genre": "türkü",
-  "metadata_quality": "good",
-  "is_active": true,
-  "sort_order": 260,
-  "country": "tr"
- },
- {
-  "slug": "beste-fm",
-  "name": "Beste FM",
-  "city": null,
-  "frequency": null,
-  "stream_url": "https://stream.zeno.fm/tnvnovtgozstv",
-  "homepage": null,
-  "accent_color": "#d6568c",
-  "band": "tr",
-  "genre": "türkçe pop",
-  "metadata_quality": "good",
-  "is_active": true,
-  "sort_order": 270,
-  "country": "tr"
- },
- {
-  "slug": "hey-radyo",
-  "name": "Hey Radyo",
-  "city": "İzmir",
-  "frequency": null,
-  "stream_url": "https://usa4.fastcast4u.com/proxy/radyoizmirfm/mp3stream128",
-  "homepage": null,
-  "accent_color": "#e0629a",
-  "band": "tr",
-  "genre": "türkçe pop",
-  "metadata_quality": "good",
-  "is_active": true,
-  "sort_order": 280,
-  "country": "tr"
- },
- {
-  "slug": "radyo-kent",
-  "name": "Radyo Kent",
-  "city": null,
-  "frequency": null,
-  "stream_url": "https://kentfm955.ozelip.com/9306/stream",
-  "homepage": null,
-  "accent_color": "#c94f86",
-  "band": "tr",
-  "genre": "türkçe pop",
-  "metadata_quality": "good",
-  "is_active": true,
-  "sort_order": 290,
-  "country": "tr"
- },
- {
-  "slug": "ask-fm",
-  "name": "Aşk FM",
-  "city": null,
-  "frequency": null,
-  "stream_url": "http://yayin.asymedya.com:8020/;",
-  "homepage": null,
-  "accent_color": "#e05a7a",
-  "band": "tr",
-  "genre": "pop",
-  "metadata_quality": "good",
-  "is_active": true,
-  "sort_order": 300,
-  "country": "tr"
- },
- {
-  "slug": "joyturk-rock",
-  "name": "JoyTürk Rock",
-  "city": null,
-  "frequency": null,
-  "stream_url": "http://23613.live.streamtheworld.com/JOYTURK_ROCK128AAC.aac",
-  "homepage": null,
-  "accent_color": "#8b3a3a",
-  "band": "tr",
-  "genre": "rock",
-  "metadata_quality": "good",
-  "is_active": true,
-  "sort_order": 310,
-  "country": "tr"
- },
- {
-  "slug": "radyo-odtu-rock",
-  "name": "Radyo ODTÜ Rock",
-  "city": "Ankara",
-  "frequency": null,
-  "stream_url": "http://stream.radyoodtu.com.tr/rock",
-  "homepage": null,
-  "accent_color": "#6d2e2e",
-  "band": "tr",
-  "genre": "rock",
-  "metadata_quality": "good",
-  "is_active": true,
-  "sort_order": 320,
-  "country": "tr"
- },
- {
-  "slug": "turk-rock-fm",
-  "name": "Türk Rock FM",
-  "city": null,
-  "frequency": null,
-  "stream_url": "https://yayin5.radyohizmeti.com/8090/stream;",
-  "homepage": null,
-  "accent_color": "#9c3535",
-  "band": "tr",
-  "genre": "rock",
-  "metadata_quality": "good",
-  "is_active": true,
-  "sort_order": 330,
-  "country": "tr"
- },
- {
-  "slug": "radyo-a",
-  "name": "Radyo A",
-  "city": "Eskişehir",
-  "frequency": null,
-  "stream_url": "http://canli.radyoa.anadolu.edu.tr:44445/Radyo_A_MP3",
-  "homepage": null,
-  "accent_color": "#4b6cb7",
-  "band": "tr",
-  "genre": "alternatif",
-  "metadata_quality": "good",
-  "is_active": true,
-  "sort_order": 340,
-  "country": "tr"
- },
- {
-  "slug": "enradio",
-  "name": "Enradio",
-  "city": null,
-  "frequency": null,
-  "stream_url": "https://radyo1.radyo-dinle.tc/8098/stream",
-  "homepage": null,
-  "accent_color": "#5a7d9a",
-  "band": "tr",
-  "genre": "alternatif",
-  "metadata_quality": "good",
-  "is_active": true,
-  "sort_order": 350,
-  "country": "tr"
- },
- {
-  "slug": "loops-radio",
-  "name": "Loops Radio",
-  "city": null,
-  "frequency": null,
-  "stream_url": "https://ssl22.radyotelekom.com/8232/stream",
-  "homepage": null,
-  "accent_color": "#2f8f83",
-  "band": "tr",
-  "genre": "elektronik",
-  "metadata_quality": "good",
-  "is_active": true,
-  "sort_order": 360,
-  "country": "tr"
- },
- {
-  "slug": "mayday-records",
-  "name": "Mayday Records",
-  "city": null,
-  "frequency": null,
-  "stream_url": "https://stream.maydayrecords.net/radio/8000/maydayrecords.mp3",
-  "homepage": null,
-  "accent_color": "#3a7d6f",
-  "band": "tr",
-  "genre": "elektronik",
-  "metadata_quality": "good",
-  "is_active": true,
-  "sort_order": 370,
-  "country": "tr"
- },
- {
-  "slug": "dinamo-smog",
-  "name": "dinamo.fm smog",
-  "city": "İstanbul",
-  "frequency": null,
-  "stream_url": "http://channels.dinamo.fm/smog-mp3",
-  "homepage": null,
-  "accent_color": "#4a6b7c",
-  "band": "tr",
-  "genre": "elektronik",
-  "metadata_quality": "good",
-  "is_active": true,
-  "sort_order": 380,
-  "country": "tr"
- },
- {
-  "slug": "romantik-ses-isparta",
-  "name": "Romantik Ses Isparta",
-  "city": "Isparta",
-  "frequency": null,
-  "stream_url": "https://radyo.romantikses.com/romantiksesispart/stream",
-  "homepage": null,
-  "accent_color": "#a8577a",
-  "band": "tr",
-  "genre": "nostalji",
-  "metadata_quality": "good",
-  "is_active": true,
-  "sort_order": 390,
-  "country": "tr"
- },
- {
-  "slug": "slow-fm",
-  "name": "Slow FM",
-  "city": null,
-  "frequency": null,
-  "stream_url": "https://anadolu.liderhost.com.tr:10973/",
-  "homepage": null,
-  "accent_color": "#7a6a8c",
-  "band": "tr",
-  "genre": "nostalji",
-  "metadata_quality": "good",
-  "is_active": true,
-  "sort_order": 400,
-  "country": "tr"
- },
- {
-  "slug": "radyo-arabesk",
-  "name": "Radyo Arabesk",
-  "city": null,
-  "frequency": null,
-  "stream_url": "https://yayin.radyoarabesk.com.tr:8000/stream",
-  "homepage": null,
-  "accent_color": "#8e2f4a",
-  "band": "tr",
-  "genre": "arabesk",
-  "metadata_quality": "good",
-  "is_active": true,
-  "sort_order": 410,
-  "country": "tr"
- },
- {
-  "slug": "radyo-45lik",
-  "name": "Radyo 45’lik",
-  "city": null,
-  "frequency": null,
-  "stream_url": "https://stream.radyo45lik.com:4545/",
-  "homepage": "https://www.radyo45lik.com",
-  "accent_color": "#a8842c",
-  "band": "tr",
-  "genre": "nostalji",
-  "metadata_quality": "good",
-  "is_active": true,
-  "sort_order": 420,
-  "country": "tr"
- },
- {
-  "band": "tr",
-  "metadata_quality": "good",
-  "is_active": true,
-  "city": "İstanbul",
-  "frequency": "94.6",
-  "homepage": "https://www.joyturk.com.tr",
-  "slug": "joyturk",
-  "name": "JoyTürk",
-  "stream_url": "https://playerservices.streamtheworld.com/api/livestream-redirect/JOY_TURK_ITUNES.mp3",
-  "accent_color": "#e8552e",
-  "genre": "türkçe pop",
-  "sort_order": 430,
-  "country": "tr"
- },
- {
-  "band": "tr",
-  "metadata_quality": "good",
-  "is_active": true,
-  "city": "İstanbul",
-  "frequency": null,
-  "homepage": "https://www.borusanklasik.com",
-  "slug": "borusan-klasik",
-  "name": "Borusan Klasik",
-  "stream_url": "http://27783.live.streamtheworld.com/BORUSAN_KLASIKAAC_SC",
-  "accent_color": "#1b4f8a",
-  "genre": "klasik",
-  "sort_order": 440,
-  "country": "tr"
- },
- {
-  "band": "tr",
-  "metadata_quality": "good",
-  "is_active": true,
-  "city": null,
-  "frequency": null,
-  "homepage": null,
-  "slug": "park-fm",
-  "name": "Park FM",
-  "stream_url": "http://yayin.netradyom.com:8050/PARKFM/",
-  "accent_color": "#b5423f",
-  "genre": "arabesk",
-  "sort_order": 450,
-  "country": "tr"
- },
- {
-  "slug": "baba-radyo",
-  "name": "Baba Radyo",
-  "city": "İstanbul",
-  "frequency": "105.6",
-  "stream_url": "http://officialbabaradyo.radyotvonline.net/babaofficial",
-  "homepage": "https://www.babaradyo.com",
-  "accent_color": "#8a2b2b",
-  "band": "tr",
-  "genre": "arabesk",
-  "metadata_quality": "good",
-  "is_active": true,
-  "sort_order": 455,
-  "country": "tr"
- },
- {
-  "band": "tr",
-  "metadata_quality": "good",
-  "is_active": true,
-  "city": null,
-  "frequency": null,
-  "homepage": null,
-  "slug": "halk-radyo",
-  "name": "Halk Radyo",
-  "stream_url": "https://anadolu.liderhost.com.tr:10876/;",
-  "accent_color": "#3f7bb5",
-  "genre": "türkçe pop",
-  "sort_order": 460,
-  "country": "tr"
- },
- {
-  "band": "tr",
-  "metadata_quality": "good",
-  "is_active": true,
-  "city": null,
-  "frequency": null,
-  "homepage": null,
-  "slug": "radyo-duet",
-  "name": "Radyo Düet",
-  "stream_url": "https://radyo.yayin.com.tr:6032/stream",
-  "accent_color": "#9c5cae",
-  "genre": "türkçe pop",
-  "sort_order": 470,
-  "country": "tr"
- },
- {
-  "band": "tr",
-  "metadata_quality": "good",
-  "is_active": true,
-  "city": null,
-  "frequency": null,
-  "homepage": null,
-  "slug": "can-radyo",
-  "name": "Can Radyo",
-  "stream_url": "http://yayin1.yayindakiler.com:3124/;",
-  "accent_color": "#7a9c3c",
-  "genre": "türkü",
-  "sort_order": 480,
-  "country": "tr"
- },
- {
-  "band": "tr",
-  "metadata_quality": "good",
-  "is_active": true,
-  "city": null,
-  "frequency": null,
-  "homepage": null,
-  "slug": "radyo-ekin",
-  "name": "Radyo Ekin",
-  "stream_url": "http://yayin.turkhosted.com:6006/",
-  "accent_color": "#b5762c",
-  "genre": "türkü",
-  "sort_order": 490,
-  "country": "tr"
- },
- {
-  "band": "tr",
-  "metadata_quality": "good",
-  "is_active": true,
-  "city": "Antalya",
-  "frequency": null,
-  "homepage": null,
-  "slug": "radio-antalya",
-  "name": "Radio Antalya",
-  "stream_url": "https://my.radiolize.com/radio/8000/radio.mp3",
-  "accent_color": "#2ca6a4",
-  "genre": "alternatif",
-  "sort_order": 500,
-  "country": "tr"
- },
- {
-  "band": "tr",
-  "metadata_quality": "good",
-  "is_active": true,
-  "city": "Gökçeada",
-  "frequency": null,
-  "homepage": null,
-  "slug": "radyo-gokceada",
-  "name": "Radyo Gökçeada",
-  "stream_url": "https://radyo.yayin.com.tr:6179/;",
-  "accent_color": "#4a86c2",
-  "genre": "pop",
-  "sort_order": 510,
-  "country": "tr"
- },
- {
-  "band": "tr",
-  "metadata_quality": "good",
-  "is_active": true,
-  "city": "İstanbul",
-  "frequency": null,
-  "homepage": null,
-  "slug": "slow-turk",
-  "name": "Slow Türk",
-  "stream_url": "https://radyo.duhnet.tv/ak_dtvh_slowturk",
-  "accent_color": "#4a6fa5",
-  "genre": "nostalji",
-  "sort_order": 511,
-  "country": "tr"
- },
- {
-  "band": "tr",
-  "metadata_quality": "good",
-  "is_active": true,
-  "city": "Ankara",
-  "frequency": null,
-  "homepage": null,
-  "slug": "trt-fm",
-  "name": "TRT FM",
-  "stream_url": "https://trt.radyotvonline.net/trtfm",
-  "accent_color": "#e0532b",
-  "genre": "pop",
-  "sort_order": 512,
-  "country": "tr"
- },
- {
-  "band": "tr",
-  "metadata_quality": "good",
-  "is_active": true,
-  "city": "İstanbul",
-  "frequency": null,
-  "homepage": null,
-  "slug": "kral-turk-fm",
-  "name": "Kral Türk FM",
-  "stream_url": "https://live.radyositesihazir.com/8032/stream",
-  "accent_color": "#c0392b",
-  "genre": "türkçe pop",
-  "sort_order": 513,
-  "country": "tr"
- },
- {
-  "band": "tr",
-  "metadata_quality": "good",
-  "is_active": true,
-  "city": "Ankara",
-  "frequency": null,
-  "homepage": null,
-  "slug": "radyo-seymen",
-  "name": "Radyo Seymen",
-  "stream_url": "https://yayin.radyoseymen.com.tr:1070/stream",
-  "accent_color": "#b5762c",
-  "genre": "türkü",
-  "sort_order": 514,
-  "country": "tr"
- },
- {
-  "band": "tr",
-  "metadata_quality": "good",
-  "is_active": true,
-  "city": null,
-  "frequency": null,
-  "homepage": null,
-  "slug": "radyo-voyage",
-  "name": "Radyo Voyage",
-  "stream_url": "http://voyagewmp.radyotvonline.com/;stream.mp3",
-  "accent_color": "#2ca6a4",
-  "genre": "elektronik",
-  "sort_order": 515,
-  "country": "tr"
- },
- {
-  "band": "tr",
-  "metadata_quality": "good",
-  "is_active": true,
-  "city": null,
-  "frequency": null,
-  "homepage": null,
-  "slug": "gozyasi-fm",
-  "name": "Gözyaşı FM",
-  "stream_url": "http://yayin1.canliyayin.org:8700/;*.mp3",
-  "accent_color": "#7a3b5e",
-  "genre": "arabesk",
-  "sort_order": 516,
-  "country": "tr"
- },
- {
-  "band": "tr",
-  "metadata_quality": "good",
-  "is_active": true,
-  "city": null,
-  "frequency": null,
-  "homepage": null,
-  "slug": "kalp-fm",
-  "name": "Kalp FM",
-  "stream_url": "https://yayin.kalpfm.com:8080/",
-  "accent_color": "#d05a7a",
-  "genre": "nostalji",
-  "sort_order": 517,
-  "country": "tr"
- },
- {
-  "band": "tr",
-  "metadata_quality": "good",
-  "is_active": true,
-  "city": null,
-  "frequency": null,
-  "homepage": null,
-  "slug": "fakir-fm",
-  "name": "Fakir FM",
-  "stream_url": "https://live.radyositesihazir.com/1025/stream/",
-  "accent_color": "#8a3b3b",
-  "genre": "arabesk",
-  "sort_order": 518,
-  "country": "tr"
- },
- {
-  "band": "tr",
-  "metadata_quality": "good",
-  "is_active": true,
-  "city": "Erzincan",
-  "frequency": null,
-  "homepage": null,
-  "slug": "erzincan-cem-radyo",
-  "name": "Erzincan Cem Radyo",
-  "stream_url": "https://erzincan.80.yayin.com.tr/stream",
-  "accent_color": "#6a7a3c",
-  "genre": "türkü",
-  "sort_order": 519,
-  "country": "tr"
- },
- {
-  "band": "tr",
-  "metadata_quality": "good",
-  "is_active": true,
-  "city": "Ankara",
-  "frequency": null,
-  "homepage": null,
-  "slug": "radyo-odtu",
-  "name": "Radyo ODTÜ",
-  "stream_url": "http://stream.radyoodtu.com.tr/;",
-  "accent_color": "#3c6ea5",
-  "genre": "alternatif",
-  "sort_order": 520,
-  "country": "tr"
- },
- {
-  "band": "tr",
-  "metadata_quality": "good",
-  "is_active": true,
-  "city": null,
-  "frequency": null,
-  "homepage": null,
-  "slug": "dinamo-fm-locodyno",
-  "name": "dinamo.fm locodyno",
-  "stream_url": "http://channels.dinamo.fm/locodyno-mp3",
-  "accent_color": "#6a5acd",
-  "genre": "elektronik",
-  "sort_order": 521,
-  "country": "tr"
- },
- {
-  "band": "tr",
-  "metadata_quality": "good",
-  "is_active": true,
-  "city": null,
-  "frequency": null,
-  "homepage": null,
-  "slug": "keyf-station",
-  "name": "Keyf Station",
-  "stream_url": "http://yayin.radyomadyo.com:8002/stream",
-  "accent_color": "#c07a3c",
-  "genre": "pop",
-  "sort_order": 522,
-  "country": "tr"
- },
- {
-  "band": "tr",
-  "metadata_quality": "good",
-  "is_active": true,
-  "city": null,
-  "frequency": null,
-  "homepage": null,
-  "slug": "radyo-eksen",
-  "name": "Radyo Eksen",
-  "stream_url": "http://eksenwmp.radyotvonline.com/;stream.mp3",
-  "genre": "alternatif",
-  "accent_color": "#d13b3b",
-  "sort_order": 523,
-  "country": "tr"
- },
- {
-  "band": "tr",
-  "metadata_quality": "good",
-  "is_active": true,
-  "city": null,
-  "frequency": null,
-  "homepage": null,
-  "slug": "apacik-radyo",
-  "name": "Açık Radyo",
-  "stream_url": "http://stream.34bit.net/ar.mp3",
-  "genre": "alternatif",
-  "accent_color": "#2c8c8c",
-  "sort_order": 524,
-  "country": "tr"
- },
- {
-  "band": "tr",
-  "metadata_quality": "good",
-  "is_active": true,
-  "city": null,
-  "frequency": null,
-  "homepage": null,
-  "slug": "kiyi-caz",
-  "name": "Kıyı Caz",
-  "stream_url": "https://caz.radioca.st/stream",
-  "genre": "caz",
-  "accent_color": "#3a6a8a",
-  "sort_order": 525,
-  "country": "tr"
- },
- {
-  "band": "tr",
-  "metadata_quality": "good",
-  "is_active": true,
-  "city": null,
-  "frequency": null,
-  "homepage": null,
-  "slug": "radyoaura",
-  "name": "Radyo Aura",
-  "stream_url": "https://stream.radiaura.net/station-ea8ab46e-ae01-4b71-ad9a-fef58665b89c",
-  "genre": "caz",
-  "accent_color": "#7a5ca0",
-  "sort_order": 526,
-  "country": "tr"
- },
- {
-  "band": "tr",
-  "metadata_quality": "good",
-  "is_active": true,
-  "city": null,
-  "frequency": null,
-  "homepage": null,
-  "slug": "radio-mydonose",
-  "name": "Mydonose",
-  "stream_url": "https://29083.live.streamtheworld.com/RADIO_MYDONOSE128AAC.aac",
-  "genre": "elektronik",
-  "accent_color": "#e0338a",
-  "sort_order": 527,
-  "country": "tr"
- },
- {
-  "band": "tr",
-  "metadata_quality": "good",
-  "is_active": true,
-  "city": null,
-  "frequency": null,
-  "homepage": null,
-  "slug": "max-fm",
-  "name": "Max FM",
-  "stream_url": "https://maxfm.radyotvonline.net/stream/164/;",
-  "genre": "rock",
-  "accent_color": "#e05a2b",
-  "sort_order": 528,
-  "country": "tr"
- },
- {
-  "band": "tr",
-  "metadata_quality": "good",
-  "is_active": true,
-  "city": null,
-  "frequency": null,
-  "homepage": null,
-  "slug": "kiss-turk",
-  "name": "Kiss Türk",
-  "stream_url": "https://kiss.radyotvonline.net/kissturk",
-  "genre": "türkçe pop",
-  "accent_color": "#c0392b",
-  "sort_order": 529,
-  "country": "tr"
- },
- {
-  "band": "tr",
-  "metadata_quality": "good",
-  "is_active": true,
-  "city": null,
-  "frequency": null,
-  "homepage": null,
-  "slug": "tgrt-fm",
-  "name": "TGRT FM",
-  "stream_url": "https://icecasttgrt.ihlasdigitalassets.com/tgrtfm",
-  "genre": "türkçe pop",
-  "accent_color": "#2a6ab0",
-  "sort_order": 530,
-  "country": "tr"
- },
- {
-  "band": "tr",
-  "metadata_quality": "good",
-  "is_active": true,
-  "city": null,
-  "frequency": null,
-  "homepage": null,
-  "slug": "turkiyem-fm",
-  "name": "Türkiyem FM",
-  "stream_url": "https://server7.streamserver24.com/proxy/turkiyemfm?mp=/stream",
-  "genre": "türkçe pop",
-  "accent_color": "#b5762c",
-  "sort_order": 531,
-  "country": "tr"
- },
- {
-  "band": "tr",
-  "metadata_quality": "good",
-  "is_active": true,
-  "city": null,
-  "frequency": null,
-  "homepage": null,
-  "slug": "radyo-karadeniz",
-  "name": "Radyo Karadeniz",
-  "stream_url": "https://radyomar.80.yayin.com.tr/;",
-  "genre": "türkçe pop",
-  "accent_color": "#2a7a5a",
-  "sort_order": 532,
-  "country": "tr"
- },
- {
-  "band": "tr",
-  "metadata_quality": "good",
-  "is_active": true,
-  "city": null,
-  "frequency": null,
-  "homepage": null,
-  "slug": "radyo-alaturka",
-  "name": "Radyo Alaturka",
-  "stream_url": "https://yayin.jumboserver.net:9100/stream",
-  "genre": "tsm",
-  "accent_color": "#9c5b3c",
-  "sort_order": 533,
-  "country": "tr"
- },
- {
-  "band": "tr",
-  "metadata_quality": "good",
-  "is_active": true,
-  "city": null,
-  "frequency": null,
-  "homepage": null,
-  "slug": "hayatmix-arabesk",
-  "name": "Hayatmix Arabesk",
-  "stream_url": "https://radyo.yayin.com.tr:4078/mp3",
-  "genre": "arabesk",
-  "accent_color": "#8a3b5e",
-  "sort_order": 534,
-  "country": "tr"
- },
- {
-  "band": "tr",
-  "metadata_quality": "good",
-  "is_active": true,
-  "city": null,
-  "frequency": null,
-  "homepage": null,
-  "slug": "radyo-turku",
-  "name": "Radyo Türkü",
-  "stream_url": "https://yayin.radyomadyo.com:8008/stream",
-  "genre": "türkü",
-  "accent_color": "#6a7a3c",
-  "sort_order": 535,
-  "country": "tr"
- },
- {
-  "band": "tr",
-  "metadata_quality": "good",
-  "is_active": true,
-  "city": null,
-  "frequency": null,
-  "homepage": null,
-  "slug": "dt-nostalji",
-  "name": "DT Nostalji",
-  "stream_url": "https://canli.dtnostalji.com.tr/9999/stream",
-  "genre": "nostalji",
-  "accent_color": "#b06a3c",
-  "sort_order": 536,
-  "country": "tr"
- },
- {
-  "band": "tr",
-  "metadata_quality": "good",
-  "is_active": true,
-  "city": null,
-  "frequency": null,
-  "homepage": null,
-  "slug": "dijital-slow",
-  "name": "Dijital Slow",
-  "stream_url": "http://anadolu.liderhost.com.tr:8076/radyo",
-  "genre": "nostalji",
-  "accent_color": "#4a6fa5",
-  "sort_order": 537,
-  "country": "tr"
- },
- {
-  "band": "tr",
-  "metadata_quality": "good",
-  "is_active": true,
-  "city": null,
-  "frequency": null,
-  "homepage": null,
-  "slug": "retro-turk",
-  "name": "Retro Türk",
-  "stream_url": "http://27783.live.streamtheworld.com:3690/RETROTURKAAC_SC",
-  "genre": "nostalji",
-  "accent_color": "#c07a3c",
-  "sort_order": 538,
-  "country": "tr"
- },
- {
-  "band": "tr",
-  "metadata_quality": "good",
-  "is_active": true,
-  "city": null,
-  "frequency": null,
-  "homepage": null,
-  "slug": "radyo-taksi",
-  "name": "Radyo Taksi",
-  "stream_url": "https://live.radyo.in/8006/stream",
-  "genre": "nostalji",
-  "accent_color": "#d0a02c",
-  "sort_order": 539,
-  "country": "tr"
- },
- {
-  "band": "tr",
-  "metadata_quality": "good",
-  "is_active": true,
-  "city": null,
-  "frequency": null,
-  "homepage": null,
-  "slug": "ktu",
-  "name": "KTÜ Radyo",
-  "stream_url": "https://sslyayin.netyayin.net/radyoktu/stream/;type=mp3",
-  "genre": "nostalji",
-  "accent_color": "#3c6ea5",
-  "sort_order": 540,
-  "country": "tr"
- },
- {
-  "band": "tr",
-  "metadata_quality": "good",
-  "is_active": true,
-  "city": null,
-  "frequency": null,
-  "homepage": null,
-  "slug": "dinamo-fm-legacy",
-  "name": "dinamo.fm legacy",
-  "stream_url": "http://channels.dinamo.fm/legacy-mp3",
-  "genre": "elektronik",
-  "accent_color": "#6a5acd",
-  "sort_order": 541,
-  "country": "tr"
- },
- {
-  "band": "tr",
-  "metadata_quality": "good",
-  "is_active": true,
-  "city": null,
-  "frequency": null,
-  "homepage": null,
-  "slug": "dinamo-fm-fluent",
-  "name": "dinamo.fm fluent",
-  "stream_url": "http://channels.dinamo.fm/fluent-mp3",
-  "genre": "elektronik",
-  "accent_color": "#5a6acd",
-  "sort_order": 542,
-  "country": "tr"
- },
- {
-  "band": "tr",
-  "metadata_quality": "good",
-  "is_active": true,
-  "city": null,
-  "frequency": null,
-  "homepage": null,
-  "slug": "loops-radio-progressive",
-  "name": "Loops Progressive",
-  "stream_url": "https://progressive.ozelip.com/7670/stream",
-  "genre": "elektronik",
-  "accent_color": "#7a3ca0",
-  "sort_order": 543,
-  "country": "tr"
- },
- {
-  "slug": "somafm-groove-salad",
-  "name": "SomaFM Groove Salad",
-  "city": "San Francisco",
-  "frequency": null,
-  "stream_url": "https://ice1.somafm.com/groovesalad-128-mp3",
-  "homepage": "https://somafm.com/groovesalad/",
-  "accent_color": "#5b8c5a",
-  "band": "int",
-  "metadata_quality": "good",
-  "is_active": true,
-  "sort_order": 600,
-  "genre": "elektronik",
-  "country": "us"
- },
- {
-  "slug": "somafm-indie-pop",
-  "name": "SomaFM Indie Pop",
-  "city": "San Francisco",
-  "frequency": null,
-  "stream_url": "https://ice1.somafm.com/indiepop-128-mp3",
-  "homepage": "https://somafm.com/indiepop/",
-  "accent_color": "#c65b7c",
-  "band": "int",
-  "metadata_quality": "good",
-  "is_active": true,
-  "sort_order": 610,
-  "genre": "alternatif",
-  "country": "us"
- },
- {
-  "slug": "radio-paradise",
-  "name": "Radio Paradise",
-  "city": null,
-  "frequency": null,
-  "stream_url": "https://stream.radioparadise.com/mp3-128",
-  "homepage": "https://radioparadise.com",
-  "accent_color": "#b0413e",
-  "band": "int",
-  "metadata_quality": "good",
-  "is_active": true,
-  "sort_order": 620,
-  "genre": "pop",
-  "country": "us"
- },
- {
-  "slug": "radio-paradise-rock",
-  "name": "Radio Paradise Rock",
-  "city": null,
-  "frequency": null,
-  "stream_url": "https://stream.radioparadise.com/rock-128",
-  "homepage": "https://radioparadise.com",
-  "accent_color": "#7d2e2e",
-  "band": "int",
-  "metadata_quality": "good",
-  "is_active": true,
-  "sort_order": 630,
-  "genre": "rock",
-  "country": "us"
- },
- {
-  "slug": "tsf-jazz",
-  "name": "TSF Jazz",
-  "city": "Paris",
-  "frequency": null,
-  "stream_url": "https://tsfjazz.ice.infomaniak.ch/tsfjazz-high.mp3",
-  "homepage": "https://www.tsfjazz.com",
-  "accent_color": "#2f6f9f",
-  "band": "int",
-  "metadata_quality": "good",
-  "is_active": true,
-  "sort_order": 640,
-  "genre": "caz",
-  "country": "fr"
- },
- {
-  "slug": "radio-swiss-classic",
-  "name": "Radio Swiss Classic",
-  "city": null,
-  "frequency": null,
-  "stream_url": "http://stream.srg-ssr.ch/m/rsc_de/mp3_128",
-  "homepage": "https://www.radioswissclassic.ch",
-  "accent_color": "#6b5b95",
-  "band": "int",
-  "metadata_quality": "good",
-  "is_active": true,
-  "sort_order": 650,
-  "genre": "klasik",
-  "country": "ch"
- },
- {
-  "slug": "somafm-secret-agent",
-  "name": "SomaFM Secret Agent",
-  "city": "San Francisco",
-  "frequency": null,
-  "stream_url": "https://ice1.somafm.com/secretagent-128-mp3",
-  "homepage": "https://somafm.com/secretagent/",
-  "accent_color": "#b08d57",
-  "band": "int",
-  "metadata_quality": "good",
-  "is_active": true,
-  "sort_order": 660,
-  "genre": "caz",
-  "country": "us"
- },
- {
-  "slug": "somafm-metal",
-  "name": "SomaFM Metal Detector",
-  "city": "San Francisco",
-  "frequency": null,
-  "stream_url": "https://ice1.somafm.com/metal-128-mp3",
-  "homepage": "https://somafm.com/metal/",
-  "accent_color": "#555b6e",
-  "band": "int",
-  "metadata_quality": "good",
-  "is_active": true,
-  "sort_order": 670,
-  "genre": "rock",
-  "country": "us"
- },
- {
-  "band": "int",
-  "metadata_quality": "good",
-  "is_active": true,
-  "city": "Seattle",
-  "frequency": null,
-  "homepage": "https://www.kexp.org",
-  "slug": "kexp",
-  "name": "KEXP",
-  "stream_url": "https://kexp-mp3-128.streamguys1.com/kexp128.mp3",
-  "accent_color": "#f0532b",
-  "genre": "alternatif",
-  "sort_order": 680,
-  "country": "us"
- },
- {
-  "band": "int",
-  "metadata_quality": "good",
-  "is_active": true,
-  "city": "Londra",
-  "frequency": null,
-  "homepage": "https://www.nts.live",
-  "slug": "nts-1",
-  "name": "NTS 1",
-  "stream_url": "https://stream-relay-geo.ntslive.net/stream",
-  "accent_color": "#d43a3a",
-  "genre": "alternatif",
-  "sort_order": 700,
-  "country": "gb"
- },
- {
-  "band": "int",
-  "metadata_quality": "good",
-  "is_active": true,
-  "city": "Madrid",
-  "frequency": null,
-  "homepage": "https://los40.com",
-  "slug": "los40",
-  "name": "LOS 40",
-  "stream_url": "https://playerservices.streamtheworld.com/api/livestream-redirect/Los40.mp3",
-  "accent_color": "#e2001a",
-  "genre": "pop",
-  "sort_order": 710,
-  "country": "es"
- },
- {
-  "band": "int",
-  "metadata_quality": "good",
-  "is_active": true,
-  "city": "Milano",
-  "frequency": null,
-  "homepage": "https://www.radionumberone.it",
-  "slug": "radio-number-one",
-  "name": "Radio Number One",
-  "stream_url": "https://rn1.fluidstream.eu/rn1.mp3",
-  "accent_color": "#f7a600",
-  "genre": "pop",
-  "sort_order": 720,
-  "country": "it"
- },
- {
-  "band": "int",
-  "metadata_quality": "good",
-  "is_active": true,
-  "city": "Milano",
-  "frequency": null,
-  "homepage": "https://www.virginradio.it",
-  "slug": "virgin-radio-italia",
-  "name": "Virgin Radio Italia",
-  "stream_url": "http://icecast.unitedradio.it/Virgin.mp3",
-  "accent_color": "#d81e2c",
-  "genre": "rock",
-  "sort_order": 730,
-  "country": "it"
- },
- {
-  "band": "int",
-  "metadata_quality": "good",
-  "is_active": true,
-  "city": null,
-  "frequency": null,
-  "homepage": null,
-  "slug": "diana-krall",
-  "name": "Exclusively Diana Krall",
-  "stream_url": "https://nl4.mystreaming.net/er/dianakrall/icecast.audio",
-  "accent_color": "#3a5a8a",
-  "genre": "caz",
-  "sort_order": 740,
-  "country": "www"
- },
- {
-  "band": "int",
-  "metadata_quality": "good",
-  "is_active": true,
-  "city": null,
-  "frequency": null,
-  "homepage": null,
-  "slug": "italo-power",
-  "name": "Italo Power",
-  "stream_url": "http://stream.radioitalopower.com:10018/italopower",
-  "accent_color": "#ff5aa0",
-  "genre": "nostalji",
-  "sort_order": 750,
-  "country": "www"
- },
- {
-  "slug": "france-musique",
-  "name": "France Musique",
-  "city": "Paris",
-  "frequency": null,
-  "stream_url": "http://direct.francemusique.fr/live/francemusique-midfi.mp3",
-  "homepage": "https://www.francemusique.fr/",
-  "accent_color": "#b0506a",
-  "band": "int",
-  "metadata_quality": "unknown",
-  "is_active": true,
-  "sort_order": 901,
-  "genre": "klasik",
-  "country": "fr"
- },
- {
-  "slug": "venice-classic-radio",
-  "name": "Venice Classic Radio",
-  "city": "Venedik",
-  "frequency": null,
-  "stream_url": "https://uk2.streamingpulse.com/ssl/vcr1",
-  "homepage": "https://www.veniceclassicradio.eu/",
-  "accent_color": "#9a7b4f",
-  "band": "int",
-  "metadata_quality": "unknown",
-  "is_active": true,
-  "sort_order": 902,
-  "genre": "klasik",
-  "country": "it"
- },
- {
-  "slug": "klara-nostalgia",
-  "name": "Klara Nostalgia",
-  "city": "Brüksel",
-  "frequency": null,
-  "stream_url": "https://icecast.err.ee/klaranostalgia.mp3",
-  "homepage": "https://klara.err.ee/nostalgia",
-  "accent_color": "#5f8fae",
-  "band": "int",
-  "metadata_quality": "unknown",
-  "is_active": true,
-  "sort_order": 903,
-  "genre": "nostalji",
-  "country": "be"
- },
- {
-  "slug": "wqxr",
-  "name": "WQXR",
-  "city": "New York",
-  "frequency": null,
-  "stream_url": "https://stream.wqxr.org/wqxr-web",
-  "homepage": "https://www.wqxr.org/",
-  "accent_color": "#6a86b8",
-  "band": "int",
-  "metadata_quality": "unknown",
-  "is_active": true,
-  "sort_order": 904,
-  "genre": "klasik",
-  "country": "us"
- },
- {
-  "slug": "classical-kusc",
-  "name": "Classical KUSC",
-  "city": "Los Angeles",
-  "frequency": null,
-  "stream_url": "https://playerservices.streamtheworld.com/api/livestream-redirect/KUSCMP256.mp3",
-  "homepage": "https://www.kusc.org/",
-  "accent_color": "#7d6bb0",
-  "band": "int",
-  "metadata_quality": "unknown",
-  "is_active": true,
-  "sort_order": 905,
-  "genre": "klasik",
-  "country": "us"
- },
- {
-  "slug": "radio-classique",
-  "name": "Radio Classique",
-  "city": "Paris",
-  "frequency": null,
-  "stream_url": "https://str0.creacast.com/classique1",
-  "homepage": "https://www.radioclassique.fr/",
-  "accent_color": "#9c5f7c",
-  "band": "int",
-  "metadata_quality": "unknown",
-  "is_active": true,
-  "sort_order": 906,
-  "genre": "klasik",
-  "country": "fr"
- },
- {
-  "slug": "concertzender-klassiek",
-  "name": "Concertzender Klassiek",
-  "city": "Utrecht",
-  "frequency": null,
-  "stream_url": "http://streams.greenhost.nl:8080/klassiek",
-  "homepage": "https://concertzender.nl/",
-  "accent_color": "#5f8f8a",
-  "band": "int",
-  "metadata_quality": "unknown",
-  "is_active": true,
-  "sort_order": 907,
-  "genre": "klasik",
-  "country": "nl"
- },
- {
-  "slug": "jazz24",
-  "name": "Jazz24",
-  "city": "Seattle",
-  "frequency": null,
-  "stream_url": "https://knkx-live-a.edge.audiocdn.com/6285_256k",
-  "homepage": "https://www.jazz24.org/",
-  "accent_color": "#b98a4a",
-  "band": "int",
-  "metadata_quality": "unknown",
-  "is_active": true,
-  "sort_order": 908,
-  "genre": "caz",
-  "country": "us"
- },
- {
-  "slug": "wbgo",
-  "name": "WBGO Jazz 88.3",
-  "city": "Newark",
-  "frequency": null,
-  "stream_url": "https://ais-sa8.cdnstream1.com/3629_128.mp3",
-  "homepage": "https://www.wbgo.org/",
-  "accent_color": "#c07a3a",
-  "band": "int",
-  "metadata_quality": "unknown",
-  "is_active": true,
-  "sort_order": 909,
-  "genre": "caz",
-  "country": "us"
- },
- {
-  "slug": "radio-swiss-jazz",
-  "name": "Radio Swiss Jazz",
-  "city": "Zürih",
-  "frequency": null,
-  "stream_url": "https://stream.srg-ssr.ch/m/rsj/mp3_128",
-  "homepage": "http://www.swissjazz.ch/",
-  "accent_color": "#a86f4a",
-  "band": "int",
-  "metadata_quality": "unknown",
-  "is_active": true,
-  "sort_order": 910,
-  "genre": "caz",
-  "country": "ch"
- },
- {
-  "slug": "wfmu",
-  "name": "WFMU",
-  "city": "New Jersey",
-  "frequency": null,
-  "stream_url": "https://stream0.wfmu.org/freeform-extrahigh-primary.aac",
-  "homepage": "https://wfmu.org/",
-  "accent_color": "#8a6ab0",
-  "band": "int",
-  "metadata_quality": "unknown",
-  "is_active": true,
-  "sort_order": 914,
-  "genre": "alternatif",
-  "country": "us"
- },
- {
-  "slug": "wxpn",
-  "name": "WXPN 88.5",
-  "city": "Philadelphia",
-  "frequency": null,
-  "stream_url": "https://wxpnhi.xpn.org/xpnhi",
-  "homepage": "http://www.xpn.org/",
-  "accent_color": "#5a7ab0",
-  "band": "int",
-  "metadata_quality": "unknown",
-  "is_active": true,
-  "sort_order": 915,
-  "genre": "alternatif",
-  "country": "us"
- },
- {
-  "slug": "fluxfm",
-  "name": "FluxFM",
-  "city": "Berlin",
-  "frequency": null,
-  "stream_url": "http://streams.fluxfm.de/live/mp3-320/audio/",
-  "homepage": "https://www.fluxfm.de/",
-  "accent_color": "#6a9a5a",
-  "band": "int",
-  "metadata_quality": "unknown",
-  "is_active": true,
-  "sort_order": 916,
-  "genre": "alternatif",
-  "country": "de"
- },
- {
-  "slug": "rinse-fm",
-  "name": "Rinse FM",
-  "city": "Londra",
-  "frequency": null,
-  "stream_url": "https://admin.stream.rinse.fm/proxy/rinse_uk/stream",
-  "homepage": "https://www.rinse.fm/",
-  "accent_color": "#4a90d6",
-  "band": "int",
-  "metadata_quality": "unknown",
-  "is_active": true,
-  "sort_order": 919,
-  "genre": "elektronik",
-  "country": "gb"
- },
- {
-  "slug": "worldwide-fm",
-  "name": "Worldwide FM",
-  "city": "Londra",
-  "frequency": null,
-  "stream_url": "https://worldwide-fm.radiocult.fm/stream",
-  "homepage": "https://www.worldwidefm.net/",
-  "accent_color": "#d6a04a",
-  "band": "int",
-  "metadata_quality": "unknown",
-  "is_active": true,
-  "sort_order": 920,
-  "genre": "elektronik",
-  "country": "gb"
- },
- {
-  "slug": "somafm-drone-zone",
-  "name": "SomaFM Drone Zone",
-  "city": "San Francisco",
-  "frequency": null,
-  "stream_url": "https://ice4.somafm.com/dronezone-128-mp3",
-  "homepage": "https://somafm.com/dronezone/",
-  "accent_color": "#5a7a9a",
-  "band": "int",
-  "metadata_quality": "unknown",
-  "is_active": true,
-  "sort_order": 921,
-  "genre": "elektronik",
-  "country": "us"
- },
- {
-  "slug": "somafm-space-station",
-  "name": "SomaFM Space Station",
-  "city": "San Francisco",
-  "frequency": null,
-  "stream_url": "https://ice5.somafm.com/spacestation-128-aac",
-  "homepage": "https://somafm.com/spacestation/",
-  "accent_color": "#6a5a9a",
-  "band": "int",
-  "metadata_quality": "unknown",
-  "is_active": true,
-  "sort_order": 922,
-  "genre": "elektronik",
-  "country": "us"
- },
- {
-  "slug": "fip",
-  "name": "FIP",
-  "city": "Paris",
-  "frequency": null,
-  "stream_url": "http://icecast.radiofrance.fr/fip-hifi.aac",
-  "homepage": "https://www.fip.fr/",
-  "accent_color": "#c6395a",
-  "band": "int",
-  "metadata_quality": "unknown",
-  "is_active": true,
-  "sort_order": 923,
-  "genre": "elektronik",
-  "country": "fr"
- },
- {
-  "slug": "nrj-belgie",
-  "name": "NRJ Belçika",
-  "city": "Brüksel",
-  "frequency": null,
-  "stream_url": "https://playerservices.streamtheworld.com/api/livestream-redirect/NRJBELGIE.mp3",
-  "homepage": "https://nl.nrj.be/",
-  "accent_color": "#e04a4a",
-  "band": "int",
-  "metadata_quality": "unknown",
-  "is_active": true,
-  "sort_order": 926,
-  "genre": "pop",
-  "country": "be"
- },
- {
-  "slug": "absolute-radio-80s",
-  "name": "Absolute Radio 80s",
-  "city": "Londra",
-  "frequency": null,
-  "stream_url": "https://stream-ar.hellorayo.co.uk/absolute80shigh.aac",
-  "homepage": "https://www.hellorayo.co.uk/absolute-80s",
-  "accent_color": "#c6503a",
-  "band": "int",
-  "metadata_quality": "unknown",
-  "is_active": true,
-  "sort_order": 927,
-  "genre": "nostalji",
-  "country": "gb"
- },
- {
-  "slug": "capital-fm-uk",
-  "name": "Capital FM",
-  "city": "Liverpool",
-  "frequency": null,
-  "stream_url": "http://media-ice.musicradio.com/CapitalLiverpoolMP3",
-  "homepage": null,
-  "accent_color": "#e04a7a",
-  "band": "int",
-  "metadata_quality": "unknown",
-  "is_active": true,
-  "sort_order": 928,
-  "genre": "pop",
-  "country": "gb"
- },
- {
-  "slug": "radio-paradise-mellow",
-  "name": "Radio Paradise Mellow",
-  "city": "Kaliforniya",
-  "frequency": null,
-  "stream_url": "https://stream.radioparadise.com/mellow-128",
-  "homepage": "https://radioparadise.com/",
-  "accent_color": "#7a9ab0",
-  "band": "int",
-  "metadata_quality": "unknown",
-  "is_active": true,
-  "sort_order": 929,
-  "genre": "alternatif",
-  "country": "us"
- },
- {
-  "slug": "somafm-deep-space-one",
-  "name": "SomaFM Deep Space One",
-  "city": "San Francisco",
-  "frequency": null,
-  "stream_url": "https://ice2.somafm.com/deepspaceone-128-mp3",
-  "homepage": "https://somafm.com/deepspaceone/",
-  "accent_color": "#5a6a9a",
-  "band": "int",
-  "metadata_quality": "unknown",
-  "is_active": true,
-  "sort_order": 930,
-  "genre": "elektronik",
-  "country": "us"
- },
- {
-  "slug": "somafm-lush",
-  "name": "SomaFM Lush",
-  "city": "San Francisco",
-  "frequency": null,
-  "stream_url": "https://ice2.somafm.com/lush-128-mp3",
-  "homepage": "https://somafm.com/lush/",
-  "accent_color": "#b06a9a",
-  "band": "int",
-  "metadata_quality": "unknown",
-  "is_active": true,
-  "sort_order": 931,
-  "genre": "pop",
-  "country": "us"
- },
- {
   "slug": "best-of-rock-fm-alternative-rock",
   "name": "Best Of Rock.FM Alternative Rock",
   "city": null,
@@ -1886,7 +26,7 @@
   "genre": "elektronik",
   "metadata_quality": "none",
   "is_active": true,
-  "sort_order": 501,
+  "sort_order": 500,
   "country": "de"
  },
  {
@@ -1901,7 +41,7 @@
   "genre": "elektronik",
   "metadata_quality": "good",
   "is_active": true,
-  "sort_order": 502,
+  "sort_order": 500,
   "country": "fr"
  },
  {
@@ -1916,7 +56,7 @@
   "genre": "rock",
   "metadata_quality": "good",
   "is_active": true,
-  "sort_order": 503,
+  "sort_order": 500,
   "country": "fr"
  },
  {
@@ -1931,7 +71,7 @@
   "genre": "pop",
   "metadata_quality": "none",
   "is_active": true,
-  "sort_order": 504,
+  "sort_order": 500,
   "country": "fr"
  },
  {
@@ -1946,7 +86,7 @@
   "genre": "pop",
   "metadata_quality": "none",
   "is_active": true,
-  "sort_order": 505,
+  "sort_order": 500,
   "country": "fr"
  },
  {
@@ -1961,7 +101,7 @@
   "genre": "nostalji",
   "metadata_quality": "good",
   "is_active": true,
-  "sort_order": 506,
+  "sort_order": 500,
   "country": "gb"
  },
  {
@@ -1976,7 +116,7 @@
   "genre": "elektronik",
   "metadata_quality": "good",
   "is_active": true,
-  "sort_order": 507,
+  "sort_order": 500,
   "country": "gb"
  },
  {
@@ -1991,7 +131,7 @@
   "genre": "nostalji",
   "metadata_quality": "good",
   "is_active": true,
-  "sort_order": 508,
+  "sort_order": 500,
   "country": "gb"
  },
  {
@@ -2006,7 +146,7 @@
   "genre": "nostalji",
   "metadata_quality": "good",
   "is_active": true,
-  "sort_order": 509,
+  "sort_order": 500,
   "country": "gb"
  },
  {
@@ -2021,7 +161,7 @@
   "genre": "elektronik",
   "metadata_quality": "good",
   "is_active": true,
-  "sort_order": 510,
+  "sort_order": 500,
   "country": "gb"
  },
  {
@@ -2036,7 +176,7 @@
   "genre": "elektronik",
   "metadata_quality": "good",
   "is_active": true,
-  "sort_order": 511,
+  "sort_order": 500,
   "country": "gb"
  },
  {
@@ -2051,7 +191,7 @@
   "genre": "nostalji",
   "metadata_quality": "good",
   "is_active": true,
-  "sort_order": 512,
+  "sort_order": 500,
   "country": "gb"
  },
  {
@@ -2066,7 +206,7 @@
   "genre": "elektronik",
   "metadata_quality": "good",
   "is_active": true,
-  "sort_order": 513,
+  "sort_order": 500,
   "country": "gb"
  },
  {
@@ -2081,7 +221,7 @@
   "genre": "pop",
   "metadata_quality": "good",
   "is_active": true,
-  "sort_order": 514,
+  "sort_order": 500,
   "country": "gb"
  },
  {
@@ -2096,7 +236,7 @@
   "genre": "elektronik",
   "metadata_quality": "good",
   "is_active": true,
-  "sort_order": 515,
+  "sort_order": 500,
   "country": "gb"
  },
  {
@@ -2111,7 +251,7 @@
   "genre": "rock",
   "metadata_quality": "good",
   "is_active": true,
-  "sort_order": 516,
+  "sort_order": 500,
   "country": "gb"
  },
  {
@@ -2126,7 +266,7 @@
   "genre": "pop",
   "metadata_quality": "good",
   "is_active": true,
-  "sort_order": 517,
+  "sort_order": 500,
   "country": "gb"
  },
  {
@@ -2141,7 +281,7 @@
   "genre": "caz",
   "metadata_quality": "good",
   "is_active": true,
-  "sort_order": 518,
+  "sort_order": 500,
   "country": "us"
  },
  {
@@ -2156,7 +296,7 @@
   "genre": "pop",
   "metadata_quality": "good",
   "is_active": true,
-  "sort_order": 519,
+  "sort_order": 500,
   "country": "us"
  },
  {
@@ -2171,7 +311,7 @@
   "genre": "pop",
   "metadata_quality": "good",
   "is_active": true,
-  "sort_order": 520,
+  "sort_order": 500,
   "country": "us"
  },
  {
@@ -2186,7 +326,7 @@
   "genre": "caz",
   "metadata_quality": "good",
   "is_active": true,
-  "sort_order": 521,
+  "sort_order": 500,
   "country": "us"
  },
  {
@@ -2201,7 +341,7 @@
   "genre": "pop",
   "metadata_quality": "good",
   "is_active": true,
-  "sort_order": 522,
+  "sort_order": 500,
   "country": "us"
  },
  {
@@ -2216,7 +356,7 @@
   "genre": "pop",
   "metadata_quality": "good",
   "is_active": true,
-  "sort_order": 523,
+  "sort_order": 500,
   "country": "us"
  },
  {
@@ -2231,7 +371,7 @@
   "genre": "nostalji",
   "metadata_quality": "none",
   "is_active": true,
-  "sort_order": 524,
+  "sort_order": 500,
   "country": "us"
  },
  {
@@ -2246,7 +386,7 @@
   "genre": "elektronik",
   "metadata_quality": "good",
   "is_active": true,
-  "sort_order": 525,
+  "sort_order": 500,
   "country": "it"
  },
  {
@@ -2261,7 +401,7 @@
   "genre": "pop",
   "metadata_quality": "good",
   "is_active": true,
-  "sort_order": 526,
+  "sort_order": 500,
   "country": "it"
  },
  {
@@ -2276,7 +416,7 @@
   "genre": "nostalji",
   "metadata_quality": "good",
   "is_active": true,
-  "sort_order": 527,
+  "sort_order": 500,
   "country": "it"
  },
  {
@@ -2291,7 +431,7 @@
   "genre": "nostalji",
   "metadata_quality": "good",
   "is_active": true,
-  "sort_order": 528,
+  "sort_order": 500,
   "country": "it"
  },
  {
@@ -2306,7 +446,7 @@
   "genre": "pop",
   "metadata_quality": "none",
   "is_active": true,
-  "sort_order": 529,
+  "sort_order": 500,
   "country": "it"
  },
  {
@@ -2321,7 +461,7 @@
   "genre": "pop",
   "metadata_quality": "none",
   "is_active": true,
-  "sort_order": 530,
+  "sort_order": 500,
   "country": "it"
  },
  {
@@ -2336,7 +476,7 @@
   "genre": "elektronik",
   "metadata_quality": "good",
   "is_active": true,
-  "sort_order": 531,
+  "sort_order": 500,
   "country": "es"
  },
  {
@@ -2351,7 +491,7 @@
   "genre": "elektronik",
   "metadata_quality": "good",
   "is_active": true,
-  "sort_order": 532,
+  "sort_order": 500,
   "country": "es"
  },
  {
@@ -2366,7 +506,7 @@
   "genre": "rock",
   "metadata_quality": "good",
   "is_active": true,
-  "sort_order": 533,
+  "sort_order": 500,
   "country": "es"
  },
  {
@@ -2381,7 +521,7 @@
   "genre": "elektronik",
   "metadata_quality": "good",
   "is_active": true,
-  "sort_order": 534,
+  "sort_order": 500,
   "country": "es"
  },
  {
@@ -2396,7 +536,7 @@
   "genre": "caz",
   "metadata_quality": "good",
   "is_active": true,
-  "sort_order": 535,
+  "sort_order": 500,
   "country": "es"
  },
  {
@@ -2411,7 +551,7 @@
   "genre": "elektronik",
   "metadata_quality": "good",
   "is_active": true,
-  "sort_order": 536,
+  "sort_order": 500,
   "country": "nl"
  },
  {
@@ -2426,7 +566,7 @@
   "genre": "rock",
   "metadata_quality": "good",
   "is_active": true,
-  "sort_order": 537,
+  "sort_order": 500,
   "country": "nl"
  },
  {
@@ -2441,7 +581,7 @@
   "genre": "pop",
   "metadata_quality": "good",
   "is_active": true,
-  "sort_order": 538,
+  "sort_order": 500,
   "country": "nl"
  },
  {
@@ -2456,7 +596,7 @@
   "genre": "pop",
   "metadata_quality": "good",
   "is_active": true,
-  "sort_order": 539,
+  "sort_order": 500,
   "country": "nl"
  },
  {
@@ -2471,7 +611,7 @@
   "genre": "elektronik",
   "metadata_quality": "good",
   "is_active": true,
-  "sort_order": 540,
+  "sort_order": 500,
   "country": "nl"
  },
  {
@@ -2486,7 +626,7 @@
   "genre": "caz",
   "metadata_quality": "good",
   "is_active": true,
-  "sort_order": 541,
+  "sort_order": 500,
   "country": "nl"
  },
  {
@@ -2501,7 +641,7 @@
   "genre": "caz",
   "metadata_quality": "good",
   "is_active": true,
-  "sort_order": 542,
+  "sort_order": 500,
   "country": "nl"
  },
  {
@@ -2516,7 +656,7 @@
   "genre": "nostalji",
   "metadata_quality": "good",
   "is_active": true,
-  "sort_order": 543,
+  "sort_order": 500,
   "country": "nl"
  },
  {
@@ -2531,7 +671,7 @@
   "genre": "rock",
   "metadata_quality": "good",
   "is_active": true,
-  "sort_order": 544,
+  "sort_order": 500,
   "country": "be"
  },
  {
@@ -2546,7 +686,7 @@
   "genre": "pop",
   "metadata_quality": "good",
   "is_active": true,
-  "sort_order": 545,
+  "sort_order": 500,
   "country": "be"
  },
  {
@@ -2561,7 +701,7 @@
   "genre": "elektronik",
   "metadata_quality": "good",
   "is_active": true,
-  "sort_order": 546,
+  "sort_order": 500,
   "country": "be"
  },
  {
@@ -2576,7 +716,7 @@
   "genre": "pop",
   "metadata_quality": "good",
   "is_active": true,
-  "sort_order": 547,
+  "sort_order": 500,
   "country": "be"
  },
  {
@@ -2591,7 +731,7 @@
   "genre": "pop",
   "metadata_quality": "good",
   "is_active": true,
-  "sort_order": 548,
+  "sort_order": 500,
   "country": "be"
  },
  {
@@ -2606,7 +746,7 @@
   "genre": "alternatif",
   "metadata_quality": "good",
   "is_active": true,
-  "sort_order": 549,
+  "sort_order": 500,
   "country": "be"
  },
  {
@@ -2621,7 +761,7 @@
   "genre": "rock",
   "metadata_quality": "good",
   "is_active": true,
-  "sort_order": 550,
+  "sort_order": 500,
   "country": "ch"
  },
  {
@@ -2636,7 +776,7 @@
   "genre": "pop",
   "metadata_quality": "good",
   "is_active": true,
-  "sort_order": 551,
+  "sort_order": 500,
   "country": "ch"
  },
  {
@@ -2651,7 +791,7 @@
   "genre": "elektronik",
   "metadata_quality": "good",
   "is_active": true,
-  "sort_order": 552,
+  "sort_order": 500,
   "country": "at"
  },
  {
@@ -2666,7 +806,7 @@
   "genre": "caz",
   "metadata_quality": "good",
   "is_active": true,
-  "sort_order": 553,
+  "sort_order": 500,
   "country": "at"
  },
  {
@@ -2681,7 +821,7 @@
   "genre": "pop",
   "metadata_quality": "good",
   "is_active": true,
-  "sort_order": 554,
+  "sort_order": 500,
   "country": "at"
  },
  {
@@ -2696,7 +836,7 @@
   "genre": "pop",
   "metadata_quality": "good",
   "is_active": true,
-  "sort_order": 555,
+  "sort_order": 500,
   "country": "at"
  },
  {
@@ -2711,7 +851,7 @@
   "genre": "pop",
   "metadata_quality": "good",
   "is_active": true,
-  "sort_order": 556,
+  "sort_order": 500,
   "country": "at"
  },
  {
@@ -2726,7 +866,7 @@
   "genre": "pop",
   "metadata_quality": "good",
   "is_active": true,
-  "sort_order": 557,
+  "sort_order": 500,
   "country": "at"
  },
  {
@@ -2741,7 +881,7 @@
   "genre": "pop",
   "metadata_quality": "good",
   "is_active": true,
-  "sort_order": 558,
+  "sort_order": 500,
   "country": "pt"
  },
  {
@@ -2756,7 +896,7 @@
   "genre": "pop",
   "metadata_quality": "good",
   "is_active": true,
-  "sort_order": 559,
+  "sort_order": 500,
   "country": "pt"
  },
  {
@@ -2771,7 +911,7 @@
   "genre": "nostalji",
   "metadata_quality": "good",
   "is_active": true,
-  "sort_order": 560,
+  "sort_order": 500,
   "country": "pt"
  },
  {
@@ -2786,7 +926,7 @@
   "genre": "pop",
   "metadata_quality": "good",
   "is_active": true,
-  "sort_order": 561,
+  "sort_order": 500,
   "country": "pt"
  },
  {
@@ -2801,7 +941,7 @@
   "genre": "pop",
   "metadata_quality": "good",
   "is_active": true,
-  "sort_order": 562,
+  "sort_order": 500,
   "country": "pt"
  },
  {
@@ -2816,7 +956,7 @@
   "genre": "caz",
   "metadata_quality": "good",
   "is_active": true,
-  "sort_order": 563,
+  "sort_order": 500,
   "country": "pt"
  },
  {
@@ -2831,7 +971,7 @@
   "genre": "rock",
   "metadata_quality": "good",
   "is_active": true,
-  "sort_order": 564,
+  "sort_order": 500,
   "country": "gr"
  },
  {
@@ -2846,7 +986,7 @@
   "genre": "pop",
   "metadata_quality": "good",
   "is_active": true,
-  "sort_order": 565,
+  "sort_order": 500,
   "country": "gr"
  },
  {
@@ -2861,7 +1001,7 @@
   "genre": "nostalji",
   "metadata_quality": "good",
   "is_active": true,
-  "sort_order": 566,
+  "sort_order": 500,
   "country": "gr"
  },
  {
@@ -2876,7 +1016,7 @@
   "genre": "pop",
   "metadata_quality": "good",
   "is_active": true,
-  "sort_order": 567,
+  "sort_order": 500,
   "country": "gr"
  },
  {
@@ -2891,7 +1031,7 @@
   "genre": "pop",
   "metadata_quality": "none",
   "is_active": true,
-  "sort_order": 568,
+  "sort_order": 500,
   "country": "gr"
  },
  {
@@ -2906,7 +1046,7 @@
   "genre": "pop",
   "metadata_quality": "good",
   "is_active": true,
-  "sort_order": 569,
+  "sort_order": 500,
   "country": "se"
  },
  {
@@ -2921,7 +1061,7 @@
   "genre": "pop",
   "metadata_quality": "good",
   "is_active": true,
-  "sort_order": 570,
+  "sort_order": 500,
   "country": "se"
  },
  {
@@ -2936,7 +1076,7 @@
   "genre": "pop",
   "metadata_quality": "good",
   "is_active": true,
-  "sort_order": 571,
+  "sort_order": 500,
   "country": "se"
  },
  {
@@ -2951,7 +1091,7 @@
   "genre": "pop",
   "metadata_quality": "good",
   "is_active": true,
-  "sort_order": 572,
+  "sort_order": 500,
   "country": "se"
  },
  {
@@ -2966,7 +1106,7 @@
   "genre": "pop",
   "metadata_quality": "good",
   "is_active": true,
-  "sort_order": 573,
+  "sort_order": 500,
   "country": "se"
  },
  {
@@ -2981,7 +1121,7 @@
   "genre": "pop",
   "metadata_quality": "good",
   "is_active": true,
-  "sort_order": 574,
+  "sort_order": 500,
   "country": "se"
  },
  {
@@ -2996,7 +1136,7 @@
   "genre": "pop",
   "metadata_quality": "good",
   "is_active": true,
-  "sort_order": 575,
+  "sort_order": 500,
   "country": "no"
  },
  {
@@ -3011,7 +1151,7 @@
   "genre": "pop",
   "metadata_quality": "good",
   "is_active": true,
-  "sort_order": 576,
+  "sort_order": 500,
   "country": "no"
  },
  {
@@ -3026,7 +1166,7 @@
   "genre": "pop",
   "metadata_quality": "none",
   "is_active": true,
-  "sort_order": 577,
+  "sort_order": 500,
   "country": "no"
  },
  {
@@ -3041,7 +1181,7 @@
   "genre": "pop",
   "metadata_quality": "none",
   "is_active": true,
-  "sort_order": 578,
+  "sort_order": 500,
   "country": "no"
  },
  {
@@ -3056,7 +1196,7 @@
   "genre": "rock",
   "metadata_quality": "none",
   "is_active": true,
-  "sort_order": 579,
+  "sort_order": 500,
   "country": "no"
  },
  {
@@ -3071,7 +1211,7 @@
   "genre": "rock",
   "metadata_quality": "good",
   "is_active": true,
-  "sort_order": 580,
+  "sort_order": 500,
   "country": "dk"
  },
  {
@@ -3086,7 +1226,7 @@
   "genre": "pop",
   "metadata_quality": "good",
   "is_active": true,
-  "sort_order": 581,
+  "sort_order": 500,
   "country": "dk"
  },
  {
@@ -3101,7 +1241,7 @@
   "genre": "pop",
   "metadata_quality": "good",
   "is_active": true,
-  "sort_order": 582,
+  "sort_order": 500,
   "country": "dk"
  },
  {
@@ -3116,7 +1256,7 @@
   "genre": "nostalji",
   "metadata_quality": "good",
   "is_active": true,
-  "sort_order": 583,
+  "sort_order": 500,
   "country": "dk"
  },
  {
@@ -3131,7 +1271,7 @@
   "genre": "pop",
   "metadata_quality": "none",
   "is_active": true,
-  "sort_order": 584,
+  "sort_order": 500,
   "country": "dk"
  },
  {
@@ -3146,7 +1286,7 @@
   "genre": "elektronik",
   "metadata_quality": "good",
   "is_active": true,
-  "sort_order": 585,
+  "sort_order": 500,
   "country": "fi"
  },
  {
@@ -3161,7 +1301,7 @@
   "genre": "pop",
   "metadata_quality": "good",
   "is_active": true,
-  "sort_order": 586,
+  "sort_order": 500,
   "country": "fi"
  },
  {
@@ -3176,7 +1316,7 @@
   "genre": "pop",
   "metadata_quality": "good",
   "is_active": true,
-  "sort_order": 587,
+  "sort_order": 500,
   "country": "fi"
  },
  {
@@ -3191,7 +1331,7 @@
   "genre": "pop",
   "metadata_quality": "none",
   "is_active": true,
-  "sort_order": 588,
+  "sort_order": 500,
   "country": "fi"
  },
  {
@@ -3206,7 +1346,7 @@
   "genre": "pop",
   "metadata_quality": "none",
   "is_active": true,
-  "sort_order": 589,
+  "sort_order": 500,
   "country": "fi"
  },
  {
@@ -3221,7 +1361,7 @@
   "genre": "rock",
   "metadata_quality": "good",
   "is_active": true,
-  "sort_order": 590,
+  "sort_order": 500,
   "country": "ie"
  },
  {
@@ -3236,7 +1376,7 @@
   "genre": "rock",
   "metadata_quality": "good",
   "is_active": true,
-  "sort_order": 591,
+  "sort_order": 500,
   "country": "ie"
  },
  {
@@ -3251,7 +1391,7 @@
   "genre": "pop",
   "metadata_quality": "good",
   "is_active": true,
-  "sort_order": 592,
+  "sort_order": 500,
   "country": "ie"
  },
  {
@@ -3266,7 +1406,7 @@
   "genre": "rock",
   "metadata_quality": "good",
   "is_active": true,
-  "sort_order": 593,
+  "sort_order": 500,
   "country": "ie"
  },
  {
@@ -3281,7 +1421,7 @@
   "genre": "pop",
   "metadata_quality": "good",
   "is_active": true,
-  "sort_order": 594,
+  "sort_order": 500,
   "country": "ie"
  },
  {
@@ -3296,7 +1436,7 @@
   "genre": "pop",
   "metadata_quality": "good",
   "is_active": true,
-  "sort_order": 595,
+  "sort_order": 500,
   "country": "pl"
  },
  {
@@ -3311,7 +1451,7 @@
   "genre": "pop",
   "metadata_quality": "good",
   "is_active": true,
-  "sort_order": 596,
+  "sort_order": 500,
   "country": "pl"
  },
  {
@@ -3326,7 +1466,7 @@
   "genre": "pop",
   "metadata_quality": "good",
   "is_active": true,
-  "sort_order": 597,
+  "sort_order": 500,
   "country": "pl"
  },
  {
@@ -3341,7 +1481,7 @@
   "genre": "rock",
   "metadata_quality": "good",
   "is_active": true,
-  "sort_order": 598,
+  "sort_order": 500,
   "country": "pl"
  },
  {
@@ -3356,7 +1496,7 @@
   "genre": "pop",
   "metadata_quality": "good",
   "is_active": true,
-  "sort_order": 599,
+  "sort_order": 500,
   "country": "pl"
  },
  {
@@ -3371,7 +1511,7 @@
   "genre": "pop",
   "metadata_quality": "good",
   "is_active": true,
-  "sort_order": 600,
+  "sort_order": 500,
   "country": "pl"
  },
  {
@@ -3386,7 +1526,7 @@
   "genre": "caz",
   "metadata_quality": "good",
   "is_active": true,
-  "sort_order": 601,
+  "sort_order": 500,
   "country": "cz"
  },
  {
@@ -3401,7 +1541,7 @@
   "genre": "rock",
   "metadata_quality": "good",
   "is_active": true,
-  "sort_order": 602,
+  "sort_order": 500,
   "country": "cz"
  },
  {
@@ -3416,7 +1556,7 @@
   "genre": "pop",
   "metadata_quality": "good",
   "is_active": true,
-  "sort_order": 603,
+  "sort_order": 500,
   "country": "cz"
  },
  {
@@ -3431,7 +1571,7 @@
   "genre": "elektronik",
   "metadata_quality": "good",
   "is_active": true,
-  "sort_order": 604,
+  "sort_order": 500,
   "country": "cz"
  },
  {
@@ -3446,7 +1586,7 @@
   "genre": "pop",
   "metadata_quality": "good",
   "is_active": true,
-  "sort_order": 605,
+  "sort_order": 500,
   "country": "cz"
  },
  {
@@ -3461,7 +1601,7 @@
   "genre": "elektronik",
   "metadata_quality": "good",
   "is_active": true,
-  "sort_order": 606,
+  "sort_order": 500,
   "country": "hu"
  },
  {
@@ -3476,7 +1616,7 @@
   "genre": "nostalji",
   "metadata_quality": "good",
   "is_active": true,
-  "sort_order": 607,
+  "sort_order": 500,
   "country": "hu"
  },
  {
@@ -3491,7 +1631,7 @@
   "genre": "rock",
   "metadata_quality": "good",
   "is_active": true,
-  "sort_order": 608,
+  "sort_order": 500,
   "country": "hu"
  },
  {
@@ -3506,7 +1646,7 @@
   "genre": "rock",
   "metadata_quality": "good",
   "is_active": true,
-  "sort_order": 609,
+  "sort_order": 500,
   "country": "hu"
  },
  {
@@ -3521,7 +1661,7 @@
   "genre": "pop",
   "metadata_quality": "good",
   "is_active": true,
-  "sort_order": 610,
+  "sort_order": 500,
   "country": "hu"
  },
  {
@@ -3536,7 +1676,7 @@
   "genre": "pop",
   "metadata_quality": "good",
   "is_active": true,
-  "sort_order": 611,
+  "sort_order": 500,
   "country": "ro"
  },
  {
@@ -3551,7 +1691,7 @@
   "genre": "pop",
   "metadata_quality": "good",
   "is_active": true,
-  "sort_order": 612,
+  "sort_order": 500,
   "country": "ro"
  },
  {
@@ -3566,7 +1706,7 @@
   "genre": "rock",
   "metadata_quality": "good",
   "is_active": true,
-  "sort_order": 613,
+  "sort_order": 500,
   "country": "ro"
  },
  {
@@ -3581,7 +1721,7 @@
   "genre": "pop",
   "metadata_quality": "good",
   "is_active": true,
-  "sort_order": 614,
+  "sort_order": 500,
   "country": "ro"
  },
  {
@@ -3596,7 +1736,7 @@
   "genre": "pop",
   "metadata_quality": "good",
   "is_active": true,
-  "sort_order": 615,
+  "sort_order": 500,
   "country": "ro"
  },
  {
@@ -3611,7 +1751,7 @@
   "genre": "pop",
   "metadata_quality": "good",
   "is_active": true,
-  "sort_order": 616,
+  "sort_order": 500,
   "country": "jp"
  },
  {
@@ -3626,7 +1766,7 @@
   "genre": "pop",
   "metadata_quality": "good",
   "is_active": true,
-  "sort_order": 617,
+  "sort_order": 500,
   "country": "jp"
  },
  {
@@ -3641,7 +1781,7 @@
   "genre": "pop",
   "metadata_quality": "good",
   "is_active": true,
-  "sort_order": 618,
+  "sort_order": 500,
   "country": "jp"
  },
  {
@@ -3656,7 +1796,7 @@
   "genre": "pop",
   "metadata_quality": "good",
   "is_active": true,
-  "sort_order": 619,
+  "sort_order": 500,
   "country": "jp"
  },
  {
@@ -3671,7 +1811,7 @@
   "genre": "pop",
   "metadata_quality": "good",
   "is_active": true,
-  "sort_order": 620,
+  "sort_order": 500,
   "country": "jp"
  },
  {
@@ -3686,7 +1826,7 @@
   "genre": "pop",
   "metadata_quality": "good",
   "is_active": true,
-  "sort_order": 621,
+  "sort_order": 500,
   "country": "jp"
  },
  {
@@ -3701,7 +1841,7 @@
   "genre": "pop",
   "metadata_quality": "good",
   "is_active": true,
-  "sort_order": 622,
+  "sort_order": 500,
   "country": "jp"
  },
  {
@@ -3716,7 +1856,7 @@
   "genre": "pop",
   "metadata_quality": "good",
   "is_active": true,
-  "sort_order": 623,
+  "sort_order": 500,
   "country": "jp"
  },
  {
@@ -3731,7 +1871,7 @@
   "genre": "pop",
   "metadata_quality": "good",
   "is_active": true,
-  "sort_order": 624,
+  "sort_order": 500,
   "country": "kr"
  },
  {
@@ -3746,7 +1886,7 @@
   "genre": "pop",
   "metadata_quality": "good",
   "is_active": true,
-  "sort_order": 625,
+  "sort_order": 500,
   "country": "kr"
  },
  {
@@ -3761,7 +1901,7 @@
   "genre": "pop",
   "metadata_quality": "none",
   "is_active": true,
-  "sort_order": 626,
+  "sort_order": 500,
   "country": "kr"
  },
  {
@@ -3776,7 +1916,7 @@
   "genre": "pop",
   "metadata_quality": "good",
   "is_active": true,
-  "sort_order": 627,
+  "sort_order": 500,
   "country": "in"
  },
  {
@@ -3791,7 +1931,7 @@
   "genre": "pop",
   "metadata_quality": "good",
   "is_active": true,
-  "sort_order": 628,
+  "sort_order": 500,
   "country": "in"
  },
  {
@@ -3806,7 +1946,7 @@
   "genre": "nostalji",
   "metadata_quality": "good",
   "is_active": true,
-  "sort_order": 629,
+  "sort_order": 500,
   "country": "in"
  },
  {
@@ -3821,7 +1961,7 @@
   "genre": "pop",
   "metadata_quality": "good",
   "is_active": true,
-  "sort_order": 630,
+  "sort_order": 500,
   "country": "in"
  },
  {
@@ -3836,7 +1976,7 @@
   "genre": "pop",
   "metadata_quality": "good",
   "is_active": true,
-  "sort_order": 631,
+  "sort_order": 500,
   "country": "in"
  },
  {
@@ -3851,7 +1991,7 @@
   "genre": "pop",
   "metadata_quality": "good",
   "is_active": true,
-  "sort_order": 632,
+  "sort_order": 500,
   "country": "in"
  },
  {
@@ -3866,7 +2006,7 @@
   "genre": "caz",
   "metadata_quality": "good",
   "is_active": true,
-  "sort_order": 633,
+  "sort_order": 500,
   "country": "br"
  },
  {
@@ -3881,7 +2021,7 @@
   "genre": "caz",
   "metadata_quality": "good",
   "is_active": true,
-  "sort_order": 634,
+  "sort_order": 500,
   "country": "br"
  },
  {
@@ -3896,7 +2036,7 @@
   "genre": "pop",
   "metadata_quality": "good",
   "is_active": true,
-  "sort_order": 635,
+  "sort_order": 500,
   "country": "br"
  },
  {
@@ -3911,7 +2051,7 @@
   "genre": "pop",
   "metadata_quality": "good",
   "is_active": true,
-  "sort_order": 636,
+  "sort_order": 500,
   "country": "br"
  },
  {
@@ -3926,7 +2066,7 @@
   "genre": "pop",
   "metadata_quality": "good",
   "is_active": true,
-  "sort_order": 637,
+  "sort_order": 500,
   "country": "br"
  },
  {
@@ -3941,7 +2081,7 @@
   "genre": "pop",
   "metadata_quality": "good",
   "is_active": true,
-  "sort_order": 638,
+  "sort_order": 500,
   "country": "br"
  },
  {
@@ -3956,7 +2096,7 @@
   "genre": "pop",
   "metadata_quality": "good",
   "is_active": true,
-  "sort_order": 639,
+  "sort_order": 500,
   "country": "br"
  },
  {
@@ -3971,7 +2111,7 @@
   "genre": "caz",
   "metadata_quality": "good",
   "is_active": true,
-  "sort_order": 640,
+  "sort_order": 500,
   "country": "br"
  },
  {
@@ -3986,7 +2126,7 @@
   "genre": "rock",
   "metadata_quality": "good",
   "is_active": true,
-  "sort_order": 641,
+  "sort_order": 500,
   "country": "ar"
  },
  {
@@ -4001,7 +2141,7 @@
   "genre": "rock",
   "metadata_quality": "good",
   "is_active": true,
-  "sort_order": 642,
+  "sort_order": 500,
   "country": "ar"
  },
  {
@@ -4016,7 +2156,7 @@
   "genre": "rock",
   "metadata_quality": "good",
   "is_active": true,
-  "sort_order": 643,
+  "sort_order": 500,
   "country": "ar"
  },
  {
@@ -4031,7 +2171,7 @@
   "genre": "pop",
   "metadata_quality": "none",
   "is_active": true,
-  "sort_order": 644,
+  "sort_order": 500,
   "country": "ar"
  },
  {
@@ -4046,7 +2186,7 @@
   "genre": "nostalji",
   "metadata_quality": "good",
   "is_active": true,
-  "sort_order": 645,
+  "sort_order": 500,
   "country": "mx"
  },
  {
@@ -4061,7 +2201,7 @@
   "genre": "nostalji",
   "metadata_quality": "good",
   "is_active": true,
-  "sort_order": 646,
+  "sort_order": 500,
   "country": "mx"
  },
  {
@@ -4076,7 +2216,7 @@
   "genre": "nostalji",
   "metadata_quality": "good",
   "is_active": true,
-  "sort_order": 647,
+  "sort_order": 500,
   "country": "mx"
  },
  {
@@ -4091,7 +2231,7 @@
   "genre": "nostalji",
   "metadata_quality": "good",
   "is_active": true,
-  "sort_order": 648,
+  "sort_order": 500,
   "country": "mx"
  },
  {
@@ -4106,7 +2246,7 @@
   "genre": "rock",
   "metadata_quality": "good",
   "is_active": true,
-  "sort_order": 649,
+  "sort_order": 500,
   "country": "mx"
  },
  {
@@ -4121,7 +2261,7 @@
   "genre": "elektronik",
   "metadata_quality": "good",
   "is_active": true,
-  "sort_order": 650,
+  "sort_order": 500,
   "country": "ca"
  },
  {
@@ -4136,7 +2276,7 @@
   "genre": "rock",
   "metadata_quality": "good",
   "is_active": true,
-  "sort_order": 651,
+  "sort_order": 500,
   "country": "ca"
  },
  {
@@ -4151,7 +2291,7 @@
   "genre": "rock",
   "metadata_quality": "good",
   "is_active": true,
-  "sort_order": 652,
+  "sort_order": 500,
   "country": "ca"
  },
  {
@@ -4166,7 +2306,7 @@
   "genre": "caz",
   "metadata_quality": "good",
   "is_active": true,
-  "sort_order": 653,
+  "sort_order": 500,
   "country": "ca"
  },
  {
@@ -4181,7 +2321,7 @@
   "genre": "elektronik",
   "metadata_quality": "good",
   "is_active": true,
-  "sort_order": 654,
+  "sort_order": 500,
   "country": "ca"
  },
  {
@@ -4196,7 +2336,7 @@
   "genre": "rock",
   "metadata_quality": "good",
   "is_active": true,
-  "sort_order": 655,
+  "sort_order": 500,
   "country": "au"
  },
  {
@@ -4211,7 +2351,7 @@
   "genre": "pop",
   "metadata_quality": "good",
   "is_active": true,
-  "sort_order": 656,
+  "sort_order": 500,
   "country": "au"
  },
  {
@@ -4226,7 +2366,7 @@
   "genre": "nostalji",
   "metadata_quality": "good",
   "is_active": true,
-  "sort_order": 657,
+  "sort_order": 500,
   "country": "au"
  },
  {
@@ -4241,7 +2381,7 @@
   "genre": "rock",
   "metadata_quality": "good",
   "is_active": true,
-  "sort_order": 658,
+  "sort_order": 500,
   "country": "au"
  },
  {
@@ -4256,7 +2396,7 @@
   "genre": "pop",
   "metadata_quality": "good",
   "is_active": true,
-  "sort_order": 659,
+  "sort_order": 500,
   "country": "au"
  },
  {
@@ -4271,7 +2411,7 @@
   "genre": "alternatif",
   "metadata_quality": "none",
   "is_active": true,
-  "sort_order": 660,
+  "sort_order": 500,
   "country": "au"
  },
  {
@@ -4286,7 +2426,7 @@
   "genre": "pop",
   "metadata_quality": "none",
   "is_active": true,
-  "sort_order": 661,
+  "sort_order": 500,
   "country": "au"
  },
  {
@@ -4301,7 +2441,7 @@
   "genre": "nostalji",
   "metadata_quality": "good",
   "is_active": true,
-  "sort_order": 662,
+  "sort_order": 500,
   "country": "za"
  },
  {
@@ -4316,7 +2456,7 @@
   "genre": "caz",
   "metadata_quality": "good",
   "is_active": true,
-  "sort_order": 663,
+  "sort_order": 500,
   "country": "za"
  },
  {
@@ -4331,7 +2471,7 @@
   "genre": "pop",
   "metadata_quality": "good",
   "is_active": true,
-  "sort_order": 664,
+  "sort_order": 500,
   "country": "za"
  },
  {
@@ -4346,7 +2486,7 @@
   "genre": "pop",
   "metadata_quality": "good",
   "is_active": true,
-  "sort_order": 665,
+  "sort_order": 500,
   "country": "za"
  }
 ]

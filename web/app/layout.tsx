@@ -1,24 +1,22 @@
 import type { ReactNode } from "react";
-import localFont from "next/font/local";
+import { Instrument_Sans, Fraunces } from "next/font/google";
 import { Analytics } from "@vercel/analytics/next";
 import RegisterSW from "@/components/RegisterSW";
 import "./globals.css";
 
-// Marka yazı tipi — "ŞİMDİ" kelime işareti için (duyuru görselleriyle aynı dil).
-// Yerelden yükleniyor (ağ bağımlılığı yok, Türkçe harfleri destekler).
-const brand = localFont({
-  src: "../assets/BricolageGrotesque-Bold.ttf",
-  weight: "700",
+// Marka/UI yazı tipi — berkaydogan.co ailesiyle aynı dil: zarif modern sans.
+const brand = Instrument_Sans({
+  subsets: ["latin", "latin-ext"],
+  weight: ["400", "500", "600", "700"],
   variable: "--font-brand",
   display: "swap",
 });
 
 // Edebi "okuma" fontu — mısralar, epigraflar, düzyazı (kitap hissi).
-const read = localFont({
-  src: [
-    { path: "../assets/Lora-Regular.ttf", weight: "400", style: "normal" },
-    { path: "../assets/Lora-Italic.ttf", weight: "400", style: "italic" },
-  ],
+const read = Fraunces({
+  subsets: ["latin", "latin-ext"],
+  weight: ["300", "400", "500"],
+  style: ["normal", "italic"],
   variable: "--font-read",
   display: "swap",
 });
@@ -44,7 +42,7 @@ export const metadata = {
 };
 
 export const viewport = {
-  themeColor: "#0a0a0b",
+  themeColor: "#050505",
 };
 
 export default function RootLayout({ children }: { children: ReactNode }) {

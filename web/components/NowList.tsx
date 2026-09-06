@@ -17,6 +17,8 @@ import {
 } from "@/lib/sozler";
 import KartModal from "./KartModal";
 import DilToggle from "./DilToggle";
+import Kadran from "./Kadran";
+import { istasyonUlkesi, bayrakEmoji, doluUlkeler, ulkeSlug, ULKELER } from "@/lib/ulkeler";
 import { useDil, turAdi } from "@/lib/i18n";
 
 const SAIR_SET = new Set(SAIRIN.slugs);
@@ -92,24 +94,6 @@ const DEFAULT_ACCENT = "#6b7280";
 const FAV_KEY = "favoriler";
 
 // Yabancı istasyonların bayrağı (slug'a göre). Yeni yabancı eklenince buraya da eklenir.
-const FLAG: Record<string, string> = {
-  kexp: "🇺🇸",
-  fip: "🇫🇷",
-  "nts-1": "🇬🇧",
-  los40: "🇪🇸",
-  "radio-number-one": "🇮🇹",
-  "virgin-radio-italia": "🇮🇹",
-  "tsf-jazz": "🇫🇷",
-  "radio-swiss-classic": "🇨🇭",
-  "radio-paradise": "🇺🇸",
-  "radio-paradise-rock": "🇺🇸",
-  "somafm-groove-salad": "🇺🇸",
-  "somafm-indie-pop": "🇺🇸",
-  "somafm-secret-agent": "🇺🇸",
-  "somafm-metal": "🇺🇸",
-  "diana-krall": "🇺🇸",
-  "italo-power": "🇮🇹",
-};
 
 const pad2 = (n: number) => String(n).padStart(2, "0");
 
@@ -869,6 +853,9 @@ export default function NowList() {
               <Link href="/kesif" className="underline" style={{ color: "var(--muted)" }}>
                 {t("nav.kesif")}
               </Link>
+              <Link href="/ulke" className="underline" style={{ color: "var(--muted)" }}>
+                atlas
+              </Link>
               <Link href="/kose" className="underline" style={{ color: "var(--muted)" }}>
                 {t("nav.kose")}
               </Link>
@@ -901,6 +888,23 @@ export default function NowList() {
             — {EPIGRAFLAR[epi]}
           </p>
         )}
+
+        {/* KADRAN — analog ayar bandı */}
+        <Kadran
+          stations={shown.map((s) => ({
+            slug: s.slug,
+            name: s.name,
+            accent_color: s.accentColor,
+            nowText: s.nowPlaying?.title
+              ? [s.nowPlaying.artist, s.nowPlaying.title].filter(Boolean).join(" — ")
+              : null,
+          }))}
+          playing={playing}
+          onTune={(slug) => {
+            const st = shown.find((x) => x.slug === slug);
+            if (st) toggle(st);
+          }}
+        />
 
         {/* Arama */}
         <input
@@ -940,6 +944,24 @@ export default function NowList() {
               </button>
             );
           })}
+        </div>
+
+        {/* Dünya Atlası şeridi — bayraklar ülke sayfalarına götürür */}
+        <div className="mb-4 flex items-center gap-2 overflow-x-auto whitespace-nowrap text-sm" style={{ scrollbarWidth: "none" }}>
+          {doluUlkeler().map((k) => (
+            <Link
+              key={k}
+              href={`/ulke/${ulkeSlug(k)}`}
+              className="press shrink-0 rounded-full border px-2.5 py-1"
+              style={{ borderColor: "var(--line)", color: "var(--muted)" }}
+              title={ULKELER[k].tr}
+            >
+              {bayrakEmoji(k)}
+            </Link>
+          ))}
+          <Link href="/ulke" className="shrink-0 text-xs underline" style={{ color: "var(--muted)" }}>
+            atlas →
+          </Link>
         </div>
 
         {/* Favori filtresi + sıralama + Şairin Frekansı */}
@@ -1281,7 +1303,7 @@ export default function NowList() {
                       )}
                       <span className="mt-0.5 block truncate text-xs" style={{ color: "var(--muted)" }}>
                         {SAIR_SET.has(s.slug) ? <span title="şairin frekansı">✍ </span> : ""}
-                        {s.band === "int" ? `${FLAG[s.slug] || "🌍"} ` : ""}
+                        {s.band === "int" ? `${bayrakEmoji(istasyonUlkesi(s.slug))} ` : ""}
                         <span style={{ color: c }}>{s.name}</span>
                         {s.frequency ? ` · ${s.frequency}` : ""}
                         {s.city ? ` · ${s.city}` : ""}

@@ -1,12 +1,12 @@
 @import "tailwindcss";
 
-/* Varsayılan: karanlık tema. */
+/* Varsayılan: karanlık tema — Saf Karanlık ailesi (berkaydogan.co ile aynı dil). */
 :root {
   color-scheme: dark;
-  --bg: #0a0a0b;
-  --fg: #ececee;
-  --muted: #8a8a92;
-  --line: #1c1c20;
+  --bg: #050505;
+  --fg: #fafafa;
+  --muted: #8f8f96;
+  --line: #1b1b1f;
   /* Çalan istasyonun rengi buraya yazılır ve arayüze yayılır. */
   --accent: #6b7280;
 }
@@ -27,7 +27,7 @@ body {
 }
 
 body {
-  font-family: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  font-family: var(--font-brand), ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
   -webkit-font-smoothing: antialiased;
 }
 
@@ -218,6 +218,20 @@ body {
 }
 :root[data-theme="light"] .grain { opacity: 0.03; mix-blend-mode: multiply; }
 
+/* Cilalı siyah — tepeden süzülen yumuşak beyaz ışıma + çapraz spekülatif iz.
+   İstasyon rengi (.spread) altta kendi korunu yayar; bu katman üstünde çok
+   ince bir cam parlaklığı bırakır. Yalnız karanlık temada. */
+.grain::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  background:
+    radial-gradient(120% 55% at 50% -16%, rgba(255, 255, 255, 0.045), transparent 60%),
+    linear-gradient(118deg, rgba(255, 255, 255, 0.018) 0%, transparent 36%);
+}
+:root[data-theme="light"] .grain::before { content: none; }
+
 /* Hareket hassasiyeti: animasyon/geçişleri kıs. */
 @media (prefers-reduced-motion: reduce) {
   .eq span,
@@ -233,3 +247,6 @@ body {
   .station-row,
   .title-underline { transition: none !important; }
 }
+
+/* Kadran bandı — scrollbar görünmesin. */
+.kadran-band::-webkit-scrollbar { display: none; }

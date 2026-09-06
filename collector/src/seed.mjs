@@ -16,6 +16,7 @@ const seedPath = join(here, "..", "seed.json");
 const ALLOWED = new Set([
   "slug", "name", "city", "frequency", "stream_url", "homepage",
   "accent_color", "band", "genre", "metadata_quality", "is_active", "sort_order",
+  "country", // web tarafında kullanılır; veritabanına gitmez (sütun yok)
 ]);
 
 function validate(list) {
@@ -46,7 +47,9 @@ async function main() {
     throw err;
   }
   validate(list);
-  const written = await upsertStations(list);
+  // country yalnız web tarafının verisi — stations tablosunda sütunu yok, ayıkla.
+  const dbList = list.map(({ country, ...rest }) => rest);
+  const written = await upsertStations(dbList);
   console.log(`${written.length} istasyon veritabanına yazıldı (slug'a göre upsert).`);
 
   const off = await deactivateMissing(list.map((s) => s.slug));

@@ -28,7 +28,9 @@ export async function GET(request: Request, ctx: { params: Promise<{ slug: strin
   // CPU ve provisioned memory maliyeti saatlerden milisaniyelere iner. Düz HTTP
   // yayınlar için proxy zorunlu olduğundan aşağıdaki akış aynen kalır.
   if (typeof data.stream_url === "string" && data.stream_url.startsWith("https://")) {
-    return Response.redirect(data.stream_url, 302);
+    // Response.redirect immutable başlık döndürür; Next bazı yollarda başlığa
+    // dokunmaya kalkınca TypeError atıyor — elle kurulan 302 her yerde çalışır.
+    return new Response(null, { status: 302, headers: { Location: data.stream_url } });
   }
 
   let upstream: Response;

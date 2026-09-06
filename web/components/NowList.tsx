@@ -137,6 +137,7 @@ export default function NowList() {
   const { t, dil } = useDil();
   const [stations, setStations] = useState<Station[]>([]);
   const [playing, setPlaying] = useState<string | null>(null);
+  const [ulke, setUlke] = useState<string | null>(null); // kadran ülke bandı
   const [status, setStatus] = useState<"idle" | "loading" | "error">("loading");
   const [now, setNow] = useState(0); // göreli zaman için; ilk render'da 0
   const [genre, setGenre] = useState<string | null>(null); // seçili tür filtresi
@@ -397,6 +398,7 @@ export default function NowList() {
     if (region !== "all") {
       list = list.filter((s) => (region === "int" ? s.band === "int" : s.band !== "int"));
     }
+    if (ulke) list = list.filter((s) => istasyonUlkesi(s.slug) === ulke);
     if (genre) list = list.filter((s) => s.genre === genre);
     if (favOnly) list = list.filter((s) => favs.has(s.slug));
     if (q) {
@@ -418,7 +420,7 @@ export default function NowList() {
       out.sort((a, b) => Number(favs.has(b.slug)) - Number(favs.has(a.slug)));
     }
     return out;
-  }, [stations, region, genre, query, favs, favOnly, sort, sairMode]);
+  }, [stations, region, genre, query, favs, favOnly, sort, sairMode, ulke]);
 
   // Türe göre gruplama sadece "tür" sıralamasında, filtre/arama yokken.
   const grouped = sort === "tur" && !genre && !favOnly && !query.trim() && !sairMode;
@@ -946,22 +948,41 @@ export default function NowList() {
           })}
         </div>
 
-        {/* Dünya Atlası şeridi — bayraklar ülke sayfalarına götürür */}
-        <div className="mb-4 flex items-center gap-2 overflow-x-auto whitespace-nowrap text-sm" style={{ scrollbarWidth: "none" }}>
-          {doluUlkeler().map((k) => (
-            <Link
-              key={k}
-              href={`/ulke/${ulkeSlug(k)}`}
-              className="press shrink-0 rounded-full border px-2.5 py-1"
-              style={{ borderColor: "var(--line)", color: "var(--muted)" }}
-              title={ULKELER[k].tr}
-            >
-              {bayrakEmoji(k)}
+        {/* Kadran ülke bandı — bayrağa dokun: liste + kadran o ülkeye ayarlanır */}
+        <div className="no-scrollbar mb-4 flex items-center gap-2 overflow-x-auto whitespace-nowrap text-sm">
+          {doluUlkeler().map((k) => {
+            const aktif = ulke === k;
+            return (
+              <button
+                key={k}
+                onClick={() => { setUlke(aktif ? null : k); if (!aktif) setRegion("all"); }}
+                className="press shrink-0 rounded-full border px-2.5 py-1"
+                style={{
+                  borderColor: aktif ? "var(--accent)" : "var(--line)",
+                  background: aktif ? "color-mix(in srgb, var(--accent) 16%, transparent)" : "transparent",
+                  color: aktif ? "var(--fg)" : "var(--muted)",
+                }}
+                title={ULKELER[k].tr}
+                aria-pressed={aktif}
+              >
+                {bayrakEmoji(k)}{aktif ? ` ${ULKELER[k].tr}` : ""}
+              </button>
+            );
+          })}
+          {ulke ? (
+            <>
+              <Link href={`/ulke/${ulkeSlug(ulke as Parameters<typeof ulkeSlug>[0])}`} className="shrink-0 text-xs underline" style={{ color: "var(--muted)" }}>
+                sayfası →
+              </Link>
+              <button onClick={() => setUlke(null)} className="press shrink-0 text-xs" style={{ color: "var(--muted)" }} aria-label="ülke filtresini kaldır">
+                ✕
+              </button>
+            </>
+          ) : (
+            <Link href="/ulke" className="shrink-0 text-xs underline" style={{ color: "var(--muted)" }}>
+              atlas →
             </Link>
-          ))}
-          <Link href="/ulke" className="shrink-0 text-xs underline" style={{ color: "var(--muted)" }}>
-            atlas →
-          </Link>
+          )}
         </div>
 
         {/* Favori filtresi + sıralama + Şairin Frekansı */}

@@ -3,6 +3,7 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { getSupabase } from "@/lib/supabase";
 import { ULKELER, ULKE_SLUG, ulkeSlug, bayrakUrl, ulkeIstasyonSluglari, doluUlkeler, type UlkeKodu } from "@/lib/ulkeler";
+import UlkeCanli from "@/components/UlkeCanli";
 
 // Ülke merkez sayfası — "Almanya radyoları canlı" gibi aramalar + atlas gezgini.
 export const revalidate = 600;
@@ -109,6 +110,9 @@ export default async function UlkePage({ params }: { params: Promise<{ slug: str
             ? "Yalnızca internette yaşayan istasyonlar — frekansları yok, sınırları da."
             : `${dan(u.tr)} seçme istasyonlar — dokun, o ülkenin şu an'ına bağlan.`}
         </p>
+
+        {/* Canlı şerit — şu an bu ülkede çalanlar */}
+        <UlkeCanli sluglar={stations.map((s) => s.slug)} />
 
         <section className="mt-8">
           <h2 className="mb-3 text-xs uppercase tracking-wide" style={{ color: "var(--muted)" }}>

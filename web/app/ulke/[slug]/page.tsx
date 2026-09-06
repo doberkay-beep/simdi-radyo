@@ -4,6 +4,8 @@ import { notFound } from "next/navigation";
 import { getSupabase } from "@/lib/supabase";
 import { ULKELER, ULKE_SLUG, ulkeSlug, bayrakUrl, ulkeIstasyonSluglari, doluUlkeler, type UlkeKodu } from "@/lib/ulkeler";
 import UlkeCanli from "@/components/UlkeCanli";
+import YerelSaat from "@/components/YerelSaat";
+import { SAAT_DILIMI } from "@/lib/ulkeler";
 
 // Ülke merkez sayfası — "Almanya radyoları canlı" gibi aramalar + atlas gezgini.
 export const revalidate = 600;
@@ -105,6 +107,11 @@ export default async function UlkePage({ params }: { params: Promise<{ slug: str
           )}
           <h1 className="brand text-4xl font-bold tracking-tight">{baslik}</h1>
         </div>
+        {SAAT_DILIMI[kod] && (
+          <p className="mt-1 text-xs" style={{ color: "var(--muted)" }}>
+            yerel saat: <YerelSaat tz={SAAT_DILIMI[kod]!} />
+          </p>
+        )}
         <p className="epigraf mt-3 text-[15px]">
           {kod === "www"
             ? "Yalnızca internette yaşayan istasyonlar — frekansları yok, sınırları da."

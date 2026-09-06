@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { ULKELER, ulkeSlug, bayrakUrl, doluUlkeler, ulkeIstasyonSluglari } from "@/lib/ulkeler";
+import { ULKELER, ulkeSlug, bayrakUrl, doluUlkeler, ulkeIstasyonSluglari, SAAT_DILIMI } from "@/lib/ulkeler";
+import YerelSaat from "@/components/YerelSaat";
 
 // Dünya Atlası — ülke ülke radyo gezgini.
 export const metadata: Metadata = {
@@ -60,7 +61,10 @@ export default function AtlasPage() {
                 )}
                 <span className="min-w-0">
                   <span className="block truncate text-[15px] font-semibold">{ULKELER[k].tr}</span>
-                  <span className="block text-xs" style={{ color: "var(--muted)" }}>{n} istasyon</span>
+                  <span className="block text-xs" style={{ color: "var(--muted)" }}>
+                    {n} istasyon
+                    {SAAT_DILIMI[k] && <> · <YerelSaat tz={SAAT_DILIMI[k]!} /></>}
+                  </span>
                 </span>
               </Link>
             );

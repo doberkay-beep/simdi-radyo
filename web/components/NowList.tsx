@@ -988,6 +988,22 @@ export default function NowList() {
         {/* Favori filtresi + sıralama + Şairin Frekansı */}
         <div className="mb-4 flex flex-wrap items-center gap-3 text-xs">
           <button
+            onClick={() => {
+              // 🌍 beni şaşırt: rastgele bir dünya ülkesi + rastgele istasyonu çal
+              const uks = doluUlkeler().filter((k) => k !== "tr");
+              const k = uks[Math.floor(Math.random() * uks.length)];
+              const adaylar = stations.filter((s) => istasyonUlkesi(s.slug) === k);
+              if (adaylar.length === 0) return;
+              setUlke(k); setRegion("all"); setSairMode(false);
+              toggle(adaylar[Math.floor(Math.random() * adaylar.length)]);
+            }}
+            className="rounded-full border px-3 py-1 transition-colors"
+            style={{ borderColor: "var(--line)", color: "var(--muted)" }}
+            title="rastgele bir ülkenin rastgele istasyonuna ışınlan"
+          >
+            🌍 beni şaşırt
+          </button>
+          <button
             onClick={() => setSairMode((v) => !v)}
             className="rounded-full border px-3 py-1 transition-colors"
             style={{

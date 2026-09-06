@@ -62,6 +62,19 @@ export function bayrakUrl(kod: UlkeKodu): string | null {
   return kod === "www" ? null : `https://flagcdn.com/w40/${kod}.png`;
 }
 
+/* Temsilî saat dilimi (başkent) — atlas kartlarındaki yerel saat için. */
+export const SAAT_DILIMI: Record<UlkeKodu, string | null> = {
+  tr: "Europe/Istanbul", de: "Europe/Berlin", fr: "Europe/Paris", gb: "Europe/London",
+  us: "America/New_York", it: "Europe/Rome", es: "Europe/Madrid", nl: "Europe/Amsterdam",
+  be: "Europe/Brussels", ch: "Europe/Zurich", at: "Europe/Vienna", pt: "Europe/Lisbon",
+  gr: "Europe/Athens", se: "Europe/Stockholm", no: "Europe/Oslo", dk: "Europe/Copenhagen",
+  fi: "Europe/Helsinki", ie: "Europe/Dublin", pl: "Europe/Warsaw", cz: "Europe/Prague",
+  hu: "Europe/Budapest", ro: "Europe/Bucharest", jp: "Asia/Tokyo", kr: "Asia/Seoul",
+  in: "Asia/Kolkata", br: "America/Sao_Paulo", ar: "America/Argentina/Buenos_Aires",
+  mx: "America/Mexico_City", ca: "America/Toronto", au: "Australia/Sydney",
+  za: "Africa/Johannesburg", www: null,
+};
+
 /* Emoji bayrak — ISO kodundan bölgesel gösterge harfleriyle üretilir. */
 export function bayrakEmoji(kod: UlkeKodu): string {
   if (kod === "www") return "🌐";

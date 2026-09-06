@@ -23,6 +23,14 @@ export async function GET(request: Request, ctx: { params: Promise<{ slug: strin
   if (error) return new Response("sunucu hatası", { status: 500 });
   if (!data || !data.is_active) return new Response("istasyon bulunamadı", { status: 404 });
 
+  // HTTPS yayınlar sayfaya doğrudan gömülebilir (mixed content yok): proxy'lemek
+  // yerine yönlendir. Dinleme süresi boyunca fonksiyon açık kalmaz — Fluid Active
+  // CPU ve provisioned memory maliyeti saatlerden milisaniyelere iner. Düz HTTP
+  // yayınlar için proxy zorunlu olduğundan aşağıdaki akış aynen kalır.
+  if (typeof data.stream_url === "string" && data.stream_url.startsWith("https://")) {
+    return Response.redirect(data.stream_url, 302);
+  }
+
   let upstream: Response;
   try {
     upstream = await fetch(data.stream_url, {

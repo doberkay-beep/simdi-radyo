@@ -44,6 +44,7 @@ export const ULKELER = {
 export const ULKE_SLUG: Record<string, UlkeKodu> = Object.fromEntries(
   (Object.keys(ULKELER) as UlkeKodu[]).map((k) => [
     ULKELER[k].tr
+      .replace(/İ/g, "i").replace(/I/g, "i") // toLowerCase'ten ÖNCE: "İ" birleşik noktalı "i̇" üretir
       .toLowerCase()
       .replace(/ı/g, "i").replace(/ğ/g, "g").replace(/ü/g, "u")
       .replace(/ş/g, "s").replace(/ö/g, "o").replace(/ç/g, "c")

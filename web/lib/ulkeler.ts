@@ -57,6 +57,30 @@ export function ulkeSlug(kod: UlkeKodu): string {
   return Object.entries(ULKE_SLUG).find(([, k]) => k === kod)![0];
 }
 
+/* İngilizce URL slug'ları: /en/country/germany gibi (uluslararası SEO). */
+export const ULKE_SLUG_EN: Record<string, UlkeKodu> = Object.fromEntries(
+  (Object.keys(ULKELER) as UlkeKodu[]).map((k) => [
+    (k === "www" ? "online" : ULKELER[k].en).toLowerCase().replace(/[^a-z0-9]+/g, "-"),
+    k,
+  ])
+) as Record<string, UlkeKodu>;
+
+export function ulkeSlugEn(kod: UlkeKodu): string {
+  return Object.entries(ULKE_SLUG_EN).find(([, k]) => k === kod)![0];
+}
+
+/* Temsilî koordinatlar (başkent/büyük şehir) — dünya haritası işaretleri. */
+export const KOORDINAT: Record<UlkeKodu, [number, number] | null> = {
+  tr: [39.93, 32.86], de: [52.52, 13.4], fr: [48.86, 2.35], gb: [51.51, -0.13],
+  us: [40.71, -74.01], it: [41.9, 12.5], es: [40.42, -3.7], nl: [52.37, 4.9],
+  be: [50.85, 4.35], ch: [47.38, 8.54], at: [48.21, 16.37], pt: [38.72, -9.14],
+  gr: [37.98, 23.73], se: [59.33, 18.07], no: [59.91, 10.75], dk: [55.68, 12.57],
+  fi: [60.17, 24.94], ie: [53.35, -6.26], pl: [52.23, 21.01], cz: [50.08, 14.44],
+  hu: [47.5, 19.04], ro: [44.43, 26.1], jp: [35.68, 139.69], kr: [37.57, 126.98],
+  in: [28.61, 77.21], br: [-23.55, -46.63], ar: [-34.6, -58.38], mx: [19.43, -99.13],
+  ca: [43.65, -79.38], au: [-33.87, 151.21], za: [-26.2, 28.05], www: null,
+};
+
 /* Bayrak: gerçek ülkeler flagcdn görseli, çevrimiçi 🌐. */
 export function bayrakUrl(kod: UlkeKodu): string | null {
   return kod === "www" ? null : `https://flagcdn.com/w40/${kod}.png`;

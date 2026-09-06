@@ -18,6 +18,7 @@ import {
 import KartModal from "./KartModal";
 import DilToggle from "./DilToggle";
 import Kadran from "./Kadran";
+import DunyadaSimdi from "./DunyadaSimdi";
 import { istasyonUlkesi, bayrakEmoji, doluUlkeler, ulkeSlug, ULKELER } from "@/lib/ulkeler";
 import { useDil, turAdi } from "@/lib/i18n";
 
@@ -905,6 +906,15 @@ export default function NowList() {
           onTune={(slug) => {
             const st = shown.find((x) => x.slug === slug);
             if (st) toggle(st);
+          }}
+        />
+
+        {/* Dünyada şu an — rastgele ülkelerden canlı kesit */}
+        <DunyadaSimdi
+          stations={stations}
+          onTune={(slug) => {
+            const st = stations.find((x) => x.slug === slug);
+            if (st) { setUlke(null); setRegion("all"); toggle(st); }
           }}
         />
 

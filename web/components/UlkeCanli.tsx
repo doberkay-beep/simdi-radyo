@@ -6,6 +6,8 @@ import Link from "next/link";
 /* Ülke sayfası canlı şeridi — "şu an bu ülkede çalanlar".
    /api/now'dan ülkenin istasyonlarını süzer, 30 sn'de bir tazeler. */
 
+const COP_PARCA = /use http|www\.|https?:|\.com|\.net\b/i;
+
 type Satir = {
   slug: string;
   name: string;
@@ -13,7 +15,7 @@ type Satir = {
   parca: string;
 };
 
-export default function UlkeCanli({ sluglar }: { sluglar: string[] }) {
+export default function UlkeCanli({ sluglar, baslik = "şu an bu ülkede çalanlar" }: { sluglar: string[]; baslik?: string }) {
   const [satirlar, setSatirlar] = useState<Satir[]>([]);
 
   useEffect(() => {
@@ -25,7 +27,7 @@ export default function UlkeCanli({ sluglar }: { sluglar: string[] }) {
         const d = await r.json();
         type ApiSt = { slug: string; name: string; accentColor: string | null; nowPlaying: { artist: string | null; title: string | null } | null };
         const canli: Satir[] = ((d.stations ?? []) as ApiSt[])
-          .filter((s) => set.has(s.slug) && s.nowPlaying?.title)
+          .filter((s) => set.has(s.slug) && s.nowPlaying?.title && !COP_PARCA.test(s.nowPlaying.title))
           .slice(0, 10)
           .map((s) => ({
             slug: s.slug,
@@ -50,7 +52,7 @@ export default function UlkeCanli({ sluglar }: { sluglar: string[] }) {
     <section className="mt-6">
       <h2 className="mb-2 flex items-center gap-2 text-xs uppercase tracking-wide" style={{ color: "var(--muted)" }}>
         <span className="live-dot inline-block h-2 w-2 rounded-full" style={{ background: "#3ddc84" }} />
-        şu an bu ülkede çalanlar
+        {baslik}
       </h2>
       <div className="no-scrollbar flex gap-2 overflow-x-auto pb-1">
         {satirlar.map((s) => (

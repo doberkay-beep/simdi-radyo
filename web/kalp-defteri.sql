@@ -27,7 +27,7 @@ set search_path = public
 as $$
 declare temiz text;
 begin
-  if p_slug is null or not exists (select 1 from stations where slug = p_slug and is_active) then
+  if p_slug is null or not exists (select 1 from stations st where st.slug = p_slug and st.is_active) then
     raise exception 'istasyon yok';
   end if;
   temiz := btrim(coalesce(p_not, ''));

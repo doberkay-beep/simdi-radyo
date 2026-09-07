@@ -125,19 +125,25 @@ export async function generateMetadata({
 }): Promise<Metadata> {
   const { slug } = await params;
   const s = await getStation(slug);
-  if (!s) return { title: "İstasyon bulunamadı — ŞİMDİ" };
+  const dil = await dilSunucu();
+  const en = dil === "en";
+  if (!s) return { title: en ? "Station not found — ŞİMDİ" : "İstasyon bulunamadı — ŞİMDİ" };
   const np = await getNowPlaying(slug);
   const track = trackText(np);
   const bits = [s.frequency, s.city].filter(Boolean).join(" · ");
-  const desc = track
-    ? `${s.name}${bits ? ` (${bits})` : ""} şu an: ${track}. Canlı dinle.`
-    : `${s.name}${bits ? ` (${bits})` : ""} canlı dinle — şu an ne çaldığını gör.`;
+  const desc = en
+    ? track
+      ? `${s.name}${bits ? ` (${bits})` : ""} now playing: ${track}. Listen live.`
+      : `Listen to ${s.name}${bits ? ` (${bits})` : ""} live — see what's playing right now.`
+    : track
+      ? `${s.name}${bits ? ` (${bits})` : ""} şu an: ${track}. Canlı dinle.`
+      : `${s.name}${bits ? ` (${bits})` : ""} canlı dinle — şu an ne çaldığını gör.`;
   return {
-    title: `${s.name} — canlı dinle | ŞİMDİ`,
+    title: en ? `${s.name} — listen live | ŞİMDİ` : `${s.name} — canlı dinle | ŞİMDİ`,
     description: desc,
     alternates: { canonical: `/radyo/${slug}` },
     openGraph: {
-      title: `${s.name} — canlı dinle`,
+      title: en ? `${s.name} — listen live` : `${s.name} — canlı dinle`,
       description: desc,
       type: "music.radio_station",
       images: [{ url: `/api/kart/${slug}`, width: 1200, height: 630, alt: `${s.name} — şimdi çalıyor` }],

@@ -11,7 +11,10 @@ const OLAY = "dildegisti";
 export function dilOku(): Dil {
   if (typeof window === "undefined") return "tr";
   try {
-    return localStorage.getItem("dil") === "en" ? "en" : "tr";
+    const s = localStorage.getItem("dil");
+    if (s === "en" || s === "tr") return s;
+    // Seçim yapılmamışsa tarayıcı dili: Türkçe değilse İngilizce karşıla.
+    return (navigator.language || "tr").toLowerCase().startsWith("tr") ? "tr" : "en";
   } catch {
     return "tr";
   }

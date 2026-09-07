@@ -1,0 +1,424 @@
+[
+  {
+    "slug": "arabesk-fm",
+    "eski": "http://yayin.arabeskfm.biz:8042/",
+    "yeni": "https://yayin.arabeskfm.biz:8042/",
+    "detay": {
+      "ok": true,
+      "ct": "audio/aacp",
+      "icy": true
+    }
+  },
+  {
+    "slug": "virgin-radio",
+    "eski": "http://29103.live.streamtheworld.com/VIRGIN_RADIO_SC",
+    "yeni": "https://29103.live.streamtheworld.com/VIRGIN_RADIO_SC",
+    "detay": {
+      "ok": true,
+      "ct": "audio/mpeg",
+      "icy": true
+    }
+  },
+  {
+    "slug": "radyo-7",
+    "eski": "http://46.20.3.250/;stream",
+    "yeni": null,
+    "detay": null
+  },
+  {
+    "slug": "turkulerle-turkiye",
+    "eski": "http://37.247.98.8/stream/22/;",
+    "yeni": null,
+    "detay": null
+  },
+  {
+    "slug": "metro-fm",
+    "eski": "http://28503.live.streamtheworld.com:3690/METRO_FMAAC_SC",
+    "yeni": "https://28503.live.streamtheworld.com/METRO_FMAAC_SC",
+    "detay": {
+      "ok": true,
+      "ct": "audio/aacp",
+      "icy": true
+    }
+  },
+  {
+    "slug": "ankara-havalari",
+    "eski": "http://37.247.98.8/stream/30/;",
+    "yeni": null,
+    "detay": null
+  },
+  {
+    "slug": "altin-sarkilar",
+    "eski": "http://37.247.98.8/stream/25/;",
+    "yeni": null,
+    "detay": null
+  },
+  {
+    "slug": "dinamo-sleep",
+    "eski": "http://channels.dinamo.fm/sleep-mp3",
+    "yeni": null,
+    "detay": null
+  },
+  {
+    "slug": "super-fm",
+    "eski": "http://29023.live.streamtheworld.com:3690/SUPER_FMAAC_SC",
+    "yeni": "https://29023.live.streamtheworld.com/SUPER_FMAAC_SC",
+    "detay": {
+      "ok": true,
+      "ct": "audio/aacp",
+      "icy": true
+    }
+  },
+  {
+    "slug": "90lar",
+    "eski": "http://37.247.98.8/stream/166/",
+    "yeni": null,
+    "detay": null
+  },
+  {
+    "slug": "pal-station",
+    "eski": "http://shoutcast.radyogrup.com:1020/",
+    "yeni": null,
+    "detay": null
+  },
+  {
+    "slug": "pal-nostalji",
+    "eski": "http://shoutcast.radyogrup.com:1010/",
+    "yeni": null,
+    "detay": null
+  },
+  {
+    "slug": "pal-doga",
+    "eski": "http://shoutcast.radyogrup.com:1040/;*.mp3",
+    "yeni": null,
+    "detay": null
+  },
+  {
+    "slug": "pop-90",
+    "eski": "http://23623.live.streamtheworld.com:3690/POP90AAC_SC",
+    "yeni": "https://23623.live.streamtheworld.com/POP90AAC_SC",
+    "detay": {
+      "ok": true,
+      "ct": "audio/aacp",
+      "icy": true
+    }
+  },
+  {
+    "slug": "dinamo-deep",
+    "eski": "http://channels.dinamo.fm/deep-mp3",
+    "yeni": "https://channels.dinamo.fm/deep-mp3",
+    "detay": {
+      "ok": true,
+      "ct": "audio/mpeg",
+      "icy": true
+    }
+  },
+  {
+    "slug": "joy-fm",
+    "eski": "http://22193.live.streamtheworld.com:3690/JOY_FMAAC_SC",
+    "yeni": "https://22193.live.streamtheworld.com/JOY_FMAAC_SC",
+    "detay": {
+      "ok": true,
+      "ct": "audio/aacp",
+      "icy": true
+    }
+  },
+  {
+    "slug": "dost-radyo",
+    "eski": "http://yayin1.yayindakiler.com:3156/",
+    "yeni": null,
+    "detay": null
+  },
+  {
+    "slug": "dinamo-caffe",
+    "eski": "http://channels.dinamo.fm/caffe-mp3",
+    "yeni": "https://channels.dinamo.fm/caffe-mp3",
+    "detay": {
+      "ok": true,
+      "ct": "audio/mpeg",
+      "icy": true
+    }
+  },
+  {
+    "slug": "dinamo-discotheque",
+    "eski": "http://channels.dinamo.fm/discotheque-mp3",
+    "yeni": null,
+    "detay": null
+  },
+  {
+    "slug": "itu-klasik",
+    "eski": "http://160.75.86.29:8088/ituklasikmp3",
+    "yeni": null,
+    "detay": null
+  },
+  {
+    "slug": "radio-zetzet",
+    "eski": "http://173.249.25.121:8000/",
+    "yeni": null,
+    "detay": null
+  },
+  {
+    "slug": "sizir-fm",
+    "eski": "http://stream.radiojar.com/tamm1f7kk48uv",
+    "yeni": "https://stream.radiojar.com/tamm1f7kk48uv",
+    "detay": {
+      "ok": true,
+      "ct": "audio/mpeg",
+      "icy": true
+    }
+  },
+  {
+    "slug": "ask-fm",
+    "eski": "http://yayin.asymedya.com:8020/;",
+    "yeni": null,
+    "detay": null
+  },
+  {
+    "slug": "joyturk-rock",
+    "eski": "http://23613.live.streamtheworld.com/JOYTURK_ROCK128AAC.aac",
+    "yeni": "https://23613.live.streamtheworld.com/JOYTURK_ROCK128AAC.aac",
+    "detay": {
+      "ok": true,
+      "ct": "audio/aacp",
+      "icy": true
+    }
+  },
+  {
+    "slug": "radyo-odtu-rock",
+    "eski": "http://stream.radyoodtu.com.tr/rock",
+    "yeni": "https://stream.radyoodtu.com.tr/rock",
+    "detay": {
+      "ok": true,
+      "ct": "audio/aacp",
+      "icy": true
+    }
+  },
+  {
+    "slug": "radyo-a",
+    "eski": "http://canli.radyoa.anadolu.edu.tr:44445/Radyo_A_MP3",
+    "yeni": null,
+    "detay": null
+  },
+  {
+    "slug": "dinamo-smog",
+    "eski": "http://channels.dinamo.fm/smog-mp3",
+    "yeni": "https://channels.dinamo.fm/smog-mp3",
+    "detay": {
+      "ok": true,
+      "ct": "audio/mpeg",
+      "icy": true
+    }
+  },
+  {
+    "slug": "borusan-klasik",
+    "eski": "http://27783.live.streamtheworld.com/BORUSAN_KLASIKAAC_SC",
+    "yeni": "https://27783.live.streamtheworld.com/BORUSAN_KLASIKAAC_SC",
+    "detay": {
+      "ok": true,
+      "ct": "audio/aacp",
+      "icy": true
+    }
+  },
+  {
+    "slug": "park-fm",
+    "eski": "http://yayin.netradyom.com:8050/PARKFM/",
+    "yeni": null,
+    "detay": null
+  },
+  {
+    "slug": "baba-radyo",
+    "eski": "http://officialbabaradyo.radyotvonline.net/babaofficial",
+    "yeni": "https://officialbabaradyo.radyotvonline.net/babaofficial",
+    "detay": {
+      "ok": true,
+      "ct": "audio/mpeg",
+      "icy": true
+    }
+  },
+  {
+    "slug": "can-radyo",
+    "eski": "http://yayin1.yayindakiler.com:3124/;",
+    "yeni": null,
+    "detay": null
+  },
+  {
+    "slug": "radyo-ekin",
+    "eski": "http://yayin.turkhosted.com:6006/",
+    "yeni": "https://yayin.turkhosted.com:6006/",
+    "detay": {
+      "ok": true,
+      "ct": "audio/aacp",
+      "icy": true
+    }
+  },
+  {
+    "slug": "radyo-voyage",
+    "eski": "http://voyagewmp.radyotvonline.com/;stream.mp3",
+    "yeni": null,
+    "detay": null
+  },
+  {
+    "slug": "gozyasi-fm",
+    "eski": "http://yayin1.canliyayin.org:8700/;*.mp3",
+    "yeni": null,
+    "detay": null
+  },
+  {
+    "slug": "radyo-odtu",
+    "eski": "http://stream.radyoodtu.com.tr/;",
+    "yeni": "https://stream.radyoodtu.com.tr/;",
+    "detay": {
+      "ok": true,
+      "ct": "audio/aacp",
+      "icy": true
+    }
+  },
+  {
+    "slug": "dinamo-fm-locodyno",
+    "eski": "http://channels.dinamo.fm/locodyno-mp3",
+    "yeni": "https://channels.dinamo.fm/locodyno-mp3",
+    "detay": {
+      "ok": true,
+      "ct": "audio/mpeg",
+      "icy": true
+    }
+  },
+  {
+    "slug": "keyf-station",
+    "eski": "http://yayin.radyomadyo.com:8002/stream",
+    "yeni": "https://yayin.radyomadyo.com:8002/stream",
+    "detay": {
+      "ok": true,
+      "ct": "audio/aacp",
+      "icy": true
+    }
+  },
+  {
+    "slug": "radyo-eksen",
+    "eski": "http://eksenwmp.radyotvonline.com/;stream.mp3",
+    "yeni": "https://eksenwmp.radyotvonline.com/;stream.mp3",
+    "detay": {
+      "ok": true,
+      "ct": "audio/mpeg",
+      "icy": true
+    }
+  },
+  {
+    "slug": "apacik-radyo",
+    "eski": "http://stream.34bit.net/ar.mp3",
+    "yeni": "https://stream.34bit.net/ar.mp3",
+    "detay": {
+      "ok": true,
+      "ct": "audio/mpeg",
+      "icy": true
+    }
+  },
+  {
+    "slug": "dijital-slow",
+    "eski": "http://anadolu.liderhost.com.tr:8076/radyo",
+    "yeni": "https://anadolu.liderhost.com.tr:8076/radyo",
+    "detay": {
+      "ok": true,
+      "ct": "audio/mpeg",
+      "icy": true
+    }
+  },
+  {
+    "slug": "retro-turk",
+    "eski": "http://27783.live.streamtheworld.com:3690/RETROTURKAAC_SC",
+    "yeni": "https://27783.live.streamtheworld.com/RETROTURKAAC_SC",
+    "detay": {
+      "ok": true,
+      "ct": "audio/aacp",
+      "icy": true
+    }
+  },
+  {
+    "slug": "dinamo-fm-legacy",
+    "eski": "http://channels.dinamo.fm/legacy-mp3",
+    "yeni": "https://channels.dinamo.fm/legacy-mp3",
+    "detay": {
+      "ok": true,
+      "ct": "audio/mpeg",
+      "icy": true
+    }
+  },
+  {
+    "slug": "dinamo-fm-fluent",
+    "eski": "http://channels.dinamo.fm/fluent-mp3",
+    "yeni": "https://channels.dinamo.fm/fluent-mp3",
+    "detay": {
+      "ok": true,
+      "ct": "audio/mpeg",
+      "icy": true
+    }
+  },
+  {
+    "slug": "radio-swiss-classic",
+    "eski": "http://stream.srg-ssr.ch/m/rsc_de/mp3_128",
+    "yeni": "https://stream.srg-ssr.ch/m/rsc_de/mp3_128",
+    "detay": {
+      "ok": true,
+      "ct": "audio/mpeg",
+      "icy": true
+    }
+  },
+  {
+    "slug": "virgin-radio-italia",
+    "eski": "http://icecast.unitedradio.it/Virgin.mp3",
+    "yeni": "https://icecast.unitedradio.it/Virgin.mp3",
+    "detay": {
+      "ok": true,
+      "ct": "audio/mpeg",
+      "icy": true
+    }
+  },
+  {
+    "slug": "italo-power",
+    "eski": "http://stream.radioitalopower.com:10018/italopower",
+    "yeni": null,
+    "detay": null
+  },
+  {
+    "slug": "france-musique",
+    "eski": "http://direct.francemusique.fr/live/francemusique-midfi.mp3",
+    "yeni": "https://direct.francemusique.fr/live/francemusique-midfi.mp3",
+    "detay": {
+      "ok": true,
+      "ct": "audio/mpeg",
+      "icy": true
+    }
+  },
+  {
+    "slug": "concertzender-klassiek",
+    "eski": "http://streams.greenhost.nl:8080/klassiek",
+    "yeni": null,
+    "detay": null
+  },
+  {
+    "slug": "fluxfm",
+    "eski": "http://streams.fluxfm.de/live/mp3-320/audio/",
+    "yeni": null,
+    "detay": null
+  },
+  {
+    "slug": "fip",
+    "eski": "http://icecast.radiofrance.fr/fip-hifi.aac",
+    "yeni": "https://icecast.radiofrance.fr/fip-hifi.aac",
+    "detay": {
+      "ok": true,
+      "ct": "audio/aac",
+      "icy": true
+    }
+  },
+  {
+    "slug": "capital-fm-uk",
+    "eski": "http://media-ice.musicradio.com/CapitalLiverpoolMP3",
+    "yeni": "https://media-ice.musicradio.com/CapitalLiverpoolMP3",
+    "detay": {
+      "ok": true,
+      "ct": "audio/mpeg",
+      "icy": true
+    }
+  }
+]

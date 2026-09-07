@@ -1,0 +1,22 @@
+[
+  {
+    "slug": "radyo-7",
+    "yeni": "https://radyo.yayin.com.tr:5924/"
+  },
+  {
+    "slug": "ask-fm",
+    "yeni": "https://embed.tawk.to/_s/v4/assets/audio/chat_sound.mp3"
+  },
+  {
+    "slug": "radyo-a",
+    "yeni": "https://stream.zeno.fm/z80zubtvrf9uv"
+  },
+  {
+    "slug": "park-fm",
+    "yeni": "https://s03.diazol.hu:7142/stream.mp3"
+  },
+  {
+    "slug": "fluxfm",
+    "yeni": "https://channels.fluxfm.de/FluxFM/stream.mp3"
+  }
+]

@@ -808,7 +808,7 @@ export default function NowList() {
 
       <div className="relative z-10 mx-auto max-w-2xl px-5 pb-32 pt-10">
         {/* Başlık — logo yok, sadece kelime işareti */}
-        <header className="mb-6 flex items-start justify-between">
+        <header className="mb-6 flex flex-wrap items-start justify-between gap-y-3">
           <div>
             <h1 className="brand text-[42px] font-bold leading-none tracking-tight">ŞİMDİ</h1>
             <span
@@ -819,8 +819,8 @@ export default function NowList() {
               radyoda şu an ne çalıyor
             </p>
           </div>
-          <div className="flex flex-col items-end gap-1.5 text-xs" style={{ color: "var(--muted)" }}>
-            <span className="flex items-center gap-3">
+          <div className="flex w-full flex-col gap-1.5 text-xs sm:w-auto sm:items-end" style={{ color: "var(--muted)" }}>
+            <span className="flex flex-wrap items-center gap-3">
               <button
                 onClick={cycleSleep}
                 title="uyku zamanlayıcı"
@@ -849,7 +849,7 @@ export default function NowList() {
                 {t("nav.canli")}
               </span>
             </span>
-            <span className="flex items-center gap-3">
+            <span className="flex flex-wrap items-center gap-x-3 gap-y-1">
               <Link href="/hakkinda" className="underline" style={{ color: "var(--muted)" }}>
                 {t("nav.gelistirici")}
               </Link>

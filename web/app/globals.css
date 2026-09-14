@@ -250,3 +250,11 @@ body {
 
 /* Kadran bandı — scrollbar görünmesin. */
 .kadran-band::-webkit-scrollbar { display: none; }
+
+/* Uçan kalp — canlı kanaldan gelen ya da senin gönderdiğin kalp yukarı süzülür. */
+@keyframes kalpUc {
+  0% { transform: translateY(0) scale(0.6); opacity: 0; }
+  12% { opacity: 0.9; transform: translateY(-8vh) scale(1); }
+  100% { transform: translateY(-42vh) scale(1.15) rotate(8deg); opacity: 0; }
+}
+.kalp-uc { animation: kalpUc 2.5s ease-out forwards; will-change: transform, opacity; }

@@ -4,6 +4,7 @@ import { useEffect, useRef, useState } from "react";
 import KartModal from "./KartModal";
 import { useDil } from "@/lib/i18n";
 import { kaynagiCalistir, hlsYik } from "@/lib/cal";
+import { dinleyiciKatil, type CanliKanal } from "@/lib/canli";
 
 function readableOn(hex: string): string {
   const h = hex.replace("#", "");
@@ -31,6 +32,18 @@ export default function StationPlayer({
   const [kalp, setKalp] = useState<number | null>(null);
   const kalpBekle = useRef(0);
   const retries = useRef(0);
+  const [dinleyici, setDinleyici] = useState(0);
+  const kanalRef = useRef<CanliKanal | null>(null);
+
+  // İstasyon sayfasında da canlı varlık: "şu an X kişi seninle dinliyor".
+  useEffect(() => {
+    const kanal = dinleyiciKatil(slug, { sayi: setDinleyici });
+    kanalRef.current = kanal;
+    return () => {
+      kanal.ayril();
+      kanalRef.current = null;
+    };
+  }, [slug]);
 
   useEffect(() => {
     let off = false;
@@ -47,6 +60,7 @@ export default function StationPlayer({
     const t = Date.now();
     if (t - kalpBekle.current < 1200) return;
     kalpBekle.current = t;
+    kanalRef.current?.kalpYolla();
     setKalp((k) => (k ?? 0) + 1);
     fetch("/api/kalp", {
       method: "POST",
@@ -119,7 +133,13 @@ export default function StationPlayer({
         {on ? t("player.durdur") : t("player.dinle")}
       </button>
       <span className="text-sm" style={{ color: "var(--muted)" }}>
-        {phase === "connecting" ? t("player.baglaniyor") : phase === "error" ? t("player.ulasilamadi") : ""}
+        {phase === "connecting"
+          ? t("player.baglaniyor")
+          : phase === "error"
+            ? t("player.ulasilamadi")
+            : dinleyici > 1
+              ? `🎧 ${t("player.birlikte").replace("{n}", String(dinleyici))}`
+              : ""}
       </span>
       <button
         onClick={kalpAt}

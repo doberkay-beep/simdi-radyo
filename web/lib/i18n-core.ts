@@ -78,6 +78,7 @@ export const SOZLUK: Record<string, { tr: string; en: string }> = {
   "player.durdur": { tr: "❚❚ Durdur", en: "❚❚ Stop" },
   "player.baglaniyor": { tr: "bağlanıyor…", en: "connecting…" },
   "player.ulasilamadi": { tr: "yayına ulaşılamadı", en: "stream unavailable" },
+  "player.birlikte": { tr: "şu an {n} kişi seninle dinliyor", en: "{n} people listening with you right now" },
   "player.paylas": { tr: "paylaş", en: "share" },
   "player.kopyalandi": { tr: "kopyalandı ✓", en: "copied ✓" },
   "player.kart": { tr: "kart", en: "card" },

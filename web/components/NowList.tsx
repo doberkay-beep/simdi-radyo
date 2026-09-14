@@ -4,6 +4,7 @@ import { useEffect, useMemo, useRef, useState } from "react";
 import Link from "next/link";
 import ThemeToggle from "./ThemeToggle";
 import { kaynagiCalistir, hlsYik } from "@/lib/cal";
+import { dinleyiciKatil, type CanliKanal } from "@/lib/canli";
 import {
   selamla,
   EPIGRAFLAR,
@@ -200,6 +201,34 @@ export default function NowList() {
   const [defterAcik, setDefterAcik] = useState(false); // kalp defteri alt paneli
   const [pwaIpucu, setPwaIpucu] = useState(false); // iOS "ana ekrana ekle" ipucu (bir kez)
   const jestRef = useRef<{ x: number; y: number } | null>(null); // çubukta kaydırma jesti
+  const [dinleyiciSayi, setDinleyiciSayi] = useState(0); // aynı istasyonda şu an kaç kişi
+  const [ucanKalpler, setUcanKalpler] = useState<{ id: number; x: number }[]>([]);
+  const kanalRef = useRef<CanliKanal | null>(null);
+  const kalpIdRef = useRef(0);
+
+  // Kalp uçuşu — hem kendi kalbin hem başkalarınınki ekranda süzülür.
+  function kalpUcur() {
+    const id = ++kalpIdRef.current;
+    setUcanKalpler((k) => [...k.slice(-14), { id, x: 12 + Math.random() * 76 }]);
+    setTimeout(() => setUcanKalpler((k) => k.filter((u) => u.id !== id)), 2600);
+  }
+
+  // Çalan istasyonun canlı kanalına katıl: varlık sayısı + kalp yağmuru.
+  useEffect(() => {
+    kanalRef.current?.ayril();
+    kanalRef.current = null;
+    setDinleyiciSayi(0);
+    if (!playing) return;
+    const kanal = dinleyiciKatil(playing, {
+      sayi: setDinleyiciSayi,
+      kalp: kalpUcur,
+    });
+    kanalRef.current = kanal;
+    return () => {
+      kanal.ayril();
+      if (kanalRef.current === kanal) kanalRef.current = null;
+    };
+  }, [playing]);
 
   useEffect(() => {
     try {
@@ -529,6 +558,10 @@ export default function NowList() {
     if (kalpBekleRef.current[slug] && t - kalpBekleRef.current[slug] < 1200) return;
     kalpBekleRef.current[slug] = t;
     titret(18);
+    if (slug === playingRef.current) {
+      kanalRef.current?.kalpYolla();
+      kalpUcur();
+    }
     setKalpler((k) => ({ ...k, [slug]: (k[slug] || 0) + 1 }));
     fetch("/api/kalp", {
       method: "POST",
@@ -1598,6 +1631,17 @@ export default function NowList() {
               <div className="truncate text-xs opacity-80">{current.name}</div>
             </div>
 
+            {/* Yalnız değilsin — aynı istasyonda şu an kaç kişi */}
+            {dinleyiciSayi > 1 && (
+              <span
+                className="fade-in shrink-0 rounded-full px-2.5 py-1 text-xs font-semibold"
+                title={`şu an ${dinleyiciSayi} kişi bu istasyonda — yalnız değilsin`}
+                style={{ background: "rgba(0,0,0,0.18)", color: readableOn(accent) }}
+              >
+                🎧 {dinleyiciSayi}
+              </span>
+            )}
+
             {/* Anonim kalp */}
             <button
               onClick={() => kalpAt(current.slug)}
@@ -1848,6 +1892,21 @@ export default function NowList() {
           accent={accent}
           onClose={() => setKartAcik(false)}
         />
+      )}
+
+      {/* Uçan kalpler — seninkiler ve aynı frekanstakilerinkiler */}
+      {ucanKalpler.length > 0 && (
+        <div className="pointer-events-none fixed inset-x-0 bottom-16 z-40 h-[45vh] overflow-hidden" aria-hidden>
+          {ucanKalpler.map((u) => (
+            <span
+              key={u.id}
+              className="kalp-uc absolute bottom-0 text-2xl"
+              style={{ left: `${u.x}%`, color: accent }}
+            >
+              ♥
+            </span>
+          ))}
+        </div>
       )}
 
       {/* iOS "ana ekrana ekle" ipucu — bir kez görünür */}

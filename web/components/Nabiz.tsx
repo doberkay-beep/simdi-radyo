@@ -52,6 +52,38 @@ function ara(q: string) {
 export default function Nabiz() {
   const { t, dil } = useDil();
   const [data, setData] = useState<Data | null>(null);
+
+  // Türleri beş duyguya topla — "Türkiye şu an %X hüzünlü" manşeti.
+  const duygu = (() => {
+    const moods = data?.moods;
+    if (!moods || !moods.length) return null;
+    const DUYGULAR: { ad: { tr: string; en: string }; renk: string; desen: RegExp }[] = [
+      { ad: { tr: "hüzünlü", en: "melancholic" }, renk: "#b06a3c", desen: /arabesk|slow|nostalji|damar/ },
+      { ad: { tr: "enerjik", en: "energetic" }, renk: "#e0475f", desen: /pop|dance|electronic|hit|rap/ },
+      { ad: { tr: "sakin", en: "calm" }, renk: "#5b8a72", desen: /klasik|caz|jazz|chill|lounge|akustik/ },
+      { ad: { tr: "isyanda", en: "rebellious" }, renk: "#8a4fbf", desen: /rock|alternative|metal/ },
+      { ad: { tr: "memlekette", en: "homesick" }, renk: "#c9a24b", desen: /türkü|turku|folk|halk/ },
+    ];
+    const toplamlar = DUYGULAR.map((d) => ({
+      ...d,
+      adet: moods.filter((m) => d.desen.test(m.tur)).reduce((a, m) => a + m.adet, 0),
+      turler: moods
+        .filter((m) => d.desen.test(m.tur))
+        .slice(0, 3)
+        .map((m) => turAdi(dil, m.tur))
+        .join(", "),
+    }));
+    const genel = moods.reduce((a, m) => a + m.adet, 0);
+    const bas = toplamlar.sort((a, b) => b.adet - a.adet)[0];
+    if (!bas || !genel || bas.adet < 3) return null;
+    return {
+      ad: dil === "en" ? bas.ad.en : bas.ad.tr,
+      renk: bas.renk,
+      yuzde: Math.round((bas.adet / genel) * 100),
+      adet: bas.adet,
+      turler: bas.turler,
+    };
+  })();
   const [status, setStatus] = useState<"loading" | "idle" | "error">("loading");
 
   useEffect(() => {
@@ -98,6 +130,26 @@ export default function Nabiz() {
             </Link>
           </span>
         </header>
+
+        {/* TÜRKİYE ŞU AN — türlerin duygulara toplanmış manşeti */}
+        {duygu && (
+          <div
+            className="fade-in mb-6 rounded-2xl border p-6 text-center"
+            style={{ borderColor: "var(--line)", background: `color-mix(in srgb, ${duygu.renk} 12%, transparent)` }}
+          >
+            <div className="text-xs uppercase tracking-[0.3em]" style={{ color: "var(--muted)" }}>
+              {dil === "en" ? "TÜRKİYE, RIGHT NOW" : "TÜRKİYE ŞU AN"}
+            </div>
+            <div className="mt-2 text-5xl font-bold tracking-tight" style={{ color: duygu.renk }}>
+              %{duygu.yuzde} {duygu.ad}
+            </div>
+            <p className="epigraf mt-3 text-sm">
+              {dil === "en"
+                ? `because ${duygu.adet} stations are playing ${duygu.turler} right now`
+                : `çünkü şu an ${duygu.adet} istasyonda ${duygu.turler} çalıyor`}
+            </p>
+          </div>
+        )}
 
         {/* Canlı vurgu */}
         {top && (

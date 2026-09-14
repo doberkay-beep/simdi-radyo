@@ -19,6 +19,7 @@ import {
 } from "@/lib/sozler";
 import KartModal from "./KartModal";
 import Notlar from "./Notlar";
+import FrekansKarti from "./FrekansKarti";
 import DilToggle from "./DilToggle";
 import Kadran from "./Kadran";
 import DunyadaSimdi from "./DunyadaSimdi";
@@ -199,6 +200,7 @@ export default function NowList() {
   const [odakDize, setOdakDize] = useState(0); // odakta dönen dize
   const [kartAcik, setKartAcik] = useState(false); // paylaşılabilir kart penceresi
   const [defterAcik, setDefterAcik] = useState(false); // kalp defteri alt paneli
+  const [frekansAcik, setFrekansAcik] = useState(false); // frekans kartı (kişisel karne)
   const [pwaIpucu, setPwaIpucu] = useState(false); // iOS "ana ekrana ekle" ipucu (bir kez)
   const jestRef = useRef<{ x: number; y: number } | null>(null); // çubukta kaydırma jesti
   const [dinleyiciSayi, setDinleyiciSayi] = useState(0); // aynı istasyonda şu an kaç kişi
@@ -366,6 +368,14 @@ export default function NowList() {
       }
       return next;
     });
+    // Frekans Kartı için zaman damgalı günlük (yalnız bu tarayıcıda, son 400 kayıt).
+    try {
+      const g = JSON.parse(localStorage.getItem("dinlemeGunlugu") || "[]") as { s: string; t: number }[];
+      g.push({ s: slug, t: Date.now() });
+      localStorage.setItem("dinlemeGunlugu", JSON.stringify(g.slice(-400)));
+    } catch {
+      // yok say
+    }
   }
 
   // Yayın kesilirse (üst akış düşer, ağ takılır, ekran uyanır) kendiliğinden
@@ -1015,6 +1025,13 @@ export default function NowList() {
               </span>
             </span>
             <span className="flex flex-wrap items-center gap-x-3 gap-y-1">
+              <button
+                onClick={() => setFrekansAcik(true)}
+                className="underline"
+                style={{ color: "var(--muted)" }}
+              >
+                {t("nav.frekansim")}
+              </button>
               <Link href="/hakkinda" className="underline" style={{ color: "var(--muted)" }}>
                 {t("nav.gelistirici")}
               </Link>
@@ -1891,6 +1908,19 @@ export default function NowList() {
           name={current.name}
           accent={accent}
           onClose={() => setKartAcik(false)}
+        />
+      )}
+
+      {/* Frekans Kartı — kişisel dinleme karnesi */}
+      {frekansAcik && (
+        <FrekansKarti
+          stations={stations.map((s) => ({
+            slug: s.slug,
+            name: s.name,
+            genre: s.genre ?? null,
+            accentColor: s.accentColor ?? null,
+          }))}
+          onClose={() => setFrekansAcik(false)}
         />
       )}
 

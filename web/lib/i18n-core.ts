@@ -82,6 +82,13 @@ export const SOZLUK: Record<string, { tr: string; en: string }> = {
   "player.paylas": { tr: "paylaş", en: "share" },
   "player.kopyalandi": { tr: "kopyalandı ✓", en: "copied ✓" },
   "player.kart": { tr: "kart", en: "card" },
+  // frekans kartı
+  "frekans.baslik": { tr: "Frekans Kartın", en: "Your Frequency Card" },
+  "frekans.kapat": { tr: "kapat", en: "close" },
+  "frekans.az": { tr: "Kartını çıkarabilmem için biraz daha dinle — en az birkaç istasyon gezindikten sonra buraya dön.", en: "Listen a bit more first — come back after a few stations." },
+  "frekans.paylas": { tr: "kartı paylaş / indir", en: "share / download card" },
+  "frekans.gizli": { tr: "günlük yalnız bu tarayıcıda tutulur; hiçbir yere gönderilmez.", en: "your log lives only in this browser; nothing is uploaded." },
+  "nav.frekansim": { tr: "frekansım", en: "my frequency" },
   // kalp defteri
   "defter.baslik": { tr: "kalp defteri", en: "guestbook" },
   "defter.yer": { tr: "bir anı bırak… (140 karakter)", en: "leave a note… (140 chars)" },

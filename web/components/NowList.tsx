@@ -17,6 +17,7 @@ import {
   gununDizesi,
 } from "@/lib/sozler";
 import KartModal from "./KartModal";
+import Notlar from "./Notlar";
 import DilToggle from "./DilToggle";
 import Kadran from "./Kadran";
 import DunyadaSimdi from "./DunyadaSimdi";
@@ -163,6 +164,7 @@ export default function NowList() {
   const [focus, setFocus] = useState(false); // sessizlik / odak modu
   const [odakDize, setOdakDize] = useState(0); // odakta dönen dize
   const [kartAcik, setKartAcik] = useState(false); // paylaşılabilir kart penceresi
+  const [defterAcik, setDefterAcik] = useState(false); // kalp defteri alt paneli
   const [geceModu, setGeceModu] = useState(false); // ses eşitleme (Web Audio compressor)
   const [kalpler, setKalpler] = useState<Record<string, number>>({}); // istasyon kalp toplamları
   const [yolculuk, setYolculuk] = useState(false); // sesli yolculuk — otomatik zaping
@@ -1462,6 +1464,17 @@ export default function NowList() {
               ♥ {kalpler[current.slug] ? kalpler[current.slug] : ""}
             </button>
 
+            {/* Kalp defteri — dinlerken not bırak */}
+            <button
+              onClick={() => setDefterAcik(true)}
+              aria-label="kalp defteri — bu istasyona not bırak"
+              title="kalp defteri: dinlerken bir anı bırak"
+              className="press shrink-0 inline-flex items-center rounded-full px-2.5 py-1 text-xs font-semibold"
+              style={{ background: "rgba(0,0,0,0.18)", color: readableOn(accent) }}
+            >
+              not
+            </button>
+
             {/* Paylaşılabilir kart */}
             <button
               onClick={() => setKartAcik(true)}
@@ -1690,6 +1703,36 @@ export default function NowList() {
           accent={accent}
           onClose={() => setKartAcik(false)}
         />
+      )}
+
+      {/* Kalp defteri — alttan kayan panel; dinlerken not oku / bırak */}
+      {defterAcik && current && (
+        <div className="fixed inset-0 z-50" role="dialog" aria-label="kalp defteri">
+          <button
+            aria-label="kapat"
+            onClick={() => setDefterAcik(false)}
+            className="absolute inset-0 h-full w-full"
+            style={{ background: "rgba(0,0,0,0.55)" }}
+          />
+          <div
+            className="absolute inset-x-0 bottom-0 mx-auto max-h-[72vh] max-w-2xl overflow-y-auto rounded-t-2xl border-t px-5 pb-10 pt-3"
+            style={{ background: "var(--bg)", borderColor: "var(--line)" }}
+          >
+            <div className="mx-auto mb-3 h-1 w-10 rounded-full" style={{ background: "var(--line)" }} />
+            <div className="mb-1 flex items-center justify-between">
+              <span className="text-sm font-semibold">{current.name}</span>
+              <button
+                onClick={() => setDefterAcik(false)}
+                aria-label="kapat"
+                className="press rounded-full border px-3 py-1 text-xs"
+                style={{ borderColor: "var(--line)", color: "var(--muted)" }}
+              >
+                kapat
+              </button>
+            </div>
+            <Notlar slug={current.slug} accent={accent} />
+          </div>
+        </div>
       )}
 
       {/* İlk giriş perdesi — bir kez */}

@@ -31,6 +31,11 @@ export const metadata = {
     canonical: "/",
     languages: { "tr-TR": "/", "en": "/", "x-default": "/" },
   },
+  appleWebApp: {
+    capable: true,
+    title: "ŞİMDİ",
+    statusBarStyle: "black-translucent" as const,
+  },
   openGraph: {
     title: "ŞİMDİ — radyoda şu an ne çalıyor",
     description:

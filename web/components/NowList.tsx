@@ -96,6 +96,39 @@ function since(iso: string, now: number): string {
 const DEFAULT_ACCENT = "#6b7280";
 const FAV_KEY = "favoriler";
 
+// Kilit ekranı kapağı: istasyon renginde degrade + baş harf + ŞİMDİ imzası.
+// Canvas bir kez çizilir, data URL slug başına önbellekte tutulur.
+const kapakOnbellek = new Map<string, string>();
+function kapakUret(slug: string, name: string, accent: string): string {
+  const varOlan = kapakOnbellek.get(slug);
+  if (varOlan) return varOlan;
+  try {
+    const c = document.createElement("canvas");
+    c.width = 512;
+    c.height = 512;
+    const ctx = c.getContext("2d");
+    if (!ctx) return "/icon.png";
+    const g = ctx.createLinearGradient(0, 0, 512, 512);
+    g.addColorStop(0, accent);
+    g.addColorStop(1, "#0a0a0b");
+    ctx.fillStyle = g;
+    ctx.fillRect(0, 0, 512, 512);
+    ctx.fillStyle = readableOn(accent);
+    ctx.font = "bold 260px 'Instrument Sans', system-ui, sans-serif";
+    ctx.textAlign = "center";
+    ctx.textBaseline = "middle";
+    ctx.fillText(name.trim().charAt(0).toLocaleUpperCase("tr"), 256, 268);
+    ctx.globalAlpha = 0.85;
+    ctx.font = "600 40px 'Instrument Sans', system-ui, sans-serif";
+    ctx.fillText("ŞİMDİ", 256, 452);
+    const url = c.toDataURL("image/png");
+    kapakOnbellek.set(slug, url);
+    return url;
+  } catch {
+    return "/icon.png";
+  }
+}
+
 // Yabancı istasyonların bayrağı (slug'a göre). Yeni yabancı eklenince buraya da eklenir.
 
 const pad2 = (n: number) => String(n).padStart(2, "0");
@@ -165,6 +198,20 @@ export default function NowList() {
   const [odakDize, setOdakDize] = useState(0); // odakta dönen dize
   const [kartAcik, setKartAcik] = useState(false); // paylaşılabilir kart penceresi
   const [defterAcik, setDefterAcik] = useState(false); // kalp defteri alt paneli
+  const [pwaIpucu, setPwaIpucu] = useState(false); // iOS "ana ekrana ekle" ipucu (bir kez)
+  const jestRef = useRef<{ x: number; y: number } | null>(null); // çubukta kaydırma jesti
+
+  useEffect(() => {
+    try {
+      const ios = /iphone|ipad|ipod/i.test(navigator.userAgent);
+      const standalone =
+        (navigator as unknown as { standalone?: boolean }).standalone === true ||
+        window.matchMedia("(display-mode: standalone)").matches;
+      if (ios && !standalone && !localStorage.getItem("pwa-ipucu")) setPwaIpucu(true);
+    } catch {
+      // yoksay
+    }
+  }, []);
   const [geceModu, setGeceModu] = useState(false); // ses eşitleme (Web Audio compressor)
   const [kalpler, setKalpler] = useState<Record<string, number>>({}); // istasyon kalp toplamları
   const [yolculuk, setYolculuk] = useState(false); // sesli yolculuk — otomatik zaping
@@ -481,6 +528,7 @@ export default function NowList() {
     const t = Date.now();
     if (kalpBekleRef.current[slug] && t - kalpBekleRef.current[slug] < 1200) return;
     kalpBekleRef.current[slug] = t;
+    titret(18);
     setKalpler((k) => ({ ...k, [slug]: (k[slug] || 0) + 1 }));
     fetch("/api/kalp", {
       method: "POST",
@@ -733,11 +781,93 @@ export default function NowList() {
     setPhase("connecting");
     pushHistory(s.slug);
     audio.volume = muted ? 0 : volume;
+    titret(12);
     kaynagiCalistir(audio, s.slug).catch(() => {
       // Otomatik çalma engellendiyse (deep link) sessizce bırak.
       setPlaying(null);
     });
   }
+
+  // İnce dokunsal geri bildirim (Android; desteklemeyen tarayıcı sessizce geçer).
+  function titret(ms: number) {
+    try {
+      navigator.vibrate?.(ms);
+    } catch {
+      // yoksay
+    }
+  }
+
+  // Kadran sırasında bir sonraki/önceki istasyona zapla (kilit ekranı ve jest).
+  const toggleRef = useRef(toggle);
+  toggleRef.current = toggle;
+  const stationsRef = useRef(stations);
+  stationsRef.current = stations;
+  function zapla(delta: number) {
+    const liste = stationsRef.current;
+    if (!liste.length) return;
+    const simdiki = playingRef.current;
+    const i = liste.findIndex((s) => s.slug === simdiki);
+    const hedef = liste[(i + delta + liste.length) % liste.length] ?? liste[0];
+    if (hedef && hedef.slug !== simdiki) toggleRef.current(hedef);
+  }
+  const zaplaRef = useRef(zapla);
+  zaplaRef.current = zapla;
+
+  // Kilit ekranı / bildirim kontrolü — istasyon adı, çalan parça, renkli kapak.
+  useEffect(() => {
+    if (typeof navigator === "undefined" || !("mediaSession" in navigator)) return;
+    const ms = navigator.mediaSession;
+    if (!playing || !current) {
+      ms.metadata = null;
+      return;
+    }
+    const np = liveNP ?? current.nowPlaying;
+    const parca =
+      np && np.title
+        ? np.artist && np.artist !== np.title
+          ? `${np.artist} — ${np.title}`
+          : np.title
+        : null;
+    ms.metadata = new MediaMetadata({
+      title: parca ?? current.name,
+      artist: parca ? current.name : "canlı radyo",
+      album: "ŞİMDİ · necaliyor.co",
+      artwork: [{ src: kapakUret(current.slug, current.name, accent), sizes: "512x512", type: "image/png" }],
+    });
+    ms.playbackState = phase === "playing" ? "playing" : "paused";
+    return () => {
+      ms.metadata = null;
+    };
+  }, [playing, current, liveNP, phase, accent]);
+
+  // Kilit ekranı düğmeleri — bir kez bağlanır, ref'lerle güncel kalır.
+  useEffect(() => {
+    if (typeof navigator === "undefined" || !("mediaSession" in navigator)) return;
+    const ms = navigator.mediaSession;
+    const dene = (eylem: MediaSessionAction, f: MediaSessionActionHandler) => {
+      try {
+        ms.setActionHandler(eylem, f);
+      } catch {
+        // desteklenmeyen eylem
+      }
+    };
+    dene("play", () => {
+      const c = stationsRef.current.find((s) => s.slug === playingRef.current);
+      if (c) toggleRef.current(c);
+    });
+    dene("pause", () => {
+      const c = stationsRef.current.find((s) => s.slug === playingRef.current);
+      if (c) toggleRef.current(c);
+    });
+    dene("previoustrack", () => zaplaRef.current(-1));
+    dene("nexttrack", () => zaplaRef.current(1));
+    return () => {
+      dene("play", null as unknown as MediaSessionActionHandler);
+      dene("pause", null as unknown as MediaSessionActionHandler);
+      dene("previoustrack", null as unknown as MediaSessionActionHandler);
+      dene("nexttrack", null as unknown as MediaSessionActionHandler);
+    };
+  }, []);
 
   // Alt çubuktaki parça metni (canlı bilgi öncelikli).
   const barNp = current ? liveNP ?? current.nowPlaying : null;
@@ -1415,6 +1545,21 @@ export default function NowList() {
             style={{
               color: readableOn(accent),
               paddingBottom: "calc(0.75rem + env(safe-area-inset-bottom))",
+              touchAction: "pan-y",
+            }}
+            onTouchStart={(e) => {
+              jestRef.current = { x: e.touches[0].clientX, y: e.touches[0].clientY };
+            }}
+            onTouchEnd={(e) => {
+              const j = jestRef.current;
+              if (!j) return;
+              jestRef.current = null;
+              const dx = e.changedTouches[0].clientX - j.x;
+              const dy = e.changedTouches[0].clientY - j.y;
+              if (Math.abs(dx) > 64 && Math.abs(dx) > Math.abs(dy) * 2) {
+                titret(10);
+                zapla(dx < 0 ? 1 : -1); // sola kaydır → sonraki istasyon
+              }
             }}
           >
             <button
@@ -1703,6 +1848,38 @@ export default function NowList() {
           accent={accent}
           onClose={() => setKartAcik(false)}
         />
+      )}
+
+      {/* iOS "ana ekrana ekle" ipucu — bir kez görünür */}
+      {pwaIpucu && (
+        <div
+          className="fade-in fixed inset-x-0 z-40 mx-auto flex max-w-md items-center gap-3 rounded-2xl border px-4 py-3 text-sm shadow-lg"
+          style={{
+            background: "var(--bg)",
+            borderColor: "var(--line)",
+            bottom: "calc(84px + env(safe-area-inset-bottom))",
+          }}
+        >
+          <span aria-hidden>📱</span>
+          <span className="flex-1">
+            ŞİMDİ&apos;yi uygulama yap: <b>Paylaş</b> → <b>Ana Ekrana Ekle</b>
+          </span>
+          <button
+            onClick={() => {
+              setPwaIpucu(false);
+              try {
+                localStorage.setItem("pwa-ipucu", "1");
+              } catch {
+                // yoksay
+              }
+            }}
+            aria-label="ipucunu kapat"
+            className="press rounded-full border px-3 py-1 text-xs"
+            style={{ borderColor: "var(--line)", color: "var(--muted)" }}
+          >
+            tamam
+          </button>
+        </div>
       )}
 
       {/* Kalp defteri — alttan kayan panel; dinlerken not oku / bırak */}

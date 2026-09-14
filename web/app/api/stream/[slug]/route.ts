@@ -23,6 +23,19 @@ export async function GET(request: Request, ctx: { params: Promise<{ slug: strin
   if (error) return new Response("sunucu hatası", { status: 500 });
   if (!data || !data.is_active) return new Response("istasyon bulunamadı", { status: 404 });
 
+  // ?meta=1 — istemci oynatıcıya kaynağın türünü söyler (HLS ise hls.js devreye girer).
+  // Ses gövdesi dönmez; anlık cevaptır, CPU maliyeti yok denecek kadar azdır.
+  if (new URL(request.url).searchParams.get("meta") === "1") {
+    const https = typeof data.stream_url === "string" && data.stream_url.startsWith("https://");
+    return Response.json(
+      {
+        hls: typeof data.stream_url === "string" && /\.m3u8(\?|$)/.test(data.stream_url),
+        url: https ? data.stream_url : `/api/stream/${slug}`,
+      },
+      { headers: { "Cache-Control": "public, max-age=300" } },
+    );
+  }
+
   // HTTPS yayınlar sayfaya doğrudan gömülebilir (mixed content yok): proxy'lemek
   // yerine yönlendir. Dinleme süresi boyunca fonksiyon açık kalmaz — Fluid Active
   // CPU ve provisioned memory maliyeti saatlerden milisaniyelere iner. Düz HTTP

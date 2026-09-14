@@ -3,6 +3,7 @@
 import { useEffect, useRef, useState } from "react";
 import KartModal from "./KartModal";
 import { useDil } from "@/lib/i18n";
+import { kaynagiCalistir, hlsYik } from "@/lib/cal";
 
 function readableOn(hex: string): string {
   const h = hex.replace("#", "");
@@ -69,13 +70,13 @@ export default function StationPlayer({
     if (!a) return;
     if (phase === "playing" || phase === "connecting") {
       a.pause();
+      hlsYik(a);
       setPhase("idle");
       return;
     }
     retries.current = 0;
     setPhase("connecting");
-    a.src = `/api/stream/${slug}`;
-    a.play().catch(() => setPhase("error"));
+    kaynagiCalistir(a, slug).catch(() => setPhase("error"));
   }
 
   function reconnect() {
@@ -88,8 +89,7 @@ export default function StationPlayer({
     retries.current += 1;
     setPhase("connecting");
     setTimeout(() => {
-      a.src = `/api/stream/${slug}?r=${Date.now()}`;
-      a.play().catch(() => {});
+      kaynagiCalistir(a, slug).catch(() => {});
     }, 800);
   }
 

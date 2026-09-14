@@ -3,6 +3,7 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import Link from "next/link";
 import ThemeToggle from "./ThemeToggle";
+import { kaynagiCalistir, hlsYik } from "@/lib/cal";
 import {
   selamla,
   EPIGRAFLAR,
@@ -306,8 +307,7 @@ export default function NowList() {
     if (reconnectRef.current) clearTimeout(reconnectRef.current);
     reconnectRef.current = setTimeout(() => {
       if (playingRef.current !== slug) return;
-      audio.src = `/api/stream/${slug}?r=${Date.now()}`;
-      audio.play().catch(() => {});
+      kaynagiCalistir(audio, slug).catch(() => {});
     }, 800);
   }
 
@@ -723,15 +723,15 @@ export default function NowList() {
     if (giveUpRef.current) clearTimeout(giveUpRef.current);
     if (playing === s.slug) {
       audio.pause();
+      hlsYik(audio);
       setPlaying(null);
       return;
     }
     setPlaying(s.slug);
     setPhase("connecting");
     pushHistory(s.slug);
-    audio.src = `/api/stream/${s.slug}`;
     audio.volume = muted ? 0 : volume;
-    audio.play().catch(() => {
+    kaynagiCalistir(audio, s.slug).catch(() => {
       // Otomatik çalma engellendiyse (deep link) sessizce bırak.
       setPlaying(null);
     });

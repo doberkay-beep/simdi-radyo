@@ -45,6 +45,21 @@
   "country": "tr"
  },
  {
+  "slug": "kafa-radyo",
+  "name": "Kafa Radyo",
+  "city": "İstanbul",
+  "frequency": null,
+  "stream_url": "https://moondigitaledge2.radyotvonline.net/kafaradyo/playlist.m3u8",
+  "homepage": null,
+  "accent_color": "#e8b820",
+  "band": "tr",
+  "metadata_quality": "none",
+  "is_active": true,
+  "sort_order": 18,
+  "genre": "pop",
+  "country": "tr"
+ },
+ {
   "slug": "radyo-7",
   "name": "Radyo 7",
   "city": null,

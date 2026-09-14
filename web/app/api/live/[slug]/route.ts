@@ -33,6 +33,8 @@ function normalizeTitle(raw: string, stationName = ""): string {
   if (!s) return "";
   const l = low(s);
   if (/^(https?:\/\/|www\.)\S+$/i.test(s)) return "";
+  // Ham XML/HTML metadata (ör. "<?xml ...><RadioInfo>…") parça değildir.
+  if (/^\s*<|<\?xml|<[a-z!/][^>]*>/i.test(s)) return "";
   if (JUNK.has(l) || l.includes("adw_ad") || l.includes("advertisement")) return "";
   if (stationName && l === low(stationName)) return "";
   // Çift ayraçlı tekrar: "A - B - A - B" → "A - B".

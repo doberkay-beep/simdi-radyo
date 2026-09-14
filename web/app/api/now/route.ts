@@ -1,5 +1,6 @@
 import { getSupabase } from "@/lib/supabase";
 import { json } from "@/lib/json";
+import { temizMetin } from "@/lib/cop";
 
 // Canlı veri okur → istek anında çalışır. Cache'i CDN başlığıyla veriyoruz.
 export const dynamic = "force-dynamic";
@@ -34,9 +35,9 @@ export async function GET() {
       homepage: s.homepage ?? null,
       nowPlaying: np
         ? {
-            artist: np.artist,
-            title: np.title,
-            rawTitle: np.raw_title,
+            artist: temizMetin(np.artist),
+            title: temizMetin(np.title),
+            rawTitle: temizMetin(np.raw_title),
             updatedAt: np.updated_at,
           }
         : null,

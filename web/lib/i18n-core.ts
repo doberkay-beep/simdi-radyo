@@ -55,6 +55,11 @@ export const SOZLUK: Record<string, { tr: string; en: string }> = {
   "ruh.hüzünlü.alt": { tr: "biraz dert, biraz şehir", en: "a little sorrow, a little city" },
   "ruh.odak.alt": { tr: "çalış, oku, dal", en: "work, read, dive in" },
   // arşiv
+  "arsiv.zaman": { tr: "zaman makinesi", en: "time machine" },
+  "arsiv.zamanDunGece": { tr: "🌙 dün gece 02:00", en: "🌙 last night 2 am" },
+  "arsiv.zamanDunAksam": { tr: "🌆 dün akşam 21:00", en: "🌆 yesterday 9 pm" },
+  "arsiv.zamanSabah": { tr: "☕ bu sabah 07:30", en: "☕ this morning 7:30" },
+  "arsiv.zamanHafta": { tr: "↺ bir hafta önce şu an", en: "↺ a week ago, right now" },
   "arsiv.alt": { tr: "o an radyoda ne çalıyordu", en: "what was on the radio then" },
   "arsiv.goster": { tr: "Göster", en: "Show" },
   "arsiv.ara": { tr: "arşivde parça / sanatçı ara…", en: "search archive for song / artist…" },

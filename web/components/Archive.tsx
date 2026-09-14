@@ -90,6 +90,17 @@ export default function Archive() {
     fetchArchive(ds, ts);
   }
 
+  // Zaman makinesi: belirli bir âna ışınlan (gün geriye + istenirse sabit saat).
+  function isinlan(gunGeri: number, saat?: string) {
+    const d = new Date();
+    d.setDate(d.getDate() - gunGeri);
+    const ds = `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}`;
+    const ts = saat ?? `${pad(d.getHours())}:${pad(d.getMinutes())}`;
+    setDate(ds);
+    setTime(ts);
+    fetchArchive(ds, ts);
+  }
+
   // İlk açılışta "şu an"ı göster.
   useEffect(() => {
     const now = new Date();
@@ -122,8 +133,32 @@ export default function Archive() {
             </span>
           </div>
 
+          {/* Zaman makinesi — tek dokunuşla bir âna ışınlan */}
+          <div className="mt-6">
+            <div className="mb-2 text-xs uppercase tracking-[0.25em]" style={{ color: "var(--muted)" }}>
+              {t("arsiv.zaman")}
+            </div>
+            <div className="flex flex-wrap gap-2">
+              {[
+                { e: t("arsiv.zamanDunGece"), g: 1, s: "02:00" },
+                { e: t("arsiv.zamanDunAksam"), g: 1, s: "21:00" },
+                { e: t("arsiv.zamanSabah"), g: 0, s: "07:30" },
+                { e: t("arsiv.zamanHafta"), g: 7, s: undefined },
+              ].map((z) => (
+                <button
+                  key={z.e}
+                  onClick={() => isinlan(z.g, z.s)}
+                  className="press rounded-full border px-3.5 py-1.5 text-sm"
+                  style={{ borderColor: "var(--line)", color: "var(--fg)" }}
+                >
+                  {z.e}
+                </button>
+              ))}
+            </div>
+          </div>
+
           {/* Tarih + saat seçici */}
-          <div className="mt-6 flex flex-wrap items-center gap-3">
+          <div className="mt-4 flex flex-wrap items-center gap-3">
             <input
               type="date"
               value={date}

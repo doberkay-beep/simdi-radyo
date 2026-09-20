@@ -1,0 +1,19 @@
+name: Number1 ailesi
+
+# Number1 Türk/FM/Slow/Dance streamtheworld redirect adreslerini ICY ile
+# doğrular. Actions → "Number1 ailesi" → Run workflow.
+
+on:
+  workflow_dispatch: {}
+
+jobs:
+  number1:
+    runs-on: ubuntu-latest
+    timeout-minutes: 8
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+      - name: Adayları yokla
+        run: node probe/number1.mjs

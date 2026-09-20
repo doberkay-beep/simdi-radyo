@@ -139,7 +139,9 @@ export async function generateMetadata({
       ? `${s.name}${bits ? ` (${bits})` : ""} şu an: ${track}. Canlı dinle.`
       : `${s.name}${bits ? ` (${bits})` : ""} canlı dinle — şu an ne çaldığını gör.`;
   return {
-    title: en ? `${s.name} — listen live | ŞİMDİ` : `${s.name} — canlı dinle | ŞİMDİ`,
+    title: en
+      ? `${s.name} Live — What's Playing Now | ŞİMDİ`
+      : `${s.name} Canlı Dinle — Şu An Ne Çalıyor | ŞİMDİ`,
     description: desc,
     alternates: { canonical: `/radyo/${slug}` },
     openGraph: {

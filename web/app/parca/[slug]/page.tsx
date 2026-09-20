@@ -86,12 +86,26 @@ export default async function ParcaPage({ params }: { params: Promise<{ slug: st
   if (!p) notFound();
   const ad = p.artist && p.artist !== p.baslik ? `${p.artist} — ${p.baslik}` : p.baslik;
 
+  const url = `https://necaliyor.co/parca/${slug}`;
   const jsonLd = {
     "@context": "https://schema.org",
-    "@type": "MusicRecording",
-    name: p.baslik,
-    ...(p.artist ? { byArtist: { "@type": "MusicGroup", name: p.artist } } : {}),
-    url: `https://necaliyor.co/parca/${slug}`,
+    "@graph": [
+      {
+        "@type": "MusicRecording",
+        "@id": `${url}#recording`,
+        name: p.baslik,
+        url,
+        ...(p.artist ? { byArtist: { "@type": "MusicGroup", name: p.artist } } : {}),
+      },
+      {
+        "@type": "BreadcrumbList",
+        itemListElement: [
+          { "@type": "ListItem", position: 1, name: "ŞİMDİ", item: "https://necaliyor.co" },
+          { "@type": "ListItem", position: 2, name: "Arşiv", item: "https://necaliyor.co/arsiv" },
+          { "@type": "ListItem", position: 3, name: ad, item: url },
+        ],
+      },
+    ],
   };
 
   const tarih = (iso: string) => {

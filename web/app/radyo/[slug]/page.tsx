@@ -3,6 +3,7 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { getSupabase } from "@/lib/supabase";
 import StationPlayer from "@/components/StationPlayer";
+import CanliParca from "@/components/CanliParca";
 import Notlar from "@/components/Notlar";
 import EmbedKopya from "@/components/EmbedKopya";
 import DilToggle from "@/components/DilToggle";
@@ -224,10 +225,22 @@ export default async function StationPage({ params }: { params: Promise<{ slug: 
     "@graph": [
       {
         "@type": "RadioStation",
+        "@id": `https://necaliyor.co/radyo/${slug}#station`,
         name: s.name,
         url: `https://necaliyor.co/radyo/${slug}`,
         ...(s.genre ? { genre: s.genre } : {}),
         ...(s.city ? { areaServed: s.city } : {}),
+        ...(s.homepage ? { sameAs: s.homepage } : {}),
+        ...(track
+          ? {
+              subjectOf: {
+                "@type": "BroadcastEvent",
+                name: `${s.name} — şu an çalıyor`,
+                isLiveBroadcast: true,
+                ...(track ? { description: track } : {}),
+              },
+            }
+          : {}),
       },
       {
         "@type": "BreadcrumbList",
@@ -280,12 +293,12 @@ export default async function StationPage({ params }: { params: Promise<{ slug: 
           </div>
         </div>
 
-        <div className="mt-8 rounded-xl border p-5" style={{ borderColor: "var(--line)" }}>
-          <div className="text-xs uppercase tracking-wide" style={{ color: "var(--muted)" }}>
-            {T("radyo.simdiCaliyor")}
-          </div>
-          <div className="mt-1 text-2xl font-semibold">{track ?? T("radyo.canliYayin")}</div>
-        </div>
+        <CanliParca
+          slug={slug}
+          initial={track}
+          etiket={T("radyo.simdiCaliyor")}
+          bosMetin={T("radyo.canliYayin")}
+        />
 
         <StationPlayer slug={slug} name={s.name} accent={accent} />
 

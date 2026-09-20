@@ -1,0 +1,19 @@
+name: HLS büyük markalar
+
+# Kral FM/Pop/Damar, Radyo D, Best FM, Number1'in HTTPS HLS yayınlarını
+# doğrular (200 + #EXTM3U). Actions → "HLS büyük markalar" → Run workflow.
+
+on:
+  workflow_dispatch: {}
+
+jobs:
+  hls:
+    runs-on: ubuntu-latest
+    timeout-minutes: 8
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+      - name: HLS adaylarını doğrula
+        run: node probe/hls.mjs

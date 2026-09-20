@@ -1,0 +1,21 @@
+name: En çok aranan TR radyoları
+
+# En çok dinlenen/aranan TR istasyonlarından (Kral FM, Power Türk, Best FM,
+# Show Radyo, Radyo D, Radyo Viva vb.) kataloğumuzda EKSİK olanları
+# radio-browser'da arar, ICY ile yoklar, çalışan + yeni olanları "CAND {...}"
+# yazar. Actions → "En çok aranan TR radyoları" → Run workflow.
+
+on:
+  workflow_dispatch: {}
+
+jobs:
+  toptr:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+      - name: Ara ve yokla
+        run: node probe/toptr.mjs

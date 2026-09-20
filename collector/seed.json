@@ -4558,5 +4558,35 @@
     "sort_order": 31,
     "genre": "haber",
     "country": "tr"
+  },
+  {
+    "slug": "kral-fm",
+    "name": "Kral FM",
+    "city": null,
+    "frequency": null,
+    "stream_url": "https://ssldyg.radyotvonline.com/smil/smil:kralfm.smil/playlist.m3u8",
+    "homepage": "https://www.kralmuzik.com.tr",
+    "accent_color": "#c0392b",
+    "band": "tr",
+    "metadata_quality": "silent",
+    "is_active": true,
+    "sort_order": 6,
+    "genre": "türkçe pop",
+    "country": "tr"
+  },
+  {
+    "slug": "kral-pop",
+    "name": "Kral Pop",
+    "city": null,
+    "frequency": null,
+    "stream_url": "https://ssldyg.radyotvonline.com/smil/smil:kralpop.smil/playlist.m3u8",
+    "homepage": "https://www.kralmuzik.com.tr",
+    "accent_color": "#e04a7a",
+    "band": "tr",
+    "metadata_quality": "silent",
+    "is_active": true,
+    "sort_order": 8,
+    "genre": "pop",
+    "country": "tr"
   }
 ]

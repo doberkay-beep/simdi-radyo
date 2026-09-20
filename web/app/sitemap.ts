@@ -48,6 +48,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     })),
     { url: `${BASE}/nabiz`, changeFrequency: "hourly", priority: 0.8 },
     { url: `${BASE}/arsiv`, changeFrequency: "daily", priority: 0.5 },
+    { url: `${BASE}/rozet`, changeFrequency: "monthly", priority: 0.6 },
     { url: `${BASE}/hakkinda`, changeFrequency: "monthly", priority: 0.4 },
     ...slugs.map((slug) => ({
       url: `${BASE}/radyo/${slug}`,

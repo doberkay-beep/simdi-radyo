@@ -2,6 +2,7 @@ import type { ReactNode } from "react";
 import { Instrument_Sans, Fraunces } from "next/font/google";
 import { Analytics } from "@vercel/analytics/next";
 import RegisterSW from "@/components/RegisterSW";
+import AltBilgi from "@/components/AltBilgi";
 import "./globals.css";
 
 // Marka/UI yazı tipi — berkaydogan.co ailesiyle aynı dil: zarif modern sans.
@@ -63,6 +64,7 @@ export default function RootLayout({ children }: { children: ReactNode }) {
       </head>
       <body>
         {children}
+        <AltBilgi />
         {/* Zemine neredeyse görünmez doku — derinlik hissi. */}
         <div className="grain" aria-hidden />
         <RegisterSW />

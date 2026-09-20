@@ -17,7 +17,9 @@ export default function Muhur({ dize }: { dize?: string }) {
         <Link href="/hakkinda" className="underline">
           geliştiren
         </Link>{" "}
-        Berkay Doğan
+        <a href="https://berkaydogan.co" target="_blank" rel="me noopener" className="underline" style={{ color: "var(--fg)" }}>
+          Berkay Doğan
+        </a>
       </p>
     </div>
   );

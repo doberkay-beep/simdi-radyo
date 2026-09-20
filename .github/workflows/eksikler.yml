@@ -1,0 +1,19 @@
+name: Eksik büyük markalar
+
+# Kral FM, Radyo D, Best FM, Number1, Kiss FM için genişletilmiş resmi-CDN
+# aday listesini ICY ile doğrular. Actions → "Eksik büyük markalar" → Run.
+
+on:
+  workflow_dispatch: {}
+
+jobs:
+  eksikler:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+      - name: Adayları yokla
+        run: node probe/eksikler.mjs

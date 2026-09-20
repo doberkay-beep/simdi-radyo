@@ -1428,21 +1428,6 @@
     "band": "int",
     "metadata_quality": "good",
     "is_active": true,
-    "city": "Madrid",
-    "frequency": null,
-    "homepage": "https://los40.com",
-    "slug": "los40",
-    "name": "LOS 40",
-    "stream_url": "https://playerservices.streamtheworld.com/api/livestream-redirect/Los40.mp3",
-    "accent_color": "#e2001a",
-    "genre": "pop",
-    "sort_order": 710,
-    "country": "es"
-  },
-  {
-    "band": "int",
-    "metadata_quality": "good",
-    "is_active": true,
     "city": "Milano",
     "frequency": null,
     "homepage": "https://www.radionumberone.it",
@@ -1498,21 +1483,6 @@
     "genre": "nostalji",
     "sort_order": 750,
     "country": "www"
-  },
-  {
-    "slug": "france-musique",
-    "name": "France Musique",
-    "city": "Paris",
-    "frequency": null,
-    "stream_url": "https://icecast.radiofrance.fr/francemusique-midfi.mp3",
-    "homepage": "https://www.francemusique.fr/",
-    "accent_color": "#b0506a",
-    "band": "int",
-    "metadata_quality": "unknown",
-    "is_active": true,
-    "sort_order": 901,
-    "genre": "klasik",
-    "country": "fr"
   },
   {
     "slug": "venice-classic-radio",
@@ -1753,21 +1723,6 @@
     "sort_order": 922,
     "genre": "elektronik",
     "country": "us"
-  },
-  {
-    "slug": "fip",
-    "name": "FIP",
-    "city": "Paris",
-    "frequency": null,
-    "stream_url": "https://icecast.radiofrance.fr/fip-midfi.mp3",
-    "homepage": "https://www.fip.fr/",
-    "accent_color": "#c6395a",
-    "band": "int",
-    "metadata_quality": "unknown",
-    "is_active": true,
-    "sort_order": 923,
-    "genre": "elektronik",
-    "country": "fr"
   },
   {
     "slug": "nrj-belgie",
@@ -2655,21 +2610,6 @@
     "country": "at"
   },
   {
-    "slug": "rfm",
-    "name": "RFM",
-    "city": null,
-    "frequency": null,
-    "stream_url": "https://23603.live.streamtheworld.com/RFMAAC.aac",
-    "homepage": "https://rfm.sapo.pt/",
-    "accent_color": "#be3ca2",
-    "band": "int",
-    "genre": "pop",
-    "metadata_quality": "good",
-    "is_active": true,
-    "sort_order": 558,
-    "country": "pt"
-  },
-  {
     "slug": "radio-comercial-portugal",
     "name": "Radio Comercial Portugal",
     "city": null,
@@ -3480,21 +3420,6 @@
     "country": "ro"
   },
   {
-    "slug": "radio-petrecere",
-    "name": "RADIO Petrecere",
-    "city": null,
-    "frequency": null,
-    "stream_url": "https://ssl.servereradio.ro/8123/stream",
-    "homepage": "https://fmradiomanele.ro/",
-    "accent_color": "#ad4392",
-    "band": "int",
-    "genre": "pop",
-    "metadata_quality": "good",
-    "is_active": true,
-    "sort_order": 614,
-    "country": "ro"
-  },
-  {
     "slug": "super-fm-ro",
     "name": "Super FM",
     "city": null,
@@ -4242,21 +4167,6 @@
     "metadata_quality": "unknown",
     "is_active": true,
     "sort_order": 544,
-    "country": "tr"
-  },
-  {
-    "slug": "radyo-odtu-easy",
-    "name": "Radyo ODTÜ Easy",
-    "city": "Ankara",
-    "frequency": null,
-    "stream_url": "https://stream3.radyoodtu.com.tr:8000/easy",
-    "homepage": null,
-    "accent_color": "#8a7ab0",
-    "band": "tr",
-    "genre": "nostalji",
-    "metadata_quality": "unknown",
-    "is_active": true,
-    "sort_order": 545,
     "country": "tr"
   },
   {

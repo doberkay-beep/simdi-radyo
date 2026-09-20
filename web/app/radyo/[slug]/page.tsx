@@ -10,6 +10,7 @@ import { TUR_EPIGRAF } from "@/lib/sozler";
 import { dilSunucu } from "@/lib/dil-sunucu";
 import { ceviri, turAdi } from "@/lib/i18n-core";
 import { turSlug } from "@/lib/turler";
+import { parcaSlug } from "@/lib/parca";
 
 // Her istasyona kendi SEO sayfası ("X Radyo canlı dinle") + gerçek çalan oynatıcı.
 export const revalidate = 60;
@@ -94,6 +95,52 @@ async function getTopArtists(slug: string): Promise<{ artist: string; adet: numb
   }
 }
 
+// İstasyonun "son çalınanlar" akışı — arşivi görünür kılar (taze + benzersiz
+// içerik; rakip agregatörlerde yok). Tekrar eden parçalar /parca sayfasına
+// iç link alır (yalnızca sayfası KESİN olanlar → kırık link yok).
+type SonCalan = { title: string; artist: string | null; pslug: string; at: string; linkli: boolean };
+async function getRecentPlays(slug: string): Promise<SonCalan[]> {
+  try {
+    const supa = getSupabase();
+    const { data: st } = await supa.from("stations").select("id").eq("slug", slug).maybeSingle();
+    if (!st) return [];
+    const { data } = await supa
+      .from("plays")
+      .select("artist, title, raw_title, started_at")
+      .eq("station_id", (st as { id: number }).id)
+      .order("started_at", { ascending: false })
+      .limit(60);
+    const ham = (data ?? []) as { artist: string | null; title: string | null; raw_title: string | null; started_at: string }[];
+    // parca slug'a göre pencere içi sayım — 2+ ise /parca sayfası kesin var.
+    const say = new Map<string, number>();
+    for (const p of ham) {
+      const t = (p.title || p.raw_title || "").trim();
+      const ps = parcaSlug(t);
+      if (ps) say.set(ps, (say.get(ps) || 0) + 1);
+    }
+    const out: SonCalan[] = [];
+    let oncekiPs = "";
+    for (const p of ham) {
+      const t = (p.title || p.raw_title || "").trim();
+      if (!t) continue;
+      const ps = parcaSlug(t);
+      if (!ps || ps === oncekiPs) continue; // ardışık tekrarı ele
+      oncekiPs = ps;
+      out.push({
+        title: t,
+        artist: p.artist?.trim() && p.artist.trim() !== t ? p.artist.trim() : null,
+        pslug: ps,
+        at: p.started_at,
+        linkli: (say.get(ps) || 0) >= 2,
+      });
+      if (out.length >= 14) break;
+    }
+    return out;
+  } catch {
+    return [];
+  }
+}
+
 async function getNowPlaying(slug: string) {
   try {
     const supa = getSupabase();
@@ -163,8 +210,14 @@ export default async function StationPage({ params }: { params: Promise<{ slug: 
   const accent = s.accent_color || DEFAULT_ACCENT;
   const similar = await getSimilar(slug, s.genre);
   const topArtists = await getTopArtists(slug);
+  const recent = await getRecentPlays(slug);
   const dil = await dilSunucu();
   const T = (k: string) => ceviri(dil, k);
+  const pad2 = (n: number) => String(n).padStart(2, "0");
+  const saat = (iso: string) => {
+    const d = new Date(iso);
+    return `${pad2(d.getDate())}.${pad2(d.getMonth() + 1)} ${pad2(d.getHours())}:${pad2(d.getMinutes())}`;
+  };
 
   const jsonLd = {
     "@context": "https://schema.org",
@@ -235,6 +288,44 @@ export default async function StationPage({ params }: { params: Promise<{ slug: 
         </div>
 
         <StationPlayer slug={slug} name={s.name} accent={accent} />
+
+        {recent.length > 0 && (
+          <section className="mt-8">
+            <h2 className="mb-3 text-xs uppercase tracking-wide" style={{ color: "var(--muted)" }}>
+              {dil === "en" ? "recently played" : "son çalınanlar"}
+            </h2>
+            <ul className="flex flex-col">
+              {recent.map((r, i) => {
+                const ad = r.artist ? `${r.artist} — ${r.title}` : r.title;
+                return (
+                  <li
+                    key={`${r.pslug}-${i}`}
+                    className="flex items-center justify-between gap-3 border-b py-2.5 text-sm"
+                    style={{ borderColor: "var(--line)" }}
+                  >
+                    {r.linkli ? (
+                      <Link href={`/parca/${r.pslug}`} className="min-w-0 flex-1 truncate underline" style={{ color: "var(--fg)" }}>
+                        {ad}
+                      </Link>
+                    ) : (
+                      <span className="min-w-0 flex-1 truncate" style={{ color: "var(--fg)" }}>
+                        {ad}
+                      </span>
+                    )}
+                    <span className="shrink-0 tabular-nums text-xs" style={{ color: "var(--muted)" }}>
+                      {saat(r.at)}
+                    </span>
+                  </li>
+                );
+              })}
+            </ul>
+            <p className="epigraf mt-3 text-sm">
+              {dil === "en"
+                ? `Every "now" on ${s.name} is written to a permanent archive.`
+                : `${s.name}'de çalan her "şimdi" kalıcı arşive yazılır.`}
+            </p>
+          </section>
+        )}
 
         <Notlar slug={slug} accent={accent} />
 

@@ -5,7 +5,14 @@ import { useState } from "react";
 // "Siteme ekle" — istasyonun canlı rozetini gömme kodu + kopyala.
 export default function EmbedKopya({ slug, name }: { slug: string; name: string }) {
   const [kopyalandi, setKopyalandi] = useState(false);
-  const kod = `<iframe src="https://necaliyor.co/embed/${slug}" width="360" height="92" style="border:0;border-radius:16px;max-width:100%" title="${name} — şu an ne çalıyor" loading="lazy"></iframe>`;
+  // iframe + DIŞINDA gerçek, crawlanabilir <a> linki: iframe-içi link backlink
+  // saymaz; asıl SEO değeri bu görünür künyeden gelir.
+  const kod = `<div style="max-width:360px">
+  <iframe src="https://necaliyor.co/embed/${slug}" width="360" height="92" style="border:0;border-radius:16px;max-width:100%" title="${name} — şu an ne çalıyor" loading="lazy"></iframe>
+  <p style="font:12px/1.4 system-ui,sans-serif;margin:6px 2px 0;color:#888">
+    <a href="https://necaliyor.co/radyo/${slug}" style="color:inherit">${name} şu an ne çalıyor</a> · <a href="https://necaliyor.co" style="color:inherit">necaliyor.co</a>
+  </p>
+</div>`;
 
   async function kopyala() {
     try {

@@ -30,6 +30,7 @@ const SAIR_SET = new Set(SAIRIN.slugs);
 
 // Tür → renk. Bir tür seçilince (henüz bir şey çalmıyorken) arka plan o renge kayar.
 const TUR_RENK: Record<string, string> = {
+  haber: "#4a6fa5",
   arabesk: "#9c5f7c",
   caz: "#b98a4a",
   türkü: "#7d9a5a",
@@ -137,6 +138,7 @@ const pad2 = (n: number) => String(n).padStart(2, "0");
 
 // Şarkı bilgisi vermeyen istasyonlar için türe uygun "havalı" cümleler.
 const TAGLINES: Record<string, string[]> = {
+  haber: ["gündem canlı akıyor", "dünyadan sesler", "haber, olduğu an"],
   caz: ["kadehler, duman ve saksofon", "gece yarısı bir kulüpte", "swing'in tam kıvamı"],
   klasik: ["yaylılar ve sonsuzluk", "bir konser salonunun sükûneti", "notaların en zarifi"],
   elektronik: ["şafağa kadar süren bir set", "bas, ışık, tekrar", "dört dörtlük bir groove"],

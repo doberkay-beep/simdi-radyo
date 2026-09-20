@@ -107,6 +107,14 @@ export const TURLER: TurBilgi[] = [
     govde:
       "Metal, duvarları titreten bir dürüstlüktür. Metal istasyonlarında şu an ne çaldığını gör, sesi sonuna kadar aç.",
   },
+  {
+    slug: "haber",
+    genre: "haber",
+    baslik: "Haber Radyoları",
+    ozet: "Canlı haber ve talk radyoları — Türkçe ve yabancı. Gündemi anında dinle, İngilizce haberlerle kulağını geliştir.",
+    govde:
+      "Bazıları müzik için açar radyoyu, bazıları dünyayı duymak için. Haber ve talk istasyonları gündemi olduğu an getirir; yabancı İngilizce yayınlar ise hem haber hem doğal bir dil pratiğidir. Türkçe ve dünyadan haber istasyonlarını buradan canlı dinleyebilirsin.",
+  },
 ];
 
 export function turBul(slug: string): TurBilgi | undefined {

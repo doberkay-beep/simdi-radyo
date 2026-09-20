@@ -29,6 +29,7 @@ type Data = {
 
 // Tür → renk (ruh halini görselleştirmek için).
 const TUR_RENK: Record<string, string> = {
+  haber: "#4a6fa5",
   arabesk: "#9c5f7c",
   caz: "#b98a4a",
   türkü: "#7d9a5a",

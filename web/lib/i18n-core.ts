@@ -112,6 +112,7 @@ export function ceviri(dil: Dil, anahtar: string): string {
 
 // İstasyon türü → görünen ad (dile göre). Veri Türkçe; yalnızca etiket çevrilir.
 const TUR_ADI: Record<string, string> = {
+  haber: "news",
   arabesk: "arabesque",
   caz: "jazz",
   türkü: "folk",

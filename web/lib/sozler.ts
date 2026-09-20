@@ -36,6 +36,7 @@ export const YOK = {
 // Türe girince üstte beliren epigraf.
 export const TUR_EPIGRAF: Record<string, string> = {
   arabesk: "bir sigara, bir dert, bir de bu şehir…",
+  haber: "dünya dönerken, kulak veriyoruz.",
   caz: "gece yarısı, kadehin dibinde bir saksofon.",
   türkü: "toprak konuşur, bağlama tercüme eder.",
   nostalji: "eski bir kaset, geri sarılan bir yaz.",

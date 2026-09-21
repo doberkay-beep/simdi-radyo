@@ -19,6 +19,10 @@ import {
 const POLL_INTERVAL_MS = Number(process.env.POLL_INTERVAL_MS) || 25_000;
 const PROBE_TIMEOUT_MS = Number(process.env.PROBE_TIMEOUT_MS) || 8_000;
 const MAX_FAILURES = Number(process.env.MAX_FAILURES) || 20;
+// Parça değişmese de yayın doğrulandığında now_playing.updated_at'i en fazla
+// bu sıklıkta tazele → arayüzdeki "şu an çalıyor" tazeliği doğru olsun
+// (uzun parça/aynı yayın "8 saat önce" gibi yanıltmasın). plays'e yazılmaz.
+const FRESH_MS = Number(process.env.FRESH_MS) || 12 * 60_000;
 // >0 ise worker bu süre kadar çalışıp çıkar (zamanlanmış çalışma, ör. GitHub
 // Actions). 0/boş ise sonsuza kadar çalışır (yerel ya da Railway/Fly).
 const RUN_DURATION_MS = Number(process.env.RUN_DURATION_MS) || 0;
@@ -28,6 +32,8 @@ const log = (...a) => console.log(new Date().toISOString(), ...a);
 
 // station_id → son yazılan raw_title
 const lastRaw = new Map();
+// station_id → now_playing'e en son yazma zamanı (tazelik kısması için)
+const lastWrite = new Map();
 // station_id → üst üste başarısızlık sayısı
 const failCount = new Map();
 
@@ -64,13 +70,28 @@ async function probeAndStore(station) {
   // Reklam/istasyon adı/URL gibi çöpü ve iki kez yapışmış başlığı temizle.
   const clean = normalizeTitle(raw, station.name);
   if (!clean) return; // anlamsız başlık — yaz(ma), önceki iyi başlık kalsın
-  if (lastRaw.get(station.id) === clean) return; // değişmediyse hiçbir şey yazma
+
+  const now = Date.now();
+
+  // Başlık değişmediyse: arşive yazma. Ama yayın DOĞRULANDIĞI için, arayüzün
+  // tazelik göstergesi doğru olsun diye updated_at'i arada bir tazele (kısmalı).
+  if (lastRaw.get(station.id) === clean) {
+    if (now - (lastWrite.get(station.id) || 0) < FRESH_MS) return;
+    try {
+      await upsertNowPlaying(station.id, parseTitle(clean)); // yalnız updated_at tazelenir
+      lastWrite.set(station.id, now);
+    } catch (err) {
+      log(`! ${station.slug} tazelenemedi:`, err.message);
+    }
+    return;
+  }
 
   const parsed = parseTitle(clean);
   try {
     await insertPlay(station.id, parsed); // arşive ekle
     await upsertNowPlaying(station.id, parsed); // "şimdi çalan"ı güncelle
     lastRaw.set(station.id, clean);
+    lastWrite.set(station.id, now);
     log(`♪ ${station.slug}: ${parsed.artist} — ${parsed.title}`);
   } catch (err) {
     // Yazma hatasında lastRaw güncellenmez ki sonraki turda tekrar denensin.

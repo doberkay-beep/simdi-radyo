@@ -85,15 +85,16 @@ function readableOn(hex: string): string {
   return lum > 0.6 ? "#0a0a0b" : "#ffffff";
 }
 
-// "az önce", "3 dk önce" gibi göreli zaman.
+// "az önce", "3 dk önce" gibi göreli zaman. now_playing.updated_at parçanın
+// SON DEĞİŞTİĞİ an olduğu için, saatlerce değişmeyen (uzun parça/aynı yayın)
+// istasyonlarda "8 saat önce" yanıltır — o yüzden yalnızca yeni değişimleri
+// (< 45 dk) göster; eskiyse boş dön (parça yine güncel kabul edilir).
 function since(iso: string, now: number): string {
   const diff = Math.max(0, now - new Date(iso).getTime());
-  const s = Math.floor(diff / 1000);
-  if (s < 60) return "az önce";
-  const m = Math.floor(s / 60);
-  if (m < 60) return `${m} dk önce`;
-  const h = Math.floor(m / 60);
-  return `${h} sa önce`;
+  const m = Math.floor(diff / 60000);
+  if (m < 1) return "az önce";
+  if (m < 45) return `${m} dk önce`;
+  return "";
 }
 
 const DEFAULT_ACCENT = "#6b7280";
@@ -1503,9 +1504,10 @@ export default function NowList() {
                           : np
                             ? isPlaying && liveNP
                               ? " · canlı"
-                              : np.updatedAt
-                                ? ` · ${since(np.updatedAt, now || Date.now())}`
-                                : ""
+                              : (() => {
+                                  const rel = np.updatedAt ? since(np.updatedAt, now || Date.now()) : "";
+                                  return rel ? ` · ${rel}` : "";
+                                })()
                             : ""}
                       </span>
                     </span>

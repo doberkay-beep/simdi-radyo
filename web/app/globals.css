@@ -100,6 +100,19 @@ body {
 .station-row { transition: background 220ms ease, box-shadow 220ms ease; }
 .station-row:hover { background: color-mix(in srgb, var(--fg) 5%, transparent); }
 
+/* İstasyon kartı — bölünmüş liste yerine zarif ayrık kartlar. */
+.station-card {
+  border: 1px solid var(--line); border-radius: 14px; margin-bottom: 0.5rem;
+  background: color-mix(in srgb, var(--fg) 2.5%, transparent);
+  transition: background 200ms ease, border-color 200ms ease, transform 140ms ease, box-shadow 220ms ease;
+}
+.station-card:hover {
+  background: color-mix(in srgb, var(--fg) 6%, transparent);
+  border-color: color-mix(in srgb, var(--fg) 22%, var(--line));
+  transform: translateY(-1px);
+  box-shadow: 0 8px 22px rgba(0, 0, 0, 0.18);
+}
+
 /* Başlık altı ince vurgu çizgisi — çalan renge göre belirginleşir. */
 .title-underline { transition: opacity 600ms ease; }
 

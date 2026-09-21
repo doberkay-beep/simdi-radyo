@@ -1421,19 +1421,19 @@ export default function NowList() {
                   </div>
                 )}
                 <div
-                  className="station-row row-in group flex w-full items-center border-b"
+                  className="station-card row-in group flex w-full items-center px-2"
                   style={{
-                    borderColor: "var(--line)",
                     background: isPlaying
-                      ? `color-mix(in srgb, ${c} 13%, transparent)`
+                      ? `color-mix(in srgb, ${c} 15%, transparent)`
                       : undefined,
+                    borderColor: isPlaying ? `color-mix(in srgb, ${c} 45%, var(--line))` : undefined,
                     boxShadow: isPlaying ? `inset 3px 0 0 ${c}` : undefined,
                     animationDelay: `${Math.min(i, 18) * 22}ms`,
                   }}
                 >
                   <button
                     onClick={() => toggle(s)}
-                    className="press flex min-w-0 flex-1 items-center gap-4 py-3 pl-1 pr-2 text-left"
+                    className="press flex min-w-0 flex-1 items-center gap-4 py-3 pl-1.5 pr-2 text-left"
                   >
                     {/* İstasyonun renginden türeyen kapak karesi */}
                     <span

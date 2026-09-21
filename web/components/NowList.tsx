@@ -1091,8 +1091,7 @@ export default function NowList() {
           value={query}
           onChange={(e) => setQuery(e.target.value)}
           placeholder={t("home.ara")}
-          className="mb-4 w-full rounded-lg border px-4 py-2.5 text-sm outline-none"
-          style={{ background: "transparent", borderColor: "var(--line)", color: "var(--fg)" }}
+          className="field mb-4"
         />
 
         {/* Ülke ayrımı: Tümü / Türkiye / Yabancı */}
@@ -1173,38 +1172,18 @@ export default function NowList() {
               setUlke(k); setRegion("all"); setSairMode(false);
               toggle(adaylar[Math.floor(Math.random() * adaylar.length)]);
             }}
-            className="rounded-full border px-3 py-1 transition-colors"
-            style={{ borderColor: "var(--line)", color: "var(--muted)" }}
+            className="chip"
             title="rastgele bir ülkenin rastgele istasyonuna ışınlan"
           >
             🌍 beni şaşırt
           </button>
-          <button
-            onClick={() => setSairMode((v) => !v)}
-            className="rounded-full border px-3 py-1 transition-colors"
-            style={{
-              borderColor: sairMode ? "var(--accent)" : "var(--line)",
-              color: sairMode ? "var(--fg)" : "var(--muted)",
-              background: sairMode ? "color-mix(in srgb, var(--accent) 14%, transparent)" : "transparent",
-            }}
-          >
+          <button onClick={() => setSairMode((v) => !v)} className="chip" data-on={sairMode ? "1" : "0"}>
             ✍ şairin frekansı
           </button>
-          <button
-            onClick={() => setFavOnly((v) => !v)}
-            className="rounded-full border px-3 py-1 transition-colors"
-            style={{
-              borderColor: favOnly ? "#ffcf4d" : "var(--line)",
-              color: favOnly ? "#ffcf4d" : "var(--muted)",
-            }}
-          >
+          <button onClick={() => setFavOnly((v) => !v)} className="chip" data-on={favOnly ? "1" : "0"}>
             {favOnly ? `★ ${t("home.favoriler")}` : `☆ ${t("home.favoriler")}`}
           </button>
-          <button
-            onClick={() => setSort((s) => (s === "liste" ? "az" : s === "az" ? "tur" : "liste"))}
-            className="rounded-full border px-3 py-1 transition-colors"
-            style={{ borderColor: "var(--line)", color: "var(--muted)" }}
-          >
+          <button onClick={() => setSort((s) => (s === "liste" ? "az" : s === "az" ? "tur" : "liste"))} className="chip">
             sıra: {sort === "liste" ? "öne çıkan" : sort === "az" ? "A-Z" : "tür"}
           </button>
         </div>
@@ -1212,31 +1191,14 @@ export default function NowList() {
         {/* Tür filtresi çipleri (sayılı) */}
         {genres.length > 0 && (
           <div className="mb-6 flex flex-wrap gap-2">
-            <button
-              onClick={() => setGenre(null)}
-              className="rounded-full border px-3 py-1 text-xs transition-colors"
-              style={{
-                borderColor: genre === null ? "var(--fg)" : "var(--line)",
-                background: genre === null ? "var(--fg)" : "transparent",
-                color: genre === null ? "var(--bg)" : "var(--muted)",
-              }}
-            >
+            <button onClick={() => setGenre(null)} className="chip chip-solid" data-on={genre === null ? "1" : "0"}>
               {t("home.tumu")}
             </button>
             {genres.map(([g, n]) => {
               const active = genre === g;
               return (
-                <button
-                  key={g}
-                  onClick={() => setGenre(active ? null : g)}
-                  className="rounded-full border px-3 py-1 text-xs transition-colors"
-                  style={{
-                    borderColor: active ? "var(--fg)" : "var(--line)",
-                    background: active ? "var(--fg)" : "transparent",
-                    color: active ? "var(--bg)" : "var(--muted)",
-                  }}
-                >
-                  {turAdi(dil, g)} <span style={{ opacity: 0.6 }}>{n}</span>
+                <button key={g} onClick={() => setGenre(active ? null : g)} className="chip chip-solid" data-on={active ? "1" : "0"}>
+                  {turAdi(dil, g)} <span style={{ opacity: 0.55 }}>{n}</span>
                 </button>
               );
             })}

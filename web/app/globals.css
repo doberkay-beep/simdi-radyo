@@ -118,6 +118,42 @@ body {
 .nav-link { color: var(--muted); transition: color 160ms ease; white-space: nowrap; }
 .nav-link:hover { color: var(--fg); }
 
+/* ── Tek tasarım sistemi: çip / yüzey / alan ── */
+/* Çip — tüm filtre/seçim pill'leri için tutarlı taban. */
+.chip {
+  display: inline-flex; align-items: center; gap: 0.4rem;
+  border: 1px solid var(--line); border-radius: 999px;
+  padding: 0.42rem 0.85rem; font-size: 0.8rem; line-height: 1;
+  color: var(--muted); background: transparent; cursor: pointer; white-space: nowrap;
+  transition: color .18s ease, border-color .18s ease, background .18s ease, transform .12s ease;
+}
+.chip:hover { color: var(--fg); border-color: color-mix(in srgb, var(--fg) 28%, var(--line)); }
+.chip:active { transform: scale(0.97); }
+.chip[data-on="1"] {
+  color: var(--fg);
+  border-color: color-mix(in srgb, var(--accent) 55%, var(--line));
+  background: color-mix(in srgb, var(--accent) 14%, transparent);
+}
+/* Dolu (baskın) varyant — birincil segment seçimleri için. */
+.chip-solid[data-on="1"] { background: var(--fg); color: var(--bg); border-color: var(--fg); }
+
+/* Yüzey — kart/panel tutarlı zemin. */
+.surf {
+  border: 1px solid var(--line); border-radius: 16px;
+  background: color-mix(in srgb, var(--fg) 3%, transparent);
+}
+
+/* Alan — arama/metin girişleri. */
+.field {
+  width: 100%; border: 1px solid var(--line); border-radius: 12px;
+  padding: 0.7rem 1rem; font-size: 0.9rem; background: transparent; color: var(--fg);
+  outline: none; transition: border-color .18s ease, box-shadow .18s ease;
+}
+.field:focus {
+  border-color: color-mix(in srgb, var(--accent) 55%, var(--line));
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--accent) 16%, transparent);
+}
+
 /* Satırların kademeli belirmesi. */
 @keyframes rowIn {
   from { opacity: 0; transform: translateY(6px); }

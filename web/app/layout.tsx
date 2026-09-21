@@ -1,5 +1,5 @@
 import type { ReactNode } from "react";
-import { Instrument_Sans, Fraunces } from "next/font/google";
+import { Instrument_Sans, Fraunces, Oswald, Space_Mono } from "next/font/google";
 import { Analytics } from "@vercel/analytics/next";
 import RegisterSW from "@/components/RegisterSW";
 import AltBilgi from "@/components/AltBilgi";
@@ -19,6 +19,22 @@ const read = Fraunces({
   weight: ["300", "400", "500"],
   style: ["normal", "italic"],
   variable: "--font-read",
+  display: "swap",
+});
+
+// KADRAN kadran/rakam fontu — sıkışık endüstriyel (frekans, etiketler).
+const dial = Oswald({
+  subsets: ["latin", "latin-ext"],
+  weight: ["300", "400", "500", "600"],
+  variable: "--font-dial",
+  display: "swap",
+});
+
+// KADRAN enstrüman okumaları — mono (frekans, sayaç, künye).
+const mono = Space_Mono({
+  subsets: ["latin"],
+  weight: ["400", "700"],
+  variable: "--font-mono",
   display: "swap",
 });
 
@@ -48,12 +64,12 @@ export const metadata = {
 };
 
 export const viewport = {
-  themeColor: "#050505",
+  themeColor: "#0b0605",
 };
 
 export default function RootLayout({ children }: { children: ReactNode }) {
   return (
-    <html lang="tr" className={`${brand.variable} ${read.variable}`} suppressHydrationWarning>
+    <html lang="tr" className={`${brand.variable} ${read.variable} ${dial.variable} ${mono.variable}`} suppressHydrationWarning>
       <head>
         {/* Tema seçimini boyamadan önce uygula (flaş olmasın). */}
         <script

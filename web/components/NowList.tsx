@@ -1241,37 +1241,38 @@ export default function NowList() {
             const fc = featured.accentColor || DEFAULT_ACCENT;
             return (
               <div
-                className="mb-5 flex items-center gap-4 rounded-2xl border p-4"
+                className="mb-6 flex items-center gap-4 rounded-2xl border p-5"
                 style={{
-                  borderColor: "var(--line)",
-                  background: `color-mix(in srgb, ${fc} 10%, transparent)`,
+                  borderColor: `color-mix(in srgb, ${fc} 32%, var(--line))`,
+                  background: `radial-gradient(120% 150% at 0% 0%, color-mix(in srgb, ${fc} 20%, transparent), transparent 58%), color-mix(in srgb, var(--fg) 3%, transparent)`,
                 }}
               >
                 <span
-                  className="flex h-14 w-14 shrink-0 items-center justify-center rounded-xl text-lg font-bold"
+                  className="flex h-16 w-16 shrink-0 items-center justify-center rounded-2xl text-2xl font-bold"
                   style={{
                     background: `linear-gradient(135deg, ${fc}, color-mix(in srgb, ${fc} 50%, #000))`,
                     color: readableOn(fc),
+                    boxShadow: `0 10px 26px color-mix(in srgb, ${fc} 40%, transparent)`,
                   }}
                 >
                   {featured.name.trim().charAt(0).toLocaleUpperCase("tr")}
                 </span>
                 <span className="min-w-0 flex-1">
-                  <span className="block text-xs uppercase tracking-wide" style={{ color: "var(--muted)" }}>
-                    ne dinlesem?{" "}
-                    <button onClick={suggestAnother} className="underline">
-                      başka öner
+                  <span className="block text-[11px] uppercase tracking-[0.16em]" style={{ color: "var(--muted)" }}>
+                    🎧 ne dinlesem?{" "}
+                    <button onClick={suggestAnother} className="nav-link">
+                      başka öner ↻
                     </button>
                   </span>
-                  <span className="block truncate text-lg font-semibold">{featured.name}</span>
+                  <span className="mt-1 block truncate text-xl font-bold">{featured.name}</span>
                   <span className="block truncate text-xs" style={{ color: "var(--muted)" }}>
-                    {[featured.genre, featured.frequency, featured.city].filter(Boolean).join(" · ") || "canlı radyo"}
+                    {[turAdi(dil, featured.genre || ""), featured.frequency, featured.city].filter(Boolean).join(" · ") || "canlı radyo"}
                   </span>
                 </span>
                 <button
                   onClick={() => toggle(featured)}
-                  className="shrink-0 rounded-full px-5 py-2.5 text-sm font-semibold"
-                  style={{ background: fc, color: readableOn(fc) }}
+                  className="press shrink-0 rounded-full px-6 py-3 text-sm font-semibold"
+                  style={{ background: fc, color: readableOn(fc), boxShadow: `0 8px 22px color-mix(in srgb, ${fc} 38%, transparent)` }}
                 >
                   ▶ Çal
                 </button>

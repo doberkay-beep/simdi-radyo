@@ -80,7 +80,7 @@ export default async function TurPage({ params }: { params: Promise<{ slug: stri
           <span className="brand text-sm font-bold tracking-tight">ŞİMDİ</span>
         </header>
 
-        <h1 className="brand text-4xl font-bold tracking-tight">{t.baslik}</h1>
+        <h1 className="dial text-5xl uppercase tracking-[0.02em]" style={{ fontWeight: 500 }}>{t.baslik}</h1>
         <p className="epigraf mt-2 text-[15px]">{t.ozet}</p>
 
         <div className="read mt-6 text-[15px] leading-relaxed" style={{ color: "var(--muted)" }}>

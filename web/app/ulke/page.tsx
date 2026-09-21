@@ -41,7 +41,7 @@ export default function AtlasPage() {
           <Link href="/" className="brand text-sm font-bold tracking-tight">ŞİMDİ</Link>
         </header>
 
-        <h1 className="brand text-4xl font-bold tracking-tight">Dünya Atlası</h1>
+        <h1 className="dial text-5xl uppercase tracking-[0.02em]" style={{ fontWeight: 500 }}>Dünya Atlası</h1>
         <p className="epigraf mt-3 text-[15px]">
           Her ülkenin bir &ldquo;şimdi&rdquo;si var. Bir ışığa dokun; o ülkenin frekanslarına bağlan.
         </p>

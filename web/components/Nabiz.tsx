@@ -118,7 +118,7 @@ export default function Nabiz() {
       <div className="mx-auto max-w-2xl px-5 pb-24 pt-10">
         <header className="mb-6 flex items-start justify-between">
           <div>
-            <h1 className="brand text-4xl font-bold tracking-tight">
+            <h1 className="dial text-5xl uppercase tracking-[0.02em]" style={{ fontWeight: 500 }}>
               {t("nabiz.baslik1")} <span style={{ color: "var(--muted)" }}>{t("nabiz.baslik2")}</span>
             </h1>
             <p className="epigraf mt-2 text-[15px]">{t("nabiz.alt")}</p>
@@ -172,7 +172,7 @@ export default function Nabiz() {
         {/* Türkiye'nin ruh hali — şu an çalan türlerin dağılımı */}
         {data && data.moods && data.moods.length > 0 && (
           <section className="mb-10">
-            <h2 className="mb-3 text-xs uppercase tracking-wide" style={{ color: "var(--muted)" }}>
+            <h2 className="mono mb-3 text-[11px] uppercase tracking-[0.16em]" style={{ color: "var(--muted)" }}>
               {t("nabiz.ruhHali")}
             </h2>
             {/* Tek çubukta oranlı şerit */}
@@ -210,7 +210,7 @@ export default function Nabiz() {
         {/* Yükselen — son 6 saatte önceki 6 saate göre artanlar */}
         {data && data.trend && data.trend.length > 0 && (
           <section className="mb-10">
-            <h2 className="mb-3 text-xs uppercase tracking-wide" style={{ color: "var(--muted)" }}>
+            <h2 className="mono mb-3 text-[11px] uppercase tracking-[0.16em]" style={{ color: "var(--muted)" }}>
               {t("nabiz.yukselen")}
             </h2>
             <ul className="flex flex-col gap-2">
@@ -237,7 +237,7 @@ export default function Nabiz() {
         {/* En hareketli saat — son 7 gün, saate göre çalma yoğunluğu */}
         {data && data.hourly && data.hourly.length > 0 && (
           <section className="mb-10">
-            <h2 className="mb-3 text-xs uppercase tracking-wide" style={{ color: "var(--muted)" }}>
+            <h2 className="mono mb-3 text-[11px] uppercase tracking-[0.16em]" style={{ color: "var(--muted)" }}>
               {t("nabiz.hareketliSaat")}
             </h2>
             {(() => {
@@ -286,7 +286,7 @@ export default function Nabiz() {
         {/* Şu an eşzamanlı */}
         {data && data.simultaneous.length > 0 && (
           <section className="mb-10">
-            <h2 className="mb-3 text-xs uppercase tracking-wide" style={{ color: "var(--muted)" }}>
+            <h2 className="mono mb-3 text-[11px] uppercase tracking-[0.16em]" style={{ color: "var(--muted)" }}>
               {t("nabiz.eszamanli")}
             </h2>
             <ul className="flex flex-col gap-3">
@@ -321,7 +321,7 @@ export default function Nabiz() {
         {/* Son 24 saatte en çok çalan parçalar */}
         {data && data.todaySongs.length > 0 && (
           <section className="mb-10">
-            <h2 className="mb-3 text-xs uppercase tracking-wide" style={{ color: "var(--muted)" }}>
+            <h2 className="mono mb-3 text-[11px] uppercase tracking-[0.16em]" style={{ color: "var(--muted)" }}>
               {t("nabiz.enCok")}
             </h2>
             <ol className="flex flex-col gap-2">
@@ -372,7 +372,7 @@ export default function Nabiz() {
         {/* En çok çalan sanatçılar */}
         {data && data.todayArtists.length > 0 && (
           <section className="mb-10">
-            <h2 className="mb-3 text-xs uppercase tracking-wide" style={{ color: "var(--muted)" }}>
+            <h2 className="mono mb-3 text-[11px] uppercase tracking-[0.16em]" style={{ color: "var(--muted)" }}>
               {t("nabiz.sanatcilar")}
             </h2>
             <div className="flex flex-wrap gap-2">

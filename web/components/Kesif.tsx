@@ -137,7 +137,7 @@ export default function Kesif() {
       <div className="mx-auto max-w-2xl px-5 pb-24 pt-10">
         <header className="mb-6 flex items-start justify-between">
           <div>
-            <h1 className="brand text-4xl font-bold tracking-tight">{t("kesif.baslik")}</h1>
+            <h1 className="dial text-5xl uppercase tracking-[0.02em]" style={{ fontWeight: 500 }}>{t("kesif.baslik")}</h1>
             <p className="epigraf mt-2 text-[15px]">{t("kesif.alt")}</p>
           </div>
           <span className="flex items-center gap-3">
@@ -184,7 +184,7 @@ export default function Kesif() {
             {/* En sevilenler — kalbe göre */}
             {enSevilen.length > 0 && (
               <section className="mb-10">
-                <h2 className="mb-3 text-xs uppercase tracking-wide" style={{ color: "var(--muted)" }}>
+                <h2 className="mono mb-3 text-[11px] uppercase tracking-[0.16em]" style={{ color: "var(--muted)" }}>
                   {t("kesif.enSevilen")}
                 </h2>
                 <div className="grid gap-2 sm:grid-cols-2">
@@ -204,7 +204,7 @@ export default function Kesif() {
 
             {/* Ruh haline göre */}
             <section className="mb-10">
-              <h2 className="mb-3 text-xs uppercase tracking-wide" style={{ color: "var(--muted)" }}>
+              <h2 className="mono mb-3 text-[11px] uppercase tracking-[0.16em]" style={{ color: "var(--muted)" }}>
                 {t("kesif.ruhHali")}
               </h2>
               <div className="mb-4 flex flex-wrap gap-2">
@@ -234,7 +234,7 @@ export default function Kesif() {
 
             {/* Türe göre gez */}
             <section className="mb-10">
-              <h2 className="mb-3 text-xs uppercase tracking-wide" style={{ color: "var(--muted)" }}>
+              <h2 className="mono mb-3 text-[11px] uppercase tracking-[0.16em]" style={{ color: "var(--muted)" }}>
                 {t("kesif.tureGore")}
               </h2>
               <div className="mb-4 flex flex-wrap gap-2">

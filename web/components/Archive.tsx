@@ -145,12 +145,7 @@ export default function Archive() {
                 { e: t("arsiv.zamanSabah"), g: 0, s: "07:30" },
                 { e: t("arsiv.zamanHafta"), g: 7, s: undefined },
               ].map((z) => (
-                <button
-                  key={z.e}
-                  onClick={() => isinlan(z.g, z.s)}
-                  className="press rounded-full border px-3.5 py-1.5 text-sm"
-                  style={{ borderColor: "var(--line)", color: "var(--fg)" }}
-                >
+                <button key={z.e} onClick={() => isinlan(z.g, z.s)} className="chip">
                   {z.e}
                 </button>
               ))}
@@ -175,14 +170,14 @@ export default function Archive() {
             />
             <button
               onClick={() => fetchArchive(date, time)}
-              className="rounded-md px-4 py-2 text-sm font-semibold"
-              style={{ background: "var(--fg)", color: "var(--bg)" }}
+              className="chip chip-solid"
+              data-on="1"
             >
               {t("arsiv.goster")}
             </button>
           </div>
           <p className="mt-2 text-xs" style={{ color: "var(--muted)" }}>
-            Saat Türkiye saatidir. Arşiv, toplayıcı çalışmaya başladığı andan itibaren doludur.
+            {t("arsiv.saatNot")}
           </p>
 
           {/* Geçmişte bugün — hızlı sıçrama */}
@@ -198,20 +193,11 @@ export default function Archive() {
                 [365, t("arsiv.yilOnce")],
               ] as const
             ).map(([g, label]) => (
-              <button
-                key={g}
-                onClick={() => gecmiseGit(g)}
-                className="press rounded-full border px-3 py-1 text-xs"
-                style={{ borderColor: "var(--line)", color: "var(--fg)" }}
-              >
+              <button key={g} onClick={() => gecmiseGit(g)} className="chip">
                 {label}
               </button>
             ))}
-            <button
-              onClick={() => gecmiseGit(0)}
-              className="press rounded-full border px-3 py-1 text-xs"
-              style={{ borderColor: "var(--line)", color: "var(--muted)" }}
-            >
+            <button onClick={() => gecmiseGit(0)} className="chip">
               {t("arsiv.simdiye")}
             </button>
           </div>
@@ -235,14 +221,9 @@ export default function Archive() {
                 }
               }}
               placeholder={t("arsiv.ara")}
-              className="flex-1 rounded-md border px-3 py-2 text-sm"
-              style={{ background: "transparent", borderColor: "var(--line)", color: "var(--fg)" }}
+              className="field flex-1"
             />
-            <button
-              type="submit"
-              className="rounded-md border px-4 py-2 text-sm"
-              style={{ borderColor: "var(--line)", color: "var(--fg)" }}
-            >
+            <button type="submit" className="chip">
               {t("arsiv.araBtn")}
             </button>
           </form>
@@ -253,7 +234,7 @@ export default function Archive() {
           <section className="mb-8">
             <div className="mb-3 flex items-center justify-between">
               <h2 className="text-xs uppercase tracking-wide" style={{ color: "var(--muted)" }}>
-                &quot;{q}&quot; için arşiv
+&quot;{q}&quot; {t("arsiv.icinArsiv")}
               </h2>
               <button
                 onClick={() => {

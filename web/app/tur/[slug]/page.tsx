@@ -126,12 +126,7 @@ export default async function TurPage({ params }: { params: Promise<{ slug: stri
           </h2>
           <div className="flex flex-wrap gap-2">
             {TURLER.filter((x) => x.slug !== slug).map((x) => (
-              <Link
-                key={x.slug}
-                href={`/tur/${x.slug}`}
-                className="press rounded-full border px-3 py-1 text-sm"
-                style={{ borderColor: "var(--line)", color: "var(--fg)" }}
-              >
+              <Link key={x.slug} href={`/tur/${x.slug}`} className="chip">
                 {x.baslik.replace(" Radyoları", "").replace(" Radyoları", "")}
               </Link>
             ))}

@@ -135,7 +135,7 @@ export default function Nabiz() {
         {/* TÜRKİYE ŞU AN — türlerin duygulara toplanmış manşeti */}
         {duygu && (
           <div
-            className="fade-in mb-6 rounded-2xl border p-6 text-center"
+            className="surf fade-in mb-6 p-6 text-center"
             style={{ borderColor: "var(--line)", background: `color-mix(in srgb, ${duygu.renk} 12%, transparent)` }}
           >
             <div className="text-xs uppercase tracking-[0.3em]" style={{ color: "var(--muted)" }}>
@@ -155,11 +155,13 @@ export default function Nabiz() {
         {/* Canlı vurgu */}
         {top && (
           <div
-            className="fade-in mb-8 rounded-2xl border p-5"
+            className="surf fade-in mb-8 p-5"
             style={{ borderColor: "var(--line)", background: "color-mix(in srgb, var(--accent) 10%, transparent)" }}
           >
             <div className="text-xs uppercase tracking-wide" style={{ color: "var(--muted)" }}>
-              şu an tam {top.stations.length} istasyonda birden
+              {dil === "en"
+                ? `on ${top.stations.length} stations at once, right now`
+                : `şu an tam ${top.stations.length} istasyonda birden`}
             </div>
             <div className="mt-1 text-2xl font-semibold">
               {top.artist && top.artist !== top.title ? `${top.artist} — ${top.title}` : top.title}
@@ -193,8 +195,14 @@ export default function Nabiz() {
               ))}
             </div>
             <p className="epigraf mt-3 text-sm">
-              {data.calanToplam ?? 0} istasyonda şu an müzik var
-              {data.moods[0] ? ` — en baskın ses: ${turAdi(dil, data.moods[0].tur)}.` : "."}
+              {dil === "en"
+                ? `${data.calanToplam ?? 0} stations are playing music right now`
+                : `${data.calanToplam ?? 0} istasyonda şu an müzik var`}
+              {data.moods[0]
+                ? dil === "en"
+                  ? ` — dominant sound: ${turAdi(dil, data.moods[0].tur)}.`
+                  : ` — en baskın ses: ${turAdi(dil, data.moods[0].tur)}.`
+                : "."}
             </p>
           </section>
         )}
@@ -283,11 +291,7 @@ export default function Nabiz() {
             </h2>
             <ul className="flex flex-col gap-3">
               {data.simultaneous.map((g, i) => (
-                <li
-                  key={i}
-                  className="rounded-xl border p-4"
-                  style={{ borderColor: "var(--line)" }}
-                >
+                <li key={i} className="surf p-4">
                   <div className="flex items-baseline justify-between gap-3">
                     <span className="min-w-0 truncate text-[17px] font-semibold">
                       {g.artist && g.artist !== g.title ? `${g.artist} — ${g.title}` : g.title}

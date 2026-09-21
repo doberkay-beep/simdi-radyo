@@ -40,7 +40,7 @@ export default function Page() {
         </header>
 
         {/* Günün denemesi */}
-        <Link href={`/kose/${gunun.slug}`} className="press row-in block rounded-2xl border p-6" style={{ borderColor: "var(--line)" }}>
+        <Link href={`/kose/${gunun.slug}`} className="surf press row-in block p-6">
           <div className="text-xs uppercase tracking-wide" style={{ color: "var(--muted)" }}>
             günün denemesi
           </div>
@@ -54,7 +54,7 @@ export default function Page() {
         <ul className="mt-6 flex flex-col gap-3">
           {digerleri.map((d) => (
             <li key={d.slug}>
-              <Link href={`/kose/${d.slug}`} className="press block rounded-xl border p-5" style={{ borderColor: "var(--line)" }}>
+              <Link href={`/kose/${d.slug}`} className="surf press block p-5">
                 <div className="flex items-baseline justify-between gap-3">
                   <h3 className="brand text-lg font-bold tracking-tight">{d.baslik}</h3>
                   <span className="shrink-0 text-xs" style={{ color: "var(--muted)" }}>

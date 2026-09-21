@@ -144,23 +144,15 @@ export default function StationPlayer({
       <button
         onClick={kalpAt}
         aria-label={t("player.kalpGonder")}
-        className="press ml-auto inline-flex items-center gap-1 rounded-full border px-4 py-2 text-sm"
-        style={{ borderColor: "var(--line)", color: kalp ? "#e0475f" : "var(--fg)" }}
+        className="chip ml-auto"
+        style={kalp ? { color: "#e0475f" } : undefined}
       >
         ♥ {kalp ?? ""}
       </button>
-      <button
-        onClick={() => setKartAcik(true)}
-        className="press rounded-full border px-4 py-2 text-sm"
-        style={{ borderColor: "var(--line)", color: "var(--fg)" }}
-      >
+      <button onClick={() => setKartAcik(true)} className="chip">
         {t("player.kart")}
       </button>
-      <button
-        onClick={share}
-        className="press rounded-full border px-4 py-2 text-sm"
-        style={{ borderColor: "var(--line)", color: "var(--fg)" }}
-      >
+      <button onClick={share} className="chip">
         {copied ? t("player.kopyalandi") : t("player.paylas")}
       </button>
       <audio

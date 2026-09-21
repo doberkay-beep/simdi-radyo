@@ -58,8 +58,7 @@ export default function AtlasPage() {
               <Link
                 key={k}
                 href={`/ulke/${ulkeSlug(k)}`}
-                className="press flex items-center gap-3 rounded-2xl border p-4"
-                style={{ borderColor: "var(--line)", background: "color-mix(in srgb, var(--fg) 3%, transparent)" }}
+                className="surf press flex items-center gap-3 p-4"
               >
                 {b ? (
                   // eslint-disable-next-line @next/next/no-img-element

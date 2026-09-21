@@ -71,6 +71,8 @@ export const SOZLUK: Record<string, { tr: string; en: string }> = {
   "arsiv.ayOnce": { tr: "1 ay önce", en: "1 month ago" },
   "arsiv.yilOnce": { tr: "1 yıl önce", en: "1 year ago" },
   "arsiv.simdiye": { tr: "şimdiye dön", en: "back to now" },
+  "arsiv.saatNot": { tr: "Saat Türkiye saatidir. Arşiv, toplayıcı çalışmaya başladığı andan itibaren doludur.", en: "Times are in Turkey time. The archive is filled from the moment the collector started running." },
+  "arsiv.icinArsiv": { tr: "araması için arşiv", en: "in the archive" },
   // radyo sayfası
   "radyo.simdiCaliyor": { tr: "şu an çalıyor", en: "playing now" },
   "radyo.canliYayin": { tr: "canlı yayın", en: "live broadcast" },

@@ -157,7 +157,7 @@ export default function Kesif() {
             {/* Günün istasyonu + Zar */}
             <section className="mb-10 grid gap-3 sm:grid-cols-2">
               {gununIst && (
-                <div className="rounded-2xl border p-5" style={{ borderColor: "var(--line)" }}>
+                <div className="surf p-5">
                   <div className="text-xs uppercase tracking-wide" style={{ color: "var(--muted)" }}>
                     {t("kesif.gununIst")}
                   </div>
@@ -166,16 +166,12 @@ export default function Kesif() {
                   </div>
                 </div>
               )}
-              <div className="rounded-2xl border p-5" style={{ borderColor: "var(--line)" }}>
+              <div className="surf p-5">
                 <div className="flex items-center justify-between">
                   <div className="text-xs uppercase tracking-wide" style={{ color: "var(--muted)" }}>
                     {t("kesif.zar")}
                   </div>
-                  <button
-                    onClick={zarAt}
-                    className="press rounded-full border px-3 py-1 text-sm"
-                    style={{ borderColor: "var(--line)", color: "var(--fg)" }}
-                  >
+                  <button onClick={zarAt} className="chip">
                     {t("kesif.rastgele")}
                   </button>
                 </div>
@@ -216,12 +212,12 @@ export default function Kesif() {
                   <button
                     key={r.key}
                     onClick={() => setRuh(r.key)}
-                    className="press rounded-full border px-4 py-1.5 text-sm"
-                    style={{
-                      borderColor: ruh === r.key ? r.accent : "var(--line)",
-                      background: ruh === r.key ? `color-mix(in srgb, ${r.accent} 16%, transparent)` : "transparent",
-                      color: ruh === r.key ? "var(--fg)" : "var(--muted)",
-                    }}
+                    className="chip"
+                    style={ruh === r.key ? {
+                      borderColor: r.accent,
+                      background: `color-mix(in srgb, ${r.accent} 16%, transparent)`,
+                      color: "var(--fg)",
+                    } : undefined}
                   >
                     {t(`ruh.${r.key}`)}
                   </button>
@@ -246,11 +242,8 @@ export default function Kesif() {
                   <button
                     key={t}
                     onClick={() => setTur(tur === t ? null : t)}
-                    className="press rounded-full border px-3 py-1 text-sm"
-                    style={{
-                      borderColor: tur === t ? "var(--accent)" : "var(--line)",
-                      background: tur === t ? "color-mix(in srgb, var(--accent) 16%, transparent)" : "transparent",
-                    }}
+                    className="chip"
+                    data-on={tur === t ? "1" : "0"}
                   >
                     {turAdi(dil, t)} <span style={{ color: "var(--muted)" }}>{n}</span>
                   </button>

@@ -143,7 +143,7 @@ export default function StationPlayer({
       </span>
       <button
         onClick={kalpAt}
-        aria-label="kalp gönder"
+        aria-label={t("player.kalpGonder")}
         className="press ml-auto inline-flex items-center gap-1 rounded-full border px-4 py-2 text-sm"
         style={{ borderColor: "var(--line)", color: kalp ? "#e0475f" : "var(--fg)" }}
       >

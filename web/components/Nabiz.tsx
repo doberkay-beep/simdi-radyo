@@ -270,9 +270,9 @@ export default function Nabiz() {
           </section>
         )}
 
-        {status === "loading" && <p className="epigraf">nabız ölçülüyor…</p>}
+        {status === "loading" && <p className="epigraf">{t("nabiz.olculuyor")}</p>}
         {status === "error" && (
-          <p style={{ color: "var(--muted)" }}>Nabız okunamadı. Birazdan tekrar dener.</p>
+          <p style={{ color: "var(--muted)" }}>{t("nabiz.okunamadi")}</p>
         )}
 
         {/* Şu an eşzamanlı */}
@@ -391,7 +391,7 @@ export default function Nabiz() {
 
         {/* Arşiv fonksiyonları henüz kurulmadıysa ipucu */}
         {data && data.todaySongs.length === 0 && data.simultaneous.length === 0 && status === "idle" && (
-          <p className="epigraf">Nabız topluyor… birazdan burada bir kalp atacak.</p>
+          <p className="epigraf">{t("nabiz.topluyor")}</p>
         )}
       </div>
     </div>

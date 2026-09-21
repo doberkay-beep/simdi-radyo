@@ -102,6 +102,31 @@ export const SOZLUK: Record<string, { tr: string; en: string }> = {
   "defter.ilk": { tr: "ilk anıyı sen bırak.", en: "be the first to leave a note." },
   // ortak
   "ortak.kalpGonder": { tr: "bu istasyona kalp gönder", en: "send this station a heart" },
+  // ana ekran kontrolleri (kahraman + filtre çubuğu)
+  "home.altyazi": { tr: "radyoda şu an ne çalıyor", en: "what's playing on the radio now" },
+  "home.filtreler": { tr: "filtreler", en: "filters" },
+  "home.beniSasirt": { tr: "beni şaşırt", en: "surprise me" },
+  "home.beniSasirtIpucu": { tr: "rastgele bir ülkenin rastgele istasyonuna ışınlan", en: "teleport to a random station in a random country" },
+  "home.sairinFrekansi": { tr: "şairin frekansı", en: "poet's frequency" },
+  "home.sira": { tr: "sıra", en: "sort" },
+  "home.siraOne": { tr: "öne çıkan", en: "featured" },
+  "home.siraTur": { tr: "tür", en: "genre" },
+  "home.neDinlesem": { tr: "ne dinlesem?", en: "what should I play?" },
+  "home.baskaOner": { tr: "başka öner", en: "suggest another" },
+  "home.cal": { tr: "Çal", en: "Play" },
+  "home.sayfasi": { tr: "sayfası", en: "page" },
+  "home.atlas": { tr: "atlas", en: "atlas" },
+  "home.uykuZamanlayici": { tr: "uyku zamanlayıcı", en: "sleep timer" },
+  "home.filtreleriTemizle": { tr: "filtreleri temizle", en: "clear filters" },
+  // durum / yükleniyor mesajları
+  "durum.aranıyor": { tr: "aranıyor…", en: "searching…" },
+  "durum.yukleniyor": { tr: "Yükleniyor…", en: "Loading…" },
+  "arsiv.sozcuk": { tr: "arşiv", en: "archive" },
+  "arsiv.aramaBos": { tr: "Arşivde bu aramaya kayıt yok (henüz).", en: "No archive records for this search (yet)." },
+  "nabiz.olculuyor": { tr: "nabız ölçülüyor…", en: "measuring the pulse…" },
+  "nabiz.okunamadi": { tr: "Nabız okunamadı. Birazdan tekrar dener.", en: "Couldn't read the pulse. Retrying shortly." },
+  "nabiz.topluyor": { tr: "Nabız topluyor… birazdan burada bir kalp atacak.", en: "Gathering the pulse… a heartbeat will appear here soon." },
+  "player.kalpGonder": { tr: "kalp gönder", en: "send a heart" },
 };
 
 export function ceviri(dil: Dil, anahtar: string): string {

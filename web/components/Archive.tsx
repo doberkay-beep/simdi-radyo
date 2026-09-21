@@ -118,7 +118,7 @@ export default function Archive() {
           <div className="flex items-end justify-between">
             <div>
               <h1 className="brand text-4xl font-bold tracking-tight">
-                ŞİMDİ <span style={{ color: "var(--muted)" }}>· arşiv</span>
+                ŞİMDİ <span style={{ color: "var(--muted)" }}>· {t("arsiv.sozcuk")}</span>
               </h1>
               <p className="mt-1 text-sm" style={{ color: "var(--muted)" }}>
                 {t("arsiv.alt")}
@@ -267,9 +267,9 @@ export default function Archive() {
                 {t("arsiv.temizle")}
               </button>
             </div>
-            {araStatus === "loading" && <p style={{ color: "var(--muted)" }}>aranıyor…</p>}
+            {araStatus === "loading" && <p style={{ color: "var(--muted)" }}>{t("durum.aranıyor")}</p>}
             {araStatus === "empty" && (
-              <p style={{ color: "var(--muted)" }}>Arşivde bu aramaya kayıt yok (henüz).</p>
+              <p style={{ color: "var(--muted)" }}>{t("arsiv.aramaBos")}</p>
             )}
             {araStatus === "idle" && araRows.length > 0 && (
               <ul className="flex flex-col">
@@ -310,7 +310,7 @@ export default function Archive() {
           </section>
         )}
 
-        {status === "loading" && <p style={{ color: "var(--muted)" }}>Yükleniyor…</p>}
+        {status === "loading" && <p style={{ color: "var(--muted)" }}>{t("durum.yukleniyor")}</p>}
         {status === "error" && (
           <p style={{ color: "var(--muted)" }}>
             Arşiv okunamadı. (Supabase&apos;de <code>archive.sql</code> çalıştırıldı mı?)

@@ -995,15 +995,15 @@ export default function NowList() {
               style={{ width: 40, background: accent, opacity: playing ? 1 : 0.25 }}
             />
             <p className="mt-2 text-sm" style={{ color: "var(--muted)" }}>
-              radyoda şu an ne çalıyor
+              {t("home.altyazi")}
             </p>
           </div>
           <div className="flex w-full flex-col gap-1.5 text-xs sm:w-auto sm:items-end" style={{ color: "var(--muted)" }}>
             <span className="flex flex-wrap items-center gap-3">
               <button
                 onClick={cycleSleep}
-                title="uyku zamanlayıcı"
-                aria-label="uyku zamanlayıcı"
+                title={t("home.uykuZamanlayici")}
+                aria-label={t("home.uykuZamanlayici")}
                 className="leading-none"
                 style={{ color: sleepUntil ? "var(--fg)" : "var(--muted)" }}
               >
@@ -1132,7 +1132,7 @@ export default function NowList() {
           data-on={filtrelerAcik ? "1" : "0"}
           aria-expanded={filtrelerAcik}
         >
-          ⚙ filtreler {filtrelerAcik ? "▲" : "▼"}
+          ⚙ {t("home.filtreler")} {filtrelerAcik ? "▲" : "▼"}
         </button>
 
         {filtrelerAcik && (
@@ -1161,7 +1161,7 @@ export default function NowList() {
           {ulke ? (
             <>
               <Link href={`/ulke/${ulkeSlug(ulke as Parameters<typeof ulkeSlug>[0])}`} className="shrink-0 text-xs underline" style={{ color: "var(--muted)" }}>
-                sayfası →
+                {t("home.sayfasi")} →
               </Link>
               <button onClick={() => setUlke(null)} className="press shrink-0 text-xs" style={{ color: "var(--muted)" }} aria-label="ülke filtresini kaldır">
                 ✕
@@ -1169,7 +1169,7 @@ export default function NowList() {
             </>
           ) : (
             <Link href="/ulke" className="shrink-0 text-xs underline" style={{ color: "var(--muted)" }}>
-              atlas →
+              {t("home.atlas")} →
             </Link>
           )}
         </div>
@@ -1187,18 +1187,18 @@ export default function NowList() {
               toggle(adaylar[Math.floor(Math.random() * adaylar.length)]);
             }}
             className="chip"
-            title="rastgele bir ülkenin rastgele istasyonuna ışınlan"
+            title={t("home.beniSasirtIpucu")}
           >
-            🌍 beni şaşırt
+            🌍 {t("home.beniSasirt")}
           </button>
           <button onClick={() => setSairMode((v) => !v)} className="chip" data-on={sairMode ? "1" : "0"}>
-            ✍ şairin frekansı
+            ✍ {t("home.sairinFrekansi")}
           </button>
           <button onClick={() => setFavOnly((v) => !v)} className="chip" data-on={favOnly ? "1" : "0"}>
             {favOnly ? `★ ${t("home.favoriler")}` : `☆ ${t("home.favoriler")}`}
           </button>
           <button onClick={() => setSort((s) => (s === "liste" ? "az" : s === "az" ? "tur" : "liste"))} className="chip">
-            sıra: {sort === "liste" ? "öne çıkan" : sort === "az" ? "A-Z" : "tür"}
+            {t("home.sira")}: {sort === "liste" ? t("home.siraOne") : sort === "az" ? "A-Z" : t("home.siraTur")}
           </button>
         </div>
         </>
@@ -1260,14 +1260,14 @@ export default function NowList() {
                 </span>
                 <span className="min-w-0 flex-1">
                   <span className="block text-[11px] uppercase tracking-[0.16em]" style={{ color: "var(--muted)" }}>
-                    🎧 ne dinlesem?{" "}
+                    🎧 {t("home.neDinlesem")}{" "}
                     <button onClick={suggestAnother} className="nav-link">
-                      başka öner ↻
+                      {t("home.baskaOner")} ↻
                     </button>
                   </span>
                   <span className="mt-1 block truncate text-xl font-bold">{featured.name}</span>
                   <span className="block truncate text-xs" style={{ color: "var(--muted)" }}>
-                    {[turAdi(dil, featured.genre || ""), featured.frequency, featured.city].filter(Boolean).join(" · ") || "canlı radyo"}
+                    {[turAdi(dil, featured.genre || ""), featured.frequency, featured.city].filter(Boolean).join(" · ") || t("radyo.canliRadyo")}
                   </span>
                 </span>
                 <button
@@ -1275,7 +1275,7 @@ export default function NowList() {
                   className="press shrink-0 rounded-full px-6 py-3 text-sm font-semibold"
                   style={{ background: fc, color: readableOn(fc), boxShadow: `0 8px 22px color-mix(in srgb, ${fc} 38%, transparent)` }}
                 >
-                  ▶ Çal
+                  ▶ {t("home.cal")}
                 </button>
               </div>
             );
@@ -1395,7 +1395,7 @@ export default function NowList() {
                 className="mt-2 underline"
                 style={{ color: "var(--fg)" }}
               >
-                filtreleri temizle
+                {t("home.filtreleriTemizle")}
               </button>
             )}
           </div>
@@ -1494,7 +1494,7 @@ export default function NowList() {
                         </span>
                       )}
                       <span className="mt-0.5 block truncate text-xs" style={{ color: "var(--muted)" }}>
-                        {SAIR_SET.has(s.slug) ? <span title="şairin frekansı">✍ </span> : ""}
+                        {SAIR_SET.has(s.slug) ? <span title={t("home.sairinFrekansi")}>✍ </span> : ""}
                         {s.band === "int" ? `${bayrakEmoji(istasyonUlkesi(s.slug))} ` : ""}
                         <span style={{ color: c }}>{s.name}</span>
                         {s.frequency ? ` · ${s.frequency}` : ""}

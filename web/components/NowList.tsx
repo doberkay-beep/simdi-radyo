@@ -1493,17 +1493,17 @@ export default function NowList() {
                           {tagline(s.genre, s.slug)}
                         </span>
                       )}
-                      <span className="mt-0.5 block truncate text-xs" style={{ color: "var(--muted)" }}>
+                      <span className="mono mt-1 block truncate text-[11px] tracking-[0.02em]" style={{ color: "var(--muted)" }}>
                         {SAIR_SET.has(s.slug) ? <span title={t("home.sairinFrekansi")}>✍ </span> : ""}
                         {s.band === "int" ? `${bayrakEmoji(istasyonUlkesi(s.slug))} ` : ""}
                         <span style={{ color: c }}>{s.name}</span>
                         {s.frequency ? ` · ${s.frequency}` : ""}
                         {s.city ? ` · ${s.city}` : ""}
                         {isPlaying && phase === "connecting"
-                          ? " · bağlanıyor…"
+                          ? ` · ${t("player.baglaniyor")}`
                           : np
                             ? isPlaying && liveNP
-                              ? " · canlı"
+                              ? ` · ${t("radyo.canli")}`
                               : (() => {
                                   const rel = np.updatedAt ? since(np.updatedAt, now || Date.now()) : "";
                                   return rel ? ` · ${rel}` : "";
@@ -1950,14 +1950,13 @@ export default function NowList() {
           >
             <div className="mx-auto mb-3 h-1 w-10 rounded-full" style={{ background: "var(--line)" }} />
             <div className="mb-1 flex items-center justify-between">
-              <span className="text-sm font-semibold">{current.name}</span>
+              <span className="dial text-base uppercase tracking-[0.04em]" style={{ fontWeight: 500 }}>{current.name}</span>
               <button
                 onClick={() => setDefterAcik(false)}
-                aria-label="kapat"
-                className="press rounded-full border px-3 py-1 text-xs"
-                style={{ borderColor: "var(--line)", color: "var(--muted)" }}
+                aria-label={t("frekans.kapat")}
+                className="chip"
               >
-                kapat
+                {t("frekans.kapat")}
               </button>
             </div>
             <Notlar slug={current.slug} accent={accent} />

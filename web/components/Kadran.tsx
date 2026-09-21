@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useMemo, useRef, useState } from "react";
+import { useDil } from "@/lib/i18n";
 
 /* KADRAN — analog radyo ayar şeridi.
    İstasyonlar bir frekans bandı gibi dizilir; ortadaki ibre sabittir, bant
@@ -25,6 +26,7 @@ export default function Kadran({
   playing: string | null;
   onTune: (slug: string) => void;
 }) {
+  const { t } = useDil();
   const trackRef = useRef<HTMLDivElement | null>(null);
   const [merkez, setMerkez] = useState(0);
 
@@ -94,10 +96,10 @@ export default function Kadran({
     <div
       className="mb-5 overflow-hidden rounded-2xl border"
       style={{
-        borderColor: "var(--line)",
+        borderColor: "var(--line-hi)",
         background:
-          "linear-gradient(180deg, color-mix(in srgb, var(--fg) 4%, transparent), transparent 55%), color-mix(in srgb, var(--bg) 88%, #000)",
-        boxShadow: "inset 0 1px 0 color-mix(in srgb, var(--fg) 9%, transparent)",
+          "radial-gradient(130% 100% at 50% 0%, color-mix(in srgb, var(--glow) 18%, transparent), transparent 62%), linear-gradient(180deg, var(--panel-hi), var(--panel))",
+        boxShadow: "inset 0 1px 0 color-mix(in srgb, #fff 8%, transparent), 0 22px 52px -30px #000",
       }}
     >
       {/* LCD penceresi */}
@@ -108,18 +110,18 @@ export default function Kadran({
           aria-label={`${gosterilen?.name} çal`}
         >
           <span
-            className="block truncate text-[15px] font-semibold tracking-tight transition-colors duration-500"
-            style={{ color: renk }}
+            className="dial block truncate text-lg uppercase tracking-[0.03em] transition-colors duration-500"
+            style={{ color: renk, fontWeight: 500 }}
           >
             {calan ? "● " : ""}{gosterilen?.name}
           </span>
-          <span className="block h-4 truncate text-xs" style={{ color: "var(--muted)" }} suppressHydrationWarning>
-            {gosterilen?.nowText || (calan ? "canlı" : "dokun, çalsın")}
+          <span className="mono block h-4 truncate text-[11px]" style={{ color: "var(--muted)" }} suppressHydrationWarning>
+            {gosterilen?.nowText || (calan ? t("radyo.canli") : t("kadran.dokun"))}
           </span>
         </button>
         <span
-          className="brand shrink-0 text-lg font-bold tabular-nums transition-colors duration-500"
-          style={{ color: renk }}
+          className="dial shrink-0 text-3xl tabular-nums transition-colors duration-500"
+          style={{ color: renk, fontWeight: 500, textShadow: `0 0 22px color-mix(in srgb, ${renk} 55%, transparent)` }}
           suppressHydrationWarning
         >
           {frekans[stations.indexOf(gosterilen!)] ?? "—"}

@@ -65,8 +65,9 @@ body {
    değişince renk 800 ms'de erir. */
 .spread {
   background:
-    radial-gradient(130% 72% at 50% -16%, color-mix(in srgb, var(--accent) 30%, transparent), transparent 72%),
-    radial-gradient(120% 55% at 50% 116%, color-mix(in srgb, var(--accent) 16%, transparent), transparent 70%),
+    radial-gradient(125% 70% at 50% -18%, color-mix(in srgb, var(--accent) 44%, transparent), transparent 66%),
+    radial-gradient(120% 62% at 50% 120%, color-mix(in srgb, var(--glow) 30%, transparent), transparent 64%),
+    radial-gradient(140% 120% at 50% 45%, color-mix(in srgb, var(--glow) 9%, transparent), transparent 72%),
     var(--bg);
   transition: --accent 800ms ease;
 }
@@ -75,8 +76,8 @@ body {
    fazla baskın durmasın). */
 :root[data-theme="light"] .spread {
   background:
-    radial-gradient(130% 72% at 50% -16%, color-mix(in srgb, var(--accent) 18%, transparent), transparent 72%),
-    radial-gradient(120% 55% at 50% 116%, color-mix(in srgb, var(--accent) 10%, transparent), transparent 70%),
+    radial-gradient(130% 72% at 50% -16%, color-mix(in srgb, var(--accent) 22%, transparent), transparent 72%),
+    radial-gradient(120% 58% at 50% 118%, color-mix(in srgb, var(--glow) 16%, transparent), transparent 68%),
     var(--bg);
 }
 
@@ -122,13 +123,13 @@ body {
 
 /* İstasyon kartı — bölünmüş liste yerine zarif ayrık kartlar. */
 .station-card {
-  border: 1px solid var(--line); border-radius: 14px; margin-bottom: 0.5rem;
-  background: color-mix(in srgb, var(--fg) 2.5%, transparent);
+  border: 1px solid var(--line-hi); border-radius: 14px; margin-bottom: 0.5rem;
+  background: color-mix(in srgb, var(--glow) 7%, var(--panel));
   transition: background 200ms ease, border-color 200ms ease, transform 140ms ease, box-shadow 220ms ease;
 }
 .station-card:hover {
-  background: color-mix(in srgb, var(--fg) 6%, transparent);
-  border-color: color-mix(in srgb, var(--fg) 22%, var(--line));
+  background: color-mix(in srgb, var(--glow) 14%, var(--panel));
+  border-color: color-mix(in srgb, var(--glow) 40%, var(--line-hi));
   transform: translateY(-1px);
   box-shadow: 0 8px 22px rgba(0, 0, 0, 0.18);
 }
@@ -176,8 +177,9 @@ body {
 
 /* Yüzey — kart/panel tutarlı zemin. */
 .surf {
-  border: 1px solid var(--line); border-radius: 16px;
-  background: color-mix(in srgb, var(--fg) 3%, transparent);
+  border: 1px solid var(--line-hi); border-radius: 16px;
+  background: linear-gradient(180deg, color-mix(in srgb, var(--glow) 9%, var(--panel-hi)), color-mix(in srgb, var(--glow) 4%, var(--panel)));
+  box-shadow: inset 0 1px 0 color-mix(in srgb, #fff 5%, transparent);
 }
 
 /* Alan — arama/metin girişleri. */

@@ -71,7 +71,7 @@ export default function DunyadaSimdi({ stations, onTune }: { stations: Ist[]; on
             key={s.slug}
             onClick={() => onTune(s.slug)}
             className="press shrink-0 rounded-xl border px-3 py-2 text-left"
-            style={{ borderColor: "var(--line)", background: "color-mix(in srgb, var(--fg) 3%, transparent)", maxWidth: 250 }}
+            style={{ borderColor: "var(--line-hi)", background: "color-mix(in srgb, var(--glow) 7%, var(--panel))", maxWidth: 250 }}
             title={`${s.name} — çal`}
           >
             <span className="block truncate text-xs" style={{ color: "var(--muted)" }} suppressHydrationWarning>

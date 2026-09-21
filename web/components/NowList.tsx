@@ -1245,7 +1245,7 @@ export default function NowList() {
                 className="mb-6 flex items-center gap-4 rounded-2xl border p-5"
                 style={{
                   borderColor: `color-mix(in srgb, ${fc} 32%, var(--line))`,
-                  background: `radial-gradient(120% 150% at 0% 0%, color-mix(in srgb, ${fc} 20%, transparent), transparent 58%), color-mix(in srgb, var(--fg) 3%, transparent)`,
+                  background: `radial-gradient(120% 150% at 0% 0%, color-mix(in srgb, ${fc} 26%, transparent), transparent 58%), linear-gradient(180deg, var(--panel-hi), var(--panel))`,
                 }}
               >
                 <span

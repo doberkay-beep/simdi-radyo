@@ -994,7 +994,7 @@ export default function NowList() {
               className="title-underline mt-2 block h-[2px] rounded-full"
               style={{ width: 40, background: accent, opacity: playing ? 1 : 0.25 }}
             />
-            <p className="mt-2 text-sm" style={{ color: "var(--muted)" }}>
+            <p className="mono mt-2 text-[11px] uppercase tracking-[0.18em]" style={{ color: "var(--muted)" }}>
               {t("home.altyazi")}
             </p>
           </div>
@@ -1259,21 +1259,21 @@ export default function NowList() {
                   {featured.name.trim().charAt(0).toLocaleUpperCase("tr")}
                 </span>
                 <span className="min-w-0 flex-1">
-                  <span className="block text-[11px] uppercase tracking-[0.16em]" style={{ color: "var(--muted)" }}>
+                  <span className="mono block text-[10px] uppercase tracking-[0.2em]" style={{ color: "var(--muted)" }}>
                     🎧 {t("home.neDinlesem")}{" "}
                     <button onClick={suggestAnother} className="nav-link">
                       {t("home.baskaOner")} ↻
                     </button>
                   </span>
-                  <span className="mt-1 block truncate text-xl font-bold">{featured.name}</span>
-                  <span className="block truncate text-xs" style={{ color: "var(--muted)" }}>
+                  <span className="dial mt-1 block truncate text-2xl uppercase tracking-[0.03em]" style={{ fontWeight: 500 }}>{featured.name}</span>
+                  <span className="mono block truncate text-[11px]" style={{ color: "var(--muted)" }}>
                     {[turAdi(dil, featured.genre || ""), featured.frequency, featured.city].filter(Boolean).join(" · ") || t("radyo.canliRadyo")}
                   </span>
                 </span>
                 <button
                   onClick={() => toggle(featured)}
-                  className="press shrink-0 rounded-full px-6 py-3 text-sm font-semibold"
-                  style={{ background: fc, color: readableOn(fc), boxShadow: `0 8px 22px color-mix(in srgb, ${fc} 38%, transparent)` }}
+                  className="dial press shrink-0 rounded-full px-6 py-3 text-sm uppercase tracking-[0.08em]"
+                  style={{ background: fc, color: readableOn(fc), fontWeight: 500, boxShadow: `0 8px 22px color-mix(in srgb, ${fc} 38%, transparent)` }}
                 >
                   ▶ {t("home.cal")}
                 </button>

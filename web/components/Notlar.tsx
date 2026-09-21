@@ -1,25 +1,26 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import { useDil } from "@/lib/i18n";
+import { useDil, type Dil } from "@/lib/i18n";
 
 type Not = { id: number; slug: string; not: string; createdAt: string };
 
-function nezaman(iso: string): string {
+function nezaman(iso: string, dil: Dil): string {
   const d = new Date(iso).getTime();
   const fark = Math.max(0, Date.now() - d);
   const dk = Math.floor(fark / 60000);
-  if (dk < 1) return "az önce";
-  if (dk < 60) return `${dk} dk önce`;
+  const en = dil === "en";
+  if (dk < 1) return en ? "just now" : "az önce";
+  if (dk < 60) return en ? `${dk} min ago` : `${dk} dk önce`;
   const sa = Math.floor(dk / 60);
-  if (sa < 24) return `${sa} sa önce`;
+  if (sa < 24) return en ? `${sa} h ago` : `${sa} sa önce`;
   const g = Math.floor(sa / 24);
-  return `${g} gün önce`;
+  return en ? `${g} d ago` : `${g} gün önce`;
 }
 
 // Kalp defteri — bir istasyona kısa anı bırak (140 karakter, link yok).
 export default function Notlar({ slug, accent }: { slug: string; accent: string }) {
-  const { t } = useDil();
+  const { t, dil } = useDil();
   const [notlar, setNotlar] = useState<Not[]>([]);
   const [metin, setMetin] = useState("");
   const [durum, setDurum] = useState<"idle" | "gonderiliyor" | "hata">("idle");
@@ -64,10 +65,20 @@ export default function Notlar({ slug, accent }: { slug: string; accent: string 
   }
 
   return (
-    <section className="mt-10">
-      <h2 className="mb-3 text-xs uppercase tracking-wide" style={{ color: "var(--muted)" }}>
-        {t("defter.baslik")}
-      </h2>
+    <section className="surf mt-8 p-5 sm:p-6">
+      <div className="mb-4 flex items-baseline justify-between gap-3">
+        <h2 className="read text-2xl" style={{ fontWeight: 600 }}>
+          {t("defter.baslik")}
+        </h2>
+        {notlar.length > 0 && (
+          <span
+            className="mono shrink-0 rounded-full border px-2.5 py-1 text-[11px]"
+            style={{ color: accent, borderColor: `color-mix(in srgb, ${accent} 40%, var(--line))` }}
+          >
+            {notlar.length} {dil === "en" ? "notes" : "anı"}
+          </span>
+        )}
+      </div>
       <form onSubmit={birak} className="flex gap-2">
         <input
           value={metin}
@@ -77,14 +88,13 @@ export default function Notlar({ slug, accent }: { slug: string; accent: string 
           }}
           maxLength={140}
           placeholder={t("defter.yer")}
-          className="flex-1 rounded-md border px-3 py-2 text-sm"
-          style={{ background: "transparent", borderColor: "var(--line)", color: "var(--fg)" }}
+          className="field flex-1"
         />
         <button
           type="submit"
           disabled={durum === "gonderiliyor" || metin.trim().length < 2}
-          className="press rounded-md px-4 py-2 text-sm font-semibold disabled:opacity-50"
-          style={{ background: accent, color: "#0a0a0b" }}
+          className="dial press shrink-0 rounded-xl px-5 text-sm uppercase tracking-[0.06em] disabled:opacity-50"
+          style={{ background: accent, color: "#0a0a0b", fontWeight: 500 }}
         >
           {t("defter.birak")}
         </button>
@@ -102,8 +112,8 @@ export default function Notlar({ slug, accent }: { slug: string; accent: string 
               <p className="text-[15px] italic" style={{ color: "var(--fg)" }}>
                 {n.not}
               </p>
-              <p className="mt-1 text-xs" style={{ color: "var(--muted)" }}>
-                {nezaman(n.createdAt)}
+              <p className="mono mt-1.5 text-[10px] tracking-[0.04em]" style={{ color: "var(--faint)" }}>
+                {nezaman(n.createdAt, dil)}
               </p>
             </li>
           ))}

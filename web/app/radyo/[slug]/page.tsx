@@ -302,6 +302,9 @@ export default async function StationPage({ params }: { params: Promise<{ slug: 
 
         <StationPlayer slug={slug} name={s.name} accent={accent} />
 
+        {/* Defter — birinci sınıf: oynatıcının hemen altında, göz önünde */}
+        <Notlar slug={slug} accent={accent} />
+
         {recent.length > 0 && (
           <section className="mt-8">
             <h2 className="mb-3 text-xs uppercase tracking-wide" style={{ color: "var(--muted)" }}>
@@ -339,8 +342,6 @@ export default async function StationPage({ params }: { params: Promise<{ slug: 
             </p>
           </section>
         )}
-
-        <Notlar slug={slug} accent={accent} />
 
         {topArtists.length > 0 && (
           <section className="mt-8">

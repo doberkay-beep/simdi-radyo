@@ -188,6 +188,7 @@ export default function NowList() {
   const [phase, setPhase] = useState<"idle" | "connecting" | "playing" | "error">("idle");
   const [sleepUntil, setSleepUntil] = useState<number | null>(null); // uyku zamanlayıcı
   const [favOnly, setFavOnly] = useState(false); // sadece favoriler
+  const [filtrelerAcik, setFiltrelerAcik] = useState(false); // ikincil filtreler katlanır
   const [sairMode, setSairMode] = useState(false); // Şairin Frekansı seçkisi
   const [sort, setSort] = useState<"liste" | "az" | "tur">("liste"); // sıralama
   const [volume, setVolume] = useState(1); // ses seviyesi 0..1
@@ -1123,6 +1124,18 @@ export default function NowList() {
           })}
         </div>
 
+        {/* Filtreler — ikincil kontrolleri katla, üst temiz kalsın */}
+        <button
+          onClick={() => setFiltrelerAcik((v) => !v)}
+          className="chip mb-4 ml-2 align-middle"
+          data-on={filtrelerAcik ? "1" : "0"}
+          aria-expanded={filtrelerAcik}
+        >
+          ⚙ filtreler {filtrelerAcik ? "▲" : "▼"}
+        </button>
+
+        {filtrelerAcik && (
+        <>
         {/* Kadran ülke bandı — bayrağa dokun: liste + kadran o ülkeye ayarlanır */}
         <div className="no-scrollbar mb-4 flex items-center gap-2 overflow-x-auto whitespace-nowrap text-sm">
           {doluUlkeler().map((k) => {
@@ -1187,6 +1200,8 @@ export default function NowList() {
             sıra: {sort === "liste" ? "öne çıkan" : sort === "az" ? "A-Z" : "tür"}
           </button>
         </div>
+        </>
+        )}
 
         {/* Tür filtresi çipleri (sayılı) */}
         {genres.length > 0 && (

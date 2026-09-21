@@ -114,6 +114,10 @@ body {
 .press { transition: transform 120ms ease; }
 .press:active { transform: scale(0.97); }
 
+/* Üst gezinme bağlantıları — sade, altı çizisiz; hover'da belirir. */
+.nav-link { color: var(--muted); transition: color 160ms ease; white-space: nowrap; }
+.nav-link:hover { color: var(--fg); }
+
 /* Satırların kademeli belirmesi. */
 @keyframes rowIn {
   from { opacity: 0; transform: translateY(6px); }

@@ -1026,35 +1026,17 @@ export default function NowList() {
                 {t("nav.canli")}
               </span>
             </span>
-            <span className="flex flex-wrap items-center gap-x-3 gap-y-1">
-              <button
-                onClick={() => setFrekansAcik(true)}
-                className="underline"
-                style={{ color: "var(--muted)" }}
-              >
+            <span className="flex flex-wrap items-center gap-x-4 gap-y-1.5">
+              <button onClick={() => setFrekansAcik(true)} className="nav-link press">
                 {t("nav.frekansim")}
               </button>
-              <Link href="/hakkinda" className="underline" style={{ color: "var(--muted)" }}>
-                {t("nav.gelistirici")}
-              </Link>
-              <Link href="/kesif" className="underline" style={{ color: "var(--muted)" }}>
-                {t("nav.kesif")}
-              </Link>
-              <Link href="/ulke" className="underline" style={{ color: "var(--muted)" }}>
-                atlas
-              </Link>
-              <Link href="/kose" className="underline" style={{ color: "var(--muted)" }}>
-                {t("nav.kose")}
-              </Link>
-              <Link href="/nabiz" className="underline" style={{ color: "var(--muted)" }}>
-                {t("nav.nabiz")}
-              </Link>
-              <Link href="/oyun" className="underline" style={{ color: "var(--muted)" }}>
-                {t("nav.oyun")}
-              </Link>
-              <Link href="/arsiv" className="underline" style={{ color: "var(--muted)" }}>
-                {t("nav.arsiv")}
-              </Link>
+              <Link href="/kesif" className="nav-link">{t("nav.kesif")}</Link>
+              <Link href="/ulke" className="nav-link">atlas</Link>
+              <Link href="/nabiz" className="nav-link">{t("nav.nabiz")}</Link>
+              <Link href="/arsiv" className="nav-link">{t("nav.arsiv")}</Link>
+              <Link href="/kose" className="nav-link">{t("nav.kose")}</Link>
+              <Link href="/oyun" className="nav-link">{t("nav.oyun")}</Link>
+              <Link href="/hakkinda" className="nav-link">{t("nav.gelistirici")}</Link>
             </span>
           </div>
         </header>

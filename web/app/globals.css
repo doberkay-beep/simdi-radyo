@@ -40,6 +40,39 @@
   --accent: #e0561f;
 }
 
+/* ── TON seçenekleri — kadranın şasisi (arka plan + parıltı) baştan aşağı değişir.
+   Magma = varsayılan (:root). data-tone tek değer olduğundan seçili tona ait blok
+   :root'u ezer; magma'ya dönünce blok eşleşmez ve :root (magma) geri gelir. */
+:root[data-tone="radyum"] {
+  --bg: #06090a; --bg2: #080d0c; --panel: #0c1412; --panel-hi: #101a17;
+  --fg: #eaf3ee; --muted: #8fa79b; --faint: #5c7268;
+  --line: #182420; --line-hi: #22322c;
+  --glow: #37d67a; --glow-hi: #6ef2a6; --live: #ff5a52; --accent: #37d67a;
+}
+:root[data-tone="tungsten"] {
+  --bg: #0b0806; --bg2: #120c07; --panel: #1a120a; --panel-hi: #241a0e;
+  --fg: #f4ecdd; --muted: #b0a08a; --faint: #7a6a52;
+  --line: #2e2113; --line-hi: #43301a;
+  --glow: #e9a13a; --glow-hi: #ffc266; --live: #ff5238; --accent: #e9a13a;
+}
+:root[data-tone="kobalt"] {
+  --bg: #060810; --bg2: #080b16; --panel: #0d1120; --panel-hi: #111731;
+  --fg: #e8ecf7; --muted: #93a0c2; --faint: #5d688a;
+  --line: #1a2138; --line-hi: #26304f;
+  --glow: #5b8cff; --glow-hi: #8fb4ff; --live: #ff5a6e; --accent: #5b8cff;
+}
+:root[data-tone="ametist"] {
+  --bg: #09060d; --bg2: #0d0814; --panel: #150f20; --panel-hi: #1c142b;
+  --fg: #efe9f6; --muted: #a597be; --faint: #6f6188;
+  --line: #251b38; --line-hi: #342651;
+  --glow: #b17cff; --glow-hi: #cfa8ff; --live: #ff5aa0; --accent: #b17cff;
+}
+/* Açık temada ton yalnız parıltı/aksan rengini kaydırır (zemin gün ışığı kalır). */
+:root[data-theme="light"][data-tone="radyum"]  { --glow: #17a559; --glow-hi: #2fca75; --accent: #17a559; }
+:root[data-theme="light"][data-tone="kobalt"]   { --glow: #2f5fe0; --glow-hi: #557fff; --accent: #2f5fe0; }
+:root[data-theme="light"][data-tone="ametist"]  { --glow: #8a4fe0; --glow-hi: #a878ff; --accent: #8a4fe0; }
+:root[data-theme="light"][data-tone="tungsten"] { --glow: #c9791a; --glow-hi: #e89a3a; --accent: #c9791a; }
+
 html,
 body {
   background: var(--bg);
@@ -84,11 +117,9 @@ body {
 /* Hiçbir şey çalmazken zemin ölü kalmasın: renk yumuşakça gezinsin (aurora).
    Yumuşak, doygunluğu düşük tonlar — sakin bir lav lambası gibi. */
 @keyframes aurora {
-  0% { --accent: #ff6a3d; }
-  25% { --accent: #ff8a3d; }
-  50% { --accent: #e0561f; }
-  75% { --accent: #ff5238; }
-  100% { --accent: #ff6a3d; }
+  0% { --accent: var(--glow); }
+  50% { --accent: var(--glow-hi); }
+  100% { --accent: var(--glow); }
 }
 .spread.aurora { animation: aurora 26s ease-in-out infinite; }
 

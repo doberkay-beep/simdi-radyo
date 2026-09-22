@@ -3,6 +3,7 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import Link from "next/link";
 import ThemeToggle from "./ThemeToggle";
+import ToneToggle from "./ToneToggle";
 import { kaynagiCalistir, hlsYik } from "@/lib/cal";
 import { dinleyiciKatil, type CanliKanal } from "@/lib/canli";
 import {
@@ -1020,6 +1021,7 @@ export default function NowList() {
               </button>
               <DilToggle />
               <ThemeToggle />
+              <ToneToggle />
               <span className="flex items-center gap-2">
                 <span
                   className="live-dot inline-block h-2 w-2 rounded-full"

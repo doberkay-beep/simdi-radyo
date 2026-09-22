@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useDil } from "@/lib/i18n";
+import ToneToggle from "./ToneToggle";
 
 // Site-geneli künye — her sayfanın altında. ŞİMDİ'nin bir yazar projesi
 // olduğunu söyler ve berkaydogan.co'ya (aynı kişi → funnel + entity) bağlar.
@@ -43,6 +44,12 @@ export default function AltBilgi() {
         <p className="mt-2" style={{ color: "var(--muted)" }}>
           {en ? "Words first, then frequencies." : "Önce kelimeler, sonra frekanslar."}
         </p>
+        <div className="mt-4 flex items-center gap-2.5">
+          <span className="mono text-[11px] uppercase tracking-[0.16em]" style={{ color: "var(--faint)" }}>
+            {en ? "tone" : "ton"}
+          </span>
+          <ToneToggle />
+        </div>
       </div>
     </footer>
   );

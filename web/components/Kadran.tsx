@@ -102,30 +102,33 @@ export default function Kadran({
         boxShadow: "inset 0 1px 0 color-mix(in srgb, #fff 8%, transparent), 0 22px 52px -30px #000",
       }}
     >
-      {/* LCD penceresi */}
-      <div className="flex items-baseline justify-between gap-3 px-4 pt-3">
-        <button
-          onClick={() => gosterilen && onTune(gosterilen.slug)}
-          className="min-w-0 text-left"
-          aria-label={`${gosterilen?.name} çal`}
-        >
+      {/* Enstrüman penceresi — büyük frekans hakim öğe */}
+      <div className="px-5 pt-4 sm:px-6">
+        <div className="mono text-[10px] uppercase tracking-[0.22em]" style={{ color: "var(--muted)" }}>
+          {t("kadran.simdiKadranda")}
+        </div>
+        <div className="mt-1 flex items-end justify-between gap-3">
+          <button
+            onClick={() => gosterilen && onTune(gosterilen.slug)}
+            className="dial min-w-0 shrink-0 text-left tabular-nums transition-colors duration-500"
+            style={{
+              color: renk, fontWeight: 500, lineHeight: 0.82,
+              fontSize: "clamp(46px, 12vw, 92px)",
+              textShadow: `0 0 34px color-mix(in srgb, ${renk} 45%, transparent)`,
+            }}
+            aria-label={`${gosterilen?.name} çal`}
+            suppressHydrationWarning
+          >
+            {frekans[stations.indexOf(gosterilen!)] ?? "—"}
+            <span className="mono align-baseline text-[0.22em] tracking-normal" style={{ color: "var(--muted)" }}> FM</span>
+          </button>
           <span
-            className="dial block truncate text-lg uppercase tracking-[0.03em] transition-colors duration-500"
+            className="dial min-w-0 truncate pb-1 text-right text-lg uppercase tracking-[0.03em] transition-colors duration-500"
             style={{ color: renk, fontWeight: 500 }}
           >
             {calan ? "● " : ""}{gosterilen?.name}
           </span>
-          <span className="mono block h-4 truncate text-[11px]" style={{ color: "var(--muted)" }} suppressHydrationWarning>
-            {gosterilen?.nowText || (calan ? t("radyo.canli") : t("kadran.dokun"))}
-          </span>
-        </button>
-        <span
-          className="dial shrink-0 text-3xl tabular-nums transition-colors duration-500"
-          style={{ color: renk, fontWeight: 500, textShadow: `0 0 22px color-mix(in srgb, ${renk} 55%, transparent)` }}
-          suppressHydrationWarning
-        >
-          {frekans[stations.indexOf(gosterilen!)] ?? "—"}
-        </span>
+        </div>
       </div>
 
       {/* Bant */}
@@ -184,6 +187,20 @@ export default function Kadran({
             )}
           </div>
         </div>
+      </div>
+
+      {/* Şimdi çalan — VU + parça (enstrümanın alt okuması) */}
+      <div className="flex items-center gap-3 px-5 pb-4 pt-1 sm:px-6">
+        <span className="eq shrink-0" aria-hidden style={{ ["--eq-color" as string]: renk }}>
+          <span></span><span></span><span></span><span></span>
+        </span>
+        <span
+          className="read min-w-0 flex-1 truncate text-[15px] italic"
+          style={{ color: "var(--fg)" }}
+          suppressHydrationWarning
+        >
+          {gosterilen?.nowText || (calan ? t("radyo.canli") : t("kadran.dokun"))}
+        </span>
       </div>
     </div>
   );

@@ -121,6 +121,7 @@ export const SOZLUK: Record<string, { tr: string; en: string }> = {
   "home.uykuZamanlayici": { tr: "uyku zamanlayıcı", en: "sleep timer" },
   "home.filtreleriTemizle": { tr: "filtreleri temizle", en: "clear filters" },
   "kadran.dokun": { tr: "dokun, çalsın", en: "tap to play" },
+  "kadran.simdiKadranda": { tr: "şu an kadranda", en: "now on the dial" },
   // durum / yükleniyor mesajları
   "durum.aranıyor": { tr: "aranıyor…", en: "searching…" },
   "durum.yukleniyor": { tr: "Yükleniyor…", en: "Loading…" },

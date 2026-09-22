@@ -114,7 +114,7 @@ export default function Nabiz() {
   const maxArtist = data?.todayArtists?.[0]?.adet ?? 1;
 
   return (
-    <div className="spread min-h-screen" style={{ ["--accent" as string]: "#c2683c" }}>
+    <div className="spread min-h-screen" style={{ ["--accent" as string]: "var(--glow)" }}>
       <div className="mx-auto max-w-2xl px-5 pb-24 pt-10">
         <header className="mb-6 flex items-start justify-between">
           <div>

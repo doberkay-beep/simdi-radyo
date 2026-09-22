@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 
 // KADRAN ton seçici — kadranın şasi rengini (arka plan + parıltı) değiştirir.
 // Magma varsayılan; seçim data-tone olarak köke yazılır, localStorage'da tutulur.
-type Ton = "magma" | "radyum" | "tungsten" | "kobalt" | "ametist";
+type Ton = "magma" | "radyum" | "tungsten" | "kobalt" | "ametist" | "siyah" | "beyaz";
 
 const TONLAR: { id: Ton; renk: string; ad: string }[] = [
   { id: "magma", renk: "#ff6a3d", ad: "magma" },
@@ -12,6 +12,8 @@ const TONLAR: { id: Ton; renk: string; ad: string }[] = [
   { id: "tungsten", renk: "#e9a13a", ad: "tungsten" },
   { id: "kobalt", renk: "#5b8cff", ad: "kobalt" },
   { id: "ametist", renk: "#b17cff", ad: "ametist" },
+  { id: "siyah", renk: "#26262b", ad: "siyah" },
+  { id: "beyaz", renk: "#f2f2f4", ad: "beyaz" },
 ];
 
 function apply(t: Ton) {

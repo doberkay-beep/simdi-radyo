@@ -46,7 +46,7 @@ export default async function Page({ params }: { params: Promise<{ slug: string 
   };
 
   return (
-    <div className="spread min-h-screen" style={{ ["--accent" as string]: "#9c5f7c" }}>
+    <div className="spread min-h-screen" style={{ ["--accent" as string]: "var(--glow)" }}>
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
       <div className="mx-auto max-w-2xl px-5 pb-24 pt-10">
         <header className="mb-10 flex items-center justify-between">

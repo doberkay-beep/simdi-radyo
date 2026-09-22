@@ -24,7 +24,7 @@ export default function Page() {
   const digerleri = DENEMELER.filter((d) => d.slug !== gunun.slug);
 
   return (
-    <div className="spread min-h-screen" style={{ ["--accent" as string]: "#9c5f7c" }}>
+    <div className="spread min-h-screen" style={{ ["--accent" as string]: "var(--glow)" }}>
       <div className="mx-auto max-w-2xl px-5 pb-24 pt-10">
         <header className="mb-8 flex items-start justify-between">
           <div>

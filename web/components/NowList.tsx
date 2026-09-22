@@ -4,6 +4,7 @@ import { useEffect, useMemo, useRef, useState } from "react";
 import Link from "next/link";
 import ThemeToggle from "./ThemeToggle";
 import ToneToggle from "./ToneToggle";
+import KonsolRaylar from "./KonsolRaylar";
 import { kaynagiCalistir, hlsYik } from "@/lib/cal";
 import { dinleyiciKatil, type CanliKanal } from "@/lib/canli";
 import {
@@ -932,6 +933,17 @@ export default function NowList() {
             : undefined
       }
     >
+      {/* Masaüstü konsol rayları — geniş ekranda yan boşluğu doldurur (≥1280px). */}
+      <KonsolRaylar
+        stations={stations}
+        favSlugs={Array.from(favs)}
+        playing={playing}
+        onTune={(slug) => {
+          const st = stations.find((x) => x.slug === slug);
+          if (st) toggle(st);
+        }}
+      />
+
       {/* Geniş ekranda yan boşluklara çok soluk dev kelime işareti (ambient). */}
       <div
         aria-hidden

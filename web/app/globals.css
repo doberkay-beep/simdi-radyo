@@ -219,6 +219,28 @@ body {
 }
 .bandsel .sub { font-family: var(--font-mono), ui-monospace, monospace; font-size: 9px; letter-spacing: 0.1em; opacity: 0.72; }
 
+/* KADRAN masaüstü konsolu — geniş ekranda merkez kolonun (max-w-2xl = 672px)
+   sağ/soluna sabit modül rayları. Dar ekranda gizli (mobil tek kolon korunur). */
+.konsol-ray { display: none; }
+@media (min-width: 1280px) {
+  .konsol-ray {
+    display: flex; flex-direction: column; gap: 14px;
+    position: fixed; top: 84px; width: 286px;
+    max-height: calc(100vh - 108px); overflow-y: auto; overflow-x: hidden;
+    z-index: 5; scrollbar-width: none;
+    -webkit-mask-image: linear-gradient(to bottom, #000 93%, transparent);
+            mask-image: linear-gradient(to bottom, #000 93%, transparent);
+  }
+  .konsol-ray::-webkit-scrollbar { width: 0; }
+  .konsol-ray.sol { left: calc(50% - 336px - 22px - 286px); }
+  .konsol-ray.sag { left: calc(50% + 336px + 22px); }
+}
+@media (min-width: 1560px) {
+  .konsol-ray { width: 320px; }
+  .konsol-ray.sol { left: calc(50% - 336px - 30px - 320px); }
+  .konsol-ray.sag { left: calc(50% + 336px + 30px); }
+}
+
 /* Yatay şeritte kaydırma çubuğunu gizle. */
 .no-scrollbar { scrollbar-width: none; -ms-overflow-style: none; }
 .no-scrollbar::-webkit-scrollbar { display: none; }

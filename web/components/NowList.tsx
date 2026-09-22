@@ -1043,6 +1043,13 @@ export default function NowList() {
           </div>
         </header>
 
+        {/* Bant seçici — radyo bant düğmesi: FM (buradasın) / Dünya / Nabız */}
+        <nav className="bandsel mb-5" aria-label="bant">
+          <Link href="/" data-on="1" aria-current="page">FM<span className="sub">{t("home.turkiye")}</span></Link>
+          <Link href="/ulke" data-on="0">{t("home.dunya")}<span className="sub">{t("home.atlas")}</span></Link>
+          <Link href="/nabiz" data-on="0">{t("nav.nabiz")}<span className="sub">{t("nav.canli")}</span></Link>
+        </nav>
+
         {/* Selamlama (edebi) + saat + sayaçlar */}
         {now > 0 && (
           <div className="mb-5">

@@ -266,39 +266,80 @@ export default async function StationPage({ params }: { params: Promise<{ slug: 
           </span>
         </header>
 
-        <div className="flex items-center gap-4">
-          <span
-            className="flex h-16 w-16 shrink-0 items-center justify-center rounded-2xl text-2xl font-bold"
-            style={{
-              background: `linear-gradient(135deg, ${accent}, color-mix(in srgb, ${accent} 50%, #000))`,
-              color: readableOn(accent),
-            }}
-          >
-            {s.name.trim().charAt(0).toLocaleUpperCase("tr")}
-          </span>
-          <div>
-            <h1 className="brand text-4xl font-bold tracking-tight">{s.name}</h1>
-            <p className="mt-1 text-sm" style={{ color: "var(--muted)" }}>
-              {[turAdi(dil, s.genre), s.frequency, s.city].filter(Boolean).join(" · ") || T("radyo.canliRadyo")}
-            </p>
-            {turSlug(s.genre) && (
-              <Link
-                href={`/tur/${turSlug(s.genre)}`}
-                className="mt-1 inline-block text-sm underline"
-                style={{ color: accent }}
+        {/* KADRAN enstrümanı — bu istasyon (büyük frekans + ibre bandı + VU) */}
+        <div
+          className="mb-5 overflow-hidden rounded-2xl border"
+          style={{
+            borderColor: "var(--line-hi)",
+            background: `radial-gradient(130% 100% at 50% 0%, color-mix(in srgb, ${accent} 20%, transparent), transparent 62%), linear-gradient(180deg, var(--panel-hi), var(--panel))`,
+            boxShadow: "inset 0 1px 0 color-mix(in srgb, #fff 8%, transparent), 0 22px 52px -30px #000",
+          }}
+        >
+          <div className="px-5 pt-4 sm:px-6">
+            <div className="mono text-[10px] uppercase tracking-[0.22em]" style={{ color: "var(--muted)" }}>
+              {T("kadran.simdiKadranda")}
+            </div>
+            <div className="mt-1 flex items-end justify-between gap-3">
+              <span
+                className="dial tabular-nums"
+                style={{
+                  color: accent, fontWeight: 500, lineHeight: 0.82,
+                  fontSize: s.frequency ? "clamp(44px, 11vw, 84px)" : "clamp(28px, 7vw, 52px)",
+                  textShadow: `0 0 34px color-mix(in srgb, ${accent} 45%, transparent)`,
+                }}
               >
-                {dil === "en" ? `all ${turAdi(dil, s.genre)} stations →` : `tüm ${s.genre} radyoları →`}
-              </Link>
-            )}
+                {s.frequency || s.name}
+                {s.frequency && /^[\d.]+$/.test(s.frequency) ? (
+                  <span className="mono align-baseline text-[0.24em]" style={{ color: "var(--muted)" }}> FM</span>
+                ) : null}
+              </span>
+              {s.frequency ? (
+                <span className="dial min-w-0 truncate pb-1 text-right text-lg uppercase tracking-[0.03em]" style={{ color: accent, fontWeight: 500 }}>
+                  {s.name}
+                </span>
+              ) : null}
+            </div>
+            <p className="mono mt-1 text-[11px]" style={{ color: "var(--muted)" }}>
+              {[turAdi(dil, s.genre), s.city].filter(Boolean).join(" · ") || T("radyo.canliRadyo")}
+            </p>
+          </div>
+          {/* Statik ayar bandı — ortada ibre */}
+          <div className="relative mt-3 h-8" aria-hidden>
+            <div className="absolute left-0 right-0 top-1/2 h-px -translate-y-1/2" style={{ background: "var(--line-hi)" }} />
+            <div className="absolute inset-0 flex items-center justify-between px-5 sm:px-6">
+              {Array.from({ length: 29 }).map((_, i) => (
+                <span
+                  key={i}
+                  className="block w-px"
+                  style={{
+                    height: i === 14 ? 22 : i % 4 === 0 ? 12 : 7,
+                    background: i === 14 ? accent : "color-mix(in srgb, var(--fg) 26%, transparent)",
+                    boxShadow: i === 14 ? `0 0 10px ${accent}` : undefined,
+                  }}
+                />
+              ))}
+            </div>
+          </div>
+          {/* Şimdi çalan — VU + canlı parça */}
+          <div className="flex items-center gap-3 px-5 pb-4 pt-2 sm:px-6">
+            <span className="eq shrink-0" aria-hidden style={{ ["--eq-color" as string]: accent }}>
+              <span></span><span></span><span></span><span></span>
+            </span>
+            <div className="min-w-0 flex-1">
+              <CanliParca slug={slug} initial={track} etiket={T("radyo.simdiCaliyor")} bosMetin={T("radyo.canliYayin")} />
+            </div>
           </div>
         </div>
 
-        <CanliParca
-          slug={slug}
-          initial={track}
-          etiket={T("radyo.simdiCaliyor")}
-          bosMetin={T("radyo.canliYayin")}
-        />
+        {turSlug(s.genre) && (
+          <Link
+            href={`/tur/${turSlug(s.genre)}`}
+            className="mb-2 inline-block text-sm underline"
+            style={{ color: accent }}
+          >
+            {dil === "en" ? `all ${turAdi(dil, s.genre)} stations →` : `tüm ${s.genre} radyoları →`}
+          </Link>
+        )}
 
         <StationPlayer slug={slug} name={s.name} accent={accent} />
 

@@ -132,6 +132,13 @@ export default function Nabiz() {
           </span>
         </header>
 
+        {/* Bant seçici — Nabız aktif */}
+        <nav className="bandsel mb-6" aria-label="bant">
+          <Link href="/" data-on="0">FM<span className="sub">{t("home.turkiye")}</span></Link>
+          <Link href="/ulke" data-on="0">{t("home.dunya")}<span className="sub">{t("home.atlas")}</span></Link>
+          <Link href="/nabiz" data-on="1" aria-current="page">{t("nav.nabiz")}<span className="sub">{t("nav.canli")}</span></Link>
+        </nav>
+
         {/* TÜRKİYE ŞU AN — türlerin duygulara toplanmış manşeti */}
         {duygu && (
           <div

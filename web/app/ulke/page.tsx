@@ -41,6 +41,13 @@ export default function AtlasPage() {
           <Link href="/" className="brand text-sm font-bold tracking-tight">ŞİMDİ</Link>
         </header>
 
+        {/* Bant seçici — Dünya aktif */}
+        <nav className="bandsel mb-6" aria-label="bant">
+          <Link href="/" data-on="0">FM<span className="sub">türkiye</span></Link>
+          <Link href="/ulke" data-on="1" aria-current="page">Dünya<span className="sub">atlas</span></Link>
+          <Link href="/nabiz" data-on="0">Nabız<span className="sub">canlı</span></Link>
+        </nav>
+
         <h1 className="dial text-5xl uppercase tracking-[0.02em]" style={{ fontWeight: 500 }}>Dünya Atlası</h1>
         <p className="epigraf mt-3 text-[15px]">
           Her ülkenin bir &ldquo;şimdi&rdquo;si var. Bir ışığa dokun; o ülkenin frekanslarına bağlan.

@@ -25,6 +25,7 @@ import FrekansKarti from "./FrekansKarti";
 import DilToggle from "./DilToggle";
 import Kadran from "./Kadran";
 import DunyadaSimdi from "./DunyadaSimdi";
+import DefterSeridi from "./DefterSeridi";
 import { istasyonUlkesi, bayrakEmoji, doluUlkeler, ulkeSlug, ULKELER } from "@/lib/ulkeler";
 import { useDil, turAdi } from "@/lib/i18n";
 
@@ -1106,6 +1107,9 @@ export default function NowList() {
             if (st) { setUlke(null); setRegion("all"); toggle(st); }
           }}
         />
+
+        {/* Kalp defteri şeridi — son anılar akar */}
+        <DefterSeridi stations={stations} />
 
         {/* Arama */}
         <input

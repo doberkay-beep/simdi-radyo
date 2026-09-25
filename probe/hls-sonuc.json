@@ -1,0 +1,267 @@
+[
+  {
+    "slug": "radyo-7",
+    "name": "Radyo 7",
+    "eski": "http://46.20.3.250/;stream",
+    "yeni": null,
+    "zayif": [
+      {
+        "url": "https://moondigitaledge2.radyotvonline.net/radyo7turku/playlist.m3u8",
+        "tip": "hls",
+        "uygun": false,
+        "kanit": "moondigitaledge2.radyotvonline.net",
+        "rbAd": "Radyo 7 Türkü"
+      },
+      {
+        "url": "https://radyo.yayin.com.tr:5924/",
+        "tip": "icy",
+        "uygun": false,
+        "kanit": "RADYO 71",
+        "rbAd": "RADYO 71"
+      },
+      {
+        "url": "https://anadolu.liderhost.com.tr/8126/stream",
+        "tip": "icy",
+        "uygun": false,
+        "kanit": "AutoDJ Stream",
+        "rbAd": "RADYO 75"
+      }
+    ]
+  },
+  {
+    "slug": "turkulerle-turkiye",
+    "name": "Türkülerle Türkiye",
+    "eski": "http://37.247.98.8/stream/22/;",
+    "yeni": null,
+    "zayif": []
+  },
+  {
+    "slug": "ankara-havalari",
+    "name": "Ankara Havaları",
+    "eski": "http://37.247.98.8/stream/30/;",
+    "yeni": null,
+    "zayif": []
+  },
+  {
+    "slug": "altin-sarkilar",
+    "name": "Altın Şarkılar",
+    "eski": "http://37.247.98.8/stream/25/;",
+    "yeni": null,
+    "zayif": []
+  },
+  {
+    "slug": "dinamo-sleep",
+    "name": "dinamo.fm sleep",
+    "eski": "http://channels.dinamo.fm/sleep-mp3",
+    "yeni": null,
+    "zayif": []
+  },
+  {
+    "slug": "90lar",
+    "name": "90'lar",
+    "eski": "http://37.247.98.8/stream/166/",
+    "yeni": {
+      "url": "https://moondigitalmaster.radyotvonline.net/90lar/playlist.m3u8",
+      "tip": "hls",
+      "uygun": true,
+      "kanit": "moondigitalmaster.radyotvonline.net",
+      "rbAd": "90'lar Türkçe Pop"
+    },
+    "zayif": []
+  },
+  {
+    "slug": "pal-station",
+    "name": "Pal Station",
+    "eski": "http://shoutcast.radyogrup.com:1020/",
+    "yeni": null,
+    "zayif": []
+  },
+  {
+    "slug": "pal-nostalji",
+    "name": "Pal Nostalji",
+    "eski": "http://shoutcast.radyogrup.com:1010/",
+    "yeni": {
+      "url": "https://moondigitaledge.radyotvonline.net/palnostalji/playlist.m3u8",
+      "tip": "hls",
+      "uygun": true,
+      "kanit": "moondigitaledge.radyotvonline.net",
+      "rbAd": "PAL Nostalji"
+    },
+    "zayif": []
+  },
+  {
+    "slug": "pal-doga",
+    "name": "Pal Doğa",
+    "eski": "http://shoutcast.radyogrup.com:1040/;*.mp3",
+    "yeni": null,
+    "zayif": []
+  },
+  {
+    "slug": "dost-radyo",
+    "name": "Dost Radyo",
+    "eski": "http://yayin1.yayindakiler.com:3156/",
+    "yeni": null,
+    "zayif": []
+  },
+  {
+    "slug": "dinamo-discotheque",
+    "name": "dinamo.fm discotheque",
+    "eski": "http://channels.dinamo.fm/discotheque-mp3",
+    "yeni": null,
+    "zayif": []
+  },
+  {
+    "slug": "itu-klasik",
+    "name": "İTÜ Klasik",
+    "eski": "http://160.75.86.29:8088/ituklasikmp3",
+    "yeni": null,
+    "zayif": []
+  },
+  {
+    "slug": "radio-zetzet",
+    "name": "Radio ZetZet",
+    "eski": "http://173.249.25.121:8000/",
+    "yeni": null,
+    "zayif": []
+  },
+  {
+    "slug": "ask-fm",
+    "name": "Aşk FM",
+    "eski": "http://yayin.asymedya.com:8020/;",
+    "yeni": null,
+    "zayif": [
+      {
+        "url": "https://embed.tawk.to/_s/v4/assets/audio/chat_sound.mp3",
+        "tip": "icy",
+        "uygun": false,
+        "kanit": "audio/mpeg",
+        "rbAd": "Mega Ask FM"
+      }
+    ]
+  },
+  {
+    "slug": "radyo-a",
+    "name": "Radyo A",
+    "eski": "http://canli.radyoa.anadolu.edu.tr:44445/Radyo_A_MP3",
+    "yeni": null,
+    "zayif": [
+      {
+        "url": "https://stream.zeno.fm/z80zubtvrf9uv",
+        "tip": "icy",
+        "uygun": false,
+        "kanit": "DXGT RADYO ABANTE",
+        "rbAd": "DXGT RADYO ABANTE"
+      },
+      {
+        "url": "https://yayin.radyomadyo.com:8014/stream",
+        "tip": "icy",
+        "uygun": false,
+        "kanit": "Radyo Ahenk",
+        "rbAd": "RADYO AHENK"
+      },
+      {
+        "url": "https://radyo.yayin.com.tr:8026/",
+        "tip": "icy",
+        "uygun": false,
+        "kanit": "RADYO AK 92.70",
+        "rbAd": "RADYO AK"
+      },
+      {
+        "url": "https://yayin.radyoakdeniz.com/9470/stream",
+        "tip": "icy",
+        "uygun": false,
+        "kanit": "RADYO AKDENIZ",
+        "rbAd": "RADYO AKDENIZ"
+      },
+      {
+        "url": "https://moondigitaledge.radyotvonline.net/akustikland/playlist.m3u8",
+        "tip": "hls",
+        "uygun": false,
+        "kanit": "moondigitaledge.radyotvonline.net",
+        "rbAd": "RADYO AKUSTİKLAND"
+      },
+      {
+        "url": "https://yayin.jumboserver.net:9100/stream",
+        "tip": "icy",
+        "uygun": false,
+        "kanit": "Radyo Alaturka",
+        "rbAd": "Radyo Alaturka"
+      },
+      {
+        "url": "https://alevifm.80.yayin.com.tr/",
+        "tip": "icy",
+        "uygun": false,
+        "kanit": "Alevi Radyosu",
+        "rbAd": "Radyo Alevi Canlar"
+      },
+      {
+        "url": "https://sslyayin.netyayin.net:8036/",
+        "tip": "icy",
+        "uygun": false,
+        "kanit": "RADYO ANTALYA",
+        "rbAd": "RADYO ANTALYA"
+      },
+      {
+        "url": "https://radyo.yayindakiler.com:4084/stream",
+        "tip": "icy",
+        "uygun": false,
+        "kanit": "Armoni FM 98.1 Afyon",
+        "rbAd": "RADYO ARMONİ"
+      }
+    ]
+  },
+  {
+    "slug": "park-fm",
+    "name": "Park FM",
+    "eski": "http://yayin.netradyom.com:8050/PARKFM/",
+    "yeni": {
+      "url": "https://s03.diazol.hu:7142/stream.mp3",
+      "tip": "icy",
+      "uygun": true,
+      "kanit": "Park FM",
+      "rbAd": "Park FM"
+    },
+    "zayif": []
+  },
+  {
+    "slug": "can-radyo",
+    "name": "Can Radyo",
+    "eski": "http://yayin1.yayindakiler.com:3124/;",
+    "yeni": null,
+    "zayif": []
+  },
+  {
+    "slug": "radyo-voyage",
+    "name": "Radyo Voyage",
+    "eski": "http://voyagewmp.radyotvonline.com/;stream.mp3",
+    "yeni": {
+      "url": "https://ssldyg.radyotvonline.com/pozitif/smil:voyage.smil/playlist.m3u8",
+      "tip": "hls",
+      "uygun": true,
+      "kanit": "ssldyg.radyotvonline.com",
+      "rbAd": "Radyo Voyage"
+    },
+    "zayif": []
+  },
+  {
+    "slug": "gozyasi-fm",
+    "name": "Gözyaşı FM",
+    "eski": "http://yayin1.canliyayin.org:8700/;*.mp3",
+    "yeni": null,
+    "zayif": []
+  },
+  {
+    "slug": "italo-power",
+    "name": "Italo Power",
+    "eski": "http://stream.radioitalopower.com:10018/italopower",
+    "yeni": null,
+    "zayif": []
+  },
+  {
+    "slug": "concertzender-klassiek",
+    "name": "Concertzender Klassiek",
+    "eski": "http://streams.greenhost.nl:8080/klassiek",
+    "yeni": null,
+    "zayif": []
+  }
+]

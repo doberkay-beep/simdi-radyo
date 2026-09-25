@@ -3,7 +3,15 @@
 import { useEffect, useRef, useState } from "react";
 import { useDil, type Dil } from "@/lib/i18n";
 
-type Not = { id: number; slug: string; not: string; createdAt: string };
+type Not = { id: number; slug: string; not: string; createdAt: string; kalp?: number };
+
+function kalpliOku(): number[] {
+  try {
+    return JSON.parse(localStorage.getItem("defterKalp") || "[]") as number[];
+  } catch {
+    return [];
+  }
+}
 
 function nezaman(iso: string, dil: Dil): string {
   const d = new Date(iso).getTime();
@@ -24,7 +32,25 @@ export default function Notlar({ slug, accent }: { slug: string; accent: string 
   const [notlar, setNotlar] = useState<Not[]>([]);
   const [metin, setMetin] = useState("");
   const [durum, setDurum] = useState<"idle" | "gonderiliyor" | "hata">("idle");
+  const [kalpli, setKalpli] = useState<number[]>([]);
   const bekle = useRef(0);
+
+  useEffect(() => setKalpli(kalpliOku()), []);
+
+  function notKalp(id: number) {
+    if (kalpli.includes(id)) return;
+    const yeni = [...kalpli, id];
+    setKalpli(yeni);
+    try {
+      localStorage.setItem("defterKalp", JSON.stringify(yeni.slice(-200)));
+    } catch { /* yoksay */ }
+    setNotlar((n) => n.map((x) => (x.id === id ? { ...x, kalp: (x.kalp || 0) + 1 } : x)));
+    fetch("/api/not-kalp", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ id }),
+    }).catch(() => {});
+  }
 
   useEffect(() => {
     let off = false;
@@ -112,8 +138,18 @@ export default function Notlar({ slug, accent }: { slug: string; accent: string 
               <p className="text-[15px] italic" style={{ color: "var(--fg)" }}>
                 {n.not}
               </p>
-              <p className="mono mt-1.5 text-[10px] tracking-[0.04em]" style={{ color: "var(--faint)" }}>
-                {nezaman(n.createdAt, dil)}
+              <p className="mono mt-1.5 flex items-center gap-3 text-[10px] tracking-[0.04em]" style={{ color: "var(--faint)" }}>
+                <span>{nezaman(n.createdAt, dil)}</span>
+                <button
+                  type="button"
+                  onClick={() => notKalp(n.id)}
+                  aria-label="nota kalp bırak"
+                  className="press text-xs leading-none"
+                  style={{ color: kalpli.includes(n.id) ? accent : "var(--faint)" }}
+                >
+                  {kalpli.includes(n.id) ? "♥" : "♡"}
+                  {(n.kalp || 0) > 0 ? ` ${n.kalp}` : ""}
+                </button>
               </p>
             </li>
           ))}

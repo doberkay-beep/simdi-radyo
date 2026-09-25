@@ -10,18 +10,24 @@ export async function GET(request: Request) {
   const slug = (searchParams.get("slug") || "").trim();
   const supabase = getSupabase();
   try {
-    let q = supabase
-      .from("station_notes")
-      .select("id, slug, not_text, created_at")
-      .order("created_at", { ascending: false })
-      .limit(20);
-    if (slug) q = q.eq("slug", slug);
-    const { data } = await q;
-    const notlar = (data ?? []).map((r) => ({
+    // kalp kolonu migrasyonu (not-kalp.sql) çalışana dek eski şemayla da ayakta kal.
+    const sec = async (kolonlar: string) => {
+      let q = supabase
+        .from("station_notes")
+        .select(kolonlar)
+        .order("created_at", { ascending: false })
+        .limit(20);
+      if (slug) q = q.eq("slug", slug);
+      return q;
+    };
+    let { data, error } = await sec("id, slug, not_text, created_at, kalp");
+    if (error) ({ data } = await sec("id, slug, not_text, created_at"));
+    const notlar = ((data ?? []) as unknown as { id: number; slug: string; not_text: string; created_at: string; kalp?: number }[]).map((r) => ({
       id: r.id,
       slug: r.slug,
       not: r.not_text,
       createdAt: r.created_at,
+      kalp: Number(r.kalp) || 0,
     }));
     return json({ notlar }, { headers: { "Cache-Control": "public, s-maxage=15, stale-while-revalidate=45" } });
   } catch {

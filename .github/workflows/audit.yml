@@ -1,15 +1,19 @@
 name: Katalog denetimi
 
-# collector/seed.json'daki her istasyonu yoklar, ölü/sessiz olanları loglar.
-# Ölü çıkanları katalogdan çıkarırız. Elle tetiklenir.
+# Sağlık robotu: her Pazartesi 09:17 (TR) katalogdaki her istasyonu yoklar
+# (ICY başlık / HLS manifest) + canlı siteden metadata bayatlığını ölçer.
+# ÖLÜ istasyon bulursa iş kırmızıya döner (GitHub mail atar); özet raporu
+# Actions'ın Summary sekmesinde. Elle de tetiklenebilir.
 
 on:
   workflow_dispatch: {}
+  schedule:
+    - cron: "17 6 * * 1"
 
 jobs:
   audit:
     runs-on: ubuntu-latest
-    timeout-minutes: 8
+    timeout-minutes: 10
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4

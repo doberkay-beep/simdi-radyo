@@ -27,6 +27,9 @@ import Kadran from "./Kadran";
 import DunyadaSimdi from "./DunyadaSimdi";
 import DefterSeridi from "./DefterSeridi";
 import GeceNobeti from "./GeceNobeti";
+import AvDefteri from "./AvDefteri";
+import SanatciRadari from "./SanatciRadari";
+import { avEkle } from "@/lib/avlar";
 import { istasyonUlkesi, bayrakEmoji, doluUlkeler, ulkeSlug, ULKELER } from "@/lib/ulkeler";
 import { useDil, turAdi } from "@/lib/i18n";
 
@@ -209,6 +212,8 @@ export default function NowList() {
   const [kartAcik, setKartAcik] = useState(false); // paylaşılabilir kart penceresi
   const [defterAcik, setDefterAcik] = useState(false); // kalp defteri alt paneli
   const [frekansAcik, setFrekansAcik] = useState(false); // frekans kartı (kişisel karne)
+  const [avAcik, setAvAcik] = useState(false); // av defteri (şarkı yakala)
+  const [avGeri, setAvGeri] = useState(0); // "yakalandı" geri bildirimi (zaman damgası)
   const [pwaIpucu, setPwaIpucu] = useState(false); // iOS "ana ekrana ekle" ipucu (bir kez)
   const jestRef = useRef<{ x: number; y: number } | null>(null); // çubukta kaydırma jesti
   const [dinleyiciSayi, setDinleyiciSayi] = useState(0); // aynı istasyonda şu an kaç kişi
@@ -1048,6 +1053,9 @@ export default function NowList() {
               <button onClick={() => setFrekansAcik(true)} className="nav-link press">
                 {t("nav.frekansim")}
               </button>
+              <button onClick={() => setAvAcik(true)} className="nav-link press">
+                {t("nav.avlarim")}
+              </button>
               <Link href="/kesif" className="nav-link">{t("nav.kesif")}</Link>
               <Link href="/ulke" className="nav-link">atlas</Link>
               <Link href="/nabiz" className="nav-link">{t("nav.nabiz")}</Link>
@@ -1114,6 +1122,15 @@ export default function NowList() {
 
         {/* Kalp defteri şeridi — son anılar akar */}
         <DefterSeridi stations={stations} />
+
+        {/* Sanatçı radarı — izlediğin sanatçı şu an bir istasyonda çalıyorsa */}
+        <SanatciRadari
+          stations={stations}
+          onTune={(slug) => {
+            const st = stations.find((x) => x.slug === slug);
+            if (st) { setUlke(null); setRegion("all"); toggle(st); }
+          }}
+        />
 
         {/* Arama */}
         <input
@@ -1663,6 +1680,29 @@ export default function NowList() {
               ♥ {kalpler[current.slug] ? kalpler[current.slug] : ""}
             </button>
 
+            {/* Şarkı yakala — çalan parçayı av defterine at */}
+            {barNp && (barNp.artist || barNp.title) && (
+              <button
+                onClick={() => {
+                  avEkle({
+                    t: Date.now(),
+                    artist: barNp.artist ?? null,
+                    title: barNp.title ?? null,
+                    slug: current.slug,
+                    istasyon: current.name,
+                  });
+                  setAvGeri(Date.now());
+                  setTimeout(() => setAvGeri(0), 1400);
+                }}
+                aria-label={t("av.yakala")}
+                title={t("av.yakala")}
+                className="press shrink-0 inline-flex items-center gap-1 rounded-full px-2.5 py-1 text-xs font-semibold"
+                style={{ background: "rgba(0,0,0,0.18)", color: readableOn(accent) }}
+              >
+                {avGeri ? `✓ ${t("av.yakalandi")}` : "🎣"}
+              </button>
+            )}
+
             {/* Kalp defteri — dinlerken not bırak */}
             <button
               onClick={() => setDefterAcik(true)}
@@ -1916,6 +1956,8 @@ export default function NowList() {
           onClose={() => setFrekansAcik(false)}
         />
       )}
+
+      {avAcik && <AvDefteri onClose={() => setAvAcik(false)} />}
 
       {/* Uçan kalpler — seninkiler ve aynı frekanstakilerinkiler */}
       {ucanKalpler.length > 0 && (

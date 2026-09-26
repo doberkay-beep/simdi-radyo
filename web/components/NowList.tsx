@@ -26,6 +26,7 @@ import DilToggle from "./DilToggle";
 import Kadran from "./Kadran";
 import DunyadaSimdi from "./DunyadaSimdi";
 import DefterSeridi from "./DefterSeridi";
+import GeceNobeti from "./GeceNobeti";
 import { istasyonUlkesi, bayrakEmoji, doluUlkeler, ulkeSlug, ULKELER } from "@/lib/ulkeler";
 import { useDil, turAdi } from "@/lib/i18n";
 
@@ -1064,6 +1065,9 @@ export default function NowList() {
           <Link href="/ulke" data-on="0">{t("home.dunya")}<span className="sub">{t("home.atlas")}</span></Link>
           <Link href="/nabiz" data-on="0">{t("nav.nabiz")}<span className="sub">{t("nav.canli")}</span></Link>
         </nav>
+
+        {/* Gece nöbeti — 02:00–05:00 arası özel yüz */}
+        <GeceNobeti />
 
         {/* Selamlama (edebi) + saat + sayaçlar */}
         {now > 0 && (

@@ -35,7 +35,21 @@ export default function FrekansKarti({
   const { dil, t } = useDil();
   const en = dil === "en";
   const [kartUrl, setKartUrl] = useState<string | null>(null);
-  const gunluk = useMemo(oku, []);
+  // "hep" = tüm günlük, "ay" = ŞİMDİ Wrapped (bu ayın dinlemeleri)
+  const [kip, setKip] = useState<"hep" | "ay">("hep");
+  const tumGunluk = useMemo(oku, []);
+  const gunluk = useMemo(() => {
+    if (kip === "hep") return tumGunluk;
+    const simdi = new Date();
+    return tumGunluk.filter((k) => {
+      const d = new Date(k.t);
+      return d.getMonth() === simdi.getMonth() && d.getFullYear() === simdi.getFullYear();
+    });
+  }, [tumGunluk, kip]);
+  const ayAdi = useMemo(
+    () => new Date().toLocaleDateString(en ? "en-US" : "tr-TR", { month: "long" }),
+    [en],
+  );
 
   const ozet = useMemo(() => {
     if (gunluk.length < 3) return null;
@@ -93,7 +107,15 @@ export default function FrekansKarti({
       x.textAlign = "center";
       x.fillStyle = "#8a8a8a";
       x.font = "600 34px 'Instrument Sans', system-ui, sans-serif";
-      x.fillText(en ? "Y O U R   F R E Q U E N C Y" : "S E N İ N   F R E K A N S I N", 540, 300);
+      const baslikMetni =
+        kip === "ay"
+          ? en
+            ? `YOUR ${ayAdi.toUpperCase()} FREQUENCY`
+            : `${ayAdi.toLocaleUpperCase("tr")} FREKANSIN`
+          : en
+            ? "YOUR FREQUENCY"
+            : "SENİN FREKANSIN";
+      x.fillText(baslikMetni.split("").join(" "), 540, 300);
       x.fillStyle = ozet.accent;
       x.font = "bold 96px 'Instrument Sans', system-ui, sans-serif";
       x.fillText(ozet.kisilik, 540, 430);
@@ -152,7 +174,7 @@ export default function FrekansKarti({
     } catch {
       // kart üretilemedi — modal yine metinle çalışır
     }
-  }, [ozet, en]);
+  }, [ozet, en, kip, ayAdi]);
 
   async function paylas() {
     if (!kartUrl) return;
@@ -184,6 +206,27 @@ export default function FrekansKarti({
           <button onClick={onClose} className="press rounded-full border px-3 py-1 text-xs" style={{ borderColor: "var(--line)", color: "var(--muted)" }}>
             {t("frekans.kapat")}
           </button>
+        </div>
+        {/* ŞİMDİ Wrapped — tümü / bu ay */}
+        <div className="mb-3 inline-flex rounded-full border p-0.5 text-xs" style={{ borderColor: "var(--line)" }}>
+          {(
+            [
+              ["hep", en ? "all time" : "tümü"],
+              ["ay", en ? ayAdi.toLowerCase() : ayAdi.toLocaleLowerCase("tr")],
+            ] as const
+          ).map(([k, ad]) => (
+            <button
+              key={k}
+              onClick={() => setKip(k)}
+              className="rounded-full px-3 py-1 transition-colors"
+              style={{
+                background: kip === k ? "var(--fg)" : "transparent",
+                color: kip === k ? "var(--bg)" : "var(--muted)",
+              }}
+            >
+              {ad}
+            </button>
+          ))}
         </div>
         {!ozet ? (
           <p className="read text-sm" style={{ color: "var(--muted)" }}>

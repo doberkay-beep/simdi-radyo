@@ -18,6 +18,9 @@ self.addEventListener("activate", (e) => {
 });
 
 self.addEventListener("fetch", (e) => {
+  // Geliştirme sunucusunda araya girme — dev chunk yolları hash'siz olduğu
+  // için önbellek bayat kod sunar (canlıda yollar hash'li, sorun yok).
+  if (location.hostname === "localhost" || location.hostname === "127.0.0.1") return;
   const req = e.request;
   if (req.method !== "GET") return;
   const url = new URL(req.url);

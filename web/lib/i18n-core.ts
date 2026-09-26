@@ -128,6 +128,17 @@ export const SOZLUK: Record<string, { tr: string; en: string }> = {
   // rozetler & şairin frekansı
   "rozet.baslik": { tr: "rozetler", en: "badges" },
   "sair.baslik": { tr: "şairin frekansı", en: "the poet's pick" },
+  // topluluk geri bildirimi
+  "gb.yanlis": { tr: "yanlış şarkı mı yazıyor? bildir", en: "wrong song showing? report" },
+  "gb.tesekkur": { tr: "bildirildi — teşekkürler ✓", en: "reported — thanks ✓" },
+  "gb.onerBaslik": { tr: "bir istasyon öner", en: "suggest a station" },
+  "gb.onerYer": { tr: "istasyon adı + varsa yayın linki…", en: "station name + stream link if you have it…" },
+  "gb.gonder": { tr: "gönder", en: "send" },
+  "gb.onerTesekkur": { tr: "Ulaştı — teşekkürler; uygunsa kadrana eklenir.", en: "Received — thanks; if it fits, it joins the dial." },
+  "gb.hata": { tr: "Gönderilemedi — 2-300 karakter olsun.", en: "Couldn't send — keep it 2-300 characters." },
+  // alarm v2
+  "alarm.rastgele": { tr: "rastgele istasyonla uyan", en: "wake to a random station" },
+  "alarm.kademeli": { tr: "ses 30 saniyede yavaşça açılır", en: "volume fades in over 30 seconds" },
   // kalp defteri
   "defter.baslik": { tr: "kalp defteri", en: "guestbook" },
   "defter.yer": { tr: "bir anı bırak… (140 karakter)", en: "leave a note… (140 chars)" },

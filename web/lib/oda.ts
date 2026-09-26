@@ -39,9 +39,12 @@ export function odaKoduUret(): string {
   return k;
 }
 
+const TEPKILER = ["🔥", "❤️", "🎶", "😢"];
+
 export type Oda = {
   istasyonYolla: (slug: string) => void;
   kalpYolla: () => void;
+  tepkiYolla: (ch: string) => void;
   ayril: () => void;
 };
 
@@ -52,6 +55,7 @@ export function odaBaglan(
     sayi?: (n: number) => void;
     istasyon?: (slug: string) => void;
     kalp?: () => void;
+    tepki?: (ch: string) => void;
     hostGitti?: () => void;
   },
 ): Oda {
@@ -92,6 +96,10 @@ export function odaBaglan(
     }
   });
   ch.on("broadcast", { event: "kalp" }, () => uzerine.kalp?.());
+  ch.on("broadcast", { event: "tepki" }, (p) => {
+    const c = (p as { payload?: { ch?: string } }).payload?.ch;
+    if (typeof c === "string" && TEPKILER.includes(c)) uzerine.tepki?.(c);
+  });
 
   ch.subscribe((durum) => {
     if (durum === "SUBSCRIBED") ch.track({ rol, t: Date.now() }).catch(() => {});
@@ -105,6 +113,10 @@ export function odaBaglan(
     },
     kalpYolla: () => {
       ch.send({ type: "broadcast", event: "kalp", payload: {} }).catch(() => {});
+    },
+    tepkiYolla: (c: string) => {
+      if (!TEPKILER.includes(c)) return;
+      ch.send({ type: "broadcast", event: "tepki", payload: { ch: c } }).catch(() => {});
     },
     ayril: () => {
       al().removeChannel(ch).catch(() => {});

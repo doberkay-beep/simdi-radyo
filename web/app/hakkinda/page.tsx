@@ -4,6 +4,8 @@ import ThemeToggle from "@/components/ThemeToggle";
 import DilToggle from "@/components/DilToggle";
 import { gununDizesi } from "@/lib/sozler";
 import { dilSunucu } from "@/lib/dil-sunucu";
+import { IstasyonOner } from "@/components/GeriBildirim";
+import { DESTEK_URL } from "@/lib/destek";
 
 export async function generateMetadata(): Promise<Metadata> {
   const dil = await dilSunucu();
@@ -95,6 +97,31 @@ export default async function Hakkinda() {
             </>
           )}
         </div>
+
+        {/* Topluluk: istasyon öner */}
+        <div className="mt-12 border-t pt-6" style={{ borderColor: "var(--line)" }}>
+          <IstasyonOner />
+        </div>
+
+        {/* Ayakta tut — DESTEK_URL doluyken görünür */}
+        {DESTEK_URL && (
+          <div className="mt-8 rounded-lg border px-4 py-3 text-sm" style={{ borderColor: "var(--line)" }}>
+            <p style={{ color: "var(--fg)" }}>
+              {en
+                ? "ŞİMDİ is free, ad-free and stays that way."
+                : "ŞİMDİ ücretsiz ve reklamsız; öyle de kalacak."}
+            </p>
+            <a
+              href={DESTEK_URL}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="mt-1.5 inline-block underline"
+              style={{ color: "var(--fg)" }}
+            >
+              {en ? "keep the frequency alive ♥" : "frekansı ayakta tut ♥"}
+            </a>
+          </div>
+        )}
 
         <div className="mt-12 border-t pt-6 text-sm" style={{ borderColor: "var(--line)", color: "var(--muted)" }}>
           <p>

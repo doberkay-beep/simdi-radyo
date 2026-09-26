@@ -5,6 +5,8 @@ import { getSupabase } from "@/lib/supabase";
 import StationPlayer from "@/components/StationPlayer";
 import CanliParca from "@/components/CanliParca";
 import Notlar from "@/components/Notlar";
+import { YanlisSarki } from "@/components/GeriBildirim";
+import { istasyonTanimi } from "@/lib/istasyon-tanim";
 import EmbedKopya from "@/components/EmbedKopya";
 import DilToggle from "@/components/DilToggle";
 import { TUR_EPIGRAF } from "@/lib/sozler";
@@ -328,8 +330,13 @@ export default async function StationPage({ params }: { params: Promise<{ slug: 
             <div className="min-w-0 flex-1">
               <CanliParca slug={slug} initial={track} etiket={T("radyo.simdiCaliyor")} bosMetin={T("radyo.canliYayin")} />
             </div>
+            <YanlisSarki slug={slug} />
           </div>
         </div>
+
+        {istasyonTanimi(slug, dil) && (
+          <p className="epigraf mb-3 text-[15px]">{istasyonTanimi(slug, dil)}</p>
+        )}
 
         {turSlug(s.genre) && (
           <Link

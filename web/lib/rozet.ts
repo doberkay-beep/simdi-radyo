@@ -19,7 +19,26 @@ export const ROZETLER: Rozet[] = [
   { id: "sadik-frekans", emoji: "❤️", ad: { tr: "Sadık Frekans", en: "Loyal Frequency" }, aciklama: { tr: "Aynı istasyonu 20 kez dinledin.", en: "You listened to one station 20 times." } },
   { id: "usta-avci", emoji: "🏹", ad: { tr: "Usta Avcı", en: "Master Hunter" }, aciklama: { tr: "10 şarkı yakaladın.", en: "You caught 10 songs." } },
   { id: "yuz-dinleme", emoji: "💯", ad: { tr: "Yüzler Kulübü", en: "Century Club" }, aciklama: { tr: "100 dinlemeye ulaştın.", en: "You reached 100 listens." } },
+  { id: "uc-gun-seri", emoji: "🔥", ad: { tr: "Üç Günlük Ateş", en: "Three-Day Fire" }, aciklama: { tr: "3 gün üst üste dinledin.", en: "You listened 3 days in a row." } },
+  { id: "hafta-seri", emoji: "📅", ad: { tr: "Tam Hafta", en: "Full Week" }, aciklama: { tr: "7 gün üst üste dinledin.", en: "You listened 7 days in a row." } },
+  { id: "gezgin-kaptan", emoji: "🗺️", ad: { tr: "Gezgin Kaptan", en: "Voyager Captain" }, aciklama: { tr: "10 farklı ülkeden radyo dinledin.", en: "You tuned into radios from 10 countries." } },
 ];
+
+// Günlükten ardışık gün serisi (bugün ya da dün biten en uzun güncel seri).
+function seriHesapla(gunluk: { t: number }[]): number {
+  const gunler = new Set(gunluk.map((k) => new Date(k.t).toISOString().slice(0, 10)));
+  if (!gunler.size) return 0;
+  const gun = 86400000;
+  let bas = Date.now();
+  // Seri bugünden ya da dünden geriye sayılır.
+  if (!gunler.has(new Date(bas).toISOString().slice(0, 10))) bas -= gun;
+  let seri = 0;
+  while (gunler.has(new Date(bas).toISOString().slice(0, 10))) {
+    seri++;
+    bas -= gun;
+  }
+  return seri;
+}
 
 function oku<T>(anahtar: string, bos: T): T {
   try {
@@ -63,5 +82,9 @@ export function rozetleriHesapla(): Set<string> {
   if (enCok >= 20) kazanildi.add("sadik-frekans");
   if (avlar.length >= 10) kazanildi.add("usta-avci");
   if (gunluk.length >= 100) kazanildi.add("yuz-dinleme");
+  const seri = seriHesapla(gunluk);
+  if (seri >= 3) kazanildi.add("uc-gun-seri");
+  if (seri >= 7) kazanildi.add("hafta-seri");
+  if (ulkeler.size >= 10) kazanildi.add("gezgin-kaptan");
   return kazanildi;
 }

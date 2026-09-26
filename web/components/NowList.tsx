@@ -220,6 +220,7 @@ export default function NowList() {
   const [alarm, setAlarm] = useState<{ ts: number; slug: string } | null>(null);
   const [alarmAcik, setAlarmAcik] = useState(false);
   const [alarmSaat, setAlarmSaat] = useState("07:30");
+  const [alarmRastgele, setAlarmRastgele] = useState(false);
   // Birlikte dinle — ortak dinleme odası.
   const [oda, setOda] = useState<{ kod: string; rol: "host" | "uye" } | null>(null);
   const [odaSayi, setOdaSayi] = useState(1);
@@ -229,14 +230,14 @@ export default function NowList() {
   const [pwaIpucu, setPwaIpucu] = useState(false); // iOS "ana ekrana ekle" ipucu (bir kez)
   const jestRef = useRef<{ x: number; y: number } | null>(null); // çubukta kaydırma jesti
   const [dinleyiciSayi, setDinleyiciSayi] = useState(0); // aynı istasyonda şu an kaç kişi
-  const [ucanKalpler, setUcanKalpler] = useState<{ id: number; x: number }[]>([]);
+  const [ucanKalpler, setUcanKalpler] = useState<{ id: number; x: number; ch?: string }[]>([]);
   const kanalRef = useRef<CanliKanal | null>(null);
   const kalpIdRef = useRef(0);
 
-  // Kalp uçuşu — hem kendi kalbin hem başkalarınınki ekranda süzülür.
-  function kalpUcur() {
+  // Kalp/tepki uçuşu — hem seninkiler hem aynı frekanstakilerinkiler süzülür.
+  function kalpUcur(ch?: string) {
     const id = ++kalpIdRef.current;
-    setUcanKalpler((k) => [...k.slice(-14), { id, x: 12 + Math.random() * 76 }]);
+    setUcanKalpler((k) => [...k.slice(-14), { id, x: 12 + Math.random() * 76, ch }]);
     setTimeout(() => setUcanKalpler((k) => k.filter((u) => u.id !== id)), 2600);
   }
 
@@ -248,7 +249,7 @@ export default function NowList() {
     if (!playing) return;
     const kanal = dinleyiciKatil(playing, {
       sayi: setDinleyiciSayi,
-      kalp: kalpUcur,
+      kalp: () => kalpUcur(),
     });
     kanalRef.current = kanal;
     return () => {
@@ -761,7 +762,7 @@ export default function NowList() {
     const hedef = new Date();
     hedef.setHours(sa, dk, 0, 0);
     if (hedef.getTime() <= Date.now()) hedef.setDate(hedef.getDate() + 1);
-    const slug = playing || [...favs][0] || stations[0]?.slug;
+    const slug = alarmRastgele ? "__rastgele" : playing || [...favs][0] || stations[0]?.slug;
     if (!slug) return;
     const a = { ts: hedef.getTime(), slug };
     setAlarm(a);
@@ -777,10 +778,33 @@ export default function NowList() {
 
   useEffect(() => {
     if (!alarm || now <= 0 || now < alarm.ts) return;
-    const st = stationsRef.current.find((s) => s.slug === alarm.slug);
+    const liste = stationsRef.current;
+    const st =
+      alarm.slug === "__rastgele"
+        ? liste[Math.floor(Math.random() * liste.length)]
+        : liste.find((s) => s.slug === alarm.slug);
     setAlarm(null);
     try { localStorage.removeItem("alarm"); } catch { /* yoksay */ }
-    if (st && playingRef.current !== st.slug) toggleRef.current(st);
+    if (st && playingRef.current !== st.slug) {
+      toggleRef.current(st);
+      // Kademeli uyanış: ses 30 saniyede yavaşça hedefe tırmanır.
+      const hedefSes = muted ? 0 : volume;
+      const audio = audioRef.current;
+      if (audio && hedefSes > 0) {
+        audio.volume = 0;
+        let adim = 0;
+        const rampa = setInterval(() => {
+          adim++;
+          const a = audioRef.current;
+          if (!a || adim >= 30) {
+            if (a) a.volume = hedefSes;
+            clearInterval(rampa);
+            return;
+          }
+          a.volume = Math.min(hedefSes, (adim / 30) * hedefSes);
+        }, 1000);
+      }
+    }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [now, alarm]);
 
@@ -814,7 +838,7 @@ export default function NowList() {
   function odaAc() {
     if (oda) return;
     const kod = odaKoduUret();
-    const k = odaBaglan(kod, "host", { sayi: setOdaSayi });
+    const k = odaBaglan(kod, "host", { sayi: setOdaSayi, tepki: (ch) => kalpUcur(ch) });
     odaRef.current = k;
     setOda({ kod, rol: "host" });
     if (playingRef.current) k.istasyonYolla(playingRef.current);
@@ -824,6 +848,7 @@ export default function NowList() {
   function odayaKatil(kod: string) {
     const k = odaBaglan(kod, "uye", {
       sayi: setOdaSayi,
+      tepki: (ch) => kalpUcur(ch),
       istasyon: (slug) => {
         const st = stationsRef.current.find((x) => x.slug === slug);
         if (st && playingRef.current !== slug) toggleRef.current(st);
@@ -1164,6 +1189,19 @@ export default function NowList() {
                   <button onClick={() => davetKopyala(oda.kod)} className="press leading-none" title={t("oda.baslik")} aria-label={t("oda.baslik")}>
                     👥 {odaSayi}
                   </button>
+                  {["🔥", "❤️", "🎶"].map((ch) => (
+                    <button
+                      key={ch}
+                      onClick={() => {
+                        kalpUcur(ch);
+                        odaRef.current?.tepkiYolla(ch);
+                      }}
+                      className="press leading-none"
+                      aria-label={`tepki ${ch}`}
+                    >
+                      {ch}
+                    </button>
+                  ))}
                   <button onClick={() => odadanAyril()} className="press leading-none" title={t("oda.ayril")} aria-label={t("oda.ayril")} style={{ color: "var(--muted)" }}>
                     ×
                   </button>
@@ -1229,8 +1267,18 @@ export default function NowList() {
               />
               <span className="text-xs" style={{ color: "var(--muted)" }}>
                 {t("alarm.istasyon")}:{" "}
-                {stations.find((s) => s.slug === (playing || [...favs][0] || stations[0]?.slug))?.name || "—"}
+                {alarmRastgele
+                  ? "🎲"
+                  : stations.find((s) => s.slug === (playing || [...favs][0] || stations[0]?.slug))?.name || "—"}
               </span>
+              <label className="flex items-center gap-1.5 text-xs" style={{ color: "var(--muted)" }}>
+                <input
+                  type="checkbox"
+                  checked={alarmRastgele}
+                  onChange={(e) => setAlarmRastgele(e.target.checked)}
+                />
+                {t("alarm.rastgele")}
+              </label>
               <button onClick={alarmKur} className="press rounded-full px-3.5 py-1.5 text-xs font-semibold" style={{ background: "var(--fg)", color: "var(--bg)" }}>
                 {t("alarm.kur")}
               </button>
@@ -1241,7 +1289,7 @@ export default function NowList() {
               )}
             </div>
             <p className="mt-1.5 text-xs" style={{ color: "var(--muted)" }}>
-              {t("alarm.not")}
+              {t("alarm.not")} · {t("alarm.kademeli")}
             </p>
           </div>
         )}
@@ -2165,7 +2213,7 @@ export default function NowList() {
               className="kalp-uc absolute bottom-0 text-2xl"
               style={{ left: `${u.x}%`, color: accent }}
             >
-              ♥
+              {u.ch || "♥"}
             </span>
           ))}
         </div>

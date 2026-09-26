@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { useDil } from "@/lib/i18n";
+import { nobetIsaretle } from "@/lib/rozet";
 
 // GECE NÖBETİ — 02:00–05:00 arası site başka bir yüze bürünür:
 // üstte nöbet bandı, sayfaya loş bir gece tülü, dakikada bir dönen nöbet cümlesi.
@@ -37,6 +38,11 @@ export default function GeceNobeti() {
 
   useEffect(() => {
     if (!aktif) return;
+    {
+      // rozet: gece nöbetçisi — yalnız gerçek nöbet saatinde sayılır (?nobet=1 testi sayılmaz)
+      const h = new Date().getHours();
+      if (h >= 2 && h < 5) nobetIsaretle();
+    }
     const eski = document.title;
     if (!eski.startsWith("🌙")) document.title = `🌙 ${eski}`;
     return () => {

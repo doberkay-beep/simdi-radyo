@@ -111,6 +111,23 @@ export const SOZLUK: Record<string, { tr: string; en: string }> = {
   "av.gizli": { tr: "avların yalnız bu tarayıcıda tutulur; hiçbir yere gönderilmez.", en: "your catches live only in this browser; nothing is uploaded." },
   "av.radar": { tr: "radarına takıldı — izlediğin sanatçı şu an çalıyor", en: "on your radar — a watched artist is playing now" },
   "av.dinle": { tr: "dinle", en: "listen" },
+  // birlikte dinle
+  "oda.baslik": { tr: "birlikte dinle", en: "listen together" },
+  "oda.davet": { tr: "Bir dinleme odasına davetlisin — istasyonu oda sahibi seçer, birlikte geçersiniz.", en: "You're invited to a listening room — the host picks the station, you switch together." },
+  "oda.katil": { tr: "odaya katıl", en: "join room" },
+  "oda.yoksay": { tr: "yok say", en: "dismiss" },
+  "oda.kopyalandi": { tr: "davet linki kopyalandı — arkadaşına yolla", en: "invite link copied — send it to a friend" },
+  "oda.ayril": { tr: "odadan ayrıl", en: "leave room" },
+  "oda.hostGitti": { tr: "oda sahibi ayrıldı — oda kapandı.", en: "the host left — room closed." },
+  // radyoyla uyan
+  "alarm.baslik": { tr: "radyoyla uyan", en: "wake with radio" },
+  "alarm.kur": { tr: "kur", en: "set" },
+  "alarm.kaldir": { tr: "alarmı kaldır", en: "remove alarm" },
+  "alarm.not": { tr: "sekme açık kaldığı sürece, saati gelince çalar", en: "plays at the set time while this tab stays open" },
+  "alarm.istasyon": { tr: "istasyon", en: "station" },
+  // rozetler & şairin frekansı
+  "rozet.baslik": { tr: "rozetler", en: "badges" },
+  "sair.baslik": { tr: "şairin frekansı", en: "the poet's pick" },
   // kalp defteri
   "defter.baslik": { tr: "kalp defteri", en: "guestbook" },
   "defter.yer": { tr: "bir anı bırak… (140 karakter)", en: "leave a note… (140 chars)" },

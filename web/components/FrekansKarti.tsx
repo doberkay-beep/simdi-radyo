@@ -2,6 +2,7 @@
 
 import { useEffect, useMemo, useState } from "react";
 import { useDil } from "@/lib/i18n";
+import { ROZETLER, rozetleriHesapla } from "@/lib/rozet";
 
 // Frekans Kartın — bu tarayıcıdaki dinleme günlüğünden kişisel radyo karnesi:
 // kişilik etiketi, tür dağılımı, en sadık istasyon; paylaşılabilir 1080×1920 kart.
@@ -37,6 +38,7 @@ export default function FrekansKarti({
   const [kartUrl, setKartUrl] = useState<string | null>(null);
   // "hep" = tüm günlük, "ay" = ŞİMDİ Wrapped (bu ayın dinlemeleri)
   const [kip, setKip] = useState<"hep" | "ay">("hep");
+  const kazanilan = useMemo(() => rozetleriHesapla(), []);
   const tumGunluk = useMemo(oku, []);
   const gunluk = useMemo(() => {
     if (kip === "hep") return tumGunluk;
@@ -250,6 +252,34 @@ export default function FrekansKarti({
             </p>
           </>
         )}
+
+        {/* Rozetler — dinleme başarımları */}
+        <div className="mt-5">
+          <p className="mb-2 text-[11px] uppercase tracking-wide" style={{ color: "var(--muted)" }}>
+            {t("rozet.baslik")} · {kazanilan.size}/{ROZETLER.length}
+          </p>
+          <div className="grid grid-cols-2 gap-2">
+            {ROZETLER.map((r) => {
+              const var_ = kazanilan.has(r.id);
+              return (
+                <div
+                  key={r.id}
+                  className="rounded-lg border px-3 py-2"
+                  style={{ borderColor: "var(--line)", opacity: var_ ? 1 : 0.38 }}
+                  title={en ? r.aciklama.en : r.aciklama.tr}
+                >
+                  <span className="text-base leading-none" aria-hidden>{var_ ? r.emoji : "🔒"}</span>
+                  <p className="mt-1 text-xs font-semibold" style={{ color: "var(--fg)" }}>
+                    {en ? r.ad.en : r.ad.tr}
+                  </p>
+                  <p className="text-[10px] leading-snug" style={{ color: "var(--muted)" }}>
+                    {en ? r.aciklama.en : r.aciklama.tr}
+                  </p>
+                </div>
+              );
+            })}
+          </div>
+        </div>
       </div>
     </div>
   );

@@ -29,7 +29,9 @@ import DefterSeridi from "./DefterSeridi";
 import GeceNobeti from "./GeceNobeti";
 import AvDefteri from "./AvDefteri";
 import SanatciRadari from "./SanatciRadari";
+import SairinFrekansi from "./SairinFrekansi";
 import { avEkle } from "@/lib/avlar";
+import { odaBaglan, odaKoduUret, type Oda } from "@/lib/oda";
 import { istasyonUlkesi, bayrakEmoji, doluUlkeler, ulkeSlug, ULKELER } from "@/lib/ulkeler";
 import { useDil, turAdi } from "@/lib/i18n";
 
@@ -214,6 +216,16 @@ export default function NowList() {
   const [frekansAcik, setFrekansAcik] = useState(false); // frekans kartı (kişisel karne)
   const [avAcik, setAvAcik] = useState(false); // av defteri (şarkı yakala)
   const [avGeri, setAvGeri] = useState(0); // "yakalandı" geri bildirimi (zaman damgası)
+  // Radyoyla uyan — {ts, slug}: sekme açıkken saati gelince o istasyonu çal.
+  const [alarm, setAlarm] = useState<{ ts: number; slug: string } | null>(null);
+  const [alarmAcik, setAlarmAcik] = useState(false);
+  const [alarmSaat, setAlarmSaat] = useState("07:30");
+  // Birlikte dinle — ortak dinleme odası.
+  const [oda, setOda] = useState<{ kod: string; rol: "host" | "uye" } | null>(null);
+  const [odaSayi, setOdaSayi] = useState(1);
+  const [odaDavet, setOdaDavet] = useState<string | null>(null);
+  const [odaBilgi, setOdaBilgi] = useState<string | null>(null);
+  const odaRef = useRef<Oda | null>(null);
   const [pwaIpucu, setPwaIpucu] = useState(false); // iOS "ana ekrana ekle" ipucu (bir kez)
   const jestRef = useRef<{ x: number; y: number } | null>(null); // çubukta kaydırma jesti
   const [dinleyiciSayi, setDinleyiciSayi] = useState(0); // aynı istasyonda şu an kaç kişi
@@ -731,6 +743,106 @@ export default function NowList() {
   }
   const sleepRemain = sleepUntil ? Math.max(0, Math.ceil((sleepUntil - (now || Date.now())) / 60000)) : 0;
 
+  // --- Radyoyla uyan ---
+  useEffect(() => {
+    try {
+      const a = JSON.parse(localStorage.getItem("alarm") || "null");
+      if (a && typeof a.ts === "number" && a.ts > Date.now()) setAlarm(a);
+    } catch { /* yoksay */ }
+    try {
+      const kod = new URLSearchParams(window.location.search).get("oda");
+      if (kod && /^[a-z0-9]{4,10}$/.test(kod)) setOdaDavet(kod);
+    } catch { /* yoksay */ }
+  }, []);
+
+  function alarmKur() {
+    const [sa, dk] = alarmSaat.split(":").map(Number);
+    if (Number.isNaN(sa) || Number.isNaN(dk)) return;
+    const hedef = new Date();
+    hedef.setHours(sa, dk, 0, 0);
+    if (hedef.getTime() <= Date.now()) hedef.setDate(hedef.getDate() + 1);
+    const slug = playing || [...favs][0] || stations[0]?.slug;
+    if (!slug) return;
+    const a = { ts: hedef.getTime(), slug };
+    setAlarm(a);
+    try { localStorage.setItem("alarm", JSON.stringify(a)); } catch { /* yoksay */ }
+    setAlarmAcik(false);
+  }
+
+  function alarmKaldir() {
+    setAlarm(null);
+    try { localStorage.removeItem("alarm"); } catch { /* yoksay */ }
+    setAlarmAcik(false);
+  }
+
+  useEffect(() => {
+    if (!alarm || now <= 0 || now < alarm.ts) return;
+    const st = stationsRef.current.find((s) => s.slug === alarm.slug);
+    setAlarm(null);
+    try { localStorage.removeItem("alarm"); } catch { /* yoksay */ }
+    if (st && playingRef.current !== st.slug) toggleRef.current(st);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [now, alarm]);
+
+  // --- Birlikte dinle ---
+  function odadanAyril(bilgi?: string) {
+    odaRef.current?.ayril();
+    odaRef.current = null;
+    setOda(null);
+    setOdaSayi(1);
+    if (bilgi) {
+      setOdaBilgi(bilgi);
+      setTimeout(() => setOdaBilgi(null), 5000);
+    }
+  }
+
+  async function davetKopyala(kod: string) {
+    const link = `${window.location.origin}/?oda=${kod}`;
+    try {
+      if (navigator.share) {
+        await navigator.share({ title: "ŞİMDİ — birlikte dinle", url: link });
+        return;
+      }
+    } catch { /* paylaşım iptal — panoya düş */ }
+    try {
+      await navigator.clipboard.writeText(link);
+      setOdaBilgi(t("oda.kopyalandi"));
+      setTimeout(() => setOdaBilgi(null), 4000);
+    } catch { /* yoksay */ }
+  }
+
+  function odaAc() {
+    if (oda) return;
+    const kod = odaKoduUret();
+    const k = odaBaglan(kod, "host", { sayi: setOdaSayi });
+    odaRef.current = k;
+    setOda({ kod, rol: "host" });
+    if (playingRef.current) k.istasyonYolla(playingRef.current);
+    davetKopyala(kod);
+  }
+
+  function odayaKatil(kod: string) {
+    const k = odaBaglan(kod, "uye", {
+      sayi: setOdaSayi,
+      istasyon: (slug) => {
+        const st = stationsRef.current.find((x) => x.slug === slug);
+        if (st && playingRef.current !== slug) toggleRef.current(st);
+      },
+      hostGitti: () => odadanAyril(t("oda.hostGitti")),
+    });
+    odaRef.current = k;
+    setOda({ kod, rol: "uye" });
+    setOdaDavet(null);
+  }
+
+  // Oda sahibi istasyon değiştirince odaya duyur.
+  useEffect(() => {
+    if (oda?.rol === "host" && playing) odaRef.current?.istasyonYolla(playing);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [playing, oda?.rol]);
+
+  useEffect(() => () => { odaRef.current?.ayril(); }, []);
+
   // Kilit ekranı / medya kontrolleri: sayfa başlığı yerine gerçek şarkı +
   // istasyon + uygulama ikonunu göster (telefonda arka planda çalarken).
   useEffect(() => {
@@ -1038,6 +1150,29 @@ export default function NowList() {
               >
                 {yolculuk ? "🧭 gezside" : "🧭"}
               </button>
+              <button
+                onClick={() => setAlarmAcik((v) => !v)}
+                title={t("alarm.baslik")}
+                aria-label={t("alarm.baslik")}
+                className="press leading-none"
+                style={{ color: alarm ? "var(--fg)" : "var(--muted)" }}
+              >
+                {alarm ? `⏰ ${new Date(alarm.ts).toTimeString().slice(0, 5)}` : "⏰"}
+              </button>
+              {oda ? (
+                <span className="inline-flex items-center gap-1.5" data-kod={oda.kod} style={{ color: "var(--fg)" }}>
+                  <button onClick={() => davetKopyala(oda.kod)} className="press leading-none" title={t("oda.baslik")} aria-label={t("oda.baslik")}>
+                    👥 {odaSayi}
+                  </button>
+                  <button onClick={() => odadanAyril()} className="press leading-none" title={t("oda.ayril")} aria-label={t("oda.ayril")} style={{ color: "var(--muted)" }}>
+                    ×
+                  </button>
+                </span>
+              ) : (
+                <button onClick={odaAc} title={t("oda.baslik")} aria-label={t("oda.baslik")} className="press leading-none" style={{ color: "var(--muted)" }}>
+                  👥
+                </button>
+              )}
               <DilToggle />
               <ThemeToggle />
               <ToneToggle />
@@ -1076,6 +1211,59 @@ export default function NowList() {
 
         {/* Gece nöbeti — 02:00–05:00 arası özel yüz */}
         <GeceNobeti />
+
+        {/* Radyoyla uyan — kurulum paneli */}
+        {alarmAcik && (
+          <div className="mb-5 rounded-lg border px-4 py-3" style={{ borderColor: "var(--line)" }}>
+            <p className="text-[11px] font-semibold uppercase tracking-[0.18em]" style={{ color: "var(--fg)" }}>
+              ⏰ {t("alarm.baslik")}
+            </p>
+            <div className="mt-2 flex flex-wrap items-center gap-2 text-sm">
+              <input
+                type="time"
+                value={alarmSaat}
+                onChange={(e) => setAlarmSaat(e.target.value)}
+                className="rounded-md border px-2 py-1"
+                style={{ background: "transparent", borderColor: "var(--line)", color: "var(--fg)" }}
+                aria-label={t("alarm.baslik")}
+              />
+              <span className="text-xs" style={{ color: "var(--muted)" }}>
+                {t("alarm.istasyon")}:{" "}
+                {stations.find((s) => s.slug === (playing || [...favs][0] || stations[0]?.slug))?.name || "—"}
+              </span>
+              <button onClick={alarmKur} className="press rounded-full px-3.5 py-1.5 text-xs font-semibold" style={{ background: "var(--fg)", color: "var(--bg)" }}>
+                {t("alarm.kur")}
+              </button>
+              {alarm && (
+                <button onClick={alarmKaldir} className="press text-xs underline" style={{ color: "var(--muted)" }}>
+                  {t("alarm.kaldir")}
+                </button>
+              )}
+            </div>
+            <p className="mt-1.5 text-xs" style={{ color: "var(--muted)" }}>
+              {t("alarm.not")}
+            </p>
+          </div>
+        )}
+
+        {/* Birlikte dinle — davet bandı */}
+        {odaDavet && !oda && (
+          <div className="mb-5 flex flex-wrap items-center gap-3 rounded-lg border px-4 py-3" style={{ borderColor: "var(--fg)" }}>
+            <span aria-hidden className="text-lg leading-none">🎧</span>
+            <p className="min-w-0 flex-1 text-sm" style={{ color: "var(--fg)" }}>{t("oda.davet")}</p>
+            <button onClick={() => odayaKatil(odaDavet)} className="press shrink-0 rounded-full px-3.5 py-1.5 text-xs font-semibold" style={{ background: "var(--fg)", color: "var(--bg)" }}>
+              {t("oda.katil")}
+            </button>
+            <button onClick={() => setOdaDavet(null)} className="press shrink-0 text-xs underline" style={{ color: "var(--muted)" }}>
+              {t("oda.yoksay")}
+            </button>
+          </div>
+        )}
+        {odaBilgi && (
+          <p className="mb-4 text-xs" role="status" style={{ color: "var(--muted)" }}>
+            {odaBilgi}
+          </p>
+        )}
 
         {/* Selamlama (edebi) + saat + sayaçlar */}
         {now > 0 && (
@@ -1125,6 +1313,15 @@ export default function NowList() {
 
         {/* Sanatçı radarı — izlediğin sanatçı şu an bir istasyonda çalıyorsa */}
         <SanatciRadari
+          stations={stations}
+          onTune={(slug) => {
+            const st = stations.find((x) => x.slug === slug);
+            if (st) { setUlke(null); setRegion("all"); toggle(st); }
+          }}
+        />
+
+        {/* Şairin frekansı — Berkay'ın seçkisi (seçki yoksa görünmez) */}
+        <SairinFrekansi
           stations={stations}
           onTune={(slug) => {
             const st = stations.find((x) => x.slug === slug);

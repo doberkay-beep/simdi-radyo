@@ -27,15 +27,19 @@ export default function ToneToggle() {
   const [acik, setAcik] = useState(false); // katlanır: kapalıyken tek top
 
   useEffect(() => {
-    let t: Ton = "magma";
+    let t: Ton | null = null;
     try {
       const v = localStorage.getItem("ton") as Ton | null;
       if (v && TONLAR.some((x) => x.id === v)) t = v;
     } catch {
       // yok say
     }
-    setTon(t);
-    apply(t);
+    // Elle seçim yoksa gece (00–07) kadran kendiliğinden siyaha kayar;
+    // localStorage'a yazılmaz, sabah magma'ya döner.
+    const saat = new Date().getHours();
+    const secim = t ?? (saat < 7 ? "siyah" : "magma");
+    setTon(secim);
+    apply(secim);
   }, []);
 
   function sec(t: Ton) {

@@ -1,0 +1,1 @@
+kr: liste=100 filtre=32 probe=32 secilen=12 (hls=10)

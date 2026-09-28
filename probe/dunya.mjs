@@ -21,11 +21,11 @@ const API = "https://de1.api.radio-browser.info";
 
 // Hedef ülkeler → ülke başına aday üst sınırı. (TR hariç — o katalog zaten dolu.)
 const ULKELER = [
-  ["de", 12], ["fr", 12], ["gb", 12], ["us", 12], ["it", 10], ["es", 10],
-  ["nl", 8], ["be", 6], ["ch", 6], ["at", 6], ["pt", 6], ["gr", 8],
-  ["se", 6], ["no", 5], ["dk", 5], ["fi", 5], ["ie", 5], ["pl", 6],
-  ["cz", 5], ["hu", 5], ["ro", 5], ["jp", 8], ["kr", 6], ["in", 6],
-  ["br", 8], ["ar", 6], ["mx", 6], ["ca", 6], ["au", 8], ["za", 5],
+  ["de", 8], ["cn", 6], ["kr", 5], ["ru", 5], ["ua", 4], ["kz", 4],
+  ["rs", 4], ["hr", 3], ["bg", 3], ["is", 3],
+  ["ma", 4], ["eg", 4], ["ae", 3],
+  ["id", 4], ["th", 4], ["vn", 3], ["ph", 3],
+  ["cl", 3], ["co", 3], ["pe", 3], ["ng", 3], ["ke", 3],
 ];
 
 // Tür eşlemesi: Radio Browser etiketleri → bizim taksonomi.

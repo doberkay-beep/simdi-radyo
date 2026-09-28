@@ -20,10 +20,10 @@ const ICON: Record<Pref, string> = { system: "🖥", light: "☀︎", dark: "☾
 const LABEL: Record<Pref, string> = { system: "sistem teması", light: "açık tema", dark: "koyu tema" };
 
 export default function ThemeToggle() {
-  const [pref, setPref] = useState<Pref>("light");
+  const [pref, setPref] = useState<Pref>("dark");
 
   useEffect(() => {
-    let p: Pref = "light"; // BEYAZ SAYFA: kayıtlı tercih yoksa gün ışığı kadran
+    let p: Pref = "dark"; // KİNETİK MANŞET: kayıtlı tercih yoksa magma şasi (koyu)
     try {
       const v = localStorage.getItem("tema") as Pref | null;
       if (v === "light" || v === "dark" || v === "system") p = v;
@@ -44,7 +44,7 @@ export default function ThemeToggle() {
   }, [pref]);
 
   function cycle() {
-    const next: Pref = pref === "light" ? "dark" : pref === "dark" ? "system" : "light";
+    const next: Pref = pref === "dark" ? "light" : pref === "light" ? "system" : "dark";
     setPref(next);
     apply(next);
     try {

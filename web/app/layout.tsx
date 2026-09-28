@@ -74,7 +74,7 @@ export default function RootLayout({ children }: { children: ReactNode }) {
         {/* Tema seçimini boyamadan önce uygula (flaş olmasın). */}
         <script
           dangerouslySetInnerHTML={{
-            __html: `try{var t=localStorage.getItem('tema');var l=t==='light'||!t||(t==='system'&&matchMedia('(prefers-color-scheme: light)').matches);if(l)document.documentElement.dataset.theme='light'}catch(e){}try{var tn=localStorage.getItem('ton');if(tn&&tn!=='magma')document.documentElement.dataset.tone=tn;else if(!tn&&new Date().getHours()<7)document.documentElement.dataset.tone='siyah'}catch(e){}`,
+            __html: `try{var t=localStorage.getItem('tema');var l=t==='light'||(t==='system'&&matchMedia('(prefers-color-scheme: light)').matches);if(l)document.documentElement.dataset.theme='light'}catch(e){}try{var tn=localStorage.getItem('ton');if(tn&&tn!=='magma')document.documentElement.dataset.tone=tn;else if(!tn&&new Date().getHours()<7)document.documentElement.dataset.tone='siyah'}catch(e){}`,
           }}
         />
       </head>

@@ -216,6 +216,16 @@ export default function NowList() {
   const [frekansAcik, setFrekansAcik] = useState(false); // frekans kartı (kişisel karne)
   const [frekansKip, setFrekansKip] = useState<"hep" | "ay">("hep"); // wrapped bandından açılırsa "ay"
   const [avAcik, setAvAcik] = useState(false); // av defteri (şarkı yakala)
+  const [navAcik, setNavAcik] = useState(false); // mobil nav: "daha" katlaması
+  const [darEkran, setDarEkran] = useState(false); // arama yer tutucusunun kısa hali için
+
+  useEffect(() => {
+    const mq = window.matchMedia("(max-width: 640px)");
+    const uygula = () => setDarEkran(mq.matches);
+    uygula();
+    mq.addEventListener("change", uygula);
+    return () => mq.removeEventListener("change", uygula);
+  }, []);
   const [avGeri, setAvGeri] = useState(0); // "yakalandı" geri bildirimi (zaman damgası)
   // Radyoyla uyan — {ts, slug}: sekme açıkken saati gelince o istasyonu çal.
   const [alarm, setAlarm] = useState<{ ts: number; slug: string } | null>(null);
@@ -1234,12 +1244,22 @@ export default function NowList() {
                 {t("nav.avlarim")}
               </button>
               <Link href="/kesif" className="nav-link">{t("nav.kesif")}</Link>
-              <Link href="/ulke" className="nav-link">atlas</Link>
-              <Link href="/nabiz" className="nav-link">{t("nav.nabiz")}</Link>
-              <Link href="/arsiv" className="nav-link">{t("nav.arsiv")}</Link>
-              <Link href="/kose" className="nav-link">{t("nav.kose")}</Link>
-              <Link href="/oyun" className="nav-link">{t("nav.oyun")}</Link>
-              <Link href="/hakkinda" className="nav-link">{t("nav.gelistirici")}</Link>
+              {/* Mobilde kalan linkler "daha"nın altına katlanır; sm+ hepsi açık */}
+              <span className={`${navAcik ? "contents" : "hidden"} sm:contents`}>
+                <Link href="/ulke" className="nav-link">atlas</Link>
+                <Link href="/nabiz" className="nav-link">{t("nav.nabiz")}</Link>
+                <Link href="/arsiv" className="nav-link">{t("nav.arsiv")}</Link>
+                <Link href="/kose" className="nav-link">{t("nav.kose")}</Link>
+                <Link href="/oyun" className="nav-link">{t("nav.oyun")}</Link>
+                <Link href="/hakkinda" className="nav-link">{t("nav.gelistirici")}</Link>
+              </span>
+              <button
+                onClick={() => setNavAcik((v) => !v)}
+                className="nav-link press sm:hidden"
+                aria-expanded={navAcik}
+              >
+                {navAcik ? `${t("nav.dahaKapat")} ▴` : `${t("nav.daha")} ▾`}
+              </button>
             </span>
           </div>
         </header>
@@ -1408,7 +1428,7 @@ export default function NowList() {
           type="search"
           value={query}
           onChange={(e) => setQuery(e.target.value)}
-          placeholder={t("home.ara")}
+          placeholder={darEkran ? t("home.araKisa") : t("home.ara")}
           className="field mb-4"
         />
 

@@ -24,6 +24,7 @@ function apply(t: Ton) {
 
 export default function ToneToggle() {
   const [ton, setTon] = useState<Ton>("magma");
+  const [acik, setAcik] = useState(false); // katlanır: kapalıyken tek top
 
   useEffect(() => {
     let t: Ton = "magma";
@@ -40,11 +41,31 @@ export default function ToneToggle() {
   function sec(t: Ton) {
     setTon(t);
     apply(t);
+    setAcik(false);
     try {
       localStorage.setItem("ton", t);
     } catch {
       // yok say
     }
+  }
+
+  const aktif = TONLAR.find((x) => x.id === ton) ?? TONLAR[0];
+
+  if (!acik) {
+    return (
+      <button
+        onClick={() => setAcik(true)}
+        aria-label={`ton: ${aktif.ad} (değiştir)`}
+        title={`ton: ${aktif.ad}`}
+        className="press rounded-full align-middle"
+        style={{
+          width: 14,
+          height: 14,
+          background: aktif.renk,
+          boxShadow: `0 0 0 2px var(--bg), 0 0 0 3.5px ${aktif.renk}`,
+        }}
+      />
+    );
   }
 
   return (

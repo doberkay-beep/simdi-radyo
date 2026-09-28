@@ -131,6 +131,9 @@ export const SOZLUK: Record<string, { tr: string; en: string }> = {
   "kopru.kitap": { tr: "ŞİMDİ'yi kuran yazarın kitabı:", en: "A book by the writer who built ŞİMDİ:" },
   "wrapped.baslik": { tr: "ay kapandı — frekans karnen hazır", en: "the month is in — your frequency report is ready" },
   "wrapped.alt": { tr: "Karnenle yüzleş, kartını bas, story'ne at.", en: "Face the numbers, print your card, share it." },
+  "nav.daha": { tr: "daha", en: "more" },
+  "nav.dahaKapat": { tr: "kapat", en: "less" },
+  "home.araKisa": { tr: "istasyon ara…", en: "search stations…" },
   "oda.hosgeldin": { tr: "Hoş geldin 🎧 Beğendiysen ♥ ile favorilere ekle; telefonda 'Ana Ekrana Ekle' dersen hep cebinde.", en: "Welcome 🎧 If you like it, ♥ a favorite; 'Add to Home Screen' keeps it in your pocket." },
   // topluluk geri bildirimi
   "gb.yanlis": { tr: "yanlış şarkı mı yazıyor? bildir", en: "wrong song showing? report" },

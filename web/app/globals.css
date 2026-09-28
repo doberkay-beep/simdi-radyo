@@ -434,3 +434,20 @@ body {
   100% { transform: translateY(-42vh) scale(1.15) rotate(8deg); opacity: 0; }
 }
 .kalp-uc { animation: kalpUc 2.5s ease-out forwards; will-change: transform, opacity; }
+
+/* KADRAN mikro dokunuşları — frekans oturması + ibre salınımı */
+@keyframes dialPop {
+  0% { opacity: 0.35; transform: translateY(5px); filter: blur(3px); }
+  100% { opacity: 1; transform: translateY(0); filter: blur(0); }
+}
+.dial-pop { animation: dialPop 0.26s cubic-bezier(0.22, 1, 0.36, 1); }
+@keyframes ibreSway {
+  0% { transform: translateX(-50%) rotate(0deg); }
+  30% { transform: translateX(-50%) rotate(1.4deg); }
+  65% { transform: translateX(-50%) rotate(-0.9deg); }
+  100% { transform: translateX(-50%) rotate(0deg); }
+}
+.ibre-sway { animation: ibreSway 0.42s ease-out; }
+@media (prefers-reduced-motion: reduce) {
+  .dial-pop, .ibre-sway { animation: none; }
+}

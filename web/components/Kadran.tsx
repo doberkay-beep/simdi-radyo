@@ -119,7 +119,9 @@ export default function Kadran({
             aria-label={`${gosterilen?.name} çal`}
             suppressHydrationWarning
           >
-            {frekans[stations.indexOf(gosterilen!)] ?? "—"}
+            <span key={gosterilen?.slug} className="dial-pop inline-block">
+              {frekans[stations.indexOf(gosterilen!)] ?? "—"}
+            </span>
             <span className="mono align-baseline text-[0.22em] tracking-normal" style={{ color: "var(--muted)" }}> FM</span>
           </button>
           <span
@@ -133,10 +135,11 @@ export default function Kadran({
 
       {/* Bant */}
       <div className="relative mt-1" style={{ height: 62 }}>
-        {/* Sabit ibre */}
+        {/* Sabit ibre — bant her oturduğunda ince bir salınım */}
         <div
-          className="pointer-events-none absolute left-1/2 top-0 z-10 h-full w-px -translate-x-1/2 transition-colors duration-500"
-          style={{ background: renk, boxShadow: `0 0 12px ${renk}` }}
+          key={`ibre-${merkez}`}
+          className="ibre-sway pointer-events-none absolute left-1/2 top-0 z-10 h-full w-px -translate-x-1/2 transition-colors duration-500"
+          style={{ background: renk, boxShadow: `0 0 12px ${renk}`, transformOrigin: "bottom center" }}
           aria-hidden
         />
         <div

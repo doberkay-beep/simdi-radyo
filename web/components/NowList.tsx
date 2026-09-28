@@ -214,6 +214,7 @@ export default function NowList() {
   const [kartAcik, setKartAcik] = useState(false); // paylaşılabilir kart penceresi
   const [defterAcik, setDefterAcik] = useState(false); // kalp defteri alt paneli
   const [frekansAcik, setFrekansAcik] = useState(false); // frekans kartı (kişisel karne)
+  const [frekansKip, setFrekansKip] = useState<"hep" | "ay">("hep"); // wrapped bandından açılırsa "ay"
   const [avAcik, setAvAcik] = useState(false); // av defteri (şarkı yakala)
   const [avGeri, setAvGeri] = useState(0); // "yakalandı" geri bildirimi (zaman damgası)
   // Radyoyla uyan — {ts, slug}: sekme açıkken saati gelince o istasyonu çal.
@@ -1253,6 +1254,27 @@ export default function NowList() {
         {/* Gece nöbeti — 02:00–05:00 arası özel yüz */}
         <GeceNobeti />
 
+        {/* Wrapped bandı — her ayın ilk 4 günü: kapanan ayın frekans karnesi */}
+        {new Date().getDate() <= 4 && (
+          <button
+            onClick={() => {
+              setFrekansKip("ay");
+              setFrekansAcik(true);
+            }}
+            className="press mb-5 flex w-full items-center gap-3 rounded-lg border px-4 py-3 text-left"
+            style={{ borderColor: "var(--line)" }}
+          >
+            <span aria-hidden className="text-lg leading-none">🏆</span>
+            <span className="min-w-0 flex-1">
+              <span className="block text-[11px] font-semibold uppercase tracking-[0.18em]" style={{ color: "var(--fg)" }}>
+                {t("wrapped.baslik")}
+              </span>
+              <span className="epigraf mt-0.5 block text-sm">{t("wrapped.alt")}</span>
+            </span>
+            <span aria-hidden style={{ color: "var(--muted)" }}>→</span>
+          </button>
+        )}
+
         {/* Radyoyla uyan — kurulum paneli */}
         {alarmAcik && (
           <div className="mb-5 rounded-lg border px-4 py-3" style={{ borderColor: "var(--line)" }}>
@@ -2215,7 +2237,11 @@ export default function NowList() {
             genre: s.genre ?? null,
             accentColor: s.accentColor ?? null,
           }))}
-          onClose={() => setFrekansAcik(false)}
+          onClose={() => {
+            setFrekansAcik(false);
+            setFrekansKip("hep");
+          }}
+          baslangicKip={frekansKip}
         />
       )}
 

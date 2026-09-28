@@ -29,28 +29,36 @@ function readableOn(hex: string): string {
 export default function FrekansKarti({
   stations,
   onClose,
+  baslangicKip = "hep",
 }: {
   stations: IstasyonOzet[];
   onClose: () => void;
+  baslangicKip?: "hep" | "ay";
 }) {
   const { dil, t } = useDil();
   const en = dil === "en";
   const [kartUrl, setKartUrl] = useState<string | null>(null);
   // "hep" = tüm günlük, "ay" = ŞİMDİ Wrapped (bu ayın dinlemeleri)
-  const [kip, setKip] = useState<"hep" | "ay">("hep");
+  const [kip, setKip] = useState<"hep" | "ay">(baslangicKip);
   const kazanilan = useMemo(() => rozetleriHesapla(), []);
   const tumGunluk = useMemo(oku, []);
+  // "ay" kipi Wrapped'tır: ayın ilk 4 günü kapanan ayı gösterir (1 Ekim'de Eylül),
+  // sonrasında içinde bulunulan ayı.
+  const hedefAy = useMemo(() => {
+    const d = new Date();
+    if (d.getDate() <= 4) d.setMonth(d.getMonth() - 1);
+    return { ay: d.getMonth(), yil: d.getFullYear(), tarih: d };
+  }, []);
   const gunluk = useMemo(() => {
     if (kip === "hep") return tumGunluk;
-    const simdi = new Date();
     return tumGunluk.filter((k) => {
       const d = new Date(k.t);
-      return d.getMonth() === simdi.getMonth() && d.getFullYear() === simdi.getFullYear();
+      return d.getMonth() === hedefAy.ay && d.getFullYear() === hedefAy.yil;
     });
-  }, [tumGunluk, kip]);
+  }, [tumGunluk, kip, hedefAy]);
   const ayAdi = useMemo(
-    () => new Date().toLocaleDateString(en ? "en-US" : "tr-TR", { month: "long" }),
-    [en],
+    () => hedefAy.tarih.toLocaleDateString(en ? "en-US" : "tr-TR", { month: "long" }),
+    [en, hedefAy],
   );
 
   const ozet = useMemo(() => {

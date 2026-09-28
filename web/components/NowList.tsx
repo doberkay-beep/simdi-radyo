@@ -858,6 +858,9 @@ export default function NowList() {
     odaRef.current = k;
     setOda({ kod, rol: "uye" });
     setOdaDavet(null);
+    // Davetle gelen yeni dinleyiciye karşılama — kalıcılık teşviki.
+    setOdaBilgi(t("oda.hosgeldin"));
+    setTimeout(() => setOdaBilgi(null), 9000);
   }
 
   // Oda sahibi istasyon değiştirince odaya duyur.
@@ -1837,6 +1840,20 @@ export default function NowList() {
             );
           })}
         </ul>
+
+        {/* Kitap köprüsü — tek satır, sayfanın dibinde */}
+        <p className="mt-10 text-center text-xs" style={{ color: "var(--muted)" }}>
+          📖 {t("kopru.kitap")}{" "}
+          <a
+            href="https://www.berkaydogan.co/kitaplar/tasfiye"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="underline"
+            style={{ color: "var(--fg)" }}
+          >
+            Tasfiye
+          </a>
+        </p>
       </div>
 
       {/* Alt çalma çubuğu — çalan istasyonun renginde */}

@@ -128,6 +128,8 @@ export const SOZLUK: Record<string, { tr: string; en: string }> = {
   // rozetler & şairin frekansı
   "rozet.baslik": { tr: "rozetler", en: "badges" },
   "sair.baslik": { tr: "şairin frekansı", en: "the poet's pick" },
+  "kopru.kitap": { tr: "ŞİMDİ'yi kuran yazarın kitabı:", en: "A book by the writer who built ŞİMDİ:" },
+  "oda.hosgeldin": { tr: "Hoş geldin 🎧 Beğendiysen ♥ ile favorilere ekle; telefonda 'Ana Ekrana Ekle' dersen hep cebinde.", en: "Welcome 🎧 If you like it, ♥ a favorite; 'Add to Home Screen' keeps it in your pocket." },
   // topluluk geri bildirimi
   "gb.yanlis": { tr: "yanlış şarkı mı yazıyor? bildir", en: "wrong song showing? report" },
   "gb.tesekkur": { tr: "bildirildi — teşekkürler ✓", en: "reported — thanks ✓" },

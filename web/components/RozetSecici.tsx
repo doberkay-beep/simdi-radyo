@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { embedKodu } from "@/lib/embed";
+import { embedKodu, EMBED_BOYLAR, type EmbedBoy } from "@/lib/embed";
 
 function readableOn(hex: string): string {
   const h = (hex || "#6b7280").replace("#", "");
@@ -17,12 +17,13 @@ type Ist = { slug: string; name: string; accent: string };
 export default function RozetSecici({ list }: { list: Ist[] }) {
   const [q, setQ] = useState("");
   const [sel, setSel] = useState(list[0]?.slug ?? "");
+  const [boy, setBoy] = useState<EmbedBoy>("kart");
   const [kop, setKop] = useState(false);
 
   const secili = list.find((s) => s.slug === sel) ?? list[0];
   const ql = q.trim().toLocaleLowerCase("tr");
   const suz = ql ? list.filter((s) => s.name.toLocaleLowerCase("tr").includes(ql)) : list;
-  const kod = secili ? embedKodu(secili.slug, secili.name) : "";
+  const kod = secili ? embedKodu(secili.slug, secili.name, boy) : "";
 
   async function kopyala() {
     try {
@@ -73,17 +74,40 @@ export default function RozetSecici({ list }: { list: Ist[] }) {
         )}
       </div>
 
+      {/* Boy seçimi — rozet kartı ya da klasik banner şeritleri */}
+      <div className="mt-6">
+        <div className="mb-2 text-xs uppercase tracking-wide" style={{ color: "var(--muted)" }}>
+          boy
+        </div>
+        <div className="flex flex-wrap gap-2">
+          {(Object.keys(EMBED_BOYLAR) as EmbedBoy[]).map((b) => (
+            <button
+              key={b}
+              onClick={() => setBoy(b)}
+              className="press rounded-full border px-3 py-1.5 text-sm"
+              style={{
+                borderColor: boy === b ? secili.accent : "var(--line)",
+                background: boy === b ? secili.accent : "transparent",
+                color: boy === b ? readableOn(secili.accent) : "var(--fg)",
+              }}
+            >
+              {EMBED_BOYLAR[b].ad}
+            </button>
+          ))}
+        </div>
+      </div>
+
       {/* Canlı önizleme */}
       <div className="mt-8">
         <div className="mb-2 text-xs uppercase tracking-wide" style={{ color: "var(--muted)" }}>
           önizleme
         </div>
         <iframe
-          key={secili.slug}
-          src={`/embed/${secili.slug}`}
-          width={360}
-          height={92}
-          style={{ border: 0, borderRadius: 16, maxWidth: "100%" }}
+          key={`${secili.slug}-${boy}`}
+          src={`/embed/${secili.slug}${boy === "kart" ? "" : `?boy=${boy}`}`}
+          width={EMBED_BOYLAR[boy].w}
+          height={EMBED_BOYLAR[boy].h}
+          style={{ border: 0, borderRadius: boy === "ince" ? 12 : 16, maxWidth: "100%" }}
           title={`${secili.name} — şu an ne çalıyor`}
           loading="lazy"
         />

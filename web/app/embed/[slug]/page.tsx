@@ -31,9 +31,6 @@ export default async function EmbedPage({ params }: { params: Promise<{ slug: st
   const name = s?.name ?? "ŞİMDİ";
   const accent = s?.accent_color || DEFAULT_ACCENT;
 
-  return (
-    <div style={{ padding: 8, background: "transparent" }}>
-      <EmbedLive slug={slug} name={name} accent={accent} />
-    </div>
-  );
+  // Boyu (?boy=ince|genis) client okur — sayfa ISR kalsın (CPU kotası).
+  return <EmbedLive slug={slug} name={name} accent={accent} />;
 }

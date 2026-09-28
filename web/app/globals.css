@@ -451,3 +451,14 @@ body {
 @media (prefers-reduced-motion: reduce) {
   .dial-pop, .ibre-sway { animation: none; }
 }
+
+/* ── KAYAN MANŞET — köz şeridi: parıltı zemin, kesintisiz akış ── */
+.simdi-marquee { overflow: hidden; white-space: nowrap; background: var(--glow); color: var(--bg);
+  position: relative; z-index: 20; user-select: none; }
+.simdi-marquee-track { display: inline-flex; padding: 0.5rem 0; animation: simdiMarquee 20s linear infinite; will-change: transform; }
+.simdi-marquee-track > span { font-family: var(--font-mono, monospace); font-size: 0.68rem; font-weight: 700;
+  letter-spacing: 0.24em; text-transform: uppercase; padding-right: 2.2rem; }
+.simdi-marquee-track > span::after { content: "✦"; margin-left: 2.2rem; opacity: 0.6; }
+@keyframes simdiMarquee { from { transform: translateX(0); } to { transform: translateX(-50%); } }
+.simdi-marquee:hover .simdi-marquee-track { animation-play-state: paused; }
+@media (prefers-reduced-motion: reduce) { .simdi-marquee-track { animation: none; } }

@@ -1156,6 +1156,20 @@ export default function NowList() {
         </div>
       </div>
 
+      {/* KAYAN MANŞET — köz şeridi (yazar sitesiyle ortak sansasyon dili) */}
+      <div className="simdi-marquee" aria-hidden>
+        <div className="simdi-marquee-track">
+          {[0, 1].map((k) =>
+            [
+              `${stations.length} ${t("manset.istasyon")}`,
+              `${doluUlkeler().length} ${t("manset.ulke")}`,
+              t("manset.rota"),
+              t("manset.canli"),
+            ].map((parca) => <span key={`${k}-${parca}`}>{parca}</span>)
+          )}
+        </div>
+      </div>
+
       <div className="relative z-10 mx-auto max-w-2xl px-5 pb-32 pt-10">
         {/* Başlık — logo yok, sadece kelime işareti */}
         <header className="mb-6 flex flex-wrap items-start justify-between gap-y-3">

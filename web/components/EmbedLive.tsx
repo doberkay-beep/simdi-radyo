@@ -13,9 +13,25 @@ function readableOn(hex: string): string {
 }
 
 // Gömülebilir "şu an çalıyor" rozeti — başka siteler iframe ile koyar.
-export default function EmbedLive({ slug, name, accent }: { slug: string; name: string; accent: string }) {
+// boy: kart 360×92 (varsayılan) · ince 468×60 · genis 728×90.
+export default function EmbedLive({ slug, name, accent, boy: boyProp }: { slug: string; name: string; accent: string; boy?: "kart" | "ince" | "genis" }) {
   const [live, setLive] = useState<Live>(null);
+  const [boy, setBoy] = useState<"kart" | "ince" | "genis">(boyProp ?? "kart");
   const ink = readableOn(accent);
+
+  // Boy iframe URL'sinden gelir (?boy=ince|genis) — sayfa statik kalsın diye client'ta okunur.
+  useEffect(() => {
+    if (boyProp) return;
+    try {
+      const b = new URLSearchParams(window.location.search).get("boy");
+      if (b === "ince" || b === "genis") setBoy(b);
+    } catch { /* yoksay */ }
+  }, [boyProp]);
+  const B = {
+    kart: { pad: "16px 18px", radius: 16, eq: 34, eqBars: [16, 28, 22, 34, 20], etiket: 11, parca: 16, gap: 14 },
+    ince: { pad: "7px 14px", radius: 12, eq: 22, eqBars: [10, 18, 14, 22, 12], etiket: 9, parca: 13, gap: 10 },
+    genis: { pad: "14px 20px", radius: 14, eq: 34, eqBars: [16, 28, 22, 34, 20], etiket: 11, parca: 17, gap: 14 },
+  }[boy];
 
   useEffect(() => {
     let off = false;
@@ -38,6 +54,7 @@ export default function EmbedLive({ slug, name, accent }: { slug: string; name: 
       : live?.title || live?.rawTitle || "canlı yayın";
 
   return (
+    <div style={{ padding: boy === "kart" ? 8 : 0, height: "100dvh", boxSizing: "border-box", background: "transparent" }}>
     <a
       href={`https://necaliyor.co/radyo/${slug}`}
       target="_blank"
@@ -45,31 +62,32 @@ export default function EmbedLive({ slug, name, accent }: { slug: string; name: 
       style={{
         display: "flex",
         alignItems: "center",
-        gap: 14,
+        gap: B.gap,
         textDecoration: "none",
         width: "100%",
+        height: "100%",
         boxSizing: "border-box",
-        padding: "16px 18px",
-        borderRadius: 16,
+        padding: B.pad,
+        borderRadius: B.radius,
         background: `linear-gradient(135deg, ${accent}, color-mix(in srgb, ${accent} 45%, #08080a))`,
         color: ink,
         fontFamily: "system-ui, -apple-system, Segoe UI, Roboto, sans-serif",
       }}
     >
       {/* Ekolayzer */}
-      <span style={{ display: "flex", alignItems: "flex-end", gap: 3, height: 34 }}>
-        {[16, 28, 22, 34, 20].map((h, i) => (
+      <span style={{ display: "flex", alignItems: "flex-end", gap: 3, height: B.eq }}>
+        {B.eqBars.map((h, i) => (
           <span key={i} style={{ width: 4, height: h, background: ink, opacity: 0.85, borderRadius: 2 }} />
         ))}
       </span>
       <span style={{ minWidth: 0, flex: 1 }}>
-        <span style={{ display: "block", fontSize: 11, letterSpacing: 1.5, textTransform: "uppercase", opacity: 0.75 }}>
+        <span style={{ display: "block", fontSize: B.etiket, letterSpacing: 1.5, textTransform: "uppercase", opacity: 0.75 }}>
           {name} · şu an
         </span>
         <span
           style={{
             display: "block",
-            fontSize: 16,
+            fontSize: B.parca,
             fontWeight: 700,
             marginTop: 2,
             whiteSpace: "nowrap",
@@ -80,7 +98,8 @@ export default function EmbedLive({ slug, name, accent }: { slug: string; name: 
           {track}
         </span>
       </span>
-      <span style={{ fontSize: 11, fontWeight: 700, opacity: 0.85, whiteSpace: "nowrap" }}>necaliyor.co</span>
+      <span style={{ fontSize: B.etiket, fontWeight: 700, opacity: 0.85, whiteSpace: "nowrap" }}>necaliyor.co</span>
     </a>
+    </div>
   );
 }

@@ -10,6 +10,13 @@ export const metadata = {
 
 const OYUNLAR = [
   {
+    href: "/oyun/gunun-frekansi",
+    ad: "Günün Frekansı",
+    soru: "her gün tek gizli radyo, herkese aynısı — 3 hakta bul, karneni paylaş.",
+    emoji: "🗓",
+    yeni: true,
+  },
+  {
     href: "/oyun/kor-dinleme",
     ad: "Kör Dinleme",
     soru: "istasyon gizli — sadece ses. hangi radyo çalıyor?",
@@ -20,7 +27,6 @@ const OYUNLAR = [
     ad: "Nereden Çalıyor?",
     soru: "dünyadan bir radyo — hangi ülkeden yayında?",
     emoji: "🌍",
-    yeni: true,
   },
 ];
 

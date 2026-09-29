@@ -98,6 +98,35 @@ export default async function Hakkinda() {
           )}
         </div>
 
+        {/* Gece Pencereleri — projenin animasyon tanıtım filmi (YouTube, çerezsiz gömme) */}
+        <section id="film" className="mt-12 border-t pt-8" style={{ borderColor: "var(--line)" }}>
+          <h2 className="brand text-2xl font-bold tracking-tight">
+            {en ? "Night Windows" : "Gece Pencereleri"}{" "}
+            <span className="text-base font-normal" style={{ color: "var(--muted)" }}>
+              · {en ? "the film" : "film"} 🕯
+            </span>
+          </h2>
+          <p className="epigraf mt-2 text-[15px]">
+            {en
+              ? "The city sleeps; frequencies don't. ŞİMDİ's animated short — Istanbul to Seoul, all at once."
+              : "Şehir uyur; frekanslar uyumaz. ŞİMDİ'nin animasyon kısa filmi — İstanbul'dan Seul'e, aynı anda."}
+          </p>
+          <div
+            className="mt-5 overflow-hidden rounded-2xl border"
+            style={{ borderColor: "var(--line)", aspectRatio: "16 / 9" }}
+          >
+            <iframe
+              src="https://www.youtube-nocookie.com/embed/a0WP9eqXzN0"
+              title={en ? "ŞİMDİ — Night Windows (animated short)" : "ŞİMDİ — Gece Pencereleri (animasyon film)"}
+              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+              allowFullScreen
+              loading="lazy"
+              className="h-full w-full"
+              style={{ border: 0 }}
+            />
+          </div>
+        </section>
+
         {/* Topluluk: istasyon öner */}
         <div className="mt-12 border-t pt-6" style={{ borderColor: "var(--line)" }}>
           <IstasyonOner />

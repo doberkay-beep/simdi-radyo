@@ -32,11 +32,24 @@ export default function AltBilgi() {
           >
             Berkay Doğan
           </a>
-          {" · "}
+        </p>
+        {/* Mini site haritası — üst menünün katlamasında kaybolanlar burada göz önünde */}
+        <p className="mt-3 flex flex-wrap gap-x-4 gap-y-1.5">
           <Link href="/hakkinda" className="underline">
             {en ? "about" : "hakkında"}
           </Link>
-          {" · "}
+          <Link href="/hakkinda#film" className="underline">
+            {en ? "the film 🕯" : "film 🕯"}
+          </Link>
+          <Link href="/oyun" className="underline">
+            {en ? "games" : "oyunlar"}
+          </Link>
+          <Link href="/arsiv" className="underline">
+            {en ? "archive" : "arşiv"}
+          </Link>
+          <Link href="/kose" className="underline">
+            {en ? "essays" : "köşe"}
+          </Link>
           <Link href="/rozet" className="underline">
             {en ? "badge" : "rozet"}
           </Link>

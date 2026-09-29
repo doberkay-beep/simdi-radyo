@@ -105,8 +105,8 @@ export default function KorDinleme() {
           </div>
           <span className="flex items-center gap-3">
             <ThemeToggle />
-            <Link href="/" className="text-sm underline" style={{ color: "var(--muted)" }}>
-              ← şimdi
+            <Link href="/oyun" className="text-sm underline" style={{ color: "var(--muted)" }}>
+              ← oyunlar
             </Link>
           </span>
         </header>

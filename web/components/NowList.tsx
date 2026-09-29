@@ -1258,13 +1258,17 @@ export default function NowList() {
                 {t("nav.avlarim")}
               </button>
               <Link href="/kesif" className="nav-link">{t("nav.kesif")}</Link>
-              {/* Mobilde kalan linkler "daha"nın altına katlanır; sm+ hepsi açık */}
+              {/* Oyunlar katlamanın DIŞINDA — mobilde de göz önünde, hafif vurgulu */}
+              <Link href="/oyun" className="nav-link font-semibold" style={{ color: "var(--fg)" }}>
+                {t("nav.oyun")}
+              </Link>
+              {/* Mobilde kalan linkler "daha"nın altına katlanır; sm+ hepsi açık.
+                  atlas + nabız bant seçicide zaten görünür — burada ikincil kalabilirler. */}
               <span className={`${navAcik ? "contents" : "hidden"} sm:contents`}>
                 <Link href="/ulke" className="nav-link">atlas</Link>
                 <Link href="/nabiz" className="nav-link">{t("nav.nabiz")}</Link>
                 <Link href="/arsiv" className="nav-link">{t("nav.arsiv")}</Link>
                 <Link href="/kose" className="nav-link">{t("nav.kose")}</Link>
-                <Link href="/oyun" className="nav-link">{t("nav.oyun")}</Link>
                 <Link href="/hakkinda" className="nav-link">{t("nav.gelistirici")}</Link>
               </span>
               <button

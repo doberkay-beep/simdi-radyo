@@ -41,6 +41,8 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     })),
     { url: `${BASE}/kose`, changeFrequency: "weekly", priority: 0.6 },
     { url: `${BASE}/oyun`, changeFrequency: "monthly", priority: 0.5 },
+    { url: `${BASE}/oyun/kor-dinleme`, changeFrequency: "monthly", priority: 0.5 },
+    { url: `${BASE}/oyun/nereden`, changeFrequency: "monthly", priority: 0.5 },
     ...DENEMELER.map((d) => ({
       url: `${BASE}/kose/${d.slug}`,
       changeFrequency: "monthly" as const,

@@ -6,7 +6,8 @@ import ThemeToggle from "./ThemeToggle";
 import ToneToggle from "./ToneToggle";
 import KonsolRaylar from "./KonsolRaylar";
 import { kaynagiCalistir, hlsYik } from "@/lib/cal";
-import { dinleyiciKatil, type CanliKanal } from "@/lib/canli";
+import { dinleyiciKatil, simdiDinle, type CanliKanal } from "@/lib/canli";
+import { temizMetin } from "@/lib/cop";
 import {
   selamla,
   EPIGRAFLAR,
@@ -62,6 +63,7 @@ type NowPlaying = {
 } | null;
 
 type Station = {
+  id: number;
   slug: string;
   name: string;
   city: string | null;
@@ -463,11 +465,39 @@ export default function NowList() {
       // yok say
     }
     load();
-    const dataTimer = setInterval(load, 15000);
+    // Şarkı değişimleri Realtime'dan anında düşer; yoklama bağlıyken seyrek
+    // yedek (60 sn), bağlantı yoksa eski sıklıkta (15 sn) çalışır.
+    let bagli = false;
+    const dataTimer = setInterval(() => {
+      if (!bagli || Date.now() % 60000 < 15000) load();
+    }, 15000);
+    const ayril = simdiDinle(
+      (d) => {
+        setStations((prev) =>
+          prev.map((s) =>
+            s.id === d.station_id
+              ? {
+                  ...s,
+                  nowPlaying: {
+                    artist: temizMetin(d.artist),
+                    title: temizMetin(d.title),
+                    rawTitle: temizMetin(d.raw_title),
+                    updatedAt: d.updated_at,
+                  },
+                }
+              : s,
+          ),
+        );
+      },
+      (b) => {
+        bagli = b;
+      },
+    );
     const clockTimer = setInterval(() => setNow(Date.now()), 20000);
     return () => {
       clearInterval(dataTimer);
       clearInterval(clockTimer);
+      ayril();
     };
   }, []);
 
@@ -1263,6 +1293,9 @@ export default function NowList() {
                 {t("nav.oyun")}
               </Link>
               <Link href="/fal" className="nav-link">fal 🔮</Link>
+              <Link href="/liste" className="nav-link font-semibold" style={{ color: "var(--fg)" }}>
+                liste
+              </Link>
               {/* Mobilde kalan linkler "daha"nın altına katlanır; sm+ hepsi açık.
                   atlas + nabız bant seçicide zaten görünür — burada ikincil kalabilirler. */}
               <span className={`${navAcik ? "contents" : "hidden"} sm:contents`}>

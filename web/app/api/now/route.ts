@@ -11,7 +11,7 @@ export async function GET() {
   const { data, error } = await supabase
     .from("stations")
     .select(
-      "slug, name, city, frequency, accent_color, band, genre, homepage, now_playing(artist, title, raw_title, updated_at)",
+      "id, slug, name, city, frequency, accent_color, band, genre, homepage, now_playing(artist, title, raw_title, updated_at)",
     )
     .eq("is_active", true)
     .order("sort_order", { ascending: true });
@@ -25,6 +25,7 @@ export async function GET() {
     const raw = s.now_playing as unknown;
     const np = Array.isArray(raw) ? raw[0] : raw;
     return {
+      id: s.id,
       slug: s.slug,
       name: s.name,
       city: s.city,

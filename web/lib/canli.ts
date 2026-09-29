@@ -38,6 +38,33 @@ export type CanliKanal = {
   ayril: () => void;
 };
 
+/* "Şarkı değiştiği an" — now_playing tablosundaki her değişiklik anında düşer.
+   Toplayıcı yazdığı saniye ekran güncellenir; 15 sn'lik yoklama yedeğe iner.
+   Gereksinim: liste-canli.sql (tabloyu supabase_realtime yayınına ekler). */
+export type SimdiDegisim = {
+  station_id: number;
+  artist: string | null;
+  title: string | null;
+  raw_title: string | null;
+  updated_at: string;
+};
+
+export function simdiDinle(uzerine: (d: SimdiDegisim) => void, durum?: (bagli: boolean) => void): () => void {
+  const ch: RealtimeChannel = al().channel("simdi-degisim");
+  ch.on(
+    "postgres_changes",
+    { event: "*", schema: "public", table: "now_playing" },
+    (p) => {
+      const yeni = (p as { new?: Partial<SimdiDegisim> }).new;
+      if (yeni && typeof yeni.station_id === "number") uzerine(yeni as SimdiDegisim);
+    },
+  );
+  ch.subscribe((s) => durum?.(s === "SUBSCRIBED"));
+  return () => {
+    al().removeChannel(ch).catch(() => {});
+  };
+}
+
 export function dinleyiciKatil(
   slug: string,
   uzerine: {

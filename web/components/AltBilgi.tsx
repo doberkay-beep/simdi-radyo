@@ -44,6 +44,9 @@ export default function AltBilgi() {
           <Link href="/oyun" className="underline">
             {en ? "games" : "oyunlar"}
           </Link>
+          <Link href="/fal" className="underline">
+            {en ? "fortune 🔮" : "fal 🔮"}
+          </Link>
           <Link href="/arsiv" className="underline">
             {en ? "archive" : "arşiv"}
           </Link>

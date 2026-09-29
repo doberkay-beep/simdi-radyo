@@ -1262,6 +1262,7 @@ export default function NowList() {
               <Link href="/oyun" className="nav-link font-semibold" style={{ color: "var(--fg)" }}>
                 {t("nav.oyun")}
               </Link>
+              <Link href="/fal" className="nav-link">fal 🔮</Link>
               {/* Mobilde kalan linkler "daha"nın altına katlanır; sm+ hepsi açık.
                   atlas + nabız bant seçicide zaten görünür — burada ikincil kalabilirler. */}
               <span className={`${navAcik ? "contents" : "hidden"} sm:contents`}>

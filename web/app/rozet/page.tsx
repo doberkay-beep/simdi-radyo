@@ -3,6 +3,7 @@ import Link from "next/link";
 import ThemeToggle from "@/components/ThemeToggle";
 import DilToggle from "@/components/DilToggle";
 import RozetSecici from "@/components/RozetSecici";
+import ListeRozeti from "@/components/ListeRozeti";
 import { getSupabase } from "@/lib/supabase";
 
 // Self-servis rozet sayfası — herkes kendi/ favori istasyonunun canlı "şu an
@@ -81,6 +82,8 @@ export default async function RozetPage() {
             İstasyon listesi şu an yüklenemedi. Birazdan tekrar dene.
           </p>
         )}
+
+        <ListeRozeti />
 
         <div className="read mt-12 text-[15px] leading-relaxed" style={{ color: "var(--muted)" }}>
           <p>

@@ -34,6 +34,7 @@ import AvDefteri from "./AvDefteri";
 import SanatciRadari from "./SanatciRadari";
 import SairinFrekansi from "./SairinFrekansi";
 import { avEkle } from "@/lib/avlar";
+import { dinlemeKaydet } from "@/lib/wrapped";
 import { odaBaglan, odaKoduUret, type Oda } from "@/lib/oda";
 import { istasyonUlkesi, bayrakEmoji, doluUlkeler, ulkeSlug, ULKELER } from "@/lib/ulkeler";
 import { useDil, turAdi } from "@/lib/i18n";
@@ -2200,6 +2201,8 @@ export default function NowList() {
         onPlaying={() => {
           retriesRef.current = 0;
           setPhase("playing");
+          // Wrapped günlüğü: yayın GERÇEKTEN başladıysa anonim dinleme düş.
+          if (playingRef.current) dinlemeKaydet(playingRef.current);
         }}
         onEnded={reconnect}
         onError={reconnect}

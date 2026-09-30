@@ -3,6 +3,8 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { getSupabase } from "@/lib/supabase";
 import { sarkiSlug } from "@/lib/seoslug";
+import SanatciTakipDugme from "@/components/SanatciTakipDugme";
+import RozetPaylas from "@/components/RozetPaylas";
 
 // Sanatçı sayfası — "X radyoda ne kadar çalınıyor?" aramasının cevabı.
 // ISR: saatte bir tazelenir; veri plays arşivinden (sanatci_ozet RPC).
@@ -32,6 +34,12 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
     title: `${o.ad} radyoda ne kadar çalınıyor? | ŞİMDİ`,
     description: `${o.ad} son 7 günde Türkiye radyolarında ${o.kez7} kez çaldı (30 günde ${o.kez30} kez, ${o.istasyonSay} istasyon). En çok çalan şarkıları ve istasyonları — canlı sayım.`,
     alternates: { canonical: `/sanatci/${slug}` },
+    // Link paylaşılınca önizleme = sanatçının radyo rozeti.
+    openGraph: {
+      title: `${o.ad} — Türkiye radyolarında ${o.kez7 || o.kez30} kez`,
+      images: [{ url: `/sanatci/${slug}/rozet?boyut=og`, width: 1200, height: 630 }],
+    },
+    twitter: { card: "summary_large_image", images: [`/sanatci/${slug}/rozet?boyut=og`] },
   };
 }
 
@@ -65,6 +73,7 @@ export default async function Sayfa({ params }: { params: Promise<{ slug: string
           </p>
           <h1 className="brand mt-1 text-4xl font-bold tracking-tight">{o.ad}</h1>
           <p className="epigraf mt-2 text-[15px]">Türkiye radyolarında ne kadar çalınıyor — gerçek sayım.</p>
+          <SanatciTakipDugme ad={o.ad} />
         </header>
 
         {/* Şu an çalıyor mu? */}
@@ -96,6 +105,11 @@ export default async function Sayfa({ params }: { params: Promise<{ slug: string
             </div>
           ))}
         </div>
+
+        {/* 📣 Radyo rozeti — sanatçı/menajer/hayran paylaşsın */}
+        {(o.kez7 > 0 || o.kez30 > 0) && (
+          <RozetPaylas slug={slug} ad={o.ad} sayi={o.kez7 > 0 ? o.kez7 : o.kez30} haftalik={o.kez7 > 0} />
+        )}
 
         {/* En çok çalınan şarkıları */}
         <h2 className="mb-2 text-sm font-semibold uppercase tracking-wide" style={{ color: "var(--muted)" }}>
@@ -144,10 +158,10 @@ export default async function Sayfa({ params }: { params: Promise<{ slug: string
         {/* CTA'lar */}
         <div className="rounded-2xl border p-5" style={{ borderColor: "var(--line)" }}>
           <p className="text-sm">
-            🔔 <strong>{o.ad}</strong> bir radyoda çalmaya başladığı an haber almak ister misin?{" "}
-            <Link href="/" className="underline">ŞİMDİ&apos;yi aç</Link>, müzik defterinden izlemeye al, radar zilini kur.
+            🔔 <strong>{o.ad}</strong> bir radyoda çalmaya başladığı an haber almak ister misin?
           </p>
-          <p className="mt-2 text-sm" style={{ color: "var(--muted)" }}>
+          <SanatciTakipDugme ad={o.ad} />
+          <p className="mt-3 text-sm" style={{ color: "var(--muted)" }}>
             Haftanın tam listesi: <Link href="/liste" className="underline">ŞİMDİ LİSTESİ →</Link>
           </p>
         </div>

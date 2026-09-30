@@ -14,6 +14,27 @@ import { kuruluMu } from "./KurSihirbazi";
 
 type Sonuc = { slug: string; ad: string; kez: number; istasyon: number; son: string };
 
+// Radar nöbetçisiyle aynı katlama + düet bölme kuralı.
+function katla(t: string): string {
+  return t.replace(/İ/g, "i").replace(/I/g, "ı").toLowerCase()
+    .replace(/ı/g, "i").replace(/ş/g, "s").replace(/ğ/g, "g")
+    .replace(/ü/g, "u").replace(/ö/g, "o").replace(/ç/g, "c")
+    .normalize("NFD").replace(/[̀-ͯ]/g, "")
+    .replace(/[^a-z0-9]+/g, " ").trim();
+}
+function ortaklar(ad: string): string[] {
+  return ad.split(/\s+(?:feat\.?|ft\.?|featuring|x|vs\.?|ve|and|with)\s+|\s*[&,/+]\s*/i).map(katla).filter(Boolean);
+}
+// "Hadise, Murda" gibi düet satırlarını, listede tek başına "Hadise" varsa gizle —
+// radar düetleri zaten ayrıştırıyor, "Hadise"yi takip etmek hepsini kapsar.
+function duetleriSuz(liste: Sonuc[]): Sonuc[] {
+  const tekler = new Set(liste.filter((s) => ortaklar(s.ad).length === 1).map((s) => katla(s.ad)));
+  return liste.filter((s) => {
+    const o = ortaklar(s.ad);
+    return o.length === 1 || !o.some((p) => tekler.has(p));
+  });
+}
+
 function once(t: string, en: boolean): string {
   const dk = Math.max(0, Math.floor((Date.now() - Date.parse(t)) / 60000));
   if (dk < 60) return en ? `${dk} min ago` : `${dk} dk önce`;
@@ -53,7 +74,7 @@ export default function SanatciTakip({
     const zaman = setTimeout(async () => {
       try {
         const { data } = await getSupabase().rpc("sanatci_ara", { q: temiz });
-        if (no === sayac.current) setSonuclar((data as Sonuc[]) ?? []);
+        if (no === sayac.current) setSonuclar(duetleriSuz((data as Sonuc[]) ?? []));
       } catch {
         if (no === sayac.current) setSonuclar([]);
       } finally {

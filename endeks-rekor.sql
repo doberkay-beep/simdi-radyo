@@ -62,11 +62,12 @@ security definer
 set search_path = public
 as $$
 with agg as materialized (
+  -- TR 2016'dan beri sabit UTC+3: 'at time zone' yerine ucuz aritmetik.
   select p.artist, p.title, p.station_id,
-         (p.started_at at time zone 'Europe/Istanbul')::date as gun,
+         ((p.started_at + interval '3 hours')::date) as gun,
          case
-           when extract(hour from p.started_at at time zone 'Europe/Istanbul') < 6 then 'gece'
-           when extract(hour from p.started_at at time zone 'Europe/Istanbul') < 10 then 'sabah'
+           when extract(hour from (p.started_at + interval '3 hours')) < 6 then 'gece'
+           when extract(hour from (p.started_at + interval '3 hours')) < 10 then 'sabah'
            else 'gunduz'
          end as bant,
          count(*) as kez
@@ -101,7 +102,9 @@ sadik_iliski as (
   group by 1, 2, 3 order by 4 desc limit 1
 ),
 arsiv as (
-  select count(*) as toplam, min(started_at) as ilk from plays
+  -- Tam sayım pahalı: planlayıcı tahmini (reltuples) + indeksli min yeter.
+  select (select reltuples::bigint from pg_class where relname = 'plays') as toplam,
+         (select min(started_at) from plays) as ilk
 )
 select json_build_object(
   'gunRekoru',       (select row_to_json(g) from gun_rekoru g),
@@ -158,3 +161,10 @@ from (
 ) b;
 $$;
 grant execute on function benzerler(text) to anon, authenticated;
+
+-- ── 4) ANON SORGU SINIRI ──────────────────────────────────────────────────
+-- Supabase anon rolünün varsayılan statement_timeout'u ağır vitrin sorguları
+-- (rekorlar, benzerler) için dar. 8 saniyeye çıkar (resmi yöntem).
+alter role anon set statement_timeout = '8s';
+alter role authenticated set statement_timeout = '8s';
+notify pgrst, 'reload config';

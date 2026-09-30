@@ -32,9 +32,13 @@ import DefterSeridi from "./DefterSeridi";
 import GeceNobeti from "./GeceNobeti";
 import AvDefteri from "./AvDefteri";
 import KurSihirbazi, { kuruluMu } from "./KurSihirbazi";
+import SanatciTakip from "./SanatciTakip";
+import KasaModal from "./KasaModal";
+import YukariCik from "./YukariCik";
+import { KASA_OLAYI } from "@/lib/kasa";
 import SanatciRadari from "./SanatciRadari";
 import SairinFrekansi from "./SairinFrekansi";
-import { avEkle } from "@/lib/avlar";
+import { avEkle, izlenenOku } from "@/lib/avlar";
 import { dinlemeKaydet } from "@/lib/wrapped";
 import { odaBaglan, odaKoduUret, type Oda } from "@/lib/oda";
 import { istasyonUlkesi, bayrakEmoji, doluUlkeler, ulkeSlug, ULKELER } from "@/lib/ulkeler";
@@ -229,6 +233,16 @@ export default function NowList() {
   const [navAcik, setNavAcik] = useState(false); // mobil ☰ menü sayfası
   const [cipMenu, setCipMenu] = useState(false); // mobil oynatıcı ⋯ menüsü
   const [kurAcik, setKurAcik] = useState(false); // 📲 uygulama kur sihirbazı
+  const [takipAcik, setTakipAcik] = useState(false); // 🔔 sanatçı ara + takip
+  const [kasaAcik, setKasaAcik] = useState(false); // 🔐 hafıza kodu
+  const [takipSay, setTakipSay] = useState(0); // takip edilen sanatçı sayısı (hap parlasın)
+  useEffect(() => {
+    if (takipAcik) return;
+    const say = () => setTakipSay(izlenenOku().length);
+    say();
+    window.addEventListener(KASA_OLAYI, say);
+    return () => window.removeEventListener(KASA_OLAYI, say);
+  }, [takipAcik]);
   const [darEkran, setDarEkran] = useState(false); // arama yer tutucusunun kısa hali için
 
   useEffect(() => {
@@ -313,14 +327,19 @@ export default function NowList() {
   const deepLinkRef = useRef<string | null>(null);
   const deepTriedRef = useRef(false);
 
-  // Favorileri yükle (localStorage).
+  // Favorileri yükle (localStorage) — kasa başka cihazdan geri yüklenince de tazele.
   useEffect(() => {
-    try {
-      const raw = localStorage.getItem(FAV_KEY);
-      if (raw) setFavs(new Set(JSON.parse(raw)));
-    } catch {
-      // yok say
-    }
+    const yukle = () => {
+      try {
+        const raw = localStorage.getItem(FAV_KEY);
+        if (raw) setFavs(new Set(JSON.parse(raw)));
+      } catch {
+        // yok say
+      }
+    };
+    yukle();
+    window.addEventListener(KASA_OLAYI, yukle);
+    return () => window.removeEventListener(KASA_OLAYI, yukle);
   }, []);
 
   function toggleFav(slug: string) {
@@ -1256,6 +1275,9 @@ export default function NowList() {
                 <button onClick={() => setAvAcik(true)} className="nav-link press">
                   {t("nav.avlarim")}
                 </button>
+                <button onClick={() => setKasaAcik(true)} className="nav-link press">
+                  {dil === "en" ? "memory code" : "hafıza kodum"}
+                </button>
                 <Link href="/kesif" className="nav-link">{t("nav.kesif")}</Link>
                 {/* liste/oyunlar/fal ÜST MENÜDE DEĞİL — bant seçicinin altındaki
                     vitrin rafında yaşarlar. atlas+nabız da bant seçicide zaten var. */}
@@ -1298,6 +1320,13 @@ export default function NowList() {
 
         {/* Araç rafı — dinleme araçları: elle tutulur haplar (mini ikon dönemi bitti). */}
         <nav className="raf mb-5" aria-label="araçlar">
+          <button
+            onClick={() => setTakipAcik(true)}
+            className={takipSay ? "on" : ""}
+            title={dil === "en" ? "search artists, get notified when they play" : "sanatçını ara, radyoda çalınca haber al"}
+          >
+            🔔 {dil === "en" ? "FOLLOW ARTIST" : "SANATÇI TAKİP"}
+          </button>
           <button
             onClick={() => setNotAcik(true)}
             title={t("defter.baslik")}
@@ -2248,6 +2277,12 @@ export default function NowList() {
                   📲 {dil === "en" ? "install as an app" : "uygulama gibi kur"}
                 </button>
               )}
+              <button onClick={() => { setNavAcik(false); setTakipAcik(true); }} className="menu-kalem press">
+                🔔 {dil === "en" ? "follow artists" : "sanatçı takip"}
+              </button>
+              <button onClick={() => { setNavAcik(false); setKasaAcik(true); }} className="menu-kalem press">
+                🔐 {dil === "en" ? "memory code" : "hafıza kodum"}
+              </button>
               <button onClick={() => { setNavAcik(false); setFrekansAcik(true); }} className="menu-kalem press">
                 {t("nav.frekansim")}
               </button>
@@ -2334,6 +2369,11 @@ export default function NowList() {
 
       {/* 📲 Uygulama kur sihirbazı */}
       <KurSihirbazi acik={kurAcik} kapat={() => setKurAcik(false)} dil={dil} />
+
+      {/* 🔔 Sanatçı ara + takip · 🔐 hafıza kodu · ⬆ yukarı çık */}
+      <SanatciTakip acik={takipAcik} kapat={() => setTakipAcik(false)} dil={dil} kurAc={() => setKurAcik(true)} />
+      <KasaModal acik={kasaAcik} kapat={() => setKasaAcik(false)} dil={dil} />
+      <YukariCik oynaticiVar={!!current} />
 
       {/* Sadece bu satırdan ses çıkar; görünmez. Kesilirse yeniden bağlanır. */}
       <audio

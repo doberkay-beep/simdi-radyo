@@ -321,6 +321,22 @@ body {
   .raf a, .raf button { font-size: 10.5px; padding: 8px 11px; letter-spacing: 0.1em; }
 }
 
+/* ⬆ YUKARI ÇIK — oynatıcının üstünde yüzen kor düğme. */
+.yukari-cik {
+  position: fixed; right: 16px; z-index: 45;
+  width: 46px; height: 46px; border-radius: 999px;
+  display: flex; align-items: center; justify-content: center;
+  color: var(--glow-hi);
+  border: 1px solid color-mix(in srgb, var(--glow) 55%, var(--line-hi));
+  background: color-mix(in srgb, var(--glow) 12%, var(--panel));
+  box-shadow: 0 10px 26px -12px var(--glow), 0 6px 18px -10px #000;
+  backdrop-filter: blur(8px);
+  transition: opacity 0.2s ease, transform 0.2s ease;
+}
+.yukari-cik[data-gorunur="0"] { opacity: 0; transform: translateY(12px); pointer-events: none; }
+.yukari-cik[data-gorunur="1"] { opacity: 1; transform: none; }
+@media (min-width: 640px) { .yukari-cik { right: 24px; } }
+
 /* MOBİL MENÜ SAYFALARI — ☰ (site) ve ⋯ (oynatıcı) alt sayfaları.
    .menu-hap: başlıktaki çağrı düğmesi; .menu-sayfa: alttan doğan panel;
    .menu-kalem: tam boy, parmak dostu seçenek. */

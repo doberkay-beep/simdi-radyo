@@ -52,17 +52,25 @@ export default function CanliHarita({ embed = false }: { embed?: boolean }) {
 
   useEffect(() => {
     // Ana sayfayla AYNI favori defteri (localStorage "favoriler").
-    try {
-      const ham = localStorage.getItem("favoriler");
-      if (ham) setFavlar(new Set(JSON.parse(ham)));
-    } catch { /* yok say */ }
+    const favYukle = () => {
+      try {
+        const ham = localStorage.getItem("favoriler");
+        if (ham) setFavlar(new Set(JSON.parse(ham)));
+      } catch { /* yok say */ }
+    };
+    favYukle();
+    window.addEventListener("kasa-geri-yuklendi", favYukle);
     const hesapla = () => {
       const s = new Date();
       setGunesBoylami((12 - (s.getUTCHours() + s.getUTCMinutes() / 60)) * 15);
     };
     hesapla();
     const id = setInterval(hesapla, 60000);
-    return () => { clearInterval(id); sesRef.current?.pause(); };
+    return () => {
+      clearInterval(id);
+      sesRef.current?.pause();
+      window.removeEventListener("kasa-geri-yuklendi", favYukle);
+    };
   }, []);
 
   useEffect(() => {

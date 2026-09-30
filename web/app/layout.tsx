@@ -3,6 +3,7 @@ import { Instrument_Sans, Fraunces, Oswald, Space_Mono } from "next/font/google"
 import { Analytics } from "@vercel/analytics/next";
 import RegisterSW from "@/components/RegisterSW";
 import AltBilgi from "@/components/AltBilgi";
+import KasaBekcisi from "@/components/KasaBekcisi";
 import "./globals.css";
 
 // Marka/UI yazı tipi — berkaydogan.co ailesiyle aynı dil: zarif modern sans.
@@ -84,6 +85,7 @@ export default function RootLayout({ children }: { children: ReactNode }) {
         {/* Zemine neredeyse görünmez doku — derinlik hissi. */}
         <div className="grain" aria-hidden />
         <RegisterSW />
+        <KasaBekcisi />
         <Analytics />
       </body>
     </html>

@@ -110,9 +110,14 @@ genis_yayilim as (
   from agg group by 1, 2 order by 3 desc, sum(kez) desc limit 1
 ),
 sadik_iliski as (
-  -- Bir istasyonun tek bir şarkıya 30 günlük en büyük aşkı.
+  -- Bir istasyonun tek bir şarkıya 30 günlük en büyük aşkı. Sanatçı, başka
+  -- istasyonlarda da çalınan GERÇEK bir sanatçı olmalı — yoksa kendi kendini
+  -- yayınlayan kanallar (istasyon = sanatçı) rekoru kapıyor.
   select a.artist, a.title, s.name as istasyon, sum(a.kez)::int as kez
   from agg a join stations s on s.id = a.station_id
+  where a.artist in (
+    select artist from agg group by artist having count(distinct station_id) >= 2
+  )
   group by 1, 2, 3 order by 4 desc limit 1
 ),
 arsiv as (

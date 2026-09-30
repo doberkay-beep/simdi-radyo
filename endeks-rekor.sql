@@ -79,8 +79,8 @@ with agg as materialized (
     and lower(p.artist) <> lower(p.title)
     and lower(p.artist) <> lower(s.name)
     and lower(p.title)  <> lower(s.name)
-    and p.artist !~* '(https?:|www\.|\.com|\.net|use http|<|radyosu)'
-    and p.title  !~* '(https?:|www\.|\.com|\.net|use http|<|now playing)'
+    and p.artist !~* '(https?:|www\.|\.com|\.net|use http|<|radyosu|jingle|\yradyo\y)'
+    and p.title  !~* '(https?:|www\.|\.com|\.net|use http|<|now playing|jingle|reklam|\yanons\y)'
     and p.title !~ '~' and p.artist !~ '~'
     and length(p.title) between 2 and 80
   group by 1, 2, 3, 4, 5

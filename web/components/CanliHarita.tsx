@@ -176,7 +176,7 @@ export default function CanliHarita({ embed = false }: { embed?: boolean }) {
                 <button
                   onClick={yakala}
                   aria-label="şarkıyı yakala"
-                  title="şarkıyı yakala — av defterine at"
+                  title="şarkıyı yakala — müzik defterine at"
                   className="press flex items-center gap-1 rounded-full border px-2.5 py-1.5 normal-case tracking-normal"
                   style={{ borderColor: "#43201a", color: "#e9b9a4" }}
                 >

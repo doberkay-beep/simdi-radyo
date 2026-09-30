@@ -145,7 +145,7 @@ export default async function Sayfa({ params }: { params: Promise<{ slug: string
         <div className="rounded-2xl border p-5" style={{ borderColor: "var(--line)" }}>
           <p className="text-sm">
             🔔 <strong>{o.ad}</strong> bir radyoda çalmaya başladığı an haber almak ister misin?{" "}
-            <Link href="/" className="underline">ŞİMDİ&apos;yi aç</Link>, av defterinden izlemeye al, radar zilini kur.
+            <Link href="/" className="underline">ŞİMDİ&apos;yi aç</Link>, müzik defterinden izlemeye al, radar zilini kur.
           </p>
           <p className="mt-2 text-sm" style={{ color: "var(--muted)" }}>
             Haftanın tam listesi: <Link href="/liste" className="underline">ŞİMDİ LİSTESİ →</Link>

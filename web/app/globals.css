@@ -313,16 +313,45 @@ body {
   }
 }
 
-/* MOBİL KOKPİT — raflar dar ekranda tek satır, parmakla yatay kaydırılır;
-   kadran ilk ekrana girsin diye dikeyde yığılmazlar. */
+/* MOBİL KOKPİT — raflar dar ekranda SARILIR: her seçenek gözle görülür,
+   yatay kaydırma yok (insanlar sağa kaydırmayı çözemez). Haplar hafif sıkışır
+   ki kadran yine ilk ekrana girsin. */
 @media (max-width: 639px) {
-  .raf {
-    display: flex; flex-wrap: nowrap; overflow-x: auto;
-    -webkit-overflow-scrolling: touch; scrollbar-width: none;
-    margin-inline: -20px; padding-inline: 20px; /* kolon kenarına taşan ray */
-  }
-  .raf::-webkit-scrollbar { display: none; }
-  .raf a, .raf button { flex: 0 0 auto; }
+  .raf { display: flex; flex-wrap: wrap; gap: 6px; }
+  .raf a, .raf button { font-size: 10.5px; padding: 8px 11px; letter-spacing: 0.1em; }
+}
+
+/* MOBİL MENÜ SAYFALARI — ☰ (site) ve ⋯ (oynatıcı) alt sayfaları.
+   .menu-hap: başlıktaki çağrı düğmesi; .menu-sayfa: alttan doğan panel;
+   .menu-kalem: tam boy, parmak dostu seçenek. */
+.menu-hap {
+  font-family: var(--font-mono), ui-monospace, monospace;
+  font-size: 11px; font-weight: 700; letter-spacing: 0.14em; line-height: 1;
+  color: color-mix(in srgb, var(--glow-hi) 75%, var(--fg));
+  border: 1px solid color-mix(in srgb, var(--glow) 45%, var(--line-hi));
+  background: color-mix(in srgb, var(--glow) 7%, var(--panel));
+  border-radius: 999px; padding: 8px 13px;
+}
+.menu-sayfa {
+  background: color-mix(in srgb, var(--glow) 4%, var(--panel));
+  border-top: 1px solid color-mix(in srgb, var(--glow) 40%, var(--line-hi));
+  box-shadow: 0 -24px 60px -30px var(--glow);
+  animation: menu-dogus 0.22s ease;
+  max-height: 78vh; overflow-y: auto;
+}
+@keyframes menu-dogus { from { transform: translateY(26px); opacity: 0; } }
+.menu-kalem {
+  display: flex; align-items: center; gap: 9px;
+  font-size: 0.85rem; font-weight: 600; color: var(--fg); line-height: 1.2;
+  border: 1px solid var(--line-hi); border-radius: 14px; padding: 13px 14px;
+  background: color-mix(in srgb, var(--panel) 70%, transparent);
+  text-decoration: none; text-align: left;
+}
+.menu-kalem:active { background: color-mix(in srgb, var(--glow) 14%, var(--panel)); }
+.menu-kalem.on {
+  color: var(--bg);
+  background: linear-gradient(180deg, var(--glow-hi), var(--glow));
+  border-color: transparent;
 }
 
 /* KADRAN masaüstü konsolu — geniş ekranda merkez kolonun (max-w-2xl = 672px)
@@ -503,6 +532,14 @@ body {
   transition: transform 0.15s ease, background 0.2s ease;
 }
 .pbar-cip:hover { transform: translateY(-1px); background: color-mix(in srgb, var(--pa, var(--accent)) 24%, transparent); }
+/* .pbar-cip display tanımladığı için Tailwind'in hidden/sm:* ekranlarını yener —
+   mobil/masaüstü ayrımı bu iki yardımcıyla yapılır:
+   .cip-masa yalnız geniş ekranda, .cip-cep yalnız dar ekranda görünür. */
+.pbar-cip.cip-masa { display: none; }
+@media (min-width: 640px) {
+  .pbar-cip.cip-masa { display: inline-flex; }
+  .pbar-cip.cip-cep { display: none; }
+}
 /* Ana çal/durdur — konsolun kalbi: istasyon renginde dolu yuvarlak. */
 .pbar-ana {
   display: flex; align-items: center; justify-content: center;

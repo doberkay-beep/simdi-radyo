@@ -222,10 +222,11 @@ export default function NowList() {
   const [defterAcik, setDefterAcik] = useState(false); // kalp defteri alt paneli
   const [frekansAcik, setFrekansAcik] = useState(false); // frekans kartı (kişisel karne)
   const [frekansKip, setFrekansKip] = useState<"hep" | "ay">("hep"); // wrapped bandından açılırsa "ay"
-  const [avAcik, setAvAcik] = useState(false); // av defteri (şarkı yakala)
+  const [avAcik, setAvAcik] = useState(false); // müzik defteri (şarkı yakala)
   const [notAcik, setNotAcik] = useState(false); // kalp defteri — not bırakma modalı
   const [muzikKart, setMuzikKart] = useState<{ artist: string; title: string | null } | null>(null); // ♪ müzik kartı
-  const [navAcik, setNavAcik] = useState(false); // mobil nav: "daha" katlaması
+  const [navAcik, setNavAcik] = useState(false); // mobil ☰ menü sayfası
+  const [cipMenu, setCipMenu] = useState(false); // mobil oynatıcı ⋯ menüsü
   const [darEkran, setDarEkran] = useState(false); // arama yer tutucusunun kısa hali için
 
   useEffect(() => {
@@ -1244,16 +1245,18 @@ export default function NowList() {
               </span>
             </span>
             <span className="flex flex-wrap items-center gap-x-4 gap-y-1.5">
-              <button onClick={() => setFrekansAcik(true)} className="nav-link press">
-                {t("nav.frekansim")}
-              </button>
-              <button onClick={() => setAvAcik(true)} className="nav-link press">
-                {t("nav.avlarim")}
-              </button>
-              <Link href="/kesif" className="nav-link">{t("nav.kesif")}</Link>
-              {/* liste/oyunlar/fal ÜST MENÜDE DEĞİL — bant seçicinin altındaki
-                  vitrin rafında yaşarlar. atlas+nabız da bant seçicide zaten var. */}
-              <span className={`${navAcik ? "contents" : "hidden"} sm:contents`}>
+              {/* Masaüstünde minik bağlantılar; mobilde hepsi ☰ MENÜ sayfasında —
+                  yatay kaydırma/katlama yok, tek dokunuş. */}
+              <span className="hidden sm:contents">
+                <button onClick={() => setFrekansAcik(true)} className="nav-link press">
+                  {t("nav.frekansim")}
+                </button>
+                <button onClick={() => setAvAcik(true)} className="nav-link press">
+                  {t("nav.avlarim")}
+                </button>
+                <Link href="/kesif" className="nav-link">{t("nav.kesif")}</Link>
+                {/* liste/oyunlar/fal ÜST MENÜDE DEĞİL — bant seçicinin altındaki
+                    vitrin rafında yaşarlar. atlas+nabız da bant seçicide zaten var. */}
                 <Link href="/ulke" className="nav-link">atlas</Link>
                 <Link href="/nabiz" className="nav-link">{t("nav.nabiz")}</Link>
                 <Link href="/arsiv" className="nav-link">{t("nav.arsiv")}</Link>
@@ -1261,11 +1264,12 @@ export default function NowList() {
                 <Link href="/hakkinda" className="nav-link">{t("nav.gelistirici")}</Link>
               </span>
               <button
-                onClick={() => setNavAcik((v) => !v)}
-                className="nav-link press sm:hidden"
+                onClick={() => setNavAcik(true)}
+                className="menu-hap press sm:hidden"
+                aria-haspopup="dialog"
                 aria-expanded={navAcik}
               >
-                {navAcik ? `${t("nav.dahaKapat")} ▴` : `${t("nav.daha")} ▾`}
+                ☰ {dil === "en" ? "MENU" : "MENÜ"}
               </button>
             </span>
           </div>
@@ -2061,7 +2065,7 @@ export default function NowList() {
             {barNp?.artist && (
               <button
                 onClick={() => setMuzikKart({ artist: barNp.artist!, title: barNp.title })}
-                className="pbar-cip press hidden shrink-0 sm:inline-flex"
+                className="pbar-cip press cip-masa shrink-0"
                 title={`${barNp.artist} — hakkında & konserler`}
               >
                 ♪ {barNp.artist.length > 16 ? barNp.artist.slice(0, 15) + "…" : barNp.artist}
@@ -2079,12 +2083,12 @@ export default function NowList() {
               <Ikon ad="yildiz" dolu={favs.has(current.slug)} />
             </button>
 
-            {/* Anonim kalp */}
+            {/* Anonim kalp — mobilde ⋯ menüsünde */}
             <button
               onClick={() => kalpAt(current.slug)}
               aria-label="bu istasyona kalp gönder"
               title="bu istasyona kalp gönder"
-              className="pbar-cip press shrink-0"
+              className="pbar-cip press cip-masa shrink-0"
             >
               <Ikon ad="kalp" />{kalpler[current.slug] ? ` ${kalpler[current.slug]}` : ""}
             </button>
@@ -2111,32 +2115,43 @@ export default function NowList() {
               </button>
             )}
 
-            {/* Kalp defteri — dinlerken not bırak */}
+            {/* Kalp defteri — dinlerken not bırak (mobilde ⋯ menüsünde) */}
             <button
               onClick={() => setDefterAcik(true)}
               aria-label="kalp defteri — bu istasyona not bırak"
               title="kalp defteri: dinlerken bir anı bırak"
-              className="pbar-cip press shrink-0"
+              className="pbar-cip press cip-masa shrink-0"
             >
               <Ikon ad="not" />
             </button>
 
-            {/* Paylaşılabilir kart */}
+            {/* Paylaşılabilir kart (mobilde ⋯ menüsünde) */}
             <button
               onClick={() => setKartAcik(true)}
               aria-label="kartı paylaş"
               title="şu an çalanı kart olarak paylaş (k)"
-              className="pbar-cip press shrink-0"
+              className="pbar-cip press cip-masa shrink-0"
             >
               <Ikon ad="kart" />
             </button>
 
-            {/* Sessizlik / odak modu */}
+            {/* ⋯ — mobil oynatıcı menüsü: kart paylaş, not, kalp, sanatçı… hepsi burada */}
+            <button
+              onClick={() => setCipMenu(true)}
+              aria-label="oynatıcı menüsü"
+              title="daha fazla — kart, not, kalp…"
+              className="pbar-cip press cip-cep shrink-0"
+              aria-haspopup="dialog"
+            >
+              ⋯
+            </button>
+
+            {/* Sessizlik / odak modu (mobilde ⋯ menüsünde) */}
             <button
               onClick={() => setFocus(true)}
               aria-label="sessizlik modu"
               title="sessizlik modu (f)"
-              className="press shrink-0 text-lg leading-none"
+              className="press hidden shrink-0 text-lg leading-none sm:inline-flex"
               style={{ color: "var(--fg)" }}>
               <Ikon ad="odak" boy={17} />
             </button>
@@ -2176,9 +2191,9 @@ export default function NowList() {
               />
             </div>
 
-            {/* Şarkıyı Spotify / YouTube'da aç */}
+            {/* Şarkıyı Spotify / YouTube'da aç (mobilde ⋯ menüsünde) */}
             {barQuery && (
-              <div className="flex shrink-0 items-center gap-2">
+              <div className="hidden shrink-0 items-center gap-2 sm:flex">
                 <a
                   href={`https://open.spotify.com/search/${encodeURIComponent(barQuery)}`}
                   target="_blank"
@@ -2199,6 +2214,107 @@ export default function NowList() {
                 </a>
               </div>
             )}
+          </div>
+        </div>
+      )}
+
+      {/* ☰ MOBİL MENÜ — başlıktaki minik seçeneklerin tam boy, dokunulur hali */}
+      {navAcik && (
+        <div className="fixed inset-0 z-[70] sm:hidden" role="dialog" aria-label="menü">
+          <button
+            className="absolute inset-0"
+            style={{ background: "color-mix(in srgb, #000 62%, transparent)" }}
+            onClick={() => setNavAcik(false)}
+            aria-label="menüyü kapat"
+          />
+          <div className="menu-sayfa absolute inset-x-0 bottom-0 rounded-t-2xl p-5 pb-8">
+            <div className="mb-3 flex items-center justify-between">
+              <span className="mono text-[11px] font-bold uppercase tracking-[0.2em]" style={{ color: "var(--muted)" }}>
+                ŞİMDİ · {dil === "en" ? "MENU" : "MENÜ"}
+              </span>
+              <button onClick={() => setNavAcik(false)} className="press text-xl leading-none" aria-label="kapat">×</button>
+            </div>
+            <div className="grid grid-cols-2 gap-2">
+              <button onClick={() => { setNavAcik(false); setFrekansAcik(true); }} className="menu-kalem press">
+                {t("nav.frekansim")}
+              </button>
+              <button onClick={() => { setNavAcik(false); setAvAcik(true); }} className="menu-kalem press">
+                {t("nav.avlarim")}
+              </button>
+              <Link href="/kesif" className="menu-kalem" onClick={() => setNavAcik(false)}>{t("nav.kesif")}</Link>
+              <Link href="/ulke" className="menu-kalem" onClick={() => setNavAcik(false)}>atlas</Link>
+              <Link href="/nabiz" className="menu-kalem" onClick={() => setNavAcik(false)}>{t("nav.nabiz")}</Link>
+              <Link href="/arsiv" className="menu-kalem" onClick={() => setNavAcik(false)}>{t("nav.arsiv")}</Link>
+              <Link href="/kose" className="menu-kalem" onClick={() => setNavAcik(false)}>{t("nav.kose")}</Link>
+              <Link href="/hakkinda" className="menu-kalem" onClick={() => setNavAcik(false)}>{t("nav.gelistirici")}</Link>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* ⋯ OYNATICI MENÜSÜ (mobil) — kart, not, kalp, sanatçı, odak… tek sayfada */}
+      {cipMenu && current && (
+        <div className="fixed inset-0 z-[70] sm:hidden" role="dialog" aria-label="oynatıcı menüsü">
+          <button
+            className="absolute inset-0"
+            style={{ background: "color-mix(in srgb, #000 62%, transparent)" }}
+            onClick={() => setCipMenu(false)}
+            aria-label="menüyü kapat"
+          />
+          <div className="menu-sayfa absolute inset-x-0 bottom-0 rounded-t-2xl p-5 pb-8">
+            <div className="mb-3 flex items-center justify-between gap-3">
+              <span className="mono min-w-0 truncate text-[11px] font-bold uppercase tracking-[0.2em]" style={{ color: "var(--muted)" }}>
+                {current.name}
+              </span>
+              <button onClick={() => setCipMenu(false)} className="press text-xl leading-none" aria-label="kapat">×</button>
+            </div>
+            <div className="grid grid-cols-2 gap-2">
+              {barNp?.artist && (
+                <button
+                  onClick={() => { setCipMenu(false); setMuzikKart({ artist: barNp.artist!, title: barNp.title }); }}
+                  className="menu-kalem press col-span-2"
+                >
+                  ♪ {barNp.artist.length > 24 ? barNp.artist.slice(0, 23) + "…" : barNp.artist}
+                </button>
+              )}
+              <button onClick={() => { setCipMenu(false); setKartAcik(true); }} className="menu-kalem press">
+                <Ikon ad="kart" /> {dil === "en" ? "share card" : "kartı paylaş"}
+              </button>
+              <button onClick={() => { setCipMenu(false); setDefterAcik(true); }} className="menu-kalem press">
+                <Ikon ad="not" /> {dil === "en" ? "leave a note" : "not bırak"}
+              </button>
+              <button onClick={() => { kalpAt(current.slug); setCipMenu(false); }} className="menu-kalem press">
+                <Ikon ad="kalp" /> {dil === "en" ? "send a heart" : "kalp gönder"}
+                {kalpler[current.slug] ? ` · ${kalpler[current.slug]}` : ""}
+              </button>
+              <button onClick={() => { setCipMenu(false); setFocus(true); }} className="menu-kalem press">
+                <Ikon ad="odak" /> {dil === "en" ? "focus mode" : "sessizlik modu"}
+              </button>
+              <button
+                onClick={() => geceModuAc(!geceModu)}
+                className={`menu-kalem press ${geceModu ? "on" : ""}`}
+              >
+                <Ikon ad="esitle" /> {dil === "en" ? "night mode" : "gece modu"}
+              </button>
+              {barQuery && (
+                <a
+                  href={`https://open.spotify.com/search/${encodeURIComponent(barQuery)}`}
+                  target="_blank" rel="noopener noreferrer" className="menu-kalem"
+                  onClick={() => setCipMenu(false)}
+                >
+                  Spotify&apos;da ara
+                </a>
+              )}
+              {barQuery && (
+                <a
+                  href={`https://www.youtube.com/results?search_query=${encodeURIComponent(barQuery)}`}
+                  target="_blank" rel="noopener noreferrer" className="menu-kalem"
+                  onClick={() => setCipMenu(false)}
+                >
+                  YouTube&apos;da ara
+                </a>
+              )}
+            </div>
           </div>
         </div>
       )}

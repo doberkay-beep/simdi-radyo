@@ -143,8 +143,13 @@ body {
    doğru) yumuşak bir kor. Ortası temiz kalır ki metin okunsun. İstasyon
    değişince renk 800 ms'de erir. */
 .spread {
+  /* Atmosfer ŞASİYE aittir (--glow): seçilen tema neyse gökyüzü o renkte.
+     Çalan istasyonun rengi (--accent) yalnız İNCE bir tını olarak karışır —
+     kızıl şaside yeşil istasyon çalınca gök artık yeşile boyanmaz. */
   background:
-    radial-gradient(125% 70% at 50% -18%, color-mix(in srgb, var(--accent) 44%, transparent), transparent 66%),
+    radial-gradient(125% 70% at 50% -18%,
+      color-mix(in srgb, color-mix(in srgb, var(--glow) 78%, var(--accent)) 44%, transparent),
+      transparent 66%),
     radial-gradient(120% 62% at 50% 120%, color-mix(in srgb, var(--glow) 30%, transparent), transparent 64%),
     radial-gradient(140% 120% at 50% 45%, color-mix(in srgb, var(--glow) 9%, transparent), transparent 72%),
     var(--bg);
@@ -155,7 +160,9 @@ body {
    fazla baskın durmasın). */
 :root[data-theme="light"] .spread {
   background:
-    radial-gradient(130% 72% at 50% -16%, color-mix(in srgb, var(--accent) 22%, transparent), transparent 72%),
+    radial-gradient(130% 72% at 50% -16%,
+      color-mix(in srgb, color-mix(in srgb, var(--glow) 78%, var(--accent)) 22%, transparent),
+      transparent 72%),
     radial-gradient(120% 58% at 50% 118%, color-mix(in srgb, var(--glow) 16%, transparent), transparent 68%),
     var(--bg);
 }

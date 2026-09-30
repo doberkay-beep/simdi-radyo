@@ -22,6 +22,7 @@ import {
 } from "@/lib/sozler";
 import KartModal from "./KartModal";
 import MuzikKarti, { KapakMini } from "./MuzikKarti";
+import Ikon from "./Ikon";
 import Notlar from "./Notlar";
 import FrekansKarti from "./FrekansKarti";
 import DilToggle from "./DilToggle";
@@ -2050,7 +2051,7 @@ export default function NowList() {
                 className="pbar-cip fade-in shrink-0"
                 title={`şu an ${dinleyiciSayi} kişi bu istasyonda — yalnız değilsin`}
               >
-                🎧 {dinleyiciSayi}
+                <Ikon ad="kulaklik" /> {dinleyiciSayi}
               </span>
             )}
 
@@ -2072,7 +2073,7 @@ export default function NowList() {
               title="bu istasyona kalp gönder"
               className="pbar-cip press shrink-0"
             >
-              ♥ {kalpler[current.slug] ? kalpler[current.slug] : ""}
+              <Ikon ad="kalp" />{kalpler[current.slug] ? ` ${kalpler[current.slug]}` : ""}
             </button>
 
             {/* Şarkı yakala — çalan parçayı av defterine at */}
@@ -2093,7 +2094,7 @@ export default function NowList() {
                 title={t("av.yakala")}
                 className="pbar-cip press shrink-0"
               >
-                {avGeri ? `✓ ${t("av.yakalandi")}` : "🎣"}
+                {avGeri ? `✓ ${t("av.yakalandi")}` : <Ikon ad="yakala" />}
               </button>
             )}
 
@@ -2104,7 +2105,7 @@ export default function NowList() {
               title="kalp defteri: dinlerken bir anı bırak"
               className="pbar-cip press shrink-0"
             >
-              not
+              <Ikon ad="not" />
             </button>
 
             {/* Paylaşılabilir kart */}
@@ -2114,7 +2115,7 @@ export default function NowList() {
               title="şu an çalanı kart olarak paylaş (k)"
               className="pbar-cip press shrink-0"
             >
-              kart
+              <Ikon ad="kart" />
             </button>
 
             {/* Sessizlik / odak modu */}
@@ -2124,7 +2125,7 @@ export default function NowList() {
               title="sessizlik modu (f)"
               className="press shrink-0 text-lg leading-none"
               style={{ color: "var(--fg)" }}>
-              ◐
+              <Ikon ad="odak" boy={17} />
             </button>
 
             {/* Ses seviyesi + sessize alma (geniş ekranda) */}
@@ -2136,7 +2137,7 @@ export default function NowList() {
                 className="pbar-cip press"
                 style={geceModu ? { background: accent, color: readableOn(accent) } : undefined}
               >
-                eşitle
+                <Ikon ad="esitle" />
               </button>
               <button
                 onClick={() => setMuted((m) => !m)}
@@ -2144,7 +2145,7 @@ export default function NowList() {
                 className="press text-base leading-none"
                 style={{ color: "var(--fg)" }}
               >
-                {muted || volume === 0 ? "🔇" : "🔊"}
+                {muted || volume === 0 ? <Ikon ad="sessiz" boy={17} /> : <Ikon ad="ses" boy={17} />}
               </button>
               <input
                 type="range"

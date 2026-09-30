@@ -99,3 +99,36 @@ export function dinleyiciKatil(
     },
   };
 }
+
+/* ⚡ SENKRON ANI — aynı şarkı 4 dk içinde 3+ radyoda birden başlayınca sunucudaki
+   nöbetçi senkron_anlari'na yazar; bu abonelik o anı anında sayfaya düşürür.
+   Gereksinim: dalga1.sql (tablo + Realtime yayını). */
+export type SenkronAn = {
+  id: number;
+  artist: string;
+  title: string;
+  istasyonlar: { slug: string; name: string; t: string }[];
+  sayi: number;
+  ilk: string;
+  son: string;
+};
+
+export async function sonSenkron(dakika = 60): Promise<SenkronAn | null> {
+  const { data } = await al()
+    .from("senkron_anlari")
+    .select("id, artist, title, istasyonlar, sayi, ilk, son")
+    .gte("son", new Date(Date.now() - dakika * 60_000).toISOString())
+    .order("son", { ascending: false })
+    .limit(1);
+  return (data?.[0] as SenkronAn | undefined) ?? null;
+}
+
+export function senkronDinle(uzerine: (an: SenkronAn) => void): () => void {
+  const ch = al().channel("senkron-anlari");
+  ch.on("postgres_changes", { event: "*", schema: "public", table: "senkron_anlari" }, (p) => {
+    const yeni = (p as { new?: Partial<SenkronAn> }).new;
+    if (yeni && typeof yeni.id === "number") uzerine(yeni as SenkronAn);
+  });
+  ch.subscribe();
+  return () => { al().removeChannel(ch).catch(() => {}); };
+}

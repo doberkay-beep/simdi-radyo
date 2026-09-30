@@ -35,6 +35,7 @@ import KurSihirbazi, { kuruluMu } from "./KurSihirbazi";
 import SanatciTakip from "./SanatciTakip";
 import KasaModal from "./KasaModal";
 import YukariCik from "./YukariCik";
+import SenkronBandi from "./SenkronBandi";
 import { KASA_OLAYI } from "@/lib/kasa";
 import SanatciRadari from "./SanatciRadari";
 import SairinFrekansi from "./SairinFrekansi";
@@ -1383,6 +1384,9 @@ export default function NowList() {
           </button>
         </nav>
 
+        {/* ⚡ Senkron Anı — aynı şarkı 3+ radyoda birden (nadir; son 1 saat) */}
+        <SenkronBandi />
+
         {/* Gece nöbeti — 02:00–05:00 arası özel yüz */}
         <GeceNobeti />
 
@@ -2289,6 +2293,8 @@ export default function NowList() {
               <button onClick={() => { setNavAcik(false); setAvAcik(true); }} className="menu-kalem press">
                 {t("nav.avlarim")}
               </button>
+              <Link href="/senkron" className="menu-kalem" onClick={() => setNavAcik(false)}>⚡ {dil === "en" ? "sync moments" : "senkron defteri"}</Link>
+              <Link href="/gece" className="menu-kalem" onClick={() => setNavAcik(false)}>🌙 {dil === "en" ? "3 AM chart" : "gece 3 listesi"}</Link>
               <Link href="/kesif" className="menu-kalem" onClick={() => setNavAcik(false)}>{t("nav.kesif")}</Link>
               <Link href="/ulke" className="menu-kalem" onClick={() => setNavAcik(false)}>atlas</Link>
               <Link href="/nabiz" className="menu-kalem" onClick={() => setNavAcik(false)}>{t("nav.nabiz")}</Link>

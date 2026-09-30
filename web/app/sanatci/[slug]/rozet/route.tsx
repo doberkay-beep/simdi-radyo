@@ -1,7 +1,6 @@
 import { ImageResponse } from "next/og";
-import { readFile } from "node:fs/promises";
-import { join } from "node:path";
 import { getSupabase } from "@/lib/supabase";
+import { BOYUT, boyutAl, RENK, kes, fontlar, KART_ONBELLEK, zemin } from "@/lib/kart-ortak";
 
 // 📻 RADYO ROZETİ — sanatçının "bu hafta Türkiye radyolarında N kez çaldım"
 // kartı. Sanatçı/menajer story'sinde paylaşsın diye: kendi kitlesini ŞİMDİ'ye taşır.
@@ -21,23 +20,11 @@ type Ozet = {
   istasyonlar7?: { name: string; kez: number }[];
 };
 
-const BOYUT = {
-  post: { w: 1080, h: 1350 },
-  story: { w: 1080, h: 1920 },
-  og: { w: 1200, h: 630 },
-} as const;
-
-const RENK = {
-  zemin1: "#16090f", zemin2: "#070405", kor: "#e5382c", sicak: "#ff9b76",
-  metin: "#f2e6da", soluk: "#a08574", cizgi: "#3a1d19",
-};
-
-const kes = (t: string, n: number) => (t.length > n ? t.slice(0, n - 1) + "…" : t);
 
 export async function GET(req: Request, ctx: { params: Promise<{ slug: string }> }) {
   const { slug } = await ctx.params;
-  const b = (new URL(req.url).searchParams.get("boyut") ?? "post") as keyof typeof BOYUT;
-  const { w, h } = BOYUT[b] ?? BOYUT.post;
+  const b = boyutAl(req);
+  const { w, h } = BOYUT[b];
   const og = b === "og";
   const story = b === "story";
 
@@ -54,11 +41,6 @@ export async function GET(req: Request, ctx: { params: Promise<{ slug: string }>
   const zirve = (haftalik ? o.sarkilar7 : o.sarkilar)?.[0];
   const istasyonlar = ((haftalik ? o.istasyonlar7 : o.istasyonlar) ?? []).slice(0, story ? 4 : 3);
 
-  const [baslikF, govdeF, siirF] = await Promise.all([
-    readFile(join(process.cwd(), "assets/BricolageGrotesque-Bold.ttf")),
-    readFile(join(process.cwd(), "assets/LiberationSans-Bold.ttf")),
-    readFile(join(process.cwd(), "assets/Lora-Italic.ttf")),
-  ]);
 
   // Ölçek: og yatay ve alçak; post/story dikey.
   const adBoy = og ? (o.ad.length > 16 ? 60 : 78) : o.ad.length > 16 ? 92 : 120;
@@ -69,8 +51,7 @@ export async function GET(req: Request, ctx: { params: Promise<{ slug: string }>
       style={{
         width: "100%", height: "100%", display: "flex", flexDirection: og ? "row" : "column",
         justifyContent: "space-between", alignItems: og ? "center" : "stretch",
-        backgroundColor: RENK.zemin2,
-        backgroundImage: `radial-gradient(circle at 50% ${og ? "0%" : "8%"}, #3a120f 0%, ${RENK.zemin1} 45%, ${RENK.zemin2} 100%)`,
+        ...zemin(og),
         color: RENK.metin, fontFamily: "Govde",
         padding: og ? "56px 72px" : story ? "150px 90px 130px" : "96px 90px 84px",
       }}
@@ -138,11 +119,7 @@ export async function GET(req: Request, ctx: { params: Promise<{ slug: string }>
   return new ImageResponse(kart, {
     width: w,
     height: h,
-    fonts: [
-      { name: "Baslik", data: baslikF, weight: 700, style: "normal" },
-      { name: "Govde", data: govdeF, weight: 700, style: "normal" },
-      { name: "Siir", data: siirF, weight: 400, style: "italic" },
-    ],
-    headers: { "Cache-Control": "public, s-maxage=3600, stale-while-revalidate=86400" },
+    fonts: await fontlar(),
+    headers: KART_ONBELLEK,
   });
 }

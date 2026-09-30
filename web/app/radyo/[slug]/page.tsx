@@ -8,6 +8,7 @@ import Notlar from "@/components/Notlar";
 import { YanlisSarki } from "@/components/GeriBildirim";
 import { istasyonTanimi } from "@/lib/istasyon-tanim";
 import EmbedKopya from "@/components/EmbedKopya";
+import RozetPaylas from "@/components/RozetPaylas";
 import DilToggle from "@/components/DilToggle";
 import { TUR_EPIGRAF } from "@/lib/sozler";
 import { dilSunucu } from "@/lib/dil-sunucu";
@@ -78,6 +79,16 @@ async function getSimilar(slug: string, genre: string | null): Promise<Benzer[]>
     return (data ?? []) as Benzer[];
   } catch {
     return [];
+  }
+}
+
+// Haftalık karne (istasyon rozeti için) — istasyon_ozet RPC.
+async function getKarne(slug: string): Promise<{ kez7: number; farkliSarki: number; sarki: { artist: string; title: string } | null } | null> {
+  try {
+    const { data } = await getSupabase().rpc("istasyon_ozet", { p_slug: slug });
+    return (data as { kez7: number; farkliSarki: number; sarki: { artist: string; title: string } | null } | null) ?? null;
+  } catch {
+    return null;
   }
 }
 
@@ -225,6 +236,7 @@ export default async function StationPage({ params }: { params: Promise<{ slug: 
   const similar = await getSimilar(slug, s.genre);
   const topArtists = await getTopArtists(slug);
   const recent = await getRecentPlays(slug);
+  const karne = await getKarne(slug);
   const dil = await dilSunucu();
   const T = (k: string) => ceviri(dil, k);
   const pad2 = (n: number) => String(n).padStart(2, "0");
@@ -363,6 +375,20 @@ export default async function StationPage({ params }: { params: Promise<{ slug: 
 
         {/* Defter — birinci sınıf: oynatıcının hemen altında, göz önünde */}
         <Notlar slug={slug} accent={accent} />
+
+        {/* 📻 İstasyon rozeti — radyonun haftalık karnesi (radyolar kendi hesaplarında paylaşsın) */}
+        {karne && karne.kez7 > 0 && (
+          <div className="mt-8">
+            <RozetPaylas
+              taban={`/radyo/${slug}/rozet`}
+              dosyaAdi={`simdi-${slug}-karne`}
+              etiket="📻 haftalık karne"
+              baslik={`${s.name} bu hafta ${karne.farkliSarki.toLocaleString("tr-TR")} farklı şarkı çaldı.`}
+              aciklama={`Radyoda çalışıyor musun, dinleyicisi misin? Karneyi paylaş.${karne.sarki ? ` En sevdiği şarkı: “${karne.sarki.title}” — ${karne.sarki.artist}.` : ""}`}
+              metin={`📻 ${s.name} bu hafta ${karne.farkliSarki.toLocaleString("tr-TR")} farklı şarkı çaldı${karne.sarki ? `; en sevdiği “${karne.sarki.title}” (${karne.sarki.artist})` : ""}. Haftalık karne: https://necaliyor.co/radyo/${slug}`}
+            />
+          </div>
+        )}
 
         {recent.length > 0 && (
           <section className="mt-8">

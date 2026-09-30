@@ -34,6 +34,8 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       priority: 0.8,
     })),
     { url: `${BASE}/rekorlar`, changeFrequency: "daily", priority: 0.8 },
+    { url: `${BASE}/senkron`, changeFrequency: "daily", priority: 0.7 },
+    { url: `${BASE}/gece`, changeFrequency: "daily", priority: 0.7 },
     ...TURLER.map((t) => ({
       url: `${BASE}/tur/${t.slug}`,
       changeFrequency: "daily" as const,

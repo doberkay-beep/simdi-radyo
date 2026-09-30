@@ -70,6 +70,16 @@ as $$
     'kez7',  (select count(*) from h where started_at > now() - interval '7 days'),
     'kez30', (select count(*) from h),
     'istasyonSay', (select count(distinct istasyon_slug) from h),
+    -- Haftalık kırılım: rozet "BU HAFTA" dediğinde bütün sayılar aynı dönemden gelsin.
+    'istasyonSay7', (select count(distinct istasyon_slug) from h where started_at > now() - interval '7 days'),
+    'istasyonlar7', (select coalesce(json_agg(x), '[]') from (
+      select istasyon as name, istasyon_slug as slug, count(*) as kez
+      from h where started_at > now() - interval '7 days'
+      group by istasyon, istasyon_slug order by kez desc limit 6) x),
+    'sarkilar7', (select coalesce(json_agg(x), '[]') from (
+      select guzel_yazilis(array_agg(title)) as title, sarki_slug(title) as slug, count(*) as kez
+      from h where started_at > now() - interval '7 days'
+      group by sarki_slug(title) order by kez desc limit 3) x),
     'sarkilar', (select coalesce(json_agg(x), '[]') from (
       select guzel_yazilis(array_agg(title)) as title, sarki_slug(title) as slug, count(*) as kez
       from h group by sarki_slug(title) order by kez desc limit 10) x),

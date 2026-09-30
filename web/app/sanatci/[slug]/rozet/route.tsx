@@ -14,8 +14,11 @@ type Ozet = {
   kez7: number;
   kez30: number;
   istasyonSay: number;
+  istasyonSay7?: number;
   sarkilar: { title: string; kez: number }[];
+  sarkilar7?: { title: string; kez: number }[];
   istasyonlar: { name: string; kez: number }[];
+  istasyonlar7?: { name: string; kez: number }[];
 };
 
 const BOYUT = {
@@ -42,12 +45,14 @@ export async function GET(req: Request, ctx: { params: Promise<{ slug: string }>
   const o = data as Ozet | null;
   if (!o) return new Response("sanatçı bulunamadı", { status: 404 });
 
-  // Bu hafta çaldıysa haftalık, yoksa aylık sayı — rozet hep dolu görünsün.
-  const haftalik = o.kez7 > 0;
+  // Bu hafta çaldıysa haftalık, yoksa aylık — ama kartın BÜTÜN sayıları aynı
+  // dönemden gelir (haftalık kırılım yoksa dürüstçe 30 güne düşülür).
+  const haftalik = o.kez7 > 0 && o.istasyonSay7 !== undefined;
   const sayi = haftalik ? o.kez7 : o.kez30;
-  const donem = haftalik ? "BU HAFTA" : "BU AY";
-  const zirve = o.sarkilar[0];
-  const istasyonlar = o.istasyonlar.slice(0, story ? 4 : 3);
+  const donem = haftalik ? "BU HAFTA" : "SON 30 GÜNDE";
+  const istasyonSay = haftalik ? o.istasyonSay7! : o.istasyonSay;
+  const zirve = (haftalik ? o.sarkilar7 : o.sarkilar)?.[0];
+  const istasyonlar = ((haftalik ? o.istasyonlar7 : o.istasyonlar) ?? []).slice(0, story ? 4 : 3);
 
   const [baslikF, govdeF, siirF] = await Promise.all([
     readFile(join(process.cwd(), "assets/BricolageGrotesque-Bold.ttf")),
@@ -97,7 +102,7 @@ export async function GET(req: Request, ctx: { params: Promise<{ slug: string }>
           </div>
         </div>
         <div style={{ display: "flex", fontSize: og ? 26 : 38, color: RENK.metin, marginTop: 6 }}>
-          {o.istasyonSay} istasyonda çalındı
+          {istasyonSay} istasyonda çalındı
         </div>
         {!og && istasyonlar.length > 0 && (
           <div style={{ display: "flex", flexWrap: "wrap", marginTop: 34 }}>

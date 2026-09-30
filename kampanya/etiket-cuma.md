@@ -1,99 +1,90 @@
 # ŞİMDİ — Sanatçı Etiket Seferi (Cuma 2 Ekim, rapor kartından sonra)
 
-> ⛔ TASLAK — istasyon sayıları 30 günlük/kez sayıları 7 günlük karışık; yazilis.sql
-> çalışınca TÜM sayılar haftalık olarak yeniden hesaplanıp bu dosya güncellenecek.
-> Bu haliyle PAYLAŞMA.
+**Sayılar:** 1 Ekim gecesi alınan SON 7 GÜN sayımı — kez, istasyon, şarkı ve
+istasyon dağılımı HEPSİ aynı 7 günden. Cuma 11:00'de son kez tazelenecek
+(rozetler zaten canlıdan üretilir, metinleri ona eşitleyeceğim).
 
-**Strateji:** Cuma 12:00 haftalık rapor kartı atılır. 12:15'ten itibaren her
-sanatçıya AYRI bir paylaşım (tek tweet'te 5 etiket = spam görünür, kimse
-paylaşmaz). Her birinin kendi rozeti eklenir. IG'de story + @mention en güçlü
-kanal: etiketlenen hesaba bildirim düşer, "story'ne ekle" düğmesiyle tek
-dokunuşta yeniden paylaşabilir.
+**Strateji:** Cuma 12:00 haftalık rapor kartı → 12:15'ten itibaren her
+sanatçıya AYRI paylaşım + kendi rozeti (tek tweet'te 5 etiket = spam).
+IG'de story + @mention en güçlüsü: sanatçıya bildirim düşer, "story'ne ekle"
+ile tek dokunuşta kendi story'sine alabilir.
 
-**⚠️ SAYILAR:** Aşağıdakiler Çarşamba gecesinin 7 günlük sayımı. Cuma sabahı
-rozetler zaten canlıdan üretilir; metinlerdeki sayıları Cuma 11:00'de
-güncelleyip sana son halini vereceğim.
+**Hesap kontrolü:** Paylaşmadan önce her profile gir, mavi tiki gör.
 
-**Hesap kontrolü:** Paylaşmadan önce her profile bir kez girip mavi tiki
-kontrol et. Kaynaklarla doğrulandı ama son söz senin gözün.
+**Rozet dosyaları:** kampanya/rozetler/<sanatçı>-story.png ve -post.png
 
 ---
 
-## 1) BLOK3 — bu hafta 101 kez · 12 istasyon · zirve: "Sebebi Yar"
-IG: **@blok3.real** · X: doğrulanamadı → X'te etiketsiz, adıyla yaz.
+## 1) Hadise — 12:15
+IG **@hadise** · X **@Hadise** · 7 gün: **62 kez · 14 istasyon** · "Ara Beni" 34 kez
+Kanca: Türkiye Radyo Endeksi'nin İLK 1 numarası.
 
 **X:**
-Bu hafta Türkiye radyolarında en çok çalan sanatçı: BLOK3 📻
-12 istasyonda 101 kez — Virgin Radio tek başına 87 kez çaldı.
+@Hadise "Ara Beni" Eylül'de Türkiye radyolarında en çok çalan şarkı oldu — Türkiye Radyo Endeksi'nin ilk 1 numarası 🏆📻
+Ekim'e de hızlı girdi: son 7 günde 14 istasyonda 62 kez.
+necaliyor.co/sanatci/hadise
+
+**IG story** (hadise-story.png + mention):
+@hadise Eylül'ün radyo 1 numarası "Ara Beni" 🏆 Son 7 günde 14 radyoda 62 kez 📻 👉 necaliyor.co/endeks
+
+---
+
+## 2) BLOK3 — 12:30
+IG **@blok3.real** · X doğrulanamadı → X'te adıyla, etiketsiz · 7 gün: **102 kez · 11 istasyon** · "Sebebi Yar" 31 kez
+
+**X:**
+Son 7 günde Türkiye radyolarında en çok çalan sanatçı: BLOK3 📻
+11 istasyonda 102 kez — Virgin Radio tek başına 48 kez çaldı.
 Gerçek sayım, anket değil: necaliyor.co/sanatci/blok3
 
-**IG story (rozet story görseli + mention):**
-@blok3.real bu hafta radyolarda 101 kez çaldın 📻 En çok "Sebebi Yar". Rozetin hazır 👉 necaliyor.co/sanatci/blok3
+**IG story:**
+@blok3.real son 7 günde radyolarda 102 kez çaldın 📻 En çok "Sebebi Yar". Rozetin hazır 👉 necaliyor.co/sanatci/blok3
 
 ---
 
-## 2) Manifest — bu hafta 84 kez · 12 istasyon · zirve: "Hileli"
-IG: **@m6nifestgirls** · X: **@m6nifestgirls**
+## 3) Manifest — 12:45
+IG **@m6nifestgirls** · X **@m6nifestgirls** · 7 gün: **84 kez · 11 istasyon** · "Toz Pembe" 24 · "Hileli" 24
 
 **X:**
-@m6nifestgirls bu hafta Türkiye radyolarında 84 kez çaldınız 📻
-"Hileli" 12 istasyonda dönüyor; Virgin Radio'da 54 kez.
-Rozetiniz hazır, gerçek sayımla: necaliyor.co/sanatci/manifest
+@m6nifestgirls son 7 günde Türkiye radyolarında 84 kez çaldınız 📻
+"Toz Pembe" ve "Hileli" başa baş: ikisi de 24'er kez, 11 istasyonda.
+Rozetiniz hazır: necaliyor.co/sanatci/manifest
 
 **IG story:**
-@m6nifestgirls radyolar sizi bırakmıyor: bu hafta 84 kez 📻 Rozetiniz 👉 necaliyor.co/sanatci/manifest
+@m6nifestgirls "Toz Pembe" 24, "Hileli" 24 — radyolar ikisini de bırakmıyor 📻 Son 7 günde 84 kez 👉 necaliyor.co/sanatci/manifest
 
 ---
 
-## 3) Hadise — bu hafta 62 kez · 15 istasyon · zirve: "Ara Beni" (Eylül'ün 1 numarası)
-IG: **@hadise** · X: **@Hadise**
+## 4) Elif Buse Doğan — 13:00
+IG **@elifbusedogan** · X **@elifbusedgn** · 7 gün: **57 kez · 16 istasyon** · "Yangın Yeri" 23 kez
 
 **X:**
-@Hadise "Ara Beni" Eylül ayında Türkiye radyolarında en çok çalan şarkı oldu 📻
-Bu hafta da bırakmadı: 15 istasyonda 62 kez.
-Türkiye Radyo Endeksi'nin ilk 1 numarası: necaliyor.co/sanatci/hadise
-
-**IG story:**
-@hadise Eylül'ün radyo 1 numarası "Ara Beni" 🏆 Bu hafta 15 istasyonda 62 kez 📻 👉 necaliyor.co/endeks
-
-*(Hadise'ye kanca farklı: "ilk resmi endeksin 1 numarası" — haber değeri en yüksek olan bu.)*
-
----
-
-## 4) Elif Buse Doğan — bu hafta 57 kez · 17 istasyon (haftanın EN GENİŞ yayılımı)
-IG: **@elifbusedogan** · X: **@elifbusedgn**
-
-**X:**
-Bu hafta en çok istasyona ulaşan sanatçı: @elifbusedgn 📻
-"Yangın Yeri" 17 farklı radyoda, toplam 57 kez çaldı — pop kanalından türkü radyosuna kadar.
+@elifbusedgn "Yangın Yeri" son 7 günde 16 farklı radyoda çaldı 📻
+Pop kanalından türkü radyosuna — en çok Türkülerle Türkiye'de. Toplam 57 kez.
 necaliyor.co/sanatci/elif-buse-dogan
 
 **IG story:**
-@elifbusedogan bu hafta 17 radyoda çaldın, haftanın en geniş yayılımı 📻 Rozetin 👉 necaliyor.co/sanatci/elif-buse-dogan
-
-*(Kanca: "en çok istasyon" — yalnız biz ölçebiliyoruz, gurur verici bir unvan.)*
+@elifbusedogan son 7 günde 16 radyoda çaldın 📻 Pop'tan türküye, her kanalda "Yangın Yeri" 👉 necaliyor.co/sanatci/elif-buse-dogan
 
 ---
 
-## 5) Eypio — bu hafta 51 kez · 10 istasyon · zirve: "Ömrüm"
-IG: **@eypio** · X: doğrulanamadı → X'te etiketsiz.
+## 5) Eypio — 13:15
+IG **@eypio** · X doğrulanamadı → X'te etiketsiz · 7 gün: **51 kez · 9 istasyon** · "Ömrüm" 27 kez
 
 **X:**
-Eypio'nun "Ömrüm"ü bu hafta Türkiye radyolarında 51 kez çaldı 📻
-10 istasyon, en çok Virgin Radio.
+Eypio'nun "Ömrüm"ü son 7 günde Türkiye radyolarında 27 kez çaldı; sanatçı toplamda 51 kez, 9 istasyonda 📻
+En çok Virgin Radio (21).
 Gerçek sayım: necaliyor.co/sanatci/eypio
 
 **IG story:**
-@eypio "Ömrüm" bu hafta 10 radyoda 51 kez 📻 Rozetin 👉 necaliyor.co/sanatci/eypio
+@eypio "Ömrüm" son 7 günde radyolarda 27 kez 📻 Rozetin 👉 necaliyor.co/sanatci/eypio
 
 ---
 
-## Yedek kulübe (ilk beşten yanıt gelirse ikinci dalga)
-- Bora Duran — 13 istasyon, 37 kez ("Döndüm")
-- Poizi — 41 kez ("Başımda Belalar") · Slayyyter (uluslararası, 47 kez)
+## Yedek kulübe (ilk dalgadan yanıt gelirse)
+- Bora Duran — 11 istasyon, 37 kez ("Döndüm" 19)
+- Poizi — 6 istasyon, 41 kez ("Başımda Belalar" 26)
 
-## Zamanlama
-- 12:00 rapor kartı (plan zaten hazır)
-- 12:15 Hadise → 12:30 BLOK3 → 12:45 Manifest → 13:00 Elif Buse Doğan → 13:15 Eypio
-- IG story'ler aynı sırayla, arada 10-15 dk
-- Biri paylaşırsa: hemen alıntıla, teşekkür et, profiline sabitle.
+## Biri paylaşırsa
+Hemen alıntıla, teşekkür et ("rozetin her saat tazeleniyor, radyo seni saymaya devam ediyor 📻"),
+o paylaşımı profile sabitle — sosyal kanıt, sıradaki sanatçıyı ikna eder.

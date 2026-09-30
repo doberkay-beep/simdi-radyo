@@ -51,54 +51,54 @@ $$;
 grant execute on function endeks_ozet(text) to anon, authenticated;
 
 -- ── 2) REKORLAR ───────────────────────────────────────────────────────────
--- rekorlar() → arşivin şov vitrini (TR bandı, son 90/30 gün pencereleri).
+-- rekorlar() → arşivin şov vitrini (TR bandı, son 30 gün).
+-- TEK TARAMA: plays bir kez okunup küçük bir özet tabloya indirgenir
+-- (materialized CTE); beş rekor o özetten çıkar. Anon sorgu zaman
+-- sınırına (statement timeout) takılmasın diye böyle.
 create or replace function rekorlar()
 returns json
 language sql stable
 security definer
 set search_path = public
 as $$
-with tr_ist as (select id, name, slug from stations where band = 'tr'),
-temiz as (
-  select p.artist, p.title, p.station_id, p.started_at,
-         p.started_at at time zone 'Europe/Istanbul' as tr_ts
+with agg as materialized (
+  select p.artist, p.title, p.station_id,
+         (p.started_at at time zone 'Europe/Istanbul')::date as gun,
+         case
+           when extract(hour from p.started_at at time zone 'Europe/Istanbul') < 6 then 'gece'
+           when extract(hour from p.started_at at time zone 'Europe/Istanbul') < 10 then 'sabah'
+           else 'gunduz'
+         end as bant,
+         count(*) as kez
   from plays p
-  join tr_ist s on s.id = p.station_id
-  where p.started_at > now() - interval '90 days'
+  join stations s on s.id = p.station_id and s.band = 'tr'
+  where p.started_at > now() - interval '30 days'
     and p.artist is not null and p.title is not null
     and p.artist <> p.title
     and p.title !~ '~' and length(p.title) between 2 and 80
+  group by 1, 2, 3, 4, 5
 ),
 gun_rekoru as (
-  select artist, title, to_char(date_trunc('day', tr_ts), 'YYYY-MM-DD') as gun,
-         count(*) as kez
-  from temiz group by 1, 2, 3 order by kez desc limit 1
+  select artist, title, to_char(gun, 'YYYY-MM-DD') as gun, sum(kez)::int as kez
+  from agg group by artist, title, agg.gun order by sum(kez) desc limit 1
 ),
 gece_krali as (
-  select artist, title, count(*) as kez
-  from temiz
-  where extract(hour from tr_ts) between 0 and 5
-    and started_at > now() - interval '30 days'
-  group by 1, 2 order by kez desc limit 1
+  select artist, title, sum(kez)::int as kez
+  from agg where bant = 'gece' group by 1, 2 order by 3 desc limit 1
 ),
 sabah_sampiyonu as (
-  select artist, title, count(*) as kez
-  from temiz
-  where extract(hour from tr_ts) between 6 and 9
-    and started_at > now() - interval '30 days'
-  group by 1, 2 order by kez desc limit 1
+  select artist, title, sum(kez)::int as kez
+  from agg where bant = 'sabah' group by 1, 2 order by 3 desc limit 1
 ),
 genis_yayilim as (
-  select artist, title, count(distinct station_id) as istasyon
-  from temiz where started_at > now() - interval '30 days'
-  group by 1, 2 order by istasyon desc, count(*) desc limit 1
+  select artist, title, count(distinct station_id)::int as istasyon
+  from agg group by 1, 2 order by 3 desc, sum(kez) desc limit 1
 ),
 sadik_iliski as (
   -- Bir istasyonun tek bir şarkıya 30 günlük en büyük aşkı.
-  select t.artist, t.title, i.name as istasyon, count(*) as kez
-  from temiz t join tr_ist i on i.id = t.station_id
-  where t.started_at > now() - interval '30 days'
-  group by 1, 2, 3 order by kez desc limit 1
+  select a.artist, a.title, s.name as istasyon, sum(a.kez)::int as kez
+  from agg a join stations s on s.id = a.station_id
+  group by 1, 2, 3 order by 4 desc limit 1
 ),
 arsiv as (
   select count(*) as toplam, min(started_at) as ilk from plays

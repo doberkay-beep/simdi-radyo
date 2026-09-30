@@ -188,6 +188,8 @@ const low = (s: string) => s.toLocaleLowerCase("tr");
 export default function NowList() {
   const { t, dil } = useDil();
   const [stations, setStations] = useState<Station[]>([]);
+  // Realtime'dan az önce parça değişimi düşen istasyonlar — kart 4 sn parlar.
+  const [tazeler, setTazeler] = useState<Record<number, number>>({});
   const [playing, setPlaying] = useState<string | null>(null);
   const [ulke, setUlke] = useState<string | null>(null); // kadran ülke bandı
   const [status, setStatus] = useState<"idle" | "loading" | "error">("loading");
@@ -473,6 +475,15 @@ export default function NowList() {
     }, 15000);
     const ayril = simdiDinle(
       (d) => {
+        // "Şarkı değişti" vurgusu: karta kısa parlaması için işaretle.
+        setTazeler((t) => ({ ...t, [d.station_id]: Date.now() }));
+        setTimeout(() => {
+          setTazeler((t) => {
+            const y = { ...t };
+            delete y[d.station_id];
+            return y;
+          });
+        }, 4200);
         setStations((prev) =>
           prev.map((s) =>
             s.id === d.station_id
@@ -1811,7 +1822,7 @@ export default function NowList() {
                   </div>
                 )}
                 <div
-                  className="station-card row-in group flex w-full items-center px-2"
+                  className={`station-card row-in group flex w-full items-center px-2${tazeler[s.id] && !isPlaying ? " np-taze" : ""}`}
                   style={{
                     background: isPlaying
                       ? `color-mix(in srgb, ${c} 15%, transparent)`
@@ -1819,6 +1830,7 @@ export default function NowList() {
                     borderColor: isPlaying ? `color-mix(in srgb, ${c} 45%, var(--line))` : undefined,
                     boxShadow: isPlaying ? `inset 3px 0 0 ${c}` : undefined,
                     animationDelay: `${Math.min(i, 18) * 22}ms`,
+                    ["--taze-renk" as string]: c,
                   }}
                 >
                   <button

@@ -297,6 +297,16 @@ body {
 }
 .row-in { animation: rowIn 360ms ease both; }
 
+/* "Şarkı değişti" ânı — Realtime'dan yeni parça düşen kart, istasyonun
+   renginde bir kez yumuşakça parlar (--taze-renk kart üstünde tanımlı). */
+@keyframes npTaze {
+  0% { background: color-mix(in srgb, var(--taze-renk) 26%, var(--panel));
+       border-color: color-mix(in srgb, var(--taze-renk) 65%, var(--line-hi)); }
+  100% { background: color-mix(in srgb, var(--glow) 7%, var(--panel));
+         border-color: var(--line-hi); }
+}
+.np-taze { animation: npTaze 4.2s ease-out both; }
+
 /* Klavye odak halkası (erişilebilirlik). */
 :focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; border-radius: 4px; }
 
@@ -415,6 +425,7 @@ body {
   .skeleton,
   .nowbar-float,
   .row-in,
+  .np-taze,
   .breathe,
   .fade-in,
   .spread.aurora { animation: none !important; }

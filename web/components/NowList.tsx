@@ -2068,6 +2068,17 @@ export default function NowList() {
               </button>
             )}
 
+            {/* Favori yıldızı — çalarken tek dokunuşla kaydet */}
+            <button
+              onClick={() => toggleFav(current.slug)}
+              aria-label={favs.has(current.slug) ? "favoriden çıkar" : "favorilere ekle"}
+              title={favs.has(current.slug) ? "favoriden çıkar" : "favorilere ekle"}
+              className="pbar-cip press shrink-0"
+              style={favs.has(current.slug) ? { color: "#ffcf4d" } : undefined}
+            >
+              <Ikon ad="yildiz" dolu={favs.has(current.slug)} />
+            </button>
+
             {/* Anonim kalp */}
             <button
               onClick={() => kalpAt(current.slug)}

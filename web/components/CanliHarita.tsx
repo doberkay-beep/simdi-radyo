@@ -5,6 +5,8 @@ import Link from "next/link";
 import { KOORDINAT, bayrakEmoji, istasyonUlkesi, type UlkeKodu } from "@/lib/ulkeler";
 import { simdiDinle } from "@/lib/canli";
 import { temizMetin } from "@/lib/cop";
+import { avEkle } from "@/lib/avlar";
+import Ikon from "./Ikon";
 import { DUNYA_YOLLARI } from "@/lib/dunya-yollari";
 
 /* CANLI HARİTA — imparatorluğun vitrini: gerçek dünya, ülke sınırları, her
@@ -42,11 +44,18 @@ export default function CanliHarita({ embed = false }: { embed?: boolean }) {
   const [akis, setAkis] = useState<Akis[]>([]);
   const [gunesBoylami, setGunesBoylami] = useState(0);
   const [calan, setCalan] = useState<{ slug: string; name: string; ulke: UlkeKodu } | null>(null);
+  const [favlar, setFavlar] = useState<Set<string>>(new Set());
+  const [yakalandi, setYakalandi] = useState(0);
   const kokRef = useRef<HTMLDivElement | null>(null);
   const sesRef = useRef<HTMLAudioElement | null>(null);
   const noktaRef = useRef<Map<number, Nokta>>(new Map());
 
   useEffect(() => {
+    // Ana sayfayla AYNI favori defteri (localStorage "favoriler").
+    try {
+      const ham = localStorage.getItem("favoriler");
+      if (ham) setFavlar(new Set(JSON.parse(ham)));
+    } catch { /* yok say */ }
     const hesapla = () => {
       const s = new Date();
       setGunesBoylami((12 - (s.getUTCHours() + s.getUTCMinutes() / 60)) * 15);
@@ -78,6 +87,8 @@ export default function CanliHarita({ embed = false }: { embed?: boolean }) {
     const ayril = simdiDinle((deg) => {
       const n = noktaRef.current.get(deg.station_id);
       if (!n) return;
+      n.nowPlaying = { artist: temizMetin(deg.artist), title: temizMetin(deg.title) };
+      setNoktalar((prev) => prev.map((p) => (p.id === deg.station_id ? { ...p, nowPlaying: n.nowPlaying } : p)));
       setTazeler((t) => ({ ...t, [deg.station_id]: Date.now() }));
       setTimeout(() => {
         setTazeler((t) => { const y = { ...t }; delete y[deg.station_id]; return y; });
@@ -108,6 +119,24 @@ export default function CanliHarita({ embed = false }: { embed?: boolean }) {
     setCalan({ slug, name, ulke });
   }
 
+  function favToggle(slug: string) {
+    setFavlar((eski) => {
+      const yeni = new Set(eski);
+      if (yeni.has(slug)) yeni.delete(slug); else yeni.add(slug);
+      try { localStorage.setItem("favoriler", JSON.stringify([...yeni])); } catch { /* yok say */ }
+      return yeni;
+    });
+  }
+
+  function yakala() {
+    if (!calan) return;
+    const np = [...noktaRef.current.values()].find((n) => n.slug === calan.slug)?.nowPlaying;
+    if (!np || (!np.artist && !np.title)) return;
+    avEkle({ t: Date.now(), artist: np.artist ?? null, title: np.title ?? null, slug: calan.slug, istasyon: calan.name });
+    setYakalandi(Date.now());
+    setTimeout(() => setYakalandi(0), 1500);
+  }
+
   const geceX = ((((gunesBoylami + 180) % 360) + 360) % 360) / 360 * W;
   const ulkeSayisi = useMemo(() => new Set(noktalar.map((n) => n.ulke)).size, [noktalar]);
 
@@ -127,13 +156,33 @@ export default function CanliHarita({ embed = false }: { embed?: boolean }) {
           </Link>
           <span className="mono flex items-center gap-4 text-[11px] uppercase tracking-[0.18em]" style={{ color: "#b0938a" }}>
             {calan && (
-              <button
-                onClick={() => cal(calan.slug, calan.name, calan.ulke)}
-                className="press flex items-center gap-2 rounded-full px-3.5 py-1.5 normal-case tracking-normal"
-                style={{ background: "#e5382c", color: "#fff", fontWeight: 700 }}
-              >
-                ⏸ {bayrakEmoji(calan.ulke)} {calan.name}
-              </button>
+              <span className="flex items-center gap-2">
+                <button
+                  onClick={() => cal(calan.slug, calan.name, calan.ulke)}
+                  className="press flex items-center gap-2 rounded-full px-3.5 py-1.5 normal-case tracking-normal"
+                  style={{ background: "#e5382c", color: "#fff", fontWeight: 700 }}
+                >
+                  ⏸ {bayrakEmoji(calan.ulke)} {calan.name}
+                </button>
+                <button
+                  onClick={() => favToggle(calan.slug)}
+                  aria-label="favorilere ekle"
+                  title={favlar.has(calan.slug) ? "favoriden çıkar" : "favorilere ekle"}
+                  className="press flex items-center rounded-full border px-2.5 py-1.5"
+                  style={{ borderColor: "#43201a", color: favlar.has(calan.slug) ? "#ffcf4d" : "#e9b9a4" }}
+                >
+                  <Ikon ad="yildiz" dolu={favlar.has(calan.slug)} />
+                </button>
+                <button
+                  onClick={yakala}
+                  aria-label="şarkıyı yakala"
+                  title="şarkıyı yakala — av defterine at"
+                  className="press flex items-center gap-1 rounded-full border px-2.5 py-1.5 normal-case tracking-normal"
+                  style={{ borderColor: "#43201a", color: "#e9b9a4" }}
+                >
+                  {yakalandi ? "✓" : <Ikon ad="yakala" />}
+                </button>
+              </span>
             )}
             <span>{noktalar.length} istasyon · {ulkeSayisi} ülke</span>
             <span className="flex items-center gap-1.5">

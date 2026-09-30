@@ -44,6 +44,9 @@ const YOLLAR: Record<string, React.ReactNode> = {
       <path d="M16 9.5l5 5M21 9.5l-5 5" />
     </>
   ),
+  yildiz: (
+    <path d="M12 3.6l2.5 5.2 5.7.7-4.2 3.9 1.1 5.6L12 16.2 6.9 19l1.1-5.6L3.8 9.5l5.7-.7L12 3.6Z" />
+  ),
   kulaklik: (
     <>
       <path d="M4.5 17v-4.5a7.5 7.5 0 0 1 15 0V17" />
@@ -53,13 +56,13 @@ const YOLLAR: Record<string, React.ReactNode> = {
   ),
 };
 
-export default function Ikon({ ad, boy = 15 }: { ad: keyof typeof YOLLAR | string; boy?: number }) {
+export default function Ikon({ ad, boy = 15, dolu = false }: { ad: keyof typeof YOLLAR | string; boy?: number; dolu?: boolean }) {
   return (
     <svg
       width={boy}
       height={boy}
       viewBox="0 0 24 24"
-      fill="none"
+      fill={dolu ? "currentColor" : "none"}
       stroke="currentColor"
       strokeWidth={1.9}
       strokeLinecap="round"

@@ -2,13 +2,15 @@
 
 import { useEffect, useMemo, useRef, useState } from "react";
 import Link from "next/link";
-import { KOORDINAT, ULKELER, bayrakEmoji, istasyonUlkesi, type UlkeKodu } from "@/lib/ulkeler";
+import { KOORDINAT, bayrakEmoji, istasyonUlkesi, type UlkeKodu } from "@/lib/ulkeler";
 import { simdiDinle } from "@/lib/canli";
 import { temizMetin } from "@/lib/cop";
+import { DUNYA_YOLLARI } from "@/lib/dunya-yollari";
 
-/* CANLI HARİTA — imparatorluğun vitrini: dünya bir gece göğü, her istasyon
-   bir ışık. Bir istasyonda şarkı değiştiği AN noktası parlar ve alttaki
-   akış şeridine düşer. Tam ekran/TV-arkası/embed dostu (?embed=1). */
+/* CANLI HARİTA — imparatorluğun vitrini: gerçek dünya, ülke sınırları, her
+   istasyon bir ışık. Şarkı değişen nokta parlar ve akış şeridine düşer;
+   noktaya ya da şerit satırına DOKUN → radyo BURADA çalar (sayfadan çıkmadan).
+   Tam ekran/TV-arkası/embed dostu (?embed=1). */
 
 const W = 1440;
 const H = 720;
@@ -17,14 +19,14 @@ function xy(lat: number, lng: number): [number, number] {
   return [((lng + 180) / 360) * W, ((90 - lat) / 180) * H];
 }
 
-/* Slug'dan deterministik saçılım — aynı ülkenin istasyonları başkent
-   çevresine yıldız kümesi gibi dağılır (her yüklemede aynı yerde). */
+/* Slug'dan deterministik saçılım — ülkenin istasyonları başkent çevresine
+   yıldız kümesi gibi dağılır (her yüklemede aynı yerde). */
 function sacilim(slug: string): [number, number] {
   let h = 2166136261;
   for (let i = 0; i < slug.length; i++) { h ^= slug.charCodeAt(i); h = Math.imul(h, 16777619); }
   const a = ((h >>> 0) % 1000) / 1000;
   const b = ((h >>> 10) % 1000) / 1000;
-  return [(a - 0.5) * 7, (b - 0.5) * 4.5]; // ±3.5° boylam, ±2.25° enlem
+  return [(a - 0.5) * 7, (b - 0.5) * 4.5];
 }
 
 type Ist = {
@@ -32,14 +34,16 @@ type Ist = {
   nowPlaying: { artist: string | null; title: string | null } | null;
 };
 type Nokta = Ist & { x: number; y: number; ulke: UlkeKodu };
-type Akis = { id: number; zaman: number; metin: string; ulke: UlkeKodu; slug: string };
+type Akis = { id: number; metin: string; ulke: UlkeKodu; slug: string; name: string };
 
 export default function CanliHarita({ embed = false }: { embed?: boolean }) {
   const [noktalar, setNoktalar] = useState<Nokta[]>([]);
   const [tazeler, setTazeler] = useState<Record<number, number>>({});
   const [akis, setAkis] = useState<Akis[]>([]);
   const [gunesBoylami, setGunesBoylami] = useState(0);
+  const [calan, setCalan] = useState<{ slug: string; name: string; ulke: UlkeKodu } | null>(null);
   const kokRef = useRef<HTMLDivElement | null>(null);
+  const sesRef = useRef<HTMLAudioElement | null>(null);
   const noktaRef = useRef<Map<number, Nokta>>(new Map());
 
   useEffect(() => {
@@ -49,7 +53,7 @@ export default function CanliHarita({ embed = false }: { embed?: boolean }) {
     };
     hesapla();
     const id = setInterval(hesapla, 60000);
-    return () => clearInterval(id);
+    return () => { clearInterval(id); sesRef.current?.pause(); };
   }, []);
 
   useEffect(() => {
@@ -71,7 +75,6 @@ export default function CanliHarita({ embed = false }: { embed?: boolean }) {
       })
       .catch(() => {});
 
-    // Şarkı değişimleri: nokta parlar + akış şeridine düşer.
     const ayril = simdiDinle((deg) => {
       const n = noktaRef.current.get(deg.station_id);
       if (!n) return;
@@ -82,14 +85,28 @@ export default function CanliHarita({ embed = false }: { embed?: boolean }) {
       const artist = temizMetin(deg.artist);
       const title = temizMetin(deg.title);
       if (!artist && !title) return;
-      if (`${artist}${title}`.includes("~")) return; // ham metadata sızıntısı şeride girmesin
+      if (`${artist}${title}`.includes("~")) return; // ham metadata sızıntısı
       setAkis((a) => [
-        { id: Date.now() + deg.station_id, zaman: Date.now(), metin: `${n.name}: ${[artist, title].filter(Boolean).join(" — ")}`, ulke: n.ulke, slug: n.slug },
+        { id: Date.now() + deg.station_id, metin: `${n.name}: ${[artist, title].filter(Boolean).join(" — ")}`, ulke: n.ulke, slug: n.slug, name: n.name },
         ...a,
       ].slice(0, 7));
     });
     return ayril;
   }, []);
+
+  /* Haritadan ayrılmadan çal — nokta ya da şerit satırı dokunuşuyla. */
+  function cal(slug: string, name: string, ulke: UlkeKodu) {
+    const a = sesRef.current;
+    if (!a) return;
+    if (calan?.slug === slug) {
+      a.pause();
+      setCalan(null);
+      return;
+    }
+    a.src = `/api/stream/${slug}?r=${Date.now()}`;
+    a.play().catch(() => {});
+    setCalan({ slug, name, ulke });
+  }
 
   const geceX = ((((gunesBoylami + 180) % 360) + 360) % 360) / 360 * W;
   const ulkeSayisi = useMemo(() => new Set(noktalar.map((n) => n.ulke)).size, [noktalar]);
@@ -103,13 +120,21 @@ export default function CanliHarita({ embed = false }: { embed?: boolean }) {
 
   return (
     <div ref={kokRef} className="relative flex h-screen flex-col overflow-hidden" style={{ background: "#050308" }}>
-      {/* Üst şerit — embed'de gizli */}
       {!embed && (
-        <header className="relative z-10 flex items-center justify-between px-6 py-4">
+        <header className="relative z-10 flex flex-wrap items-center justify-between gap-y-2 px-6 py-4">
           <Link href="/" className="brand text-xl font-bold tracking-tight" style={{ color: "#f2e6da" }}>
             ŞİMDİ <span style={{ color: "#8d6f63" }}>· canlı harita</span>
           </Link>
           <span className="mono flex items-center gap-4 text-[11px] uppercase tracking-[0.18em]" style={{ color: "#b0938a" }}>
+            {calan && (
+              <button
+                onClick={() => cal(calan.slug, calan.name, calan.ulke)}
+                className="press flex items-center gap-2 rounded-full px-3.5 py-1.5 normal-case tracking-normal"
+                style={{ background: "#e5382c", color: "#fff", fontWeight: 700 }}
+              >
+                ⏸ {bayrakEmoji(calan.ulke)} {calan.name}
+              </button>
+            )}
             <span>{noktalar.length} istasyon · {ulkeSayisi} ülke</span>
             <span className="flex items-center gap-1.5">
               <span className="live-dot inline-block h-2 w-2 rounded-full" style={{ background: "#3ddc84" }} />
@@ -122,16 +147,7 @@ export default function CanliHarita({ embed = false }: { embed?: boolean }) {
         </header>
       )}
 
-      {/* Gök haritası */}
       <svg viewBox={`0 0 ${W} ${H}`} className="min-h-0 w-full flex-1" preserveAspectRatio="xMidYMid meet" role="img" aria-label="dünyada şu an çalan radyolar">
-        {/* Izgara */}
-        {Array.from({ length: 11 }, (_, i) => (
-          <line key={`b${i}`} x1={(i + 1) * (W / 12)} y1={0} x2={(i + 1) * (W / 12)} y2={H} stroke="#1c0f14" strokeWidth={1} />
-        ))}
-        {Array.from({ length: 5 }, (_, i) => (
-          <line key={`e${i}`} x1={0} y1={(i + 1) * (H / 6)} x2={W} y2={(i + 1) * (H / 6)} stroke="#1c0f14" strokeWidth={1} />
-        ))}
-        {/* Gece örtüsü — güneşin öteki yüzü */}
         <defs>
           <linearGradient id="gece" x1="0" y1="0" x2="1" y2="0">
             <stop offset="0" stopColor="#000" stopOpacity="0.55" />
@@ -144,45 +160,68 @@ export default function CanliHarita({ embed = false }: { embed?: boolean }) {
             <stop offset="1" stopColor="#fff" stopOpacity="0" />
           </radialGradient>
         </defs>
+
+        {/* Dünya — gerçek kıtalar, görünür ülke sınırları */}
+        <g>
+          {DUNYA_YOLLARI.map((d, i) => (
+            <path key={i} d={d} fill="#180d13" stroke="#311a20" strokeWidth={0.7} />
+          ))}
+        </g>
+
+        {/* Gece örtüsü */}
         <rect x={((geceX + W / 2) % W) - W} y={0} width={W} height={H} fill="url(#gece)" />
         <rect x={(geceX + W / 2) % W} y={0} width={W} height={H} fill="url(#gece)" />
 
-        {/* İstasyon ışıkları */}
+        {/* İstasyon ışıkları — dokun, BURADA çalsın */}
         {noktalar.map((n) => {
           const renk = n.accentColor || "#ff9b76";
-          const canli = !!(n.nowPlaying && (n.nowPlaying.artist || n.nowPlaying.title));
+          const canliMi = !!(n.nowPlaying && (n.nowPlaying.artist || n.nowPlaying.title));
           const taze = !!tazeler[n.id];
+          const buCaliyor = calan?.slug === n.slug;
           return (
-            <Link key={n.slug} href={`/?ist=${n.slug}`}>
-              <g className="cursor-pointer">
-                {taze && <circle cx={n.x} cy={n.y} r={16} fill="url(#parla)" opacity={0.7} />}
-                <circle cx={n.x} cy={n.y} r={taze ? 5 : canli ? 3 : 1.8} fill={renk} opacity={canli ? 0.95 : 0.4}
-                  style={{ transition: "r 300ms ease, opacity 300ms ease" }} />
-                <title>{`${bayrakEmoji(n.ulke)} ${n.name}${canli ? ` — ${[n.nowPlaying!.artist, n.nowPlaying!.title].filter(Boolean).join(" — ")}` : ""}`}</title>
-              </g>
-            </Link>
+            <g key={n.slug} className="cursor-pointer" onClick={() => cal(n.slug, n.name, n.ulke)}>
+              {taze && <circle cx={n.x} cy={n.y} r={16} fill="url(#parla)" opacity={0.7} />}
+              {buCaliyor && (
+                <circle cx={n.x} cy={n.y} r={9} fill="none" stroke="#fff" strokeWidth={1.4} opacity={0.9}>
+                  <animate attributeName="r" values="7;11;7" dur="1.6s" repeatCount="indefinite" />
+                </circle>
+              )}
+              <circle cx={n.x} cy={n.y} r={taze ? 5 : buCaliyor ? 4.5 : canliMi ? 3 : 1.8} fill={renk} opacity={canliMi ? 0.95 : 0.45}
+                style={{ transition: "r 300ms ease, opacity 300ms ease" }} />
+              <title>{`${bayrakEmoji(n.ulke)} ${n.name}${canliMi ? ` — ${[n.nowPlaying!.artist, n.nowPlaying!.title].filter(Boolean).join(" — ")}` : ""} · dokun, çalsın`}</title>
+            </g>
           );
         })}
       </svg>
 
-      {/* Akış şeridi — şu an değişenler */}
+      {/* Akış şeridi — satıra dokun, o radyo BURADA çalsın */}
       <div className="relative z-10 px-6 pb-5" style={{ minHeight: 120 }}>
         <p className="mono mb-2 text-[10px] uppercase tracking-[0.25em]" style={{ color: "#7a5c52" }}>
-          şu an değişti
+          şu an değişti — dokun, çalsın
         </p>
         <ul className="flex flex-col gap-1">
           {akis.length === 0 && (
             <li className="text-sm" style={{ color: "#8d6f63" }}>dünya dönüyor, ilk şarkı değişimi bekleniyor…</li>
           )}
-          {akis.map((a) => (
-            <li key={a.id} className="fade-in truncate text-sm" style={{ color: "#e8d3c8" }}>
-              <Link href={`/?ist=${a.slug}`} className="hover:underline">
-                {bayrakEmoji(a.ulke)} <span style={{ color: "#f2e6da" }}>{a.metin}</span>
-              </Link>
-            </li>
-          ))}
+          {akis.map((a) => {
+            const buCaliyor = calan?.slug === a.slug;
+            return (
+              <li key={a.id} className="fade-in truncate text-sm">
+                <button
+                  onClick={() => cal(a.slug, a.name, a.ulke)}
+                  className="press max-w-full truncate text-left hover:underline"
+                  style={{ color: buCaliyor ? "#ff9b76" : "#e8d3c8" }}
+                >
+                  {buCaliyor ? "⏸" : "▶"} {bayrakEmoji(a.ulke)}{" "}
+                  <span style={{ color: buCaliyor ? "#ff9b76" : "#f2e6da" }}>{a.metin}</span>
+                </button>
+              </li>
+            );
+          })}
         </ul>
       </div>
+
+      <audio ref={sesRef} onPause={() => {}} />
     </div>
   );
 }

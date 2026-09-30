@@ -96,7 +96,13 @@ export default function CanliHarita({ embed = false }: { embed?: boolean }) {
       const artist = temizMetin(deg.artist);
       const title = temizMetin(deg.title);
       if (!artist && !title) return;
-      if (`${artist}${title}`.includes("~")) return; // ham metadata sızıntısı
+      const ham = `${artist}${title}`;
+      if (ham.includes("~")) return; // ham metadata sızıntısı
+      // URL-kodlu promo başlıklar ("melodias+que+te+encantan2Free+FM+80") ve
+      // bağıran caps-spam satırlar şeride giremez.
+      if ((ham.match(/\+/g) ?? []).length >= 3) return;
+      const harfler = ham.replace(/[^A-Za-zĞÜŞÖÇİğüşöçı]/g, "");
+      if (harfler.length > 24 && harfler === harfler.toUpperCase()) return;
       setAkis((a) => [
         { id: Date.now() + deg.station_id, metin: `${n.name}: ${[artist, title].filter(Boolean).join(" — ")}`, ulke: n.ulke, slug: n.slug, name: n.name },
         ...a,

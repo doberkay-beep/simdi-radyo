@@ -316,8 +316,6 @@ body {
   }
   .raf::-webkit-scrollbar { display: none; }
   .raf a, .raf button { flex: 0 0 auto; }
-  /* Çalma çubuğu alt sekmelerin üstüne oturur. */
-  .nowbar-float { bottom: calc(64px + env(safe-area-inset-bottom)); }
 }
 
 /* KADRAN masaüstü konsolu — geniş ekranda merkez kolonun (max-w-2xl = 672px)
@@ -472,10 +470,41 @@ body {
   from { transform: translateY(100%); opacity: 0; }
   to { transform: translateY(0); opacity: 1; }
 }
+/* OYNATICI v2 — cam konsol: istasyonun rengine (--pa) boyanmış koyu degrade,
+   üstte ince kor ışık çizgisi, arkası buğulu. Metinler --fg'den akar. */
 .nowbar-float {
-  box-shadow: 0 -12px 32px -12px rgba(0, 0, 0, 0.5);
+  background:
+    linear-gradient(180deg,
+      color-mix(in srgb, var(--pa, var(--accent)) 26%, var(--panel)),
+      color-mix(in srgb, var(--pa, var(--accent)) 12%, var(--bg)));
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  border-top: 1px solid color-mix(in srgb, var(--pa, var(--accent)) 55%, transparent) !important;
+  box-shadow:
+    0 -1px 0 color-mix(in srgb, #fff 10%, transparent) inset,
+    0 -18px 48px -18px color-mix(in srgb, var(--pa, var(--accent)) 60%, #000);
   animation: slideUp 340ms cubic-bezier(0.2, 0.8, 0.2, 1);
 }
+/* Oynatıcı çipleri — cam hap düğmeler (kalp, yakala, not, kart, Spotify…). */
+.pbar-cip {
+  display: inline-flex; align-items: center; gap: 4px;
+  border-radius: 999px; padding: 5px 11px;
+  font-size: 12px; font-weight: 600; line-height: 1.2;
+  color: var(--fg);
+  background: color-mix(in srgb, var(--pa, var(--accent)) 14%, transparent);
+  border: 1px solid color-mix(in srgb, var(--pa, var(--accent)) 38%, transparent);
+  transition: transform 0.15s ease, background 0.2s ease;
+}
+.pbar-cip:hover { transform: translateY(-1px); background: color-mix(in srgb, var(--pa, var(--accent)) 24%, transparent); }
+/* Ana çal/durdur — konsolun kalbi: istasyon renginde dolu yuvarlak. */
+.pbar-ana {
+  display: flex; align-items: center; justify-content: center;
+  height: 44px; width: 44px; border-radius: 999px; flex-shrink: 0;
+  background: var(--pa, var(--accent));
+  box-shadow: 0 8px 22px -8px var(--pa, var(--accent));
+  transition: transform 0.15s ease;
+}
+.pbar-ana:hover { transform: scale(1.05); }
 
 /* Yükleniyor iskeleti — yumuşak parıltı. */
 @keyframes shimmer {

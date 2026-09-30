@@ -1975,12 +1975,12 @@ export default function NowList() {
       {current && (
         <div
           className="nowbar-float fixed inset-x-0 bottom-0 z-10 border-t"
-          style={{ background: accent, borderColor: "rgba(255,255,255,0.15)" }}
+          style={{ ["--pa" as string]: accent }}
         >
           <div
             className="mx-auto flex max-w-2xl items-center gap-3 px-5 py-3"
             style={{
-              color: readableOn(accent),
+              color: "var(--fg)",
               paddingBottom: "calc(0.75rem + env(safe-area-inset-bottom))",
               touchAction: "pan-y",
             }}
@@ -1999,12 +1999,7 @@ export default function NowList() {
               }
             }}
           >
-            <button
-              onClick={() => toggle(current)}
-              aria-label="Durdur"
-              className="press flex h-10 w-10 shrink-0 items-center justify-center rounded-full"
-              style={{ background: "rgba(0,0,0,0.18)", color: readableOn(accent) }}
-            >
+            <button onClick={() => toggle(current)} aria-label="Durdur" className="press pbar-ana">
               <span className="flex gap-[3px]">
                 <span className="h-4 w-[3px] rounded-sm" style={{ background: readableOn(accent) }} />
                 <span className="h-4 w-[3px] rounded-sm" style={{ background: readableOn(accent) }} />
@@ -2014,7 +2009,7 @@ export default function NowList() {
             {phase === "playing" && (
               <span
                 className="eq hidden items-end gap-[2px] sm:flex"
-                style={{ ["--eq-color" as string]: readableOn(accent) }}
+                style={{ ["--eq-color" as string]: accent }}
                 aria-hidden
               >
                 <span /><span /><span /><span /><span />
@@ -2052,12 +2047,22 @@ export default function NowList() {
             {/* Yalnız değilsin — aynı istasyonda şu an kaç kişi */}
             {dinleyiciSayi > 1 && (
               <span
-                className="fade-in shrink-0 rounded-full px-2.5 py-1 text-xs font-semibold"
+                className="pbar-cip fade-in shrink-0"
                 title={`şu an ${dinleyiciSayi} kişi bu istasyonda — yalnız değilsin`}
-                style={{ background: "rgba(0,0,0,0.18)", color: readableOn(accent) }}
               >
                 🎧 {dinleyiciSayi}
               </span>
+            )}
+
+            {/* ♪ Sanatçı — görünür kimlik: ada dokun, müzik kartı (bio+konser) açılsın */}
+            {barNp?.artist && (
+              <button
+                onClick={() => setMuzikKart({ artist: barNp.artist!, title: barNp.title })}
+                className="pbar-cip press hidden shrink-0 sm:inline-flex"
+                title={`${barNp.artist} — hakkında & konserler`}
+              >
+                ♪ {barNp.artist.length > 16 ? barNp.artist.slice(0, 15) + "…" : barNp.artist}
+              </button>
             )}
 
             {/* Anonim kalp */}
@@ -2065,8 +2070,7 @@ export default function NowList() {
               onClick={() => kalpAt(current.slug)}
               aria-label="bu istasyona kalp gönder"
               title="bu istasyona kalp gönder"
-              className="press shrink-0 inline-flex items-center gap-1 rounded-full px-2.5 py-1 text-xs font-semibold"
-              style={{ background: "rgba(0,0,0,0.18)", color: readableOn(accent) }}
+              className="pbar-cip press shrink-0"
             >
               ♥ {kalpler[current.slug] ? kalpler[current.slug] : ""}
             </button>
@@ -2087,8 +2091,7 @@ export default function NowList() {
                 }}
                 aria-label={t("av.yakala")}
                 title={t("av.yakala")}
-                className="press shrink-0 inline-flex items-center gap-1 rounded-full px-2.5 py-1 text-xs font-semibold"
-                style={{ background: "rgba(0,0,0,0.18)", color: readableOn(accent) }}
+                className="pbar-cip press shrink-0"
               >
                 {avGeri ? `✓ ${t("av.yakalandi")}` : "🎣"}
               </button>
@@ -2099,8 +2102,7 @@ export default function NowList() {
               onClick={() => setDefterAcik(true)}
               aria-label="kalp defteri — bu istasyona not bırak"
               title="kalp defteri: dinlerken bir anı bırak"
-              className="press shrink-0 inline-flex items-center rounded-full px-2.5 py-1 text-xs font-semibold"
-              style={{ background: "rgba(0,0,0,0.18)", color: readableOn(accent) }}
+              className="pbar-cip press shrink-0"
             >
               not
             </button>
@@ -2110,8 +2112,7 @@ export default function NowList() {
               onClick={() => setKartAcik(true)}
               aria-label="kartı paylaş"
               title="şu an çalanı kart olarak paylaş (k)"
-              className="press hidden shrink-0 rounded-full px-2.5 py-1 text-xs font-semibold sm:inline-flex"
-              style={{ background: "rgba(0,0,0,0.18)", color: readableOn(accent) }}
+              className="pbar-cip press shrink-0"
             >
               kart
             </button>
@@ -2122,8 +2123,7 @@ export default function NowList() {
               aria-label="sessizlik modu"
               title="sessizlik modu (f)"
               className="press shrink-0 text-lg leading-none"
-              style={{ color: readableOn(accent) }}
-            >
+              style={{ color: "var(--fg)" }}>
               ◐
             </button>
 
@@ -2133,11 +2133,8 @@ export default function NowList() {
                 onClick={() => geceModuAc(!geceModu)}
                 aria-label="gece modu — sesi eşitle"
                 title="gece modu: sesi eşitle (yüksek/alçak farkını yumuşat)"
-                className="press rounded-full px-2 py-0.5 text-xs font-semibold"
-                style={{
-                  background: geceModu ? readableOn(accent) : "rgba(0,0,0,0.18)",
-                  color: geceModu ? accent : readableOn(accent),
-                }}
+                className="pbar-cip press"
+                style={geceModu ? { background: accent, color: readableOn(accent) } : undefined}
               >
                 eşitle
               </button>
@@ -2145,7 +2142,7 @@ export default function NowList() {
                 onClick={() => setMuted((m) => !m)}
                 aria-label={muted ? "sesi aç" : "sessize al"}
                 className="press text-base leading-none"
-                style={{ color: readableOn(accent) }}
+                style={{ color: "var(--fg)" }}
               >
                 {muted || volume === 0 ? "🔇" : "🔊"}
               </button>
@@ -2161,7 +2158,7 @@ export default function NowList() {
                 }}
                 aria-label="ses seviyesi"
                 className="h-1 w-20 cursor-pointer accent-current"
-                style={{ color: readableOn(accent) }}
+                style={{ color: accent }}
               />
             </div>
 
@@ -2173,8 +2170,7 @@ export default function NowList() {
                   target="_blank"
                   rel="noopener noreferrer"
                   aria-label="Spotify'da ara"
-                  className="rounded-full px-2.5 py-1 text-xs font-semibold"
-                  style={{ background: "rgba(0,0,0,0.18)", color: readableOn(accent) }}
+                  className="pbar-cip"
                 >
                   Spotify
                 </a>
@@ -2183,8 +2179,7 @@ export default function NowList() {
                   target="_blank"
                   rel="noopener noreferrer"
                   aria-label="YouTube'da ara"
-                  className="rounded-full px-2.5 py-1 text-xs font-semibold"
-                  style={{ background: "rgba(0,0,0,0.18)", color: readableOn(accent) }}
+                  className="pbar-cip"
                 >
                   YouTube
                 </a>

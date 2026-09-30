@@ -47,7 +47,7 @@ export function KapakMini({ artist, title, onClick }: { artist: string; title: s
   return (
     <button onClick={onClick} className="press shrink-0" aria-label="parça hakkında" title="parça hakkında">
       {/* eslint-disable-next-line @next/next/no-img-element */}
-      <img src={src} alt="" className="h-10 w-10 rounded-lg object-cover" style={{ boxShadow: "0 4px 12px rgba(0,0,0,0.35)" }} />
+      <img src={src} alt="" className="h-12 w-12 rounded-xl object-cover" style={{ boxShadow: "0 6px 16px rgba(0,0,0,0.4)" }} />
     </button>
   );
 }

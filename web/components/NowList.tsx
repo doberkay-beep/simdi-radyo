@@ -1284,6 +1284,7 @@ export default function NowList() {
           <Link href="/oyun">🎮 {dil === "en" ? "GAMES" : "OYUNLAR"}</Link>
           <Link href="/fal">🔮 {dil === "en" ? "FORTUNE" : "FAL"}</Link>
           <Link href="/arsiv">⏳ {dil === "en" ? "TIME MACHINE" : "ZAMAN MAKİNESİ"}</Link>
+          <Link href="/harita">🌍 {dil === "en" ? "LIVE MAP" : "CANLI HARİTA"}</Link>
         </nav>
 
         {/* Araç rafı — dinleme araçları: elle tutulur haplar (mini ikon dönemi bitti). */}

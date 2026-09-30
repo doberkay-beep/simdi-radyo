@@ -47,6 +47,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     { url: `${BASE}/oyun`, changeFrequency: "monthly", priority: 0.5 },
     { url: `${BASE}/oyun/gunun-frekansi`, changeFrequency: "daily", priority: 0.6 },
     { url: `${BASE}/fal`, changeFrequency: "monthly", priority: 0.6 },
+    { url: `${BASE}/harita`, changeFrequency: "monthly", priority: 0.6 },
     { url: `${BASE}/liste`, changeFrequency: "hourly", priority: 0.8 },
     ...sanatcilar.map((s) => ({
       url: `${BASE}/sanatci/${s}`,

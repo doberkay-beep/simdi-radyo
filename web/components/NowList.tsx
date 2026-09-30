@@ -21,6 +21,7 @@ import {
   gununDizesi,
 } from "@/lib/sozler";
 import KartModal from "./KartModal";
+import MuzikKarti, { KapakMini } from "./MuzikKarti";
 import Notlar from "./Notlar";
 import FrekansKarti from "./FrekansKarti";
 import DilToggle from "./DilToggle";
@@ -221,6 +222,7 @@ export default function NowList() {
   const [frekansKip, setFrekansKip] = useState<"hep" | "ay">("hep"); // wrapped bandından açılırsa "ay"
   const [avAcik, setAvAcik] = useState(false); // av defteri (şarkı yakala)
   const [notAcik, setNotAcik] = useState(false); // kalp defteri — not bırakma modalı
+  const [muzikKart, setMuzikKart] = useState<{ artist: string; title: string | null } | null>(null); // ♪ müzik kartı
   const [navAcik, setNavAcik] = useState(false); // mobil nav: "daha" katlaması
   const [darEkran, setDarEkran] = useState(false); // arama yer tutucusunun kısa hali için
 
@@ -2017,7 +2019,21 @@ export default function NowList() {
                 <span /><span /><span /><span /><span />
               </span>
             )}
-            <div className="min-w-0 flex-1">
+            {/* ♪ Mini kapak — bulunursa albüm kapağı; dokun: müzik kartı */}
+            {barNp?.artist && (
+              <KapakMini
+                key={`${barNp.artist}|${barNp.title ?? ""}`}
+                artist={barNp.artist}
+                title={barNp.title}
+                onClick={() => setMuzikKart({ artist: barNp.artist!, title: barNp.title })}
+              />
+            )}
+            <button
+              onClick={() => barNp?.artist && setMuzikKart({ artist: barNp.artist, title: barNp.title })}
+              className="min-w-0 flex-1 text-left"
+              title={barNp?.artist ? "parça hakkında — müzik kartı" : undefined}
+              disabled={!barNp?.artist}
+            >
               <div className="truncate text-sm font-semibold">
                 {phase === "error"
                   ? "yayına ulaşılamadı"
@@ -2030,7 +2046,7 @@ export default function NowList() {
                       : tagline(current.genre, current.slug)}
               </div>
               <div className="truncate text-xs opacity-80">{current.name}</div>
-            </div>
+            </button>
 
             {/* Yalnız değilsin — aynı istasyonda şu an kaç kişi */}
             {dinleyiciSayi > 1 && (
@@ -2336,6 +2352,16 @@ export default function NowList() {
       )}
 
       {avAcik && <AvDefteri onClose={() => setAvAcik(false)} />}
+
+      {/* ♪ Müzik kartı — çalan parçanın kimliği */}
+      {muzikKart && (
+        <MuzikKarti
+          artist={muzikKart.artist}
+          title={muzikKart.title}
+          accent={accent}
+          onClose={() => setMuzikKart(null)}
+        />
+      )}
 
       {/* Kalp defteri modalı — not bırakmak artık iki dokunuş: raf ✍ → yaz. */}
       {notAcik && (

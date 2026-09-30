@@ -1,14 +1,13 @@
 name: Toplayıcı (arşiv)
 
-# ŞİMDİ toplayıcısını GitHub'ın sunucularında çalıştırır (ücretsiz yol).
-# 5 dakikada bir tetiklenir, her seferinde ~4.5 dk yoklayıp arşive yazar.
-# Not: Railway gibi kesintisiz değildir; zamanlama gecikebilir, aralarda
-# küçük boşluklar olabilir. Sürekli/temiz arşiv için kalıcı bir worker daha iyidir.
+# EMEKLİ (30 Eyl 2026): toplayıcı artık Hetzner CX23'te 7/24 çalışıyor
+# (188.245.2.113, systemd: simdi-collector, 25 sn aralık). GitHub cron'u
+# pratikte 4-6 saatte bir tetiklendiği için arşiv delik deşikti.
+# Bu workflow YEDEK olarak durur: sunucu çökerse Actions sekmesinden
+# elle tetiklenebilir (Run workflow).
 
 on:
-  schedule:
-    - cron: "*/5 * * * *" # her 5 dakikada bir (GitHub'ın izin verdiği en sık aralık)
-  workflow_dispatch: {} # Actions sekmesinden elle de tetiklenebilir
+  workflow_dispatch: {} # yalnız elle — zamanlama kaldırıldı (sunucu asıl)
 
 # Aynı anda tek çalışma; yeni tetikleme öncekini iptal edip taze başlar.
 concurrency:

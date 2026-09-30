@@ -220,6 +220,7 @@ export default function NowList() {
   const [frekansAcik, setFrekansAcik] = useState(false); // frekans kartı (kişisel karne)
   const [frekansKip, setFrekansKip] = useState<"hep" | "ay">("hep"); // wrapped bandından açılırsa "ay"
   const [avAcik, setAvAcik] = useState(false); // av defteri (şarkı yakala)
+  const [notAcik, setNotAcik] = useState(false); // kalp defteri — not bırakma modalı
   const [navAcik, setNavAcik] = useState(false); // mobil nav: "daha" katlaması
   const [darEkran, setDarEkran] = useState(false); // arama yer tutucusunun kısa hali için
 
@@ -1226,60 +1227,7 @@ export default function NowList() {
           </div>
           <div className="flex w-full flex-col gap-1.5 text-xs sm:w-auto sm:items-end" style={{ color: "var(--muted)" }}>
             <span className="flex flex-wrap items-center gap-3">
-              <button
-                onClick={cycleSleep}
-                title={t("home.uykuZamanlayici")}
-                aria-label={t("home.uykuZamanlayici")}
-                className="leading-none"
-                style={{ color: sleepUntil ? "var(--fg)" : "var(--muted)" }}
-              >
-                {sleepUntil ? `🌙 ${sleepRemain}dk` : "🌙"}
-              </button>
-              <button
-                onClick={() => setYolculuk((v) => !v)}
-                title="sesli yolculuk — istasyonlar arası otomatik gezinti"
-                aria-label="sesli yolculuk"
-                className="press leading-none"
-                style={{ color: yolculuk ? "var(--fg)" : "var(--muted)" }}
-              >
-                {yolculuk ? "🧭 gezside" : "🧭"}
-              </button>
-              <button
-                onClick={() => setAlarmAcik((v) => !v)}
-                title={t("alarm.baslik")}
-                aria-label={t("alarm.baslik")}
-                className="press leading-none"
-                style={{ color: alarm ? "var(--fg)" : "var(--muted)" }}
-              >
-                {alarm ? `⏰ ${new Date(alarm.ts).toTimeString().slice(0, 5)}` : "⏰"}
-              </button>
-              {oda ? (
-                <span className="inline-flex items-center gap-1.5" data-kod={oda.kod} style={{ color: "var(--fg)" }}>
-                  <button onClick={() => davetKopyala(oda.kod)} className="press leading-none" title={t("oda.baslik")} aria-label={t("oda.baslik")}>
-                    👥 {odaSayi}
-                  </button>
-                  {["🔥", "❤️", "🎶"].map((ch) => (
-                    <button
-                      key={ch}
-                      onClick={() => {
-                        kalpUcur(ch);
-                        odaRef.current?.tepkiYolla(ch);
-                      }}
-                      className="press leading-none"
-                      aria-label={`tepki ${ch}`}
-                    >
-                      {ch}
-                    </button>
-                  ))}
-                  <button onClick={() => odadanAyril()} className="press leading-none" title={t("oda.ayril")} aria-label={t("oda.ayril")} style={{ color: "var(--muted)" }}>
-                    ×
-                  </button>
-                </span>
-              ) : (
-                <button onClick={odaAc} title={t("oda.baslik")} aria-label={t("oda.baslik")} className="press leading-none" style={{ color: "var(--muted)" }}>
-                  👥
-                </button>
-              )}
+              {/* uyku/gezinti/alarm/parti mini ikonları araç rafına taşındı */}
               <DilToggle />
               <ThemeToggle />
               <ToneToggle />
@@ -1328,10 +1276,68 @@ export default function NowList() {
 
         {/* Vitrin rafı — liste/oyunlar/fal; bant seçicinin kardeşi.
             Türkçe İ, text-transform'a emanet edilmez: büyük harf elle. */}
-        <nav className="raf mb-5" aria-label="vitrin">
+        <nav className="raf mb-2" aria-label="vitrin">
           <Link href="/liste">🏆 {dil === "en" ? "CHART" : "LİSTE"}</Link>
           <Link href="/oyun">🎮 {dil === "en" ? "GAMES" : "OYUNLAR"}</Link>
           <Link href="/fal">🔮 {dil === "en" ? "FORTUNE" : "FAL"}</Link>
+        </nav>
+
+        {/* Araç rafı — dinleme araçları: elle tutulur haplar (mini ikon dönemi bitti). */}
+        <nav className="raf mb-5" aria-label="araçlar">
+          <button
+            onClick={() => setNotAcik(true)}
+            title={t("defter.baslik")}
+          >
+            ✍ {dil === "en" ? "LEAVE A NOTE" : "NOT BIRAK"}
+          </button>
+          <button
+            onClick={() => setAlarmAcik((v) => !v)}
+            className={alarm ? "on" : ""}
+            title={t("alarm.baslik")}
+          >
+            ⏰ {alarm ? new Date(alarm.ts).toTimeString().slice(0, 5) : "ALARM"}
+          </button>
+          {oda ? (
+            <>
+              <button onClick={() => davetKopyala(oda.kod)} className="on" data-kod={oda.kod} title={t("oda.baslik")}>
+                👥 {dil === "en" ? "PARTY" : "PARTİ"} · {odaSayi}
+              </button>
+              {["🔥", "❤️", "🎶"].map((ch) => (
+                <button
+                  key={ch}
+                  onClick={() => {
+                    kalpUcur(ch);
+                    odaRef.current?.tepkiYolla(ch);
+                  }}
+                  aria-label={`tepki ${ch}`}
+                  style={{ padding: "9px 11px" }}
+                >
+                  {ch}
+                </button>
+              ))}
+              <button onClick={() => odadanAyril()} title={t("oda.ayril")} style={{ padding: "9px 12px" }}>
+                ×
+              </button>
+            </>
+          ) : (
+            <button onClick={odaAc} title={t("oda.baslik")}>
+              👥 {dil === "en" ? "PARTY" : "PARTİ"}
+            </button>
+          )}
+          <button
+            onClick={cycleSleep}
+            className={sleepUntil ? "on" : ""}
+            title={t("home.uykuZamanlayici")}
+          >
+            🌙 {sleepUntil ? `${sleepRemain} DK` : dil === "en" ? "SLEEP" : "UYKU"}
+          </button>
+          <button
+            onClick={() => setYolculuk((v) => !v)}
+            className={yolculuk ? "on" : ""}
+            title="sesli yolculuk — istasyonlar arası otomatik gezinti"
+          >
+            🧭 {dil === "en" ? "DRIFT" : "GEZİNTİ"}
+          </button>
         </nav>
 
         {/* Gece nöbeti — 02:00–05:00 arası özel yüz */}
@@ -2330,6 +2336,39 @@ export default function NowList() {
       )}
 
       {avAcik && <AvDefteri onClose={() => setAvAcik(false)} />}
+
+      {/* Kalp defteri modalı — not bırakmak artık iki dokunuş: raf ✍ → yaz. */}
+      {notAcik && (
+        <div className="fixed inset-0 z-50" role="dialog" aria-label={t("defter.baslik")}>
+          <button aria-label="kapat" onClick={() => setNotAcik(false)} className="absolute inset-0 h-full w-full" style={{ background: "rgba(0,0,0,0.6)" }} />
+          <div
+            className="absolute inset-x-0 bottom-0 mx-auto max-h-[85vh] max-w-md overflow-y-auto rounded-t-2xl border-t px-5 pb-10 pt-3 sm:bottom-auto sm:top-1/2 sm:-translate-y-1/2 sm:rounded-2xl sm:border"
+            style={{ background: "var(--bg)", borderColor: "var(--line)" }}
+          >
+            <div className="mb-3 flex items-center justify-between">
+              <span className="text-sm font-semibold">✍ {t("defter.baslik")}</span>
+              <button onClick={() => setNotAcik(false)} className="press rounded-full border px-3 py-1 text-xs" style={{ borderColor: "var(--line)", color: "var(--muted)" }}>
+                {t("frekans.kapat")}
+              </button>
+            </div>
+            {current ? (
+              <>
+                <p className="mb-3 text-xs" style={{ color: "var(--muted)" }}>
+                  {dil === "en" ? "your note goes to" : "notun şu istasyonun defterine yazılır:"}{" "}
+                  <strong style={{ color: "var(--fg)" }}>{current.name}</strong>
+                </p>
+                <Notlar slug={current.slug} accent={accent} />
+              </>
+            ) : (
+              <p className="read text-sm" style={{ color: "var(--muted)" }}>
+                {dil === "en"
+                  ? "tap a station first — your note is written into that station's guestbook."
+                  : "önce bir istasyona dokun — notun o istasyonun defterine yazılır. aşağıdaki defter şeridinde başkalarının bıraktıklarını görebilirsin."}
+              </p>
+            )}
+          </div>
+        </div>
+      )}
 
       {/* Uçan kalpler — seninkiler ve aynı frekanstakilerinkiler */}
       {ucanKalpler.length > 0 && (

@@ -31,6 +31,7 @@ import DunyadaSimdi from "./DunyadaSimdi";
 import DefterSeridi from "./DefterSeridi";
 import GeceNobeti from "./GeceNobeti";
 import AvDefteri from "./AvDefteri";
+import KurSihirbazi, { kuruluMu } from "./KurSihirbazi";
 import SanatciRadari from "./SanatciRadari";
 import SairinFrekansi from "./SairinFrekansi";
 import { avEkle } from "@/lib/avlar";
@@ -227,6 +228,7 @@ export default function NowList() {
   const [muzikKart, setMuzikKart] = useState<{ artist: string; title: string | null } | null>(null); // ♪ müzik kartı
   const [navAcik, setNavAcik] = useState(false); // mobil ☰ menü sayfası
   const [cipMenu, setCipMenu] = useState(false); // mobil oynatıcı ⋯ menüsü
+  const [kurAcik, setKurAcik] = useState(false); // 📲 uygulama kur sihirbazı
   const [darEkran, setDarEkran] = useState(false); // arama yer tutucusunun kısa hali için
 
   useEffect(() => {
@@ -1290,6 +1292,8 @@ export default function NowList() {
           <Link href="/fal">🔮 {dil === "en" ? "FORTUNE" : "FAL"}</Link>
           <Link href="/arsiv">⏳ {dil === "en" ? "TIME MACHINE" : "ZAMAN MAKİNESİ"}</Link>
           <Link href="/harita">🌍 {dil === "en" ? "LIVE MAP" : "CANLI HARİTA"}</Link>
+          <Link href="/endeks">📰 {dil === "en" ? "INDEX" : "ENDEKS"}</Link>
+          <Link href="/rekorlar">🎖 {dil === "en" ? "RECORDS" : "REKORLAR"}</Link>
         </nav>
 
         {/* Araç rafı — dinleme araçları: elle tutulur haplar (mini ikon dönemi bitti). */}
@@ -2235,6 +2239,15 @@ export default function NowList() {
               <button onClick={() => setNavAcik(false)} className="press text-xl leading-none" aria-label="kapat">×</button>
             </div>
             <div className="grid grid-cols-2 gap-2">
+              {!kuruluMu() && (
+                <button
+                  onClick={() => { setNavAcik(false); setKurAcik(true); }}
+                  className="menu-kalem press col-span-2"
+                  style={{ borderColor: "color-mix(in srgb, var(--glow) 55%, var(--line-hi))" }}
+                >
+                  📲 {dil === "en" ? "install as an app" : "uygulama gibi kur"}
+                </button>
+              )}
               <button onClick={() => { setNavAcik(false); setFrekansAcik(true); }} className="menu-kalem press">
                 {t("nav.frekansim")}
               </button>
@@ -2318,6 +2331,9 @@ export default function NowList() {
           </div>
         </div>
       )}
+
+      {/* 📲 Uygulama kur sihirbazı */}
+      <KurSihirbazi acik={kurAcik} kapat={() => setKurAcik(false)} dil={dil} />
 
       {/* Sadece bu satırdan ses çıkar; görünmez. Kesilirse yeniden bağlanır. */}
       <audio

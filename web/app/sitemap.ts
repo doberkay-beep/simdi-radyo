@@ -3,6 +3,7 @@ import { getSupabase } from "@/lib/supabase";
 import { DENEMELER } from "@/lib/denemeler";
 import { TURLER } from "@/lib/turler";
 import { doluUlkeler, ulkeSlug, ulkeSlugEn } from "@/lib/ulkeler";
+import { endeksAylari } from "@/lib/endeks";
 
 // Aktif istasyonları da haritaya koy → Google her radyonun sayfasını indeksler.
 export const revalidate = 3600;
@@ -26,6 +27,13 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   return [
     { url: BASE, changeFrequency: "hourly", priority: 1 },
     { url: `${BASE}/kesif`, changeFrequency: "daily", priority: 0.8 },
+    { url: `${BASE}/endeks`, changeFrequency: "daily", priority: 0.9 },
+    ...endeksAylari().map((ay) => ({
+      url: `${BASE}/endeks/${ay}`,
+      changeFrequency: "daily" as const,
+      priority: 0.8,
+    })),
+    { url: `${BASE}/rekorlar`, changeFrequency: "daily", priority: 0.8 },
     ...TURLER.map((t) => ({
       url: `${BASE}/tur/${t.slug}`,
       changeFrequency: "daily" as const,

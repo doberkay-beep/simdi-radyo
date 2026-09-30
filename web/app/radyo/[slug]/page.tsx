@@ -53,10 +53,21 @@ async function getStation(slug: string): Promise<Station | null> {
   }
 }
 
-async function getSimilar(slug: string, genre: string | null) {
+type Benzer = { slug: string; name: string; city: string | null; frequency: string | null; accent_color: string | null; band: string | null; ortak?: number };
+
+async function getSimilar(slug: string, genre: string | null): Promise<Benzer[]> {
+  const supa = getSupabase();
+  // Önce BENZERLİK MOTORU: son 30 günde ortak çalınan şarkılara göre (Jaccard).
+  // Elle liste değil, arşivin kendisi konuşur; veri azsa tür eşine düşülür.
+  try {
+    const { data } = await supa.rpc("benzerler", { p_slug: slug });
+    const b = (data ?? []) as { slug: string; name: string; genre: string | null; accent_color: string | null; ortak: number }[];
+    if (b.length >= 3) {
+      return b.map((o) => ({ slug: o.slug, name: o.name, city: null, frequency: null, accent_color: o.accent_color, band: null, ortak: o.ortak }));
+    }
+  } catch { /* RPC yoksa/tökezlediyse tür eşine düş */ }
   if (!genre) return [];
   try {
-    const supa = getSupabase();
     const { data } = await supa
       .from("stations")
       .select("slug, name, city, frequency, accent_color, band")
@@ -64,7 +75,7 @@ async function getSimilar(slug: string, genre: string | null) {
       .eq("is_active", true)
       .neq("slug", slug)
       .limit(7);
-    return (data ?? []) as { slug: string; name: string; city: string | null; frequency: string | null; accent_color: string | null; band: string | null }[];
+    return (data ?? []) as Benzer[];
   } catch {
     return [];
   }
@@ -443,7 +454,9 @@ export default async function StationPage({ params }: { params: Promise<{ slug: 
                     <span className="min-w-0">
                       <span className="block truncate text-[15px] font-semibold">{o.name}</span>
                       <span className="block truncate text-xs" style={{ color: "var(--muted)" }}>
-                        {[o.band === "int" ? o.city : o.frequency].filter(Boolean).join(" · ") || T("radyo.canli")}
+                        {o.ortak
+                          ? dil === "en" ? `${o.ortak} songs in common this month` : `bu ay ${o.ortak} ortak şarkı`
+                          : [o.band === "int" ? o.city : o.frequency].filter(Boolean).join(" · ") || T("radyo.canli")}
                       </span>
                     </span>
                   </Link>

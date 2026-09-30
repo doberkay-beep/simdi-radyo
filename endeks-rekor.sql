@@ -75,21 +75,35 @@ with agg as materialized (
   join stations s on s.id = p.station_id and s.band = 'tr'
   where p.started_at > now() - interval '30 days'
     and p.artist is not null and p.title is not null
-    and p.artist <> p.title
-    and p.title !~ '~' and length(p.title) between 2 and 80
+    -- liste_araligi ile aynı jingle süzgeçleri + istasyon kendi adını çalamaz:
+    and lower(p.artist) <> lower(p.title)
+    and lower(p.artist) <> lower(s.name)
+    and lower(p.title)  <> lower(s.name)
+    and p.artist !~* '(https?:|www\.|\.com|\.net|use http|<|radyosu)'
+    and p.title  !~* '(https?:|www\.|\.com|\.net|use http|<|now playing)'
+    and p.title !~ '~' and p.artist !~ '~'
+    and length(p.title) between 2 and 80
   group by 1, 2, 3, 4, 5
 ),
 gun_rekoru as (
+  -- Gerçek hit en az 2 istasyonda çalmış olmalı (tek istasyonluk otomasyon
+  -- tekrarları rekor sayılmaz) — liste ile aynı kural.
   select artist, title, to_char(gun, 'YYYY-MM-DD') as gun, sum(kez)::int as kez
-  from agg group by artist, title, agg.gun order by sum(kez) desc limit 1
+  from agg group by artist, title, agg.gun
+  having count(distinct station_id) >= 2
+  order by sum(kez) desc limit 1
 ),
 gece_krali as (
   select artist, title, sum(kez)::int as kez
-  from agg where bant = 'gece' group by 1, 2 order by 3 desc limit 1
+  from agg where bant = 'gece' group by 1, 2
+  having count(distinct station_id) >= 2
+  order by 3 desc limit 1
 ),
 sabah_sampiyonu as (
   select artist, title, sum(kez)::int as kez
-  from agg where bant = 'sabah' group by 1, 2 order by 3 desc limit 1
+  from agg where bant = 'sabah' group by 1, 2
+  having count(distinct station_id) >= 2
+  order by 3 desc limit 1
 ),
 genis_yayilim as (
   select artist, title, count(distinct station_id)::int as istasyon

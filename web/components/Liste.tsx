@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import ThemeToggle from "./ThemeToggle";
+import { sarkiSlug } from "@/lib/seoslug";
 
 type Satir = { artist: string; title: string; kez: number; istasyon: number };
 
@@ -148,12 +149,19 @@ export default function Liste() {
                   {i + 1}
                 </span>
                 <span className="min-w-0 flex-1">
-                  <span className={`block truncate font-semibold ${i < 3 ? "text-lg" : "text-[15px]"}`}>
+                  <Link
+                    href={`/sarki/${sarkiSlug(s.artist)}--${sarkiSlug(s.title)}`}
+                    className={`block truncate font-semibold underline-offset-2 hover:underline ${i < 3 ? "text-lg" : "text-[15px]"}`}
+                  >
                     {s.title}
-                  </span>
-                  <span className="block truncate text-sm" style={{ color: "var(--muted)" }}>
+                  </Link>
+                  <Link
+                    href={`/sanatci/${sarkiSlug(s.artist)}`}
+                    className="block truncate text-sm underline-offset-2 hover:underline"
+                    style={{ color: "var(--muted)" }}
+                  >
                     {s.artist}
-                  </span>
+                  </Link>
                 </span>
                 <span className="mono shrink-0 text-right text-xs tabular-nums" style={{ color: "var(--muted)" }}>
                   {s.kez} kez

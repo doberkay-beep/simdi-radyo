@@ -11,10 +11,14 @@ const BASE = "https://necaliyor.co";
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   let slugs: string[] = [];
+  let sanatcilar: string[] = [];
   try {
     const supa = getSupabase();
     const { data } = await supa.from("stations").select("slug").eq("is_active", true);
     slugs = (data ?? []).map((r: { slug: string }) => r.slug);
+    // Son 30 günde ≥3 kez çalan sanatçılar → /sanatci sayfaları (SEO).
+    const { data: kat } = await supa.rpc("seo_katalog");
+    sanatcilar = ((kat ?? []) as { slug: string }[]).map((r) => r.slug).filter(Boolean);
   } catch {
     // veritabanı okunamazsa sadece sabit sayfalar
   }
@@ -44,6 +48,11 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     { url: `${BASE}/oyun/gunun-frekansi`, changeFrequency: "daily", priority: 0.6 },
     { url: `${BASE}/fal`, changeFrequency: "monthly", priority: 0.6 },
     { url: `${BASE}/liste`, changeFrequency: "hourly", priority: 0.8 },
+    ...sanatcilar.map((s) => ({
+      url: `${BASE}/sanatci/${s}`,
+      changeFrequency: "daily" as const,
+      priority: 0.6,
+    })),
     { url: `${BASE}/oyun/kor-dinleme`, changeFrequency: "monthly", priority: 0.5 },
     { url: `${BASE}/oyun/nereden`, changeFrequency: "monthly", priority: 0.5 },
     ...DENEMELER.map((d) => ({

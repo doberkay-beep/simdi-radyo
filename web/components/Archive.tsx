@@ -74,9 +74,58 @@ export default function Archive() {
       const list: Row[] = data.stations ?? [];
       setRows(list);
       setStatus(list.length ? "idle" : "empty");
+      // An paylaşılabilir olsun: URL bu ânı taşır (kopyala → arkadaşın aynı âna ışınlanır).
+      try {
+        window.history.replaceState(null, "", `/arsiv?t=${d}T${t}`);
+      } catch {
+        // yok say
+      }
     } catch {
       setStatus("error");
     }
+  }
+
+  // "O anın kaseti" — görünen ânı metin olarak kopyala/paylaş.
+  const [kasetKopyalandi, setKasetKopyalandi] = useState(false);
+  async function kasetPaylas() {
+    const an = new Date(`${date}T${time}`);
+    const baslikTarih = new Intl.DateTimeFormat("tr-TR", {
+      day: "numeric", month: "long", year: "numeric", hour: "2-digit", minute: "2-digit",
+    }).format(an);
+    const satirlar = rows
+      .filter((r) => r.artist || r.title)
+      .slice(0, 12)
+      .map((r) => `📻 ${r.name}: ${[r.artist, r.title].filter(Boolean).join(" — ")}`);
+    const metin = `⏳ ${baslikTarih} — o anda radyoda çalanlar:\n\n${satirlar.join("\n")}\n\nBu âna ışınlan: necaliyor.co/arsiv?t=${date}T${time}`;
+    // Paylaşım sayfası olan cihazlarda (mobil) yerel paylaşım; masaüstünde kopya.
+    if (navigator.share && window.matchMedia("(max-width: 639px)").matches) {
+      try {
+        await navigator.share({ text: metin });
+        setKasetKopyalandi(true);
+        setTimeout(() => setKasetKopyalandi(false), 2200);
+        return;
+      } catch {
+        // paylaşım iptal — kopyalamaya düş
+      }
+    }
+    try {
+      await navigator.clipboard.writeText(metin);
+    } catch {
+      // İzin vermeyen tarayıcılar için eski-usul kopya.
+      const ta = document.createElement("textarea");
+      ta.value = metin;
+      ta.style.position = "fixed";
+      ta.style.opacity = "0";
+      document.body.appendChild(ta);
+      ta.select();
+      try {
+        document.execCommand("copy");
+      } finally {
+        ta.remove();
+      }
+    }
+    setKasetKopyalandi(true);
+    setTimeout(() => setKasetKopyalandi(false), 2200);
   }
 
   // Geçmişte bir güne atla (gün cinsinden geriye). 0 = şimdi.
@@ -101,14 +150,23 @@ export default function Archive() {
     fetchArchive(ds, ts);
   }
 
-  // İlk açılışta "şu an"ı göster.
+  // İlk açılış: URL bir ân taşıyorsa (?t=YYYY-MM-DDTHH:MM) oraya ışınlan;
+  // yoksa "şu an"ı göster.
   useEffect(() => {
-    const now = new Date();
-    const d = `${now.getFullYear()}-${pad(now.getMonth() + 1)}-${pad(now.getDate())}`;
-    const t = `${pad(now.getHours())}:${pad(now.getMinutes())}`;
+    let d: string, t: string;
+    const p = new URLSearchParams(window.location.search).get("t") || "";
+    const es = /^(\d{4}-\d{2}-\d{2})T(\d{2}:\d{2})$/.exec(p);
+    if (es) {
+      [, d, t] = es;
+    } else {
+      const now = new Date();
+      d = `${now.getFullYear()}-${pad(now.getMonth() + 1)}-${pad(now.getDate())}`;
+      t = `${pad(now.getHours())}:${pad(now.getMinutes())}`;
+    }
     setDate(d);
     setTime(t);
     fetchArchive(d, t);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return (
@@ -175,6 +233,12 @@ export default function Archive() {
             >
               {t("arsiv.goster")}
             </button>
+            {/* O anın kaseti — ânı metin+link olarak paylaş */}
+            {status === "idle" && rows.length > 0 && (
+              <button onClick={kasetPaylas} className="press hap-marka text-xs">
+                {kasetKopyalandi ? "kaset kopyalandı ✓" : "⏳ bu ânı paylaş"}
+              </button>
+            )}
           </div>
           <p className="mt-2 text-xs" style={{ color: "var(--muted)" }}>
             {t("arsiv.saatNot")}

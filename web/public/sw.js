@@ -2,7 +2,7 @@
 // Canlı yayın ve API her zaman ağdan gider; yalnızca uygulama kabuğu ve
 // statik varlıklar önbelleğe alınır ki çevrimdışıyken uygulama açılsın.
 
-const SURUM = "simdi-v1";
+const SURUM = "simdi-v2";
 const KABUK = ["/", "/kesif", "/kose", "/nabiz", "/arsiv", "/manifest.webmanifest"];
 
 self.addEventListener("install", (e) => {
@@ -15,6 +15,41 @@ self.addEventListener("activate", (e) => {
     caches.keys().then((keys) => Promise.all(keys.filter((k) => k !== SURUM).map((k) => caches.delete(k)))),
   );
   self.clients.claim();
+});
+
+// Sanatçı Radarı — sunucudaki nöbetçiden gelen push'u bildirime çevir.
+self.addEventListener("push", (e) => {
+  let d = {};
+  try {
+    d = e.data ? e.data.json() : {};
+  } catch {
+    d = { baslik: "ŞİMDİ", metin: e.data ? e.data.text() : "" };
+  }
+  e.waitUntil(
+    self.registration.showNotification(d.baslik || "📻 ŞİMDİ", {
+      body: d.metin || "",
+      icon: "/icon.png",
+      badge: "/icon.png",
+      tag: d.tag || "simdi-radar",
+      data: { url: d.url || "/" },
+    }),
+  );
+});
+
+self.addEventListener("notificationclick", (e) => {
+  e.notification.close();
+  const url = (e.notification.data && e.notification.data.url) || "/";
+  e.waitUntil(
+    clients.matchAll({ type: "window", includeUncontrolled: true }).then((acik) => {
+      for (const c of acik) {
+        if (new URL(c.url).origin === location.origin) {
+          c.navigate(url);
+          return c.focus();
+        }
+      }
+      return clients.openWindow(url);
+    }),
+  );
 });
 
 self.addEventListener("fetch", (e) => {

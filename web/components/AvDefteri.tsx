@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { useDil } from "@/lib/i18n";
 import { type Av, avOku, avSil, avTemizle, izlenenOku, izlenenDegistir, izleniyorMu } from "@/lib/avlar";
+import { radarAc, radarKapat, radarEsitle, radarAcikMi, radarDestekleniyor } from "@/lib/radar";
 
 // Av Defteri — yakaladığın şarkılar: Spotify/YouTube'da aç, sanatçıyı izlemeye al.
 // İzlenen sanatçı bir istasyonda çalmaya başlayınca ana sayfada radar bandı düşer.
@@ -22,6 +23,39 @@ export default function AvDefteri({ onClose }: { onClose: () => void }) {
   const en = dil === "en";
   const [avlar, setAvlar] = useState<Av[]>(avOku);
   const [izlenenler, setIzlenenler] = useState<string[]>(izlenenOku);
+  const [radar, setRadar] = useState<"acik" | "kapali" | "mesgul">(() => (radarAcikMi() ? "acik" : "kapali"));
+  const [radarNot, setRadarNot] = useState("");
+
+  // İzlenen listesi her değiştiğinde radar aboneliğini sessizce eşitle.
+  function izlenenGuncelle(sanatci: string) {
+    setIzlenenler(izlenenDegistir(sanatci));
+    radarEsitle();
+  }
+
+  async function radarToggle() {
+    setRadar("mesgul");
+    setRadarNot("");
+    if (radarAcikMi()) {
+      await radarKapat();
+      setRadar("kapali");
+    } else {
+      const sonuc = await radarAc();
+      if (sonuc === "acik") {
+        setRadar("acik");
+      } else {
+        setRadar("kapali");
+        setRadarNot(
+          sonuc === "izin-yok"
+            ? en ? "notification permission denied" : "bildirim izni verilmedi"
+            : sonuc === "desteklenmiyor"
+              ? en
+                ? "not supported here — on iPhone, add ŞİMDİ to your home screen first"
+                : "bu tarayıcıda yok — iPhone'da önce ŞİMDİ'yi ana ekrana ekle"
+              : en ? "something went wrong, try again" : "bir şey ters gitti, yeniden dene",
+        );
+      }
+    }
+  }
 
   return (
     <div className="fixed inset-0 z-50" role="dialog" aria-label={t("av.baslik")}>
@@ -46,7 +80,7 @@ export default function AvDefteri({ onClose }: { onClose: () => void }) {
               {izlenenler.map((s) => (
                 <button
                   key={s}
-                  onClick={() => setIzlenenler(izlenenDegistir(s))}
+                  onClick={() => izlenenGuncelle(s)}
                   title={t("av.izlemeBirak")}
                   className="press rounded-full border px-2.5 py-1 text-xs"
                   style={{ borderColor: "var(--line)", color: "var(--fg)" }}
@@ -55,6 +89,37 @@ export default function AvDefteri({ onClose }: { onClose: () => void }) {
                 </button>
               ))}
             </div>
+            {/* Radar Push — izlenen sanatçı çalınca site kapalıyken bile haber ver */}
+            {radarDestekleniyor() || radar === "acik" ? (
+              <div className="mt-3">
+                <button
+                  onClick={radarToggle}
+                  disabled={radar === "mesgul"}
+                  className="press rounded-full border px-3 py-1.5 text-xs font-semibold"
+                  style={{
+                    borderColor: radar === "acik" ? "var(--accent)" : "var(--line)",
+                    color: radar === "acik" ? "var(--accent)" : "var(--fg)",
+                  }}
+                >
+                  {radar === "mesgul"
+                    ? "…"
+                    : radar === "acik"
+                      ? en ? "🔔 radar on — tap to turn off" : "🔔 radar açık — kapatmak için dokun"
+                      : en ? "🔕 notify me when they play" : "🔕 çalınca bana haber ver"}
+                </button>
+                {radarNot && (
+                  <p className="mt-1.5 text-[11px]" style={{ color: "var(--muted)" }}>
+                    {radarNot}
+                  </p>
+                )}
+              </div>
+            ) : (
+              <p className="mt-3 text-[11px]" style={{ color: "var(--muted)" }}>
+                {en
+                  ? "📲 for push alerts on iPhone, add ŞİMDİ to your home screen"
+                  : "📲 iPhone'da bildirim için ŞİMDİ'yi ana ekrana ekle"}
+              </p>
+            )}
           </div>
         )}
 
@@ -98,7 +163,7 @@ export default function AvDefteri({ onClose }: { onClose: () => void }) {
                       </a>
                       {a.artist && (
                         <button
-                          onClick={() => setIzlenenler(izlenenDegistir(a.artist!))}
+                          onClick={() => izlenenGuncelle(a.artist!)}
                           className="press underline"
                           style={{ color: izleniyor ? "var(--fg)" : "var(--muted)" }}
                         >

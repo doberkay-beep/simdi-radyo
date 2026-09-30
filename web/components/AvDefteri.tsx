@@ -95,11 +95,8 @@ export default function AvDefteri({ onClose }: { onClose: () => void }) {
                 <button
                   onClick={radarToggle}
                   disabled={radar === "mesgul"}
-                  className="press rounded-full border px-3 py-1.5 text-xs font-semibold"
-                  style={{
-                    borderColor: radar === "acik" ? "var(--accent)" : "var(--line)",
-                    color: radar === "acik" ? "var(--accent)" : "var(--fg)",
-                  }}
+                  className={`press text-xs ${radar === "acik" ? "hap-marka" : "hap"}`}
+                  style={{ padding: "8px 14px" }}
                 >
                   {radar === "mesgul"
                     ? "…"

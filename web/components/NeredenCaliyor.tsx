@@ -224,8 +224,7 @@ export default function NeredenCaliyor() {
                   </Link>
                   <button
                     onClick={() => yeniTur(havuz)}
-                    className="press rounded-full px-6 py-2.5 text-sm font-semibold"
-                    style={{ background: "var(--fg)", color: "var(--bg)" }}
+                    className="press hap-dolu"
                   >
                     sıradaki →
                   </button>

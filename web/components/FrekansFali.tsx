@@ -259,16 +259,11 @@ export default function FrekansFali() {
             <div className="mt-5 flex flex-wrap items-center gap-3">
               <button
                 onClick={dinle}
-                className="press rounded-full px-5 py-2.5 text-sm font-semibold"
-                style={{ background: "var(--fg)", color: "var(--bg)" }}
+                className="press hap-dolu"
               >
                 {caliyor ? "⏸ durdur" : "▶ dinle"}
               </button>
-              <button
-                onClick={() => kartIndir(true)}
-                className="press rounded-full border px-5 py-2.5 text-sm font-semibold"
-                style={{ borderColor: "var(--line)" }}
-              >
+              <button onClick={() => kartIndir(true)} className="press hap-marka">
                 {indi ? "kart indi ✓" : "kartını al 🔮"}
               </button>
               <button onClick={() => falCek(ruh)} className="text-sm underline" style={{ color: "var(--muted)" }}>

@@ -1299,16 +1299,8 @@ export default function NowList() {
                 {t("nav.avlarim")}
               </button>
               <Link href="/kesif" className="nav-link">{t("nav.kesif")}</Link>
-              {/* Oyunlar katlamanın DIŞINDA — mobilde de göz önünde, hafif vurgulu */}
-              <Link href="/oyun" className="nav-link font-semibold" style={{ color: "var(--fg)" }}>
-                {t("nav.oyun")}
-              </Link>
-              <Link href="/fal" className="nav-link">fal 🔮</Link>
-              <Link href="/liste" className="nav-link font-semibold" style={{ color: "var(--fg)" }}>
-                liste
-              </Link>
-              {/* Mobilde kalan linkler "daha"nın altına katlanır; sm+ hepsi açık.
-                  atlas + nabız bant seçicide zaten görünür — burada ikincil kalabilirler. */}
+              {/* liste/oyunlar/fal ÜST MENÜDE DEĞİL — bant seçicinin altındaki
+                  vitrin rafında yaşarlar. atlas+nabız da bant seçicide zaten var. */}
               <span className={`${navAcik ? "contents" : "hidden"} sm:contents`}>
                 <Link href="/ulke" className="nav-link">atlas</Link>
                 <Link href="/nabiz" className="nav-link">{t("nav.nabiz")}</Link>
@@ -1328,10 +1320,18 @@ export default function NowList() {
         </header>
 
         {/* Bant seçici — radyo bant düğmesi: FM (buradasın) / Dünya / Nabız */}
-        <nav className="bandsel mb-5" aria-label="bant">
+        <nav className="bandsel mb-3" aria-label="bant">
           <Link href="/" data-on="1" aria-current="page">FM<span className="sub">{t("home.turkiye")}</span></Link>
           <Link href="/ulke" data-on="0">{t("home.dunya")}<span className="sub">{t("home.atlas")}</span></Link>
           <Link href="/nabiz" data-on="0">{t("nav.nabiz")}<span className="sub">{t("nav.canli")}</span></Link>
+        </nav>
+
+        {/* Vitrin rafı — liste/oyunlar/fal; bant seçicinin kardeşi.
+            Türkçe İ, text-transform'a emanet edilmez: büyük harf elle. */}
+        <nav className="raf mb-5" aria-label="vitrin">
+          <Link href="/liste">🏆 {dil === "en" ? "CHART" : "LİSTE"}</Link>
+          <Link href="/oyun">🎮 {dil === "en" ? "GAMES" : "OYUNLAR"}</Link>
+          <Link href="/fal">🔮 {dil === "en" ? "FORTUNE" : "FAL"}</Link>
         </nav>
 
         {/* Gece nöbeti — 02:00–05:00 arası özel yüz */}

@@ -4,14 +4,16 @@ import { useEffect, useState } from "react";
 
 // KADRAN ton seçici — kadranın şasi rengini (arka plan + parıltı) değiştirir.
 // Magma varsayılan; seçim data-tone olarak köke yazılır, localStorage'da tutulur.
-type Ton = "magma" | "radyum" | "tungsten" | "kobalt" | "ametist" | "siyah" | "beyaz";
+type Ton = "magma" | "kizil" | "radyum" | "tungsten" | "kobalt" | "ametist" | "kaset" | "siyah" | "beyaz";
 
 const TONLAR: { id: Ton; renk: string; ad: string }[] = [
   { id: "magma", renk: "#ff6a3d", ad: "magma" },
+  { id: "kizil", renk: "#e5382c", ad: "kızıl vardiya" },
   { id: "radyum", renk: "#37d67a", ad: "radyum" },
   { id: "tungsten", renk: "#e9a13a", ad: "tungsten" },
   { id: "kobalt", renk: "#5b8cff", ad: "kobalt" },
   { id: "ametist", renk: "#b17cff", ad: "ametist" },
+  { id: "kaset", renk: "#f2e7cf", ad: "kaset" },
   { id: "siyah", renk: "#26262b", ad: "siyah" },
   { id: "beyaz", renk: "#f2f2f4", ad: "beyaz" },
 ];
@@ -73,12 +75,12 @@ export default function ToneToggle() {
   }
 
   return (
-    <span className="inline-flex items-center gap-1.5 align-middle" role="group" aria-label="ton (arka plan rengi)">
+    <span className="inline-flex items-center gap-1.5 align-middle" role="group" aria-label="şasi (kadran teması)">
       {TONLAR.map((x) => (
         <button
           key={x.id}
           onClick={() => sec(x.id)}
-          aria-label={`ton: ${x.ad}`}
+          aria-label={`şasi: ${x.ad}`}
           aria-pressed={ton === x.id}
           title={x.ad}
           className="press rounded-full"
@@ -90,6 +92,10 @@ export default function ToneToggle() {
           }}
         />
       ))}
+      {/* Açıkken seçili şasinin ADI görünür — tonların kimliği olsun. */}
+      <span className="mono text-[9px] font-bold uppercase tracking-[0.14em]" style={{ color: "var(--muted)" }}>
+        {aktif.ad}
+      </span>
     </span>
   );
 }

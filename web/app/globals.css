@@ -67,6 +67,30 @@
   --line: #251b38; --line-hi: #342651;
   --glow: #b17cff; --glow-hi: #cfa8ff; --live: #ff5aa0; --accent: #b17cff;
 }
+/* KIZIL VARDIYA — Kinetik Manşet kanı (#E5382C) radyoda: gece zemini,
+   bordo panel, kızıl kor. Yazar sitesiyle aynı kan grubu. */
+:root[data-tone="kizil"] {
+  color-scheme: dark;
+  --bg: #0c0505; --bg2: #140707; --panel: #1d0b0a; --panel-hi: #2a100e;
+  --fg: #f7e9e6; --muted: #b58f88; --faint: #7d574f;
+  --line: #331311; --line-hi: #4a1b17;
+  --glow: #e5382c; --glow-hi: #ff6a56; --live: #ff4d3d; --accent: #e5382c;
+}
+/* KASET — 70'ler radyo kaseti: krem gövde, hardal etiket, turuncu şerit.
+   Açık zeminli sıcak nostalji; gündüz dinlemesine biçilmiş kaftan. */
+:root[data-tone="kaset"] {
+  color-scheme: light;
+  --bg: #f2e7cf; --bg2: #f8efdc; --panel: #faf3e3; --panel-hi: #fffaf0;
+  --fg: #2b1c10; --muted: #7d6748; --faint: #a58f6d;
+  --line: #e0d0ac; --line-hi: #cdb98c;
+  --glow: #d97b29; --glow-hi: #f0a04b; --live: #cf3f1f; --accent: #b8641f;
+}
+/* Kaset açık zemininde ambiyans yumuşasın (koyu kor kremi boğmasın). */
+:root[data-tone="kaset"] .spread {
+  background:
+    radial-gradient(130% 72% at 50% -16%, color-mix(in srgb, var(--glow) 16%, transparent), transparent 72%),
+    var(--bg);
+}
 /* Monokrom modern — siyah (koyu) ve beyaz (açık). Renksiz şasi; çalan
    istasyonun rengi tek vurgu olur. Kendine yeten paletler (tema fark etmez). */
 :root[data-tone="siyah"] {
@@ -267,6 +291,34 @@ body {
   box-shadow: 0 8px 20px -10px var(--glow);
 }
 .hap:disabled, .hap-dolu:disabled, .hap-marka:disabled { opacity: 0.55; transform: none; }
+
+/* KADRAN TACI — geniş ekranda kadran sayfanın tacıdır: merkez kolondan
+   taşar, kor halkasıyla çerçevelenir; "burası bir radyo" ilk bakışta belli. */
+@media (min-width: 900px) {
+  .kadran-tac {
+    margin-inline: -56px;                 /* max-w-2xl kolonundan iki yana taş */
+    border-radius: 22px;
+    box-shadow:
+      inset 0 1px 0 color-mix(in srgb, #fff 8%, transparent),
+      0 0 0 1px color-mix(in srgb, var(--glow) 22%, transparent),
+      0 30px 80px -40px color-mix(in srgb, var(--glow) 55%, #000),
+      0 22px 52px -30px #000;
+  }
+}
+
+/* MOBİL KOKPİT — raflar dar ekranda tek satır, parmakla yatay kaydırılır;
+   kadran ilk ekrana girsin diye dikeyde yığılmazlar. */
+@media (max-width: 639px) {
+  .raf {
+    display: flex; flex-wrap: nowrap; overflow-x: auto;
+    -webkit-overflow-scrolling: touch; scrollbar-width: none;
+    margin-inline: -20px; padding-inline: 20px; /* kolon kenarına taşan ray */
+  }
+  .raf::-webkit-scrollbar { display: none; }
+  .raf a, .raf button { flex: 0 0 auto; }
+  /* Çalma çubuğu alt sekmelerin üstüne oturur. */
+  .nowbar-float { bottom: calc(64px + env(safe-area-inset-bottom)); }
+}
 
 /* KADRAN masaüstü konsolu — geniş ekranda merkez kolonun (max-w-2xl = 672px)
    sağ/soluna sabit modül rayları. Dar ekranda gizli (mobil tek kolon korunur). */

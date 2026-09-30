@@ -94,7 +94,7 @@ export default function Kadran({
 
   return (
     <div
-      className="mb-5 overflow-hidden rounded-2xl border"
+      className="kadran-tac mb-5 overflow-hidden rounded-2xl border"
       style={{
         borderColor: "var(--line-hi)",
         background:

@@ -1,14 +1,15 @@
 // ŞİMDİ — Senkron nöbetçisi (sunucuda 7/24).
-// Aynı şarkı 4 dakika içinde 3+ Türk radyosunda birden başlarsa bu bir
+// Aynı şarkı AYNI DAKİKA içinde 2+ ayrı Türk radyosunda başlarsa bu bir
 // SENKRON ANI'dır: senkron_anlari'na yazılır, sitede bant + kart olur.
-// Veri: 3 günde yalnız 2 kez oldu — nadir olduğu için değerli.
+// Veri (ikiz yayınlar ayıklandıktan sonra, 7 gün): 1 dk penceresinde 2 radyo
+// 9 kez (günde ~1-2), 3+ radyo HİÇ → 3+ olursa kendiliğinden rekor.
 // Açılışta son 7 günü tarar (defter boş başlamasın), sonra 30 sn'de bir son 12 dk.
 
 import { createClient } from "@supabase/supabase-js";
 import { readFileSync } from "node:fs";
 
-const ESIK = 3;                 // en az kaç radyo
-const PENCERE = 4 * 60_000;     // başlangıçlar arası en fazla 4 dk
+const ESIK = 2;                 // en az kaç ayrı radyo
+const PENCERE = 60_000;         // başlangıçlar arası en fazla 1 dk
 const BIRLESTIR = 15 * 60_000;  // aynı şarkının 15 dk içindeki anları tek an
 const ARALIK = 30_000;
 
@@ -125,7 +126,7 @@ async function tur(geriMs) {
   for (const an of anlar) await kaydet(an);
 }
 
-log(`Senkron nöbetçisi başladı — eşik ${ESIK} radyo / ${PENCERE / 60000} dk.`);
+log(`Senkron nöbetçisi başladı — eşik ${ESIK} radyo / ${PENCERE / 1000} sn.`);
 try {
   await tur(7 * 24 * 3600_000);
   log("7 günlük geçmiş tarandı.");

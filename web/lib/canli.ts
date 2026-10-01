@@ -100,7 +100,7 @@ export function dinleyiciKatil(
   };
 }
 
-/* ⚡ SENKRON ANI — aynı şarkı 4 dk içinde 3+ radyoda birden başlayınca sunucudaki
+/* ⚡ SENKRON ANI — aynı şarkı aynı dakika içinde 2+ ayrı radyoda başlayınca sunucudaki
    nöbetçi senkron_anlari'na yazar; bu abonelik o anı anında sayfaya düşürür.
    Gereksinim: dalga1.sql (tablo + Realtime yayını). */
 export type SenkronAn = {

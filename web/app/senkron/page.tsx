@@ -9,7 +9,7 @@ export const revalidate = 120;
 export const metadata: Metadata = {
   title: "Senkron Defteri — aynı şarkı, aynı anda, birbirinden habersiz radyolarda | ŞİMDİ",
   description:
-    "Türkiye'nin radyoları birbirinden habersiz yayın yapar. Bazen aynı şarkı dakikalar içinde 3 radyoda birden başlar — nadir bir an. ŞİMDİ hepsini yakalayıp buraya yazıyor.",
+    "Türkiye'nin radyoları birbirinden habersiz yayın yapar. Bazen aynı şarkı aynı dakika içinde iki ayrı radyoda başlar — nadir bir an. ŞİMDİ hepsini yakalayıp buraya yazıyor.",
   alternates: { canonical: "/senkron" },
 };
 
@@ -25,14 +25,15 @@ export default async function Sayfa() {
       <h1 className="brand mt-2 text-4xl font-bold leading-tight">⚡ SENKRON DEFTERİ</h1>
       <p className="epigraf mt-3 text-base">
         Radyolar birbirini duymaz. Her biri kendi listesini, kendi saatini çalar. Ama bazen aynı
-        şarkı, birkaç dakika arayla, üç radyoda birden başlar. Kimse anlaşmamıştır. Buna senkron
-        diyoruz; burada hepsi kayıtlı.
+        şarkı, aynı dakika içinde, iki ayrı radyoda birden başlar. Kimse anlaşmamıştır. Buna
+        senkron diyoruz; burada hepsi kayıtlı.
+        {(rekor?.sayi ?? 0) < 3 && " Üç radyo aynı anda mı? Henüz hiç olmadı."}
       </p>
       <p className="mono mt-3 text-[11px] uppercase tracking-[0.16em]" style={{ color: "var(--muted)" }}>
-        kural: aynı şarkı · 4 dakika içinde · en az 3 türk radyosu · son 7 günde {haftada} kez
+        kural: aynı şarkı · aynı dakika içinde · en az 2 ayrı türk radyosu · son 7 günde {haftada} kez
       </p>
 
-      {rekor && (
+      {rekor && rekor.sayi >= 3 && (
         <Link
           href={`/senkron/${rekor.id}`}
           className="senkron-bant press mt-8 block rounded-2xl border p-5"

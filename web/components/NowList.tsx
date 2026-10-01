@@ -1384,7 +1384,7 @@ export default function NowList() {
           </button>
         </nav>
 
-        {/* ⚡ Senkron Anı — aynı şarkı 3+ radyoda birden (nadir; son 1 saat) */}
+        {/* ⚡ Senkron Anı — aynı şarkı aynı dakikada 2+ radyoda (nadir; son 1 saat) */}
         <SenkronBandi />
 
         {/* Gece nöbeti — 02:00–05:00 arası özel yüz */}

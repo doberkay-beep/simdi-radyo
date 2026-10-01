@@ -1,5 +1,6 @@
 # ŞİMDİ — Açılış Flood'u (1 Ekim, öğlen ~12:30)
-Görseller: T1 = endeks kartı (sabah 10:00'da sunucudan gelir) · T3 = telefondan
+⚠️ 1 Eki 12:30: ikiz yayın düzeltmesi sonrası Eylül sayıları DEĞİŞTİ — aşağıdaki T9 güncel.
+Görseller: T1 = endeks kartı (DÜZELTİLMİŞ kart: kampanya/endeks-eylul-2026.png) · T3 = telefondan
 15 sn harita ekran kaydı (tam ekranda 2-3 ışığa dokun, biri çalsın) · T9 = endeks kartı tekrar.
 Sıra: T1'i at → altına zincir olarak devamını. T1'i profiline SABİTLE.
 
@@ -8,7 +9,7 @@ Sıra: T1'i at → altına zincir olarak devamını. T1'i profiline SABİTLE.
 **1/**
 Türkiye'nin ve dünyanın radyolarını tek ekranda dinleyeceğin, şu an hangi şarkının çaldığını SANİYESİNDE gösteren bir site yaptım: necaliyor.co
 
-352 radyo · 51 ülke · üyeliksiz · ücretsiz · reklamsız.
+350 radyo · 50+ ülke · üyeliksiz · ücretsiz · reklamsız.
 
 Bir yazarın radyo takıntısından doğdu. Neler var, tek tek: 🧵
 
@@ -46,11 +47,12 @@ Radyo artık "bu kimdi?" diye bitmiyor.
 **9/**
 Ve hepsinin özeti: TÜRKİYE RADYO ENDEKSİ 📰
 
-Her ayın 1'inde, radyolarda GERÇEKTE en çok çalanların resmi raporu. İlki bugün yayında:
+Her ayın 1'inde, Türk radyolarında GERÇEKTE en çok çalanların raporu. İlki yayında:
 
-Eylül 2026 → 190.662 kayıtlı çalma
-Ayın sanatçısı: BLOK3
-Ayın şarkısı: Hadise — Ara Beni (7 istasyonda 59 kez)
+Eylül 2026 → 50.767 kayıtlı çalma
+Ayın sanatçısı: Manifest
+Ayın şarkısı: Imael Angel — Bad Times
+2. sırada: Hadise — Ara Beni
 
 Ham veri herkese açık: necaliyor.co/endeks
 

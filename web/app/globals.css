@@ -321,6 +321,32 @@ body {
   .raf a, .raf button { font-size: 10.5px; padding: 8px 11px; letter-spacing: 0.1em; }
 }
 
+/* 🚗 SÜRÜŞ MODU — bakmadan kullanılır: dev hedefler, yüksek kontrast. */
+.surus { background: #050304; color: #f6efe8; padding-bottom: max(16px, env(safe-area-inset-bottom)); }
+.surus-sarki {
+  font-size: clamp(46px, 12.5vw, 108px);
+  display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden;
+}
+.surus-dugme {
+  min-height: 92px; border-radius: 22px; font-size: 38px; color: #f6efe8;
+  background: #17100f; border: 1px solid #3a2622;
+  display: flex; align-items: center; justify-content: center;
+}
+.surus-ana { font-size: 46px; color: #0a0606; border: none; box-shadow: 0 14px 40px -18px currentColor; }
+.surus-istasyon {
+  min-height: 64px; border-radius: 16px; padding: 0 16px; font-size: 18px; font-weight: 700;
+  color: #cdbcb2; background: #120c0b; border: 2px solid #2a1c19; text-align: left;
+}
+.surus-kucuk {
+  font-size: 15px; font-weight: 700; padding: 10px 16px; border-radius: 999px;
+  border: 1px solid #3a2622; color: #cdbcb2;
+}
+@media (orientation: landscape) and (max-height: 520px) {
+  .surus-dugme { min-height: 70px; }
+  .surus-istasyon { min-height: 52px; }
+  .surus-sarki { -webkit-line-clamp: 2; }
+}
+
 /* ⚡ SENKRON BANDI — nadir olay: kor çerçeve + yavaş nabız. */
 .senkron-bant {
   border-color: color-mix(in srgb, var(--glow) 65%, var(--line-hi));

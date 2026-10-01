@@ -36,6 +36,7 @@ import SanatciTakip from "./SanatciTakip";
 import KasaModal from "./KasaModal";
 import YukariCik from "./YukariCik";
 import SenkronBandi from "./SenkronBandi";
+import SurusModu from "./SurusModu";
 import { KASA_OLAYI } from "@/lib/kasa";
 import SanatciRadari from "./SanatciRadari";
 import SairinFrekansi from "./SairinFrekansi";
@@ -236,6 +237,7 @@ export default function NowList() {
   const [kurAcik, setKurAcik] = useState(false); // 📲 uygulama kur sihirbazı
   const [takipAcik, setTakipAcik] = useState(false); // 🔔 sanatçı ara + takip
   const [kasaAcik, setKasaAcik] = useState(false); // 🔐 hafıza kodu
+  const [surus, setSurus] = useState(false); // 🚗 sürüş modu
   const [takipSay, setTakipSay] = useState(0); // takip edilen sanatçı sayısı (hap parlasın)
   useEffect(() => {
     if (takipAcik) return;
@@ -951,37 +953,6 @@ export default function NowList() {
 
   useEffect(() => () => { odaRef.current?.ayril(); }, []);
 
-  // Kilit ekranı / medya kontrolleri: sayfa başlığı yerine gerçek şarkı +
-  // istasyon + uygulama ikonunu göster (telefonda arka planda çalarken).
-  useEffect(() => {
-    if (typeof navigator === "undefined" || !("mediaSession" in navigator)) return;
-    const ms = navigator.mediaSession;
-    if (!current) {
-      ms.metadata = null;
-      ms.playbackState = "none";
-      return;
-    }
-    const np = liveNP ?? current.nowPlaying;
-    const track =
-      np && np.artist && np.title && np.artist !== np.title
-        ? `${np.artist} — ${np.title}`
-        : (np && (np.title || np.rawTitle)) || "canlı yayın";
-    try {
-      ms.metadata = new MediaMetadata({
-        title: track,
-        artist: current.name,
-        album: "ŞİMDİ",
-        artwork: [
-          { src: "/icon.png", sizes: "512x512", type: "image/png" },
-          { src: "/apple-icon.png", sizes: "180x180", type: "image/png" },
-        ],
-      });
-      ms.playbackState = "playing";
-    } catch {
-      // MediaMetadata desteklenmiyorsa sessizce geç
-    }
-  }, [current, liveNP]);
-
   // Tarayıcı tema rengi (mobil adres çubuğu) çalan istasyona göre boyansın.
   useEffect(() => {
     if (typeof document === "undefined") return;
@@ -1104,14 +1075,37 @@ export default function NowList() {
           ? `${np.artist} — ${np.title}`
           : np.title
         : null;
-    ms.metadata = new MediaMetadata({
+    const bilgi = {
       title: parca ?? current.name,
       artist: parca ? current.name : "canlı radyo",
       album: "ŞİMDİ · necaliyor.co",
-      artwork: [{ src: kapakUret(current.slug, current.name, accent), sizes: "512x512", type: "image/png" }],
-    });
+    };
+    const istasyonKapak = { src: kapakUret(current.slug, current.name, accent), sizes: "512x512", type: "image/png" };
+    try {
+      ms.metadata = new MediaMetadata({ ...bilgi, artwork: [istasyonKapak] });
+    } catch { /* MediaMetadata yoksa geç */ }
     ms.playbackState = phase === "playing" ? "playing" : "paused";
+
+    // Şarkının gerçek albüm kapağı (iTunes, müzik kartıyla aynı önbellekli uç):
+    // gelince kilit ekranında istasyon kapağının yerini alır.
+    const iptal = new AbortController();
+    if (np?.artist && np.title && np.artist !== np.title) {
+      fetch(`/api/muzik-karti?artist=${encodeURIComponent(np.artist)}&title=${encodeURIComponent(np.title)}`, { signal: iptal.signal })
+        .then((r) => (r.ok ? r.json() : null))
+        .then((d: { kapak?: string | null; album?: string | null } | null) => {
+          if (!d?.kapak) return;
+          try {
+            ms.metadata = new MediaMetadata({
+              ...bilgi,
+              album: d.album ? `${d.album} · ŞİMDİ` : bilgi.album,
+              artwork: [{ src: d.kapak, sizes: "600x600", type: "image/jpeg" }, istasyonKapak],
+            });
+          } catch { /* yoksay */ }
+        })
+        .catch(() => {});
+    }
     return () => {
+      iptal.abort();
       ms.metadata = null;
     };
   }, [playing, current, liveNP, phase, accent]);
@@ -1327,6 +1321,12 @@ export default function NowList() {
             title={dil === "en" ? "search artists, get notified when they play" : "sanatçını ara, radyoda çalınca haber al"}
           >
             🔔 {dil === "en" ? "FOLLOW ARTIST" : "SANATÇI TAKİP"}
+          </button>
+          <button
+            onClick={() => setSurus(true)}
+            title={dil === "en" ? "drive mode — big buttons, screen stays on" : "sürüş modu — dev düğmeler, ekran kapanmaz"}
+          >
+            🚗 {dil === "en" ? "DRIVE" : "SÜRÜŞ"}
           </button>
           <button
             onClick={() => setNotAcik(true)}
@@ -2195,15 +2195,8 @@ export default function NowList() {
 
             {/* Ses seviyesi + sessize alma (geniş ekranda) */}
             <div className="hidden shrink-0 items-center gap-2 md:flex">
-              <button
-                onClick={() => geceModuAc(!geceModu)}
-                aria-label="gece modu — sesi eşitle"
-                title="gece modu: sesi eşitle (yüksek/alçak farkını yumuşat)"
-                className="pbar-cip press"
-                style={geceModu ? { background: accent, color: readableOn(accent) } : undefined}
-              >
-                <Ikon ad="esitle" />
-              </button>
+              {/* Gece modu (ses eşitleme) geçici olarak kapalı: Web Audio, CORS izni
+                  vermeyen yayınları SUSTURUYOR (çoğu istasyon). Röle tabanlı v2 gelecek. */}
               <button
                 onClick={() => setMuted((m) => !m)}
                 aria-label={muted ? "sesi aç" : "sessize al"}
@@ -2344,12 +2337,6 @@ export default function NowList() {
               <button onClick={() => { setCipMenu(false); setFocus(true); }} className="menu-kalem press">
                 <Ikon ad="odak" /> {dil === "en" ? "focus mode" : "sessizlik modu"}
               </button>
-              <button
-                onClick={() => geceModuAc(!geceModu)}
-                className={`menu-kalem press ${geceModu ? "on" : ""}`}
-              >
-                <Ikon ad="esitle" /> {dil === "en" ? "night mode" : "gece modu"}
-              </button>
               {barQuery && (
                 <a
                   href={`https://open.spotify.com/search/${encodeURIComponent(barQuery)}`}
@@ -2375,6 +2362,24 @@ export default function NowList() {
 
       {/* 📲 Uygulama kur sihirbazı */}
       <KurSihirbazi acik={kurAcik} kapat={() => setKurAcik(false)} dil={dil} />
+
+      {/* 🚗 Sürüş modu — favoriler (yoksa ilk Türk istasyonları) arasında dev düğmelerle */}
+      {surus && (
+        <SurusModu
+          liste={(() => {
+            const fav = stations.filter((x) => favs.has(x.slug));
+            const dolgu = stations.filter((x) => x.band === "tr" && !favs.has(x.slug));
+            return [...fav, ...dolgu].slice(0, Math.max(6, fav.length)).map((x) => ({ slug: x.slug, name: x.name, accentColor: x.accentColor }));
+          })()}
+          calan={playing}
+          baglaniyor={phase === "connecting"}
+          parca={barNp ? { artist: barNp.artist ?? null, title: barNp.title ?? barNp.rawTitle ?? null } : null}
+          istasyonAdi={current?.name ?? null}
+          onCal={(slug) => { const st = stations.find((x) => x.slug === slug); if (st) toggle(st); }}
+          kapat={() => setSurus(false)}
+          dil={dil}
+        />
+      )}
 
       {/* 🔔 Sanatçı ara + takip · 🔐 hafıza kodu · ⬆ yukarı çık */}
       <SanatciTakip acik={takipAcik} kapat={() => setTakipAcik(false)} dil={dil} kurAc={() => setKurAcik(true)} />

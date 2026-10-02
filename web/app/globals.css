@@ -401,6 +401,11 @@ body {
   background: color-mix(in srgb, var(--panel) 70%, transparent);
   text-decoration: none; text-align: left;
 }
+.menu-grup {
+  font-family: var(--font-mono), ui-monospace, monospace;
+  font-size: 10px; font-weight: 700; letter-spacing: 0.2em; color: var(--muted);
+  margin: 14px 2px 8px;
+}
 .menu-kalem:active { background: color-mix(in srgb, var(--glow) 14%, var(--panel)); }
 .menu-kalem.on {
   color: var(--bg);

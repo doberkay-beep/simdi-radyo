@@ -238,6 +238,7 @@ export default function NowList() {
   const [takipAcik, setTakipAcik] = useState(false); // 🔔 sanatçı ara + takip
   const [kasaAcik, setKasaAcik] = useState(false); // 🔐 hafıza kodu
   const [surus, setSurus] = useState(false); // 🚗 sürüş modu
+  const [turHepsi, setTurHepsi] = useState(false); // tür çiplerinin hepsi açık mı
   const [takipSay, setTakipSay] = useState(0); // takip edilen sanatçı sayısı (hap parlasın)
   useEffect(() => {
     if (takipAcik) return;
@@ -1235,7 +1236,7 @@ export default function NowList() {
 
       <div className="relative z-10 mx-auto max-w-2xl px-5 pb-32 pt-10">
         {/* Başlık — logo yok, sadece kelime işareti */}
-        <header className="mb-6 flex flex-wrap items-start justify-between gap-y-3">
+        <header className="mb-6 flex items-start justify-between gap-3">
           <div>
             <h1 className="brand text-[42px] font-bold leading-none tracking-tight">ŞİMDİ</h1>
             <span
@@ -1246,51 +1247,17 @@ export default function NowList() {
               {t("home.altyazi")}
             </p>
           </div>
-          <div className="flex w-full flex-col gap-1.5 text-xs sm:w-auto sm:items-end" style={{ color: "var(--muted)" }}>
-            <span className="flex flex-wrap items-center gap-3">
-              {/* uyku/gezinti/alarm/parti mini ikonları araç rafına taşındı */}
-              <DilToggle />
-              <ThemeToggle />
-              <ToneToggle />
-              <span className="flex items-center gap-2">
-                <span
-                  className="live-dot inline-block h-2 w-2 rounded-full"
-                  style={{ background: playing ? accent : "#3ddc84" }}
-                />
-                {t("nav.canli")}
-              </span>
-            </span>
-            <span className="flex flex-wrap items-center gap-x-4 gap-y-1.5">
-              {/* Masaüstünde minik bağlantılar; mobilde hepsi ☰ MENÜ sayfasında —
-                  yatay kaydırma/katlama yok, tek dokunuş. */}
-              <span className="hidden sm:contents">
-                <button onClick={() => setFrekansAcik(true)} className="nav-link press">
-                  {t("nav.frekansim")}
-                </button>
-                <button onClick={() => setAvAcik(true)} className="nav-link press">
-                  {t("nav.avlarim")}
-                </button>
-                <button onClick={() => setKasaAcik(true)} className="nav-link press">
-                  {dil === "en" ? "memory code" : "hafıza kodum"}
-                </button>
-                <Link href="/kesif" className="nav-link">{t("nav.kesif")}</Link>
-                {/* liste/oyunlar/fal ÜST MENÜDE DEĞİL — bant seçicinin altındaki
-                    vitrin rafında yaşarlar. atlas+nabız da bant seçicide zaten var. */}
-                <Link href="/ulke" className="nav-link">atlas</Link>
-                <Link href="/nabiz" className="nav-link">{t("nav.nabiz")}</Link>
-                <Link href="/arsiv" className="nav-link">{t("nav.arsiv")}</Link>
-                <Link href="/kose" className="nav-link">{t("nav.kose")}</Link>
-                <Link href="/hakkinda" className="nav-link">{t("nav.gelistirici")}</Link>
-              </span>
-              <button
-                onClick={() => setNavAcik(true)}
-                className="menu-hap press sm:hidden"
-                aria-haspopup="dialog"
-                aria-expanded={navAcik}
-              >
-                ☰ {dil === "en" ? "MENU" : "MENÜ"}
-              </button>
-            </span>
+          {/* Sağ üst: yalnız dil + ☰ MENÜ. Tema/ton menünün "Görünüm" grubunda. */}
+          <div className="flex shrink-0 items-center gap-3 text-xs" style={{ color: "var(--muted)" }}>
+            <DilToggle />
+            <button
+              onClick={() => setNavAcik(true)}
+              className="menu-hap press"
+              aria-haspopup="dialog"
+              aria-expanded={navAcik}
+            >
+              ☰ {dil === "en" ? "MENU" : "MENÜ"}
+            </button>
           </div>
         </header>
 
@@ -1301,47 +1268,25 @@ export default function NowList() {
           <Link href="/nabiz" data-on="0">{t("nav.nabiz")}<span className="sub">{t("nav.canli")}</span></Link>
         </nav>
 
-        {/* Vitrin rafı — liste/oyunlar/fal; bant seçicinin kardeşi.
+        {/* ÜÇ KAPI — dinleyici için sade: liste · harita · takip. Geri kalan her şey ☰ MENÜ'de.
+            Alarm, parti, uyku, gezinti yalnız AÇIKKEN durum çipi olarak burada görünür.
             Türkçe İ, text-transform'a emanet edilmez: büyük harf elle. */}
-        <nav className="raf mb-2" aria-label="vitrin">
+        <nav className="raf mb-5" aria-label="kapılar">
           <Link href="/liste">🏆 {dil === "en" ? "CHART" : "LİSTE"}</Link>
-          <Link href="/oyun">🎮 {dil === "en" ? "GAMES" : "OYUNLAR"}</Link>
-          <Link href="/fal">🔮 {dil === "en" ? "FORTUNE" : "FAL"}</Link>
-          <Link href="/arsiv">⏳ {dil === "en" ? "TIME MACHINE" : "ZAMAN MAKİNESİ"}</Link>
-          <Link href="/harita">🌍 {dil === "en" ? "LIVE MAP" : "CANLI HARİTA"}</Link>
-          <Link href="/endeks">📰 {dil === "en" ? "INDEX" : "ENDEKS"}</Link>
-          <Link href="/rekorlar">🎖 {dil === "en" ? "RECORDS" : "REKORLAR"}</Link>
-        </nav>
-
-        {/* Araç rafı — dinleme araçları: elle tutulur haplar (mini ikon dönemi bitti). */}
-        <nav className="raf mb-5" aria-label="araçlar">
+          <Link href="/harita">🌍 {dil === "en" ? "LIVE MAP" : "HARİTA"}</Link>
           <button
             onClick={() => setTakipAcik(true)}
             className={takipSay ? "on" : ""}
             title={dil === "en" ? "search artists, get notified when they play" : "sanatçını ara, radyoda çalınca haber al"}
           >
-            🔔 {dil === "en" ? "FOLLOW ARTIST" : "SANATÇI TAKİP"}
+            🔔 {dil === "en" ? "FOLLOW" : "TAKİP"}
           </button>
-          <button
-            onClick={() => setSurus(true)}
-            title={dil === "en" ? "drive mode — big buttons, screen stays on" : "sürüş modu — dev düğmeler, ekran kapanmaz"}
-          >
-            🚗 {dil === "en" ? "DRIVE" : "SÜRÜŞ"}
-          </button>
-          <button
-            onClick={() => setNotAcik(true)}
-            title={t("defter.baslik")}
-          >
-            ✍ {dil === "en" ? "LEAVE A NOTE" : "NOT BIRAK"}
-          </button>
-          <button
-            onClick={() => setAlarmAcik((v) => !v)}
-            className={alarm ? "on" : ""}
-            title={t("alarm.baslik")}
-          >
-            ⏰ {alarm ? new Date(alarm.ts).toTimeString().slice(0, 5) : "ALARM"}
-          </button>
-          {oda ? (
+          {alarm && (
+            <button onClick={() => setAlarmAcik((v) => !v)} className="on" title={t("alarm.baslik")}>
+              ⏰ {new Date(alarm.ts).toTimeString().slice(0, 5)}
+            </button>
+          )}
+          {oda && (
             <>
               <button onClick={() => davetKopyala(oda.kod)} className="on" data-kod={oda.kod} title={t("oda.baslik")}>
                 👥 {dil === "en" ? "PARTY" : "PARTİ"} · {odaSayi}
@@ -1363,25 +1308,17 @@ export default function NowList() {
                 ×
               </button>
             </>
-          ) : (
-            <button onClick={odaAc} title={t("oda.baslik")}>
-              👥 {dil === "en" ? "PARTY" : "PARTİ"}
+          )}
+          {sleepUntil && (
+            <button onClick={cycleSleep} className="on" title={t("home.uykuZamanlayici")}>
+              🌙 {sleepRemain} DK
             </button>
           )}
-          <button
-            onClick={cycleSleep}
-            className={sleepUntil ? "on" : ""}
-            title={t("home.uykuZamanlayici")}
-          >
-            🌙 {sleepUntil ? `${sleepRemain} DK` : dil === "en" ? "SLEEP" : "UYKU"}
-          </button>
-          <button
-            onClick={() => setYolculuk((v) => !v)}
-            className={yolculuk ? "on" : ""}
-            title="sesli yolculuk — istasyonlar arası otomatik gezinti"
-          >
-            🧭 {dil === "en" ? "DRIFT" : "GEZİNTİ"}
-          </button>
+          {yolculuk && (
+            <button onClick={() => setYolculuk(false)} className="on" title="gezintiyi durdur">
+              🧭 {dil === "en" ? "DRIFT" : "GEZİNTİ"} ×
+            </button>
+          )}
         </nav>
 
         {/* ⚡ Senkron Anı — aynı şarkı aynı dakikada 2+ radyoda (nadir; son 1 saat) */}
@@ -1474,16 +1411,6 @@ export default function NowList() {
           </p>
         )}
 
-        {/* Selamlama (edebi) + saat + sayaçlar */}
-        {now > 0 && (
-          <div className="mb-5">
-            <p className="epigraf text-[15px]">{selam}</p>
-            <p className="mt-1 text-xs" style={{ color: "var(--muted)" }}>
-              {clock} · {stations.length} radyo · {genres.length} tür
-            </p>
-          </div>
-        )}
-
         {/* Günün epigrafı — boştayken yavaşça döner */}
         {!playing && now > 0 && (
           <p className="epigraf fade-in mb-5 text-lg" key={epi}>
@@ -1491,7 +1418,8 @@ export default function NowList() {
           </p>
         )}
 
-        {/* KADRAN — analog ayar bandı */}
+        {/* KADRAN — analog ayar bandı (yalnız geniş ekranda; mobilde oynatıcı yeter) */}
+        <div className="hidden sm:block">
         <Kadran
           stations={shown.map((s) => ({
             slug: s.slug,
@@ -1507,18 +1435,7 @@ export default function NowList() {
             if (st) toggle(st);
           }}
         />
-
-        {/* Dünyada şu an — rastgele ülkelerden canlı kesit */}
-        <DunyadaSimdi
-          stations={stations}
-          onTune={(slug) => {
-            const st = stations.find((x) => x.slug === slug);
-            if (st) { setUlke(null); setRegion("all"); toggle(st); }
-          }}
-        />
-
-        {/* Kalp defteri şeridi — son anılar akar */}
-        <DefterSeridi stations={stations} />
+        </div>
 
         {/* Sanatçı radarı — izlediğin sanatçı şu an bir istasyonda çalıyorsa */}
         <SanatciRadari
@@ -1662,7 +1579,7 @@ export default function NowList() {
             <button onClick={() => setGenre(null)} className="chip chip-solid" data-on={genre === null ? "1" : "0"}>
               {t("home.tumu")}
             </button>
-            {genres.map(([g, n]) => {
+            {(turHepsi ? genres : genres.filter(([g], i) => i < 6 || g === genre)).map(([g, n]) => {
               const active = genre === g;
               return (
                 <button key={g} onClick={() => setGenre(active ? null : g)} className="chip chip-solid" data-on={active ? "1" : "0"}>
@@ -1670,6 +1587,11 @@ export default function NowList() {
                 </button>
               );
             })}
+            {genres.length > 6 && (
+              <button onClick={() => setTurHepsi((v) => !v)} className="chip chip-solid" aria-expanded={turHepsi}>
+                {turHepsi ? (dil === "en" ? "less ▴" : "daha az ▴") : `+${genres.length - 6}`}
+              </button>
+            )}
           </div>
         )}
 
@@ -2000,6 +1922,22 @@ export default function NowList() {
           })}
         </ul>
 
+        {/* Listenin altı: dünyadan canlı kesit + kalp defteri (dinleyiciyi listeden önce yormasın) */}
+        <div className="mt-10">
+        {/* Dünyada şu an — rastgele ülkelerden canlı kesit */}
+        <DunyadaSimdi
+          stations={stations}
+          onTune={(slug) => {
+            const st = stations.find((x) => x.slug === slug);
+            if (st) { setUlke(null); setRegion("all"); toggle(st); }
+          }}
+        />
+
+        {/* Kalp defteri şeridi — son anılar akar */}
+        <DefterSeridi stations={stations} />
+
+        </div>
+
         {/* Kitap köprüsü — tek satır, sayfanın dibinde */}
         <p className="mt-10 text-center text-xs" style={{ color: "var(--muted)" }}>
           📖 {t("kopru.kitap")}{" "}
@@ -2248,22 +2186,58 @@ export default function NowList() {
         </div>
       )}
 
-      {/* ☰ MOBİL MENÜ — başlıktaki minik seçeneklerin tam boy, dokunulur hali */}
+      {/* ☰ MENÜ — sitenin bütün kapıları tek yerde (her ekranda). Ana sayfa sade kalsın
+          diye raflardan kalkan her şey burada: Dinle · Keşfet · Senin. */}
       {navAcik && (
-        <div className="fixed inset-0 z-[70] sm:hidden" role="dialog" aria-label="menü">
+        <div className="fixed inset-0 z-[70]" role="dialog" aria-label="menü">
           <button
             className="absolute inset-0"
             style={{ background: "color-mix(in srgb, #000 62%, transparent)" }}
             onClick={() => setNavAcik(false)}
             aria-label="menüyü kapat"
           />
-          <div className="menu-sayfa absolute inset-x-0 bottom-0 rounded-t-2xl p-5 pb-8">
+          <div className="menu-sayfa absolute inset-x-0 bottom-0 rounded-t-2xl p-5 pb-8 sm:inset-x-auto sm:bottom-auto sm:left-1/2 sm:top-1/2 sm:w-[560px] sm:-translate-x-1/2 sm:-translate-y-1/2 sm:rounded-2xl sm:border">
             <div className="mb-3 flex items-center justify-between">
               <span className="mono text-[11px] font-bold uppercase tracking-[0.2em]" style={{ color: "var(--muted)" }}>
                 ŞİMDİ · {dil === "en" ? "MENU" : "MENÜ"}
               </span>
               <button onClick={() => setNavAcik(false)} className="press text-xl leading-none" aria-label="kapat">×</button>
             </div>
+
+            <p className="menu-grup">{dil === "en" ? "LISTEN" : "DİNLE"}</p>
+            <div className="grid grid-cols-2 gap-2">
+              <button onClick={() => { setNavAcik(false); setSurus(true); }} className="menu-kalem press">🚗 {dil === "en" ? "drive mode" : "sürüş modu"}</button>
+              <button onClick={() => { cycleSleep(); }} className={`menu-kalem press ${sleepUntil ? "on" : ""}`}>
+                🌙 {sleepUntil ? `${sleepRemain} dk` : dil === "en" ? "sleep timer" : "uyku"}
+              </button>
+              <button onClick={() => { setNavAcik(false); setAlarmAcik(true); }} className={`menu-kalem press ${alarm ? "on" : ""}`}>
+                ⏰ {alarm ? new Date(alarm.ts).toTimeString().slice(0, 5) : dil === "en" ? "radio alarm" : "radyo alarmı"}
+              </button>
+              <button onClick={() => { setNavAcik(false); if (oda) davetKopyala(oda.kod); else odaAc(); }} className={`menu-kalem press ${oda ? "on" : ""}`}>
+                👥 {dil === "en" ? "listen together" : "birlikte dinle"}
+              </button>
+              <button onClick={() => { setYolculuk((v) => !v); setNavAcik(false); }} className={`menu-kalem press ${yolculuk ? "on" : ""}`}>
+                🧭 {dil === "en" ? "drift" : "gezinti"}
+              </button>
+              <button onClick={() => { setNavAcik(false); setNotAcik(true); }} className="menu-kalem press">✍ {dil === "en" ? "leave a note" : "not bırak"}</button>
+            </div>
+
+            <p className="menu-grup">{dil === "en" ? "EXPLORE" : "KEŞFET"}</p>
+            <div className="grid grid-cols-2 gap-2">
+              <Link href="/kesif" className="menu-kalem" onClick={() => setNavAcik(false)}>🎧 {t("nav.kesif")}</Link>
+              <Link href="/ulke" className="menu-kalem" onClick={() => setNavAcik(false)}>🗺 atlas</Link>
+              <Link href="/arsiv" className="menu-kalem" onClick={() => setNavAcik(false)}>⏳ {dil === "en" ? "time machine" : "zaman makinesi"}</Link>
+              <Link href="/nabiz" className="menu-kalem" onClick={() => setNavAcik(false)}>📈 {t("nav.nabiz")}</Link>
+              <Link href="/endeks" className="menu-kalem" onClick={() => setNavAcik(false)}>📰 {dil === "en" ? "radio index" : "radyo endeksi"}</Link>
+              <Link href="/rekorlar" className="menu-kalem" onClick={() => setNavAcik(false)}>🎖 {dil === "en" ? "records" : "rekorlar"}</Link>
+              <Link href="/senkron" className="menu-kalem" onClick={() => setNavAcik(false)}>⚡ {dil === "en" ? "sync moments" : "senkron defteri"}</Link>
+              <Link href="/gece" className="menu-kalem" onClick={() => setNavAcik(false)}>🌙 {dil === "en" ? "3 AM chart" : "gece 3 listesi"}</Link>
+              <Link href="/oyun" className="menu-kalem" onClick={() => setNavAcik(false)}>🎮 {dil === "en" ? "games" : "oyunlar"}</Link>
+              <Link href="/fal" className="menu-kalem" onClick={() => setNavAcik(false)}>🔮 {dil === "en" ? "fortune" : "frekans falı"}</Link>
+              <Link href="/kose" className="menu-kalem" onClick={() => setNavAcik(false)}>✒ {t("nav.kose")}</Link>
+            </div>
+
+            <p className="menu-grup">{dil === "en" ? "YOURS" : "SENİN"}</p>
             <div className="grid grid-cols-2 gap-2">
               {!kuruluMu() && (
                 <button
@@ -2274,26 +2248,17 @@ export default function NowList() {
                   📲 {dil === "en" ? "install as an app" : "uygulama gibi kur"}
                 </button>
               )}
-              <button onClick={() => { setNavAcik(false); setTakipAcik(true); }} className="menu-kalem press">
-                🔔 {dil === "en" ? "follow artists" : "sanatçı takip"}
-              </button>
-              <button onClick={() => { setNavAcik(false); setKasaAcik(true); }} className="menu-kalem press">
-                🔐 {dil === "en" ? "memory code" : "hafıza kodum"}
-              </button>
-              <button onClick={() => { setNavAcik(false); setFrekansAcik(true); }} className="menu-kalem press">
-                {t("nav.frekansim")}
-              </button>
-              <button onClick={() => { setNavAcik(false); setAvAcik(true); }} className="menu-kalem press">
-                {t("nav.avlarim")}
-              </button>
-              <Link href="/senkron" className="menu-kalem" onClick={() => setNavAcik(false)}>⚡ {dil === "en" ? "sync moments" : "senkron defteri"}</Link>
-              <Link href="/gece" className="menu-kalem" onClick={() => setNavAcik(false)}>🌙 {dil === "en" ? "3 AM chart" : "gece 3 listesi"}</Link>
-              <Link href="/kesif" className="menu-kalem" onClick={() => setNavAcik(false)}>{t("nav.kesif")}</Link>
-              <Link href="/ulke" className="menu-kalem" onClick={() => setNavAcik(false)}>atlas</Link>
-              <Link href="/nabiz" className="menu-kalem" onClick={() => setNavAcik(false)}>{t("nav.nabiz")}</Link>
-              <Link href="/arsiv" className="menu-kalem" onClick={() => setNavAcik(false)}>{t("nav.arsiv")}</Link>
-              <Link href="/kose" className="menu-kalem" onClick={() => setNavAcik(false)}>{t("nav.kose")}</Link>
-              <Link href="/hakkinda" className="menu-kalem" onClick={() => setNavAcik(false)}>{t("nav.gelistirici")}</Link>
+              <button onClick={() => { setNavAcik(false); setTakipAcik(true); }} className="menu-kalem press">🔔 {dil === "en" ? "follow artists" : "sanatçı takip"}</button>
+              <button onClick={() => { setNavAcik(false); setAvAcik(true); }} className="menu-kalem press">🎣 {t("nav.avlarim")}</button>
+              <button onClick={() => { setNavAcik(false); setFrekansAcik(true); }} className="menu-kalem press">📻 {t("nav.frekansim")}</button>
+              <button onClick={() => { setNavAcik(false); setKasaAcik(true); }} className="menu-kalem press">🔐 {dil === "en" ? "memory code" : "hafıza kodum"}</button>
+              <Link href="/hakkinda" className="menu-kalem col-span-2" onClick={() => setNavAcik(false)}>ℹ {t("nav.gelistirici")}</Link>
+            </div>
+
+            <p className="menu-grup">{dil === "en" ? "LOOK" : "GÖRÜNÜM"}</p>
+            <div className="flex items-center gap-4 px-1 text-sm" style={{ color: "var(--muted)" }}>
+              <ThemeToggle />
+              <ToneToggle />
             </div>
           </div>
         </div>

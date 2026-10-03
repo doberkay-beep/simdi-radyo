@@ -1,6 +1,6 @@
 import { ImageResponse } from "next/og";
 import { getSupabase } from "@/lib/supabase";
-import { BOYUT, boyutAl, RENK, kes, fontlar, KART_ONBELLEK, zemin } from "@/lib/kart-ortak";
+import { BOYUT, boyutAl, RENK, kes, fontlar, KART_ONBELLEK, zemin, STORY_DOLGU } from "@/lib/kart-ortak";
 
 // 📻 RADYO ROZETİ — sanatçının "bu hafta Türkiye radyolarında N kez çaldım"
 // kartı. Sanatçı/menajer story'sinde paylaşsın diye: kendi kitlesini ŞİMDİ'ye taşır.
@@ -53,7 +53,7 @@ export async function GET(req: Request, ctx: { params: Promise<{ slug: string }>
         justifyContent: "space-between", alignItems: og ? "center" : "stretch",
         ...zemin(og),
         color: RENK.metin, fontFamily: "Govde",
-        padding: og ? "56px 72px" : story ? "150px 90px 130px" : "96px 90px 84px",
+        padding: og ? "56px 72px" : story ? STORY_DOLGU : "96px 90px 84px",
       }}
     >
       {/* Üst: künye + sanatçı */}

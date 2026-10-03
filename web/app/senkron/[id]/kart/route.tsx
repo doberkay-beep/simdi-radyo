@@ -1,6 +1,6 @@
 import { ImageResponse } from "next/og";
 import { senkronAl, yayilma, trZaman } from "@/lib/senkron";
-import { BOYUT, boyutAl, RENK, kes, fontlar, KART_ONBELLEK, zemin } from "@/lib/kart-ortak";
+import { BOYUT, boyutAl, RENK, kes, fontlar, KART_ONBELLEK, zemin, STORY_DOLGU } from "@/lib/kart-ortak";
 
 // ⚡ SENKRON KARTI — "N radyo, aynı anda, birbirinden habersiz".
 export async function GET(req: Request, ctx: { params: Promise<{ id: string }> }) {
@@ -20,7 +20,7 @@ export async function GET(req: Request, ctx: { params: Promise<{ id: string }> }
       width: "100%", height: "100%", display: "flex", flexDirection: og ? "row" : "column",
       justifyContent: "space-between", alignItems: og ? "center" : "stretch",
       ...zemin(og), color: RENK.metin, fontFamily: "Govde",
-      padding: og ? "56px 72px" : story ? "150px 90px 130px" : "96px 90px 84px",
+      padding: og ? "56px 72px" : story ? STORY_DOLGU : "96px 90px 84px",
     }}>
       <div style={{ display: "flex", flexDirection: "column", maxWidth: og ? 600 : "100%" }}>
         <div style={{ display: "flex", fontSize: og ? 22 : 30, letterSpacing: 8, color: RENK.sicak }}>⚡ SENKRON ANI</div>

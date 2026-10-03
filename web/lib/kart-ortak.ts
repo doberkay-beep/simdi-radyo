@@ -36,6 +36,10 @@ export async function fontlar() {
   ];
 }
 
+// Story güvenli alanı: Instagram üstte ~250 px (ad, ilerleme çubuğu), altta ~420 px
+// (yanıt kutusu, bağlantı etiketi) kendi arayüzünü çizer — içerik bunların dışında kalır.
+export const STORY_DOLGU = "250px 90px 420px";
+
 export const KART_ONBELLEK = { "Cache-Control": "public, s-maxage=3600, stale-while-revalidate=86400" };
 
 export function zemin(og: boolean) {

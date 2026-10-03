@@ -22,10 +22,11 @@ Dosyalar: iPhone → Dosyalar → iCloud Drive → Masaüstü → simdi-radyo �
 İpucu: sanatçı story'lerinde @bahsetme çıkartması şart — sanatçıya bildirim düşer,
 "story'ne ekle" düğmesiyle tek dokunuşta kendi story'sine alabilir.
 
-## Endeks story'si
-Eylül Endeksi donduruluyor (endeks-arsiv.sql). SQL çalışınca 07-endeks story'si
-dondurulmuş sayılarla üretilecek.
+## Endeks story'si (kurumsal hesap)
+**07-eylul-endeksi.png** — dondurulmuş Eylül: 52.204 çalma; "Ara Beni" ve "Bad Times"
+50'şer kez berabere. 2. gönderinin açıklamasındaki düzeltme notuyla aynı sayılar.
+BAĞLANTI → necaliyor.co/endeks
 
 ## Not
-Story'deki rozet sayıları canlı ("bu hafta"); gün içinde artabilir. Bu doğal —
+Story'deki rozet sayıları canlı ("son 7 gün", yalnız Türk radyoları); gün içinde artabilir. Bu doğal —
 gönderilerdeki sayılar "3 Ekim itibarıyla" diye tarihli.

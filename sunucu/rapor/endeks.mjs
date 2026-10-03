@@ -28,9 +28,13 @@ const [yy, mm] = ay.split("-").map(Number);
 const ayAdi = new Intl.DateTimeFormat("tr-TR", { month: "long", year: "numeric", timeZone: "Europe/Istanbul" })
   .format(new Date(Date.UTC(yy, mm - 1, 15)));
 
-// Yayınlanan ay DONAR: endeks_dondur hesaplayıp endeks_arsiv'e yazar; site ve açık veri
-// bundan sonra hep bu donmuş sonucu gösterir (katalog sonradan değişse bile).
-const { data: o, error } = await sb.rpc("endeks_dondur", { p_ay: ay, p_aciklama: "aylık bot — otomatik yayın" });
+// Yeni ay (argümansız, ayın 1'i): endeks_dondur hesaplar ve endeks_arsiv'e YAZAR — site ve
+// açık veri bundan sonra hep bu donmuş sonucu gösterir. Belirli ay argümanla verilirse
+// (kartı yeniden çizmek için) donmuş kayıt OKUNUR, üzerine yazılmaz.
+const yenidenCiz = /^\d{4}-\d{2}$/.test(process.argv[2] ?? "");
+const { data: o, error } = yenidenCiz
+  ? await sb.rpc("endeks_ozet", { p_ay: ay })
+  : await sb.rpc("endeks_dondur", { p_ay: ay, p_aciklama: "aylık bot — otomatik yayın" });
 if (error || !o?.liste?.length) { console.error("endeks alınamadı:", error?.message ?? "boş"); process.exit(1); }
 const { liste, toplam, sanatci } = o;
 

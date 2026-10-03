@@ -7,12 +7,13 @@ export const alt = "ŞİMDİ — radyoda şu an ne çalıyor";
 export const size = { width: 1200, height: 630 };
 export const contentType = "image/png";
 
+// Marka işareti "sinyal çubukları" (kor → krem) — profil resmi ve site ikonuyla aynı.
 const BARS = [
-  { h: 150, c: "#ff8a5b" },
-  { h: 250, c: "#ffa257" },
-  { h: 340, c: "#ffba52" },
-  { h: 200, c: "#ffc94e" },
-  { h: 290, c: "#ffd24d" },
+  { h: 150, c: "#e5382c" },
+  { h: 250, c: "#ee5a3f" },
+  { h: 340, c: "#ff9b76" },
+  { h: 200, c: "#f6b896" },
+  { h: 290, c: "#f2e6da" },
 ];
 
 export default async function Image() {
@@ -27,7 +28,7 @@ export default async function Image() {
           display: "flex",
           flexDirection: "column",
           justifyContent: "center",
-          background: "#0a0a0b",
+          background: "#0b0708",
           color: "#ececee",
           padding: "0 96px",
           fontFamily: "Liberation Sans",

@@ -33,7 +33,7 @@ export async function GET(req: Request, ctx: { params: Promise<{ slug: string }>
       padding: og ? "56px 72px" : story ? STORY_DOLGU : "96px 90px 84px",
     }}>
       <div style={{ display: "flex", flexDirection: "column", maxWidth: og ? 560 : "100%" }}>
-        <div style={{ display: "flex", fontSize: og ? 22 : 30, letterSpacing: 8, color: RENK.sicak }}>📻 BU HAFTA</div>
+        <div style={{ display: "flex", fontSize: og ? 22 : 30, letterSpacing: 8, color: RENK.sicak }}>📻 SON 7 GÜNDE</div>
         <div style={{ display: "flex", fontFamily: "Baslik", fontSize: adBoy, lineHeight: 1.02, marginTop: og ? 16 : 28, letterSpacing: -2 }}>
           {kes(o.ad, 26)}
         </div>

@@ -113,8 +113,8 @@ export default async function Sayfa({ params }: { params: Promise<{ slug: string
             dosyaAdi={`simdi-${slug}`}
             etiket="📣 radyo rozeti"
             baslik="Sanatçısı, menajeri ya da hayranı mısın? Bunu paylaş."
-            aciklama={`Anket değil, gerçek sayım: ${o.ad} ${o.kez7 > 0 ? "bu hafta" : "son 30 günde"} Türkiye radyolarında ${o.kez7 > 0 ? o.kez7 : o.kez30} kez çaldı. Rozet her saat tazelenir.`}
-            metin={`${o.ad} ${o.kez7 > 0 ? "bu hafta" : "son 30 günde"} Türkiye radyolarında ${o.kez7 > 0 ? o.kez7 : o.kez30} kez çaldı 📻 Gerçek sayım: https://necaliyor.co/sanatci/${slug}`}
+            aciklama={`Anket değil, gerçek sayım: ${o.ad} ${o.kez7 > 0 ? "son 7 günde" : "son 30 günde"} Türkiye radyolarında ${o.kez7 > 0 ? o.kez7 : o.kez30} kez çaldı. Rozet her saat tazelenir.`}
+            metin={`${o.ad} ${o.kez7 > 0 ? "son 7 günde" : "son 30 günde"} Türkiye radyolarında ${o.kez7 > 0 ? o.kez7 : o.kez30} kez çaldı 📻 Gerçek sayım: https://necaliyor.co/sanatci/${slug}`}
           />
         )}
 

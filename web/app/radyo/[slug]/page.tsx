@@ -383,9 +383,9 @@ export default async function StationPage({ params }: { params: Promise<{ slug: 
               taban={`/radyo/${slug}/rozet`}
               dosyaAdi={`simdi-${slug}-karne`}
               etiket="📻 haftalık karne"
-              baslik={`${s.name} bu hafta ${karne.farkliSarki.toLocaleString("tr-TR")} farklı şarkı çaldı.`}
+              baslik={`${s.name} son 7 günde ${karne.farkliSarki.toLocaleString("tr-TR")} farklı şarkı çaldı.`}
               aciklama={`Radyoda çalışıyor musun, dinleyicisi misin? Karneyi paylaş.${karne.sarki ? ` En sevdiği şarkı: “${karne.sarki.title}” — ${karne.sarki.artist}.` : ""}`}
-              metin={`📻 ${s.name} bu hafta ${karne.farkliSarki.toLocaleString("tr-TR")} farklı şarkı çaldı${karne.sarki ? `; en sevdiği “${karne.sarki.title}” (${karne.sarki.artist})` : ""}. Haftalık karne: https://necaliyor.co/radyo/${slug}`}
+              metin={`📻 ${s.name} son 7 günde ${karne.farkliSarki.toLocaleString("tr-TR")} farklı şarkı çaldı${karne.sarki ? `; en sevdiği “${karne.sarki.title}” (${karne.sarki.artist})` : ""}. Haftalık karne: https://necaliyor.co/radyo/${slug}`}
             />
           </div>
         )}

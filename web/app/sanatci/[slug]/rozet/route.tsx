@@ -2,7 +2,7 @@ import { ImageResponse } from "next/og";
 import { getSupabase } from "@/lib/supabase";
 import { BOYUT, boyutAl, RENK, kes, fontlar, KART_ONBELLEK, zemin, STORY_DOLGU } from "@/lib/kart-ortak";
 
-// 📻 RADYO ROZETİ — sanatçının "bu hafta Türkiye radyolarında N kez çaldım"
+// 📻 RADYO ROZETİ — sanatçının "son 7 günde Türkiye radyolarında N kez çaldım"
 // kartı. Sanatçı/menajer story'sinde paylaşsın diye: kendi kitlesini ŞİMDİ'ye taşır.
 //   ?boyut=post  1080×1350 (varsayılan, IG/X gönderisi)
 //   ?boyut=story 1080×1920 (IG story)
@@ -36,7 +36,7 @@ export async function GET(req: Request, ctx: { params: Promise<{ slug: string }>
   // dönemden gelir (haftalık kırılım yoksa dürüstçe 30 güne düşülür).
   const haftalik = o.kez7 > 0 && o.istasyonSay7 !== undefined;
   const sayi = haftalik ? o.kez7 : o.kez30;
-  const donem = haftalik ? "BU HAFTA" : "SON 30 GÜNDE";
+  const donem = haftalik ? "SON 7 GÜNDE" : "SON 30 GÜNDE";
   const istasyonSay = haftalik ? o.istasyonSay7! : o.istasyonSay;
   const zirve = (haftalik ? o.sarkilar7 : o.sarkilar)?.[0];
   const istasyonlar = ((haftalik ? o.istasyonlar7 : o.istasyonlar) ?? []).slice(0, story ? 4 : 3);

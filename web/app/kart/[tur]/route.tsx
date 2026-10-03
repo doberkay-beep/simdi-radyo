@@ -77,6 +77,7 @@ async function govde(tur: Tur, og: boolean) {
   if (tur === "rekorlar") {
     const { data } = await sb.rpc("rekorlar");
     const r = data as Rekorlar | null;
+    if (!r) throw new Error("rekorlar verisi gelmedi");
     const satir: [string, Rekor | null | undefined, (x: Rekor) => string][] = [
       ["⚡ BİR GÜNÜN REKORU", r?.gunRekoru, (x) => `tek günde ${x.kez} kez`],
       ["🌙 GECENİN KRALI", r?.geceKrali, (x) => `30 gecede ${x.kez} kez`],
@@ -101,6 +102,7 @@ async function govde(tur: Tur, og: boolean) {
   // gece
   const { data } = await sb.rpc("gece_listesi", { adet: 7 });
   const liste = (data as { artist: string; title: string; kez: number; istasyon: number }[] | null) ?? [];
+  if (!liste.length) throw new Error("gece listesi verisi gelmedi");
   return (
     <div style={{ display: "flex", flexDirection: "column", flex: 1, justifyContent: "center" }}>
       <div style={{ display: "flex", fontSize: 30, letterSpacing: 8, color: RENK.sicak }}>🌙 02:00 – 05:00 · SON 7 GECE</div>
@@ -130,13 +132,20 @@ export async function GET(req: Request, ctx: { params: Promise<{ tur: string }> 
   const b = boyutAl(req);
   const { w, h } = BOYUT[b];
   const og = b === "og";
+  // Veri gelmezse boş kart ÜRETME: 503 + önbelleğe yazma (CDN bir saat boş kart saklamasın).
+  let icerik;
+  try {
+    icerik = await govde(tur as Tur, og);
+  } catch {
+    return new Response("veri şu an alınamadı, birazdan yine dene", { status: 503, headers: { "Cache-Control": "no-store" } });
+  }
   const kart = (
     <div style={{
       width: "100%", height: "100%", display: "flex", flexDirection: "column",
       ...zemin(og), color: RENK.metin, fontFamily: "Govde",
       padding: og ? "50px 72px" : b === "story" ? "150px 90px 130px" : "90px 90px 80px",
     }}>
-      {await govde(tur as Tur, og)}
+      {icerik}
       {!og && <Alt adres={ADRES[tur as Tur]} />}
     </div>
   );

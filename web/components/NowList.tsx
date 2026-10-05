@@ -37,6 +37,7 @@ import KasaModal from "./KasaModal";
 import YukariCik from "./YukariCik";
 import SenkronBandi from "./SenkronBandi";
 import SurusModu from "./SurusModu";
+import SiirKosesi from "./SiirKosesi";
 import { KASA_OLAYI } from "@/lib/kasa";
 import SanatciRadari from "./SanatciRadari";
 import SairinFrekansi from "./SairinFrekansi";
@@ -237,6 +238,7 @@ export default function NowList() {
   const [kurAcik, setKurAcik] = useState(false); // 📲 uygulama kur sihirbazı
   const [takipAcik, setTakipAcik] = useState(false); // 🔔 sanatçı ara + takip
   const [kasaAcik, setKasaAcik] = useState(false); // 🔐 hafıza kodu
+  const [siirAcik, setSiirAcik] = useState(false); // 📖 şiir köşesi (Şiir Rafım Radyosu)
   const [surus, setSurus] = useState(false); // 🚗 sürüş modu
   const [turHepsi, setTurHepsi] = useState(false); // tür çiplerinin hepsi açık mı
   const [takipSay, setTakipSay] = useState(0); // takip edilen sanatçı sayısı (hap parlasın)
@@ -2235,6 +2237,7 @@ export default function NowList() {
               <Link href="/oyun" className="menu-kalem" onClick={() => setNavAcik(false)}>🎮 {dil === "en" ? "games" : "oyunlar"}</Link>
               <Link href="/fal" className="menu-kalem" onClick={() => setNavAcik(false)}>🔮 {dil === "en" ? "fortune" : "frekans falı"}</Link>
               <Link href="/kose" className="menu-kalem" onClick={() => setNavAcik(false)}>✒ {t("nav.kose")}</Link>
+              <button onClick={() => { setNavAcik(false); audioRef.current?.pause(); setPlaying(null); setSiirAcik(true); }} className="menu-kalem press col-span-2">📖 {dil === "en" ? "poetry corner · Şiir Rafım Radio" : "şiir köşesi · Şiir Rafım Radyosu"}</button>
             </div>
 
             <p className="menu-grup">{dil === "en" ? "YOURS" : "SENİN"}</p>
@@ -2349,6 +2352,7 @@ export default function NowList() {
       {/* 🔔 Sanatçı ara + takip · 🔐 hafıza kodu · ⬆ yukarı çık */}
       <SanatciTakip acik={takipAcik} kapat={() => setTakipAcik(false)} dil={dil} kurAc={() => setKurAcik(true)} />
       <KasaModal acik={kasaAcik} kapat={() => setKasaAcik(false)} dil={dil} />
+      <SiirKosesi acik={siirAcik} kapat={() => setSiirAcik(false)} dil={dil} />
       <YukariCik oynaticiVar={!!current} />
 
       {/* Sadece bu satırdan ses çıkar; görünmez. Kesilirse yeniden bağlanır. */}

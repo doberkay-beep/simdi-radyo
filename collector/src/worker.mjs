@@ -36,6 +36,23 @@ const lastRaw = new Map();
 const lastWrite = new Map();
 // station_id → üst üste başarısızlık sayısı
 const failCount = new Map();
+// station_id → Map(başlık → son arşive yazılma zamanı). Bazı yayınlar başlığı
+// şarkı ↔ slogan ↔ program adı arasında gidip getiriyor (A-B-A); her dönüşte
+// aynı parça plays'e yeniden yazılıyordu (5 Eki ölçümü: saatte ~880 satır, %16).
+// Aynı başlık TEKRAR_MS içinde zaten arşivlendiyse yeni satır açılmaz.
+const recent = new Map();
+const TEKRAR_MS = Number(process.env.TEKRAR_MS) || 20 * 60_000;
+function yakindaYazildi(stationId, clean, now) {
+  const m = recent.get(stationId);
+  if (!m) return false;
+  for (const [t, ts] of m) if (now - ts > TEKRAR_MS) m.delete(t);
+  return m.has(clean);
+}
+function yazildiIsaretle(stationId, clean, now) {
+  let m = recent.get(stationId);
+  if (!m) recent.set(stationId, (m = new Map()));
+  m.set(clean, now);
+}
 
 async function probeAndStore(station) {
   let res;
@@ -87,11 +104,24 @@ async function probeAndStore(station) {
   }
 
   const parsed = parseTitle(clean);
+  // Gidip-gelen başlık: yakın zamanda arşivlenmiş parça geri döndüyse arşive
+  // yeniden yazma; yalnız "şimdi çalan"ı güncelle.
+  if (yakindaYazildi(station.id, clean, now)) {
+    try {
+      await upsertNowPlaying(station.id, parsed);
+      lastRaw.set(station.id, clean);
+      lastWrite.set(station.id, now);
+    } catch (err) {
+      log(`! ${station.slug} tazelenemedi:`, err.message);
+    }
+    return;
+  }
   try {
     await insertPlay(station.id, parsed); // arşive ekle
     await upsertNowPlaying(station.id, parsed); // "şimdi çalan"ı güncelle
     lastRaw.set(station.id, clean);
     lastWrite.set(station.id, now);
+    yazildiIsaretle(station.id, clean, now);
     log(`♪ ${station.slug}: ${parsed.artist} — ${parsed.title}`);
   } catch (err) {
     // Yazma hatasında lastRaw güncellenmez ki sonraki turda tekrar denensin.

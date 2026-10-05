@@ -64,6 +64,16 @@ export function normalizeTitle(rawTitle, stationName = "") {
 
   const l = low(s);
 
+  // XML/HTML parçası gönderen yayınlar (ör. radio-comercial) → çöp.
+  if (/^<(\?xml|[a-z!])/i.test(s)) return "";
+  // "Şarkı~Sanatçı~~1970~~151~2026-10-04T02:09:15~…" gibi ~ ile ayrılmış, içinde
+  // sayaç/zaman damgası taşıyan biçim: her yoklamada değişip aynı parçayı
+  // tekrar tekrar yazdırıyordu (italia-italia-70). Kararlı "Sanatçı - Şarkı"ya indir.
+  if (/~/.test(s) && /\d{4}-\d\d-\d\dT\d\d:\d\d|~~/.test(s)) {
+    const [baslik, sanatci] = s.split("~").map((x) => x.trim());
+    s = sanatci && baslik ? `${sanatci} - ${baslik}` : baslik || "";
+    if (!s) return "";
+  }
   // Sadece bir URL ise çöp.
   if (/^(https?:\/\/|www\.)\S+$/i.test(s)) return "";
   // Bilinen çöp kalıpları.

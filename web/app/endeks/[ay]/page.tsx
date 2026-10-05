@@ -46,6 +46,12 @@ export default async function Sayfa({ params }: { params: Promise<{ ay: string }
       {o.devam && (
         <p className="epigraf mt-2 text-sm">sayım sürüyor — ay kapanınca bu sayfa resmileşir.</p>
       )}
+      {ay < "2026-10" && (
+        <p className="mt-2 text-sm" style={{ color: "var(--muted)" }}>
+          📏 Bu ayın sayımı aralıklı örneklemedir (kesintisiz sayım 1 Ekim 2026&apos;da başladı): toplam,
+          sonraki aylarla karşılaştırılamaz; sıralama karşılaştırılabilir.
+        </p>
+      )}
 
       <div className="mt-6 grid grid-cols-3 gap-3 text-center">
         <div className="rounded-2xl border p-4" style={{ borderColor: "var(--line-hi)" }}>

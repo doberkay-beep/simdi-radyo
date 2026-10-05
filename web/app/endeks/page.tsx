@@ -67,6 +67,14 @@ export default async function Sayfa() {
         ))}
       </div>
 
+      {/* Yöntem notu: 1 Ekim 2026'dan önce toplayıcı aralıklı çalışıyordu (GitHub Actions,
+          ~68 dk gecikme) ve bazı istasyonlar yanlışlıkla kapalıydı; 30 Eyl'de sunucuya taşındı. */}
+      <p className="mt-4 rounded-2xl border p-4 text-sm leading-relaxed" style={{ borderColor: "var(--line)", color: "var(--muted)" }}>
+        <strong style={{ color: "var(--fg)" }}>📏 Yöntem notu:</strong> 1 Ekim 2026&apos;dan itibaren sayım
+        7/24 kesintisiz yapılıyor. Ağustos ve Eylül 2026 sayımları aralıklı örneklemedir; bu yüzden
+        ay toplamları birbiriyle karşılaştırılamaz, sıralamalar karşılaştırılabilir.
+      </p>
+
       <section className="mt-10 rounded-2xl border p-5" style={{ borderColor: "var(--line-hi)" }}>
         <h2 className="mono text-[11px] font-bold uppercase tracking-[0.2em]" style={{ color: "var(--glow-hi)" }}>
           📂 Açık veri

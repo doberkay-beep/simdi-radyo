@@ -43,7 +43,7 @@ export default function Archive() {
 
   async function araYap(term: string) {
     const t = term.trim();
-    if (t.length < 2) {
+    if (t.length < 3) {
       setAraRows(null);
       setAraStatus("idle");
       return;

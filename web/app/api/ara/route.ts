@@ -8,7 +8,7 @@ export const dynamic = "force-dynamic";
 export async function GET(request: Request) {
   const { searchParams } = new URL(request.url);
   const q = (searchParams.get("q") || "").trim();
-  if (q.length < 2) return json({ q, rows: [], toplam: 0 });
+  if (q.length < 3) return json({ q, rows: [], toplam: 0 }); // 2 harfli arama tüm arşivi tarıyordu
 
   const supabase = getSupabase();
   const like = `%${q.replace(/[%_]/g, "")}%`;
@@ -46,6 +46,6 @@ export async function GET(request: Request) {
 
   return json(
     { q, rows, toplam: rows.length },
-    { headers: { "Cache-Control": "public, s-maxage=30, stale-while-revalidate=60" } },
+    { headers: { "Cache-Control": "public, s-maxage=600, stale-while-revalidate=1800" } },
   );
 }

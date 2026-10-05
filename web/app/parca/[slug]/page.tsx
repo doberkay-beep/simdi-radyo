@@ -6,7 +6,7 @@ import { parcaSlug } from "@/lib/parca";
 
 // Parça sayfası — "X şarkısı hangi radyoda çaldı" uzun-kuyruk SEO motoru.
 // İnce içerik riskine karşı: yalnızca ≥2 kez çalınmış parçalar sayfa alır.
-export const revalidate = 300;
+export const revalidate = 21600; // 6 saat — her yenilemede tam tablo taraması (ILIKE) yapıyor
 
 const DEFAULT_ACCENT = "#6b7280";
 const pad = (n: number) => String(n).padStart(2, "0");

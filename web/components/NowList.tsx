@@ -5,6 +5,7 @@ import Link from "next/link";
 import ThemeToggle from "./ThemeToggle";
 import ToneToggle from "./ToneToggle";
 import KonsolRaylar from "./KonsolRaylar";
+import { useAnaOzet, CanliSayac, CanliListe, KesifKartlari } from "./CanliVitrin";
 import { kaynagiCalistir, hlsYik } from "@/lib/cal";
 import { dinleyiciKatil, simdiDinle, type CanliKanal } from "@/lib/canli";
 import { temizMetin } from "@/lib/cop";
@@ -239,6 +240,10 @@ export default function NowList() {
   const [takipAcik, setTakipAcik] = useState(false); // 🔔 sanatçı ara + takip
   const [kasaAcik, setKasaAcik] = useState(false); // 🔐 hafıza kodu
   const [siirAcik, setSiirAcik] = useState(false); // 📖 şiir köşesi (Şiir Rafım Radyosu)
+  // Canlı vitrin: ana_ozet satırı + sayfa açıkken gelen gerçek şarkı değişimleri (TR bandı)
+  const anaOzet = useAnaOzet();
+  const [canliArtis, setCanliArtis] = useState(0);
+  const artisRef = useRef(0);
   const [surus, setSurus] = useState(false); // 🚗 sürüş modu
   const [turHepsi, setTurHepsi] = useState(false); // tür çiplerinin hepsi açık mı
   const [takipSay, setTakipSay] = useState(0); // takip edilen sanatçı sayısı (hap parlasın)
@@ -518,8 +523,17 @@ export default function NowList() {
           });
         }, 4200);
         setStations((prev) =>
-          prev.map((s) =>
-            s.id === d.station_id
+          prev.map((s) => {
+            if (
+              s.id === d.station_id &&
+              s.band === "tr" &&
+              temizMetin(d.title) &&
+              (s.nowPlaying?.title !== temizMetin(d.title) || s.nowPlaying?.artist !== temizMetin(d.artist))
+            ) {
+              artisRef.current += 1;
+              setTimeout(() => setCanliArtis(artisRef.current), 0);
+            }
+            return s.id === d.station_id
               ? {
                   ...s,
                   nowPlaying: {
@@ -529,8 +543,8 @@ export default function NowList() {
                     updatedAt: d.updated_at,
                   },
                 }
-              : s,
-          ),
+              : s;
+          }),
         );
       },
       (b) => {
@@ -1160,6 +1174,8 @@ export default function NowList() {
       {/* Masaüstü konsol rayları — geniş ekranda yan boşluğu doldurur (≥1280px). */}
       <KonsolRaylar
         stations={stations}
+        anaOzet={anaOzet}
+        canliArtis={canliArtis}
         favSlugs={Array.from(favs)}
         playing={playing}
         onTune={(slug) => {
@@ -1456,6 +1472,15 @@ export default function NowList() {
             if (st) { setUlke(null); setRegion("all"); toggle(st); }
           }}
         />
+
+        {/* Canlı vitrin (dar ekran) — geniş ekranda aynı içerik yan raylarda */}
+        <div className="mb-4 grid gap-3 xl:hidden">
+          <CanliSayac veri={anaOzet} artis={canliArtis} kisa />
+          <CanliListe veri={anaOzet} kisa />
+        </div>
+
+        {/* Keşif kartları — menüde kaybolan en ilgi çekici içerikler */}
+        <KesifKartlari />
 
         {/* Arama */}
         <input
@@ -2228,12 +2253,7 @@ export default function NowList() {
             <div className="grid grid-cols-2 gap-2">
               <Link href="/kesif" className="menu-kalem" onClick={() => setNavAcik(false)}>🎧 {t("nav.kesif")}</Link>
               <Link href="/ulke" className="menu-kalem" onClick={() => setNavAcik(false)}>🗺 atlas</Link>
-              <Link href="/arsiv" className="menu-kalem" onClick={() => setNavAcik(false)}>⏳ {dil === "en" ? "time machine" : "zaman makinesi"}</Link>
               <Link href="/nabiz" className="menu-kalem" onClick={() => setNavAcik(false)}>📈 {t("nav.nabiz")}</Link>
-              <Link href="/endeks" className="menu-kalem" onClick={() => setNavAcik(false)}>📰 {dil === "en" ? "radio index" : "radyo endeksi"}</Link>
-              <Link href="/rekorlar" className="menu-kalem" onClick={() => setNavAcik(false)}>🎖 {dil === "en" ? "records" : "rekorlar"}</Link>
-              <Link href="/senkron" className="menu-kalem" onClick={() => setNavAcik(false)}>⚡ {dil === "en" ? "sync moments" : "senkron defteri"}</Link>
-              <Link href="/gece" className="menu-kalem" onClick={() => setNavAcik(false)}>🌙 {dil === "en" ? "3 AM chart" : "gece 3 listesi"}</Link>
               <Link href="/oyun" className="menu-kalem" onClick={() => setNavAcik(false)}>🎮 {dil === "en" ? "games" : "oyunlar"}</Link>
               <Link href="/fal" className="menu-kalem" onClick={() => setNavAcik(false)}>🔮 {dil === "en" ? "fortune" : "frekans falı"}</Link>
               <Link href="/kose" className="menu-kalem" onClick={() => setNavAcik(false)}>✒ {t("nav.kose")}</Link>

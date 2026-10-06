@@ -4,6 +4,7 @@ import { DENEMELER } from "@/lib/denemeler";
 import { TURLER } from "@/lib/turler";
 import { doluUlkeler, ulkeSlug, ulkeSlugEn } from "@/lib/ulkeler";
 import { endeksAylari } from "@/lib/endeks";
+import { haftalar } from "@/lib/rapor";
 
 // Aktif istasyonları da haritaya koy → Google her radyonun sayfasını indeksler.
 export const revalidate = 3600;
@@ -28,6 +29,8 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     { url: BASE, changeFrequency: "hourly", priority: 1 },
     { url: `${BASE}/kesif`, changeFrequency: "daily", priority: 0.8 },
     { url: `${BASE}/endeks`, changeFrequency: "daily", priority: 0.9 },
+    { url: `${BASE}/rapor`, changeFrequency: "daily", priority: 0.9 },
+    ...haftalar().slice(1).map((h) => ({ url: `${BASE}/rapor/${h}`, changeFrequency: "weekly" as const, priority: 0.6 })),
     ...endeksAylari().map((ay) => ({
       url: `${BASE}/endeks/${ay}`,
       changeFrequency: "daily" as const,

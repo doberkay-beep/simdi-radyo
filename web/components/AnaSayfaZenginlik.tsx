@@ -141,6 +141,7 @@ const KARTLAR: Kart[] = [
   { href: "/oyun/nereden", ikon: "🌍", tr: ["Nereden Çalıyor?", "Dünya radyosunu dinle, ülkesini bil.", "Oyna"], en: ["Where's It From?", "Listen to a world station, guess the country.", "Play"] },
   { href: "/arsiv", ikon: "⏳", tr: ["Zaman Makinesi", "Geçmişte o saatte hangi radyo ne çaldı?", "Geçmişe git"], en: ["Time Machine", "What played on which station back then?", "Go back"] },
   { href: "/senkron", ikon: "⚡", tr: ["Senkron Defteri", "Birbirinden habersiz radyolar, aynı şarkı, aynı dakika.", "Defteri aç"], en: ["Sync Moments", "Unconnected stations, same song, same minute.", "Open"] },
+  { href: "/rapor", ikon: "📊", tr: ["Haftalık Radyo Raporu", "Bu hafta Türkiye radyolarında en çok çalan 20 şarkı.", "Rapora bak"], en: ["Weekly Radio Report", "This week's top 20 on Turkish radio.", "See report"] },
   { href: "/endeks", ikon: "📰", tr: ["Radyo Endeksi", "Ayın gerçek listesi: 7/24 sayımla.", "Endekse bak"], en: ["Radio Index", "The month's real chart, counted 24/7.", "See index"] },
 ];
 export const KESIF_ARALIK = 8;

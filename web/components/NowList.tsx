@@ -1735,6 +1735,7 @@ export default function NowList() {
             {
               ad: en ? "EXPLORE" : "KEŞFET",
               ogeler: [
+                <Link key="rapor" href="/rapor" prefetch={false}>{en ? "WEEKLY REPORT" : "HAFTALIK RAPOR"}</Link>,
                 <Link key="kesif" href="/kesif">{en ? "DISCOVER" : "KEŞİF"}</Link>,
                 <Link key="oyun" href="/oyun">{en ? "GAMES" : "OYUNLAR"}</Link>,
                 <Link key="fal" href="/fal">{en ? "FORTUNE" : "FREKANS FALI"}</Link>,

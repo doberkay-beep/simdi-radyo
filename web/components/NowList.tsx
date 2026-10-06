@@ -1,11 +1,12 @@
 "use client";
 
-import { useEffect, useMemo, useRef, useState } from "react";
+import { Fragment, useEffect, useMemo, useRef, useState } from "react";
 import Link from "next/link";
 import ThemeToggle from "./ThemeToggle";
 import ToneToggle from "./ToneToggle";
 import KonsolRaylar from "./KonsolRaylar";
 import { useAnaOzet, CanliSayac, CanliListe } from "./CanliVitrin";
+import { TurkiyeSuAn, KesifKarti, KESIF_ARALIK, KESIF_SAYI } from "./AnaSayfaZenginlik";
 import { kaynagiCalistir, hlsYik } from "@/lib/cal";
 import { dinleyiciKatil, simdiDinle, type CanliKanal } from "@/lib/canli";
 import { temizMetin } from "@/lib/cop";
@@ -1493,6 +1494,15 @@ export default function NowList() {
           <CanliListe veri={anaOzet} kisa />
         </div>
 
+        {/* Türkiye şu an — canlı listeden anlık gözlemler (ek sorgu yok) */}
+        <TurkiyeSuAn
+          stations={stations}
+          onTune={(slug) => {
+            const st = stations.find((x) => x.slug === slug);
+            if (st) { setUlke(null); setRegion("all"); toggle(st); }
+          }}
+        />
+
         {/* Arama */}
         <input
           ref={searchRef}
@@ -1886,8 +1896,12 @@ export default function NowList() {
             const isFav = favs.has(s.slug);
             const showHeader = grouped && shown[i - 1]?.genre !== s.genre;
 
+            // Keşif kartı: filtre/arama yokken her KESIF_ARALIK radyoda bir
+            const kesifVar = !grouped && !genre && !favOnly && !query.trim() && !sairMode && (i + 1) % KESIF_ARALIK === 0 && (i + 1) / KESIF_ARALIK <= KESIF_SAYI;
+
             return (
-              <li key={s.slug}>
+              <Fragment key={s.slug}>
+              <li>
                 {showHeader && (
                   <div
                     className="mb-1 mt-4 px-1 text-xs uppercase tracking-wide"
@@ -2018,6 +2032,13 @@ export default function NowList() {
                   </button>
                 </div>
               </li>
+              {kesifVar && (
+                <KesifKarti
+                  sira={(i + 1) / KESIF_ARALIK - 1}
+                  onSiir={() => { audioRef.current?.pause(); setPlaying(null); setSiirAcik(true); }}
+                />
+              )}
+              </Fragment>
             );
           })}
         </ul>

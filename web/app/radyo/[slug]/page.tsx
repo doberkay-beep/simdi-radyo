@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
+import { unstable_cache } from "next/cache";
 import { getSupabase } from "@/lib/supabase";
 import StationPlayer from "@/components/StationPlayer";
 import CanliParca from "@/components/CanliParca";
@@ -226,6 +227,13 @@ export async function generateMetadata({
   };
 }
 
+// Sayfa dil çerezi okuduğu için dinamik (her ziyarette çalışır). Ağır sorgular
+// bu yüzden veri katmanında önbelleklenir (7 Eki 2026 Disk IO kesintisi).
+const getSimilarC = unstable_cache(getSimilar, ["radyo-benzer"], { revalidate: 21600 });
+const getTopArtistsC = unstable_cache(getTopArtists, ["radyo-sanatci"], { revalidate: 3600 });
+const getRecentPlaysC = unstable_cache(getRecentPlays, ["radyo-son"], { revalidate: 300 });
+const getKarneC = unstable_cache(getKarne, ["radyo-karne"], { revalidate: 3600 });
+
 export default async function StationPage({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params;
   const s = await getStation(slug);
@@ -233,10 +241,12 @@ export default async function StationPage({ params }: { params: Promise<{ slug: 
   const np = await getNowPlaying(slug);
   const track = trackText(np);
   const accent = s.accent_color || DEFAULT_ACCENT;
-  const similar = await getSimilar(slug, s.genre);
-  const topArtists = await getTopArtists(slug);
-  const recent = await getRecentPlays(slug);
-  const karne = await getKarne(slug);
+  const [similar, topArtists, recent, karne] = await Promise.all([
+    getSimilarC(slug, s.genre),
+    getTopArtistsC(slug),
+    getRecentPlaysC(slug),
+    getKarneC(slug),
+  ]);
   const dil = await dilSunucu();
   const T = (k: string) => ceviri(dil, k);
   const pad2 = (n: number) => String(n).padStart(2, "0");

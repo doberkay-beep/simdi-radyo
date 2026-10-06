@@ -187,33 +187,3 @@ export function CanliListe({ veri, kisa = false }: { veri: AnaOzet | null; kisa?
     </section>
   );
 }
-
-/* Keşif kartları — menüde kaybolan en ilgi çekici altı içerik. Mobilde 2 sütun
-   alt alta (yatay kaydırma yok). */
-const KARTLAR: { href: string; ikon: string; tr: [string, string]; en: [string, string] }[] = [
-  { href: "/endeks", ikon: "📰", tr: ["Radyo Endeksi", "ayın gerçek listesi"], en: ["Radio Index", "the month's real chart"] },
-  { href: "/rekorlar", ikon: "🎖", tr: ["Rekorlar", "en çok, en uzun, en sadık"], en: ["Records", "most, longest, most loyal"] },
-  { href: "/senkron", ikon: "⚡", tr: ["Senkron Defteri", "aynı şarkı, aynı anda"], en: ["Sync Moments", "same song, same second"] },
-  { href: "/gece", ikon: "🌙", tr: ["Gece 3 Listesi", "uykusuzların şarkıları"], en: ["3 AM Chart", "songs of the sleepless"] },
-  { href: "/harita", ikon: "🌍", tr: ["Canlı Harita", "dünya şu an ne dinliyor"], en: ["Live Map", "what the world plays now"] },
-  { href: "/arsiv", ikon: "⏳", tr: ["Zaman Makinesi", "geçmişte o saat ne çaldı"], en: ["Time Machine", "what played back then"] },
-];
-
-export function KesifKartlari() {
-  const { dil } = useDil();
-  const en = dil === "en";
-  return (
-    <nav aria-label={en ? "explore" : "keşfet"} className="mb-6 grid grid-cols-2 gap-2.5 sm:grid-cols-3">
-      {KARTLAR.map((k) => {
-        const [ad, alt] = en ? k.en : k.tr;
-        return (
-          <Link key={k.href} href={k.href} className="surf press flex flex-col gap-1 p-3.5">
-            <span className="text-xl leading-none">{k.ikon}</span>
-            <span className="dial mt-1 text-[15px] uppercase tracking-[0.02em]">{ad}</span>
-            <span className="text-[12px] leading-snug" style={{ color: "var(--muted)" }}>{alt}</span>
-          </Link>
-        );
-      })}
-    </nav>
-  );
-}

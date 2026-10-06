@@ -276,6 +276,39 @@ body {
   box-shadow: 0 6px 16px -8px var(--glow);
 }
 
+/* KISAYOL RAFI (.raf.minik) — ana sayfada küçük, sakin butonlar; vurgu yalnız hover'da. */
+.raf.minik { gap: 5px; }
+.raf.minik a, .raf.minik button {
+  font-size: 10px; font-weight: 600; letter-spacing: 0.08em; padding: 7px 9px;
+  color: var(--muted);
+  border-color: var(--line-hi);
+  background: transparent;
+}
+.raf.minik a:hover, .raf.minik button:hover {
+  color: var(--fg);
+  border-color: color-mix(in srgb, var(--glow) 60%, var(--line-hi));
+  background: color-mix(in srgb, var(--glow) 8%, transparent);
+  box-shadow: none;
+}
+.raf.minik .on {
+  color: var(--bg);
+  background: linear-gradient(180deg, var(--glow-hi), var(--glow));
+  border-color: transparent;
+}
+
+/* İNCE BANT — Senkron anı / gece nöbeti: kutu değil, tek satır. */
+.ince-bant {
+  display: flex; align-items: center; gap: 10px; min-width: 0;
+  padding: 8px 0; margin-bottom: 4px;
+  border-bottom: 1px solid var(--line);
+  font-size: 13px; text-decoration: none; color: var(--fg);
+}
+.ince-bant .etiket {
+  font-family: var(--font-mono), ui-monospace, monospace; font-size: 10px; font-weight: 700;
+  letter-spacing: 0.16em; text-transform: uppercase; white-space: nowrap; color: var(--glow-hi);
+}
+.ince-bant .metin { min-width: 0; flex: 1; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+
 /* HAP butonlar — site geneli tek buton ailesi.
    .hap: kontur | .hap-dolu: zemin dolgusu | .hap-marka: kor vurgulu birincil CTA */
 .hap, .hap-dolu, .hap-marka {
@@ -319,6 +352,7 @@ body {
 @media (max-width: 639px) {
   .raf { display: flex; flex-wrap: wrap; gap: 6px; }
   .raf a, .raf button { font-size: 10.5px; padding: 8px 11px; letter-spacing: 0.1em; }
+  .raf.minik a, .raf.minik button { font-size: 10px; padding: 6px 9px; letter-spacing: 0.08em; }
 }
 
 /* 🚗 SÜRÜŞ MODU — bakmadan kullanılır: dev hedefler, yüksek kontrast. */

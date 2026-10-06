@@ -5,7 +5,7 @@ import Link from "next/link";
 import ThemeToggle from "./ThemeToggle";
 import ToneToggle from "./ToneToggle";
 import KonsolRaylar from "./KonsolRaylar";
-import { useAnaOzet, CanliSayac, CanliListe, KesifKartlari } from "./CanliVitrin";
+import { useAnaOzet, CanliSayac, CanliListe } from "./CanliVitrin";
 import { kaynagiCalistir, hlsYik } from "@/lib/cal";
 import { dinleyiciKatil, simdiDinle, type CanliKanal } from "@/lib/canli";
 import { temizMetin } from "@/lib/cop";
@@ -196,6 +196,17 @@ function trackQuery(np: NowPlaying): string | null {
 }
 
 const low = (s: string) => s.toLocaleLowerCase("tr");
+
+// Ana sayfa kısayolları — menüde kaybolan, en çok merak edilen sayfalar.
+const KISAYOLLAR: { href: string; tr: string; en: string }[] = [
+  { href: "/liste", tr: "LİSTE", en: "CHART" },
+  { href: "/endeks", tr: "ENDEKS", en: "INDEX" },
+  { href: "/harita", tr: "HARİTA", en: "MAP" },
+  { href: "/rekorlar", tr: "REKORLAR", en: "RECORDS" },
+  { href: "/senkron", tr: "SENKRON", en: "SYNC" },
+  { href: "/gece", tr: "GECE 3", en: "3 AM" },
+  { href: "/arsiv", tr: "ARŞİV", en: "ARCHIVE" },
+];
 
 export default function NowList() {
   const { t, dil } = useDil();
@@ -1286,18 +1297,21 @@ export default function NowList() {
           <Link href="/nabiz" data-on="0">{t("nav.nabiz")}<span className="sub">{t("nav.canli")}</span></Link>
         </nav>
 
-        {/* ÜÇ KAPI — dinleyici için sade: liste · harita · takip. Geri kalan her şey ☰ MENÜ'de.
+        {/* KISAYOLLAR — küçük, sakin butonlar: en ilgi çekici sayfalar tek sırada.
             Alarm, parti, uyku, gezinti yalnız AÇIKKEN durum çipi olarak burada görünür.
             Türkçe İ, text-transform'a emanet edilmez: büyük harf elle. */}
-        <nav className="raf mb-5" aria-label="kapılar">
-          <Link href="/liste">🏆 {dil === "en" ? "CHART" : "LİSTE"}</Link>
-          <Link href="/harita">🌍 {dil === "en" ? "LIVE MAP" : "HARİTA"}</Link>
+        <nav className="raf minik mb-5" aria-label="kısayollar">
+          {KISAYOLLAR.map((k) => (
+            <Link key={k.href} href={k.href}>
+              {dil === "en" ? k.en : k.tr}
+            </Link>
+          ))}
           <button
             onClick={() => setTakipAcik(true)}
             className={takipSay ? "on" : ""}
             title={dil === "en" ? "search artists, get notified when they play" : "sanatçını ara, radyoda çalınca haber al"}
           >
-            🔔 {dil === "en" ? "FOLLOW" : "TAKİP"}
+            {dil === "en" ? "FOLLOW" : "TAKİP"}
           </button>
           {alarm && (
             <button onClick={() => setAlarmAcik((v) => !v)} className="on" title={t("alarm.baslik")}>
@@ -1430,14 +1444,14 @@ export default function NowList() {
         )}
 
         {/* Günün epigrafı — boştayken yavaşça döner */}
-        {!playing && now > 0 && (
+        {!playing && now > 0 && (new Date(now).getHours() < 2 || new Date(now).getHours() >= 5) && (
           <p className="epigraf fade-in mb-5 text-lg" key={epi}>
             — {EPIGRAFLAR[epi]}
           </p>
         )}
 
         {/* KADRAN — analog ayar bandı (yalnız geniş ekranda; mobilde oynatıcı yeter) */}
-        <div className="hidden sm:block">
+        <div className="hidden pt-3 sm:block">
         <Kadran
           stations={shown.map((s) => ({
             slug: s.slug,
@@ -1478,9 +1492,6 @@ export default function NowList() {
           <CanliSayac veri={anaOzet} artis={canliArtis} kisa />
           <CanliListe veri={anaOzet} kisa />
         </div>
-
-        {/* Keşif kartları — menüde kaybolan en ilgi çekici içerikler */}
-        <KesifKartlari />
 
         {/* Arama */}
         <input

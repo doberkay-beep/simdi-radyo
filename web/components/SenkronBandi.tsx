@@ -25,19 +25,13 @@ export default function SenkronBandi() {
   const ne = dk < 2 ? "ŞU AN" : `${dk} DK ÖNCE`;
 
   return (
-    <Link
-      href={`/senkron/${an.id}`}
-      className={`senkron-bant press mb-4 block rounded-2xl border px-4 py-3 ${taze ? "np-taze" : ""}`}
-    >
-      <span className="mono block text-[10.5px] font-bold uppercase tracking-[0.2em]" style={{ color: "var(--glow-hi)" }}>
-        ⚡ SENKRON ANI · {ne} · {an.sayi} RADYO AYNI ANDA
+    <Link href={`/senkron/${an.id}`} className={`ince-bant press ${taze ? "np-taze" : ""}`}>
+      <span className="etiket">⚡ {an.sayi} RADYO<span className="hidden sm:inline"> AYNI ANDA</span></span>
+      <span className="metin">
+        <strong>{an.artist} — {an.title}</strong>{" "}
+        <span style={{ color: "var(--muted)" }}>· {an.istasyonlar.map((s) => s.name).join(" · ")}</span>
       </span>
-      <span className="mt-1 block truncate text-[15px] font-semibold">
-        {an.artist} — {an.title}
-      </span>
-      <span className="mt-0.5 block truncate text-xs" style={{ color: "var(--muted)" }}>
-        {an.istasyonlar.map((s) => s.name).join(" · ")} — birbirinden habersiz, aynı şarkı. kartı gör →
-      </span>
+      <span className="mono shrink-0 text-[10px] uppercase tracking-[0.12em]" style={{ color: "var(--muted)" }}>{ne} →</span>
     </Link>
   );
 }

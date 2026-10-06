@@ -61,19 +61,9 @@ export default function GeceNobeti() {
         className="pointer-events-none fixed inset-0 z-[5]"
         style={{ background: "radial-gradient(120% 100% at 50% 0%, transparent 52%, rgba(2,2,12,0.38))" }}
       />
-      <div
-        className="mb-5 flex items-center gap-3 rounded-lg border px-4 py-3"
-        style={{ borderColor: "var(--line)", background: "linear-gradient(135deg, rgba(30,30,60,0.25), transparent)" }}
-      >
-        <span aria-hidden className="text-lg leading-none">🌙</span>
-        <div>
-          <p className="text-[11px] font-semibold uppercase tracking-[0.18em]" style={{ color: "var(--fg)" }}>
-            {dil === "en" ? "night watch" : "gece nöbeti"} · 02–05
-          </p>
-          <p className="epigraf mt-0.5 text-sm" key={c.tr}>
-            {dil === "en" ? c.en : c.tr}
-          </p>
-        </div>
+      <div className="ince-bant">
+        <span className="etiket">🌙 {dil === "en" ? "NIGHT WATCH" : "GECE NÖBETİ"}</span>
+        <span className="metin epigraf text-[14px]" key={c.tr}>{dil === "en" ? c.en : c.tr}</span>
       </div>
     </>
   );

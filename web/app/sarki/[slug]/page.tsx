@@ -110,7 +110,7 @@ export default async function Sayfa({ params }: { params: Promise<{ slug: string
         </h2>
         <div className="mb-8 flex flex-wrap gap-2">
           {o.istasyonlar.map((s) => (
-            <Link key={s.slug} href={`/radyo/${s.slug}`} className="press rounded-full border px-3 py-1.5 text-sm" style={{ borderColor: "var(--line)" }}>
+            <Link prefetch={false} key={s.slug} href={`/radyo/${s.slug}`} className="press rounded-full border px-3 py-1.5 text-sm" style={{ borderColor: "var(--line)" }}>
               {s.name} <span style={{ color: "var(--muted)" }}>· {s.kez}</span>
             </Link>
           ))}

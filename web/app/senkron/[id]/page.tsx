@@ -47,7 +47,7 @@ export default async function Sayfa({ params }: { params: Promise<{ id: string }
       <ol className="mt-6 grid gap-2">
         {an.istasyonlar.map((s, i) => (
           <li key={s.slug}>
-            <Link href={`/radyo/${s.slug}`} className="press flex items-baseline gap-3 rounded-xl border px-4 py-3" style={{ borderColor: "var(--line-hi)" }}>
+            <Link prefetch={false} href={`/radyo/${s.slug}`} className="press flex items-baseline gap-3 rounded-xl border px-4 py-3" style={{ borderColor: "var(--line-hi)" }}>
               <span className="mono w-6 shrink-0 text-sm font-bold" style={{ color: "var(--glow-hi)" }}>{i + 1}</span>
               <span className="min-w-0 flex-1 truncate font-semibold">{s.name}</span>
               <span className="mono shrink-0 text-xs" style={{ color: "var(--muted)" }}>

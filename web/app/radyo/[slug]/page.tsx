@@ -17,7 +17,7 @@ import { turSlug } from "@/lib/turler";
 import { parcaSlug } from "@/lib/parca";
 
 // Her istasyona kendi SEO sayfası ("X Radyo canlı dinle") + gerçek çalan oynatıcı.
-export const revalidate = 60;
+export const revalidate = 900; // 15 dk — istasyon_ozet ağır (7 Eki 2026)
 
 const DEFAULT_ACCENT = "#6b7280";
 
@@ -405,7 +405,7 @@ export default async function StationPage({ params }: { params: Promise<{ slug: 
                     style={{ borderColor: "var(--line)" }}
                   >
                     {r.linkli ? (
-                      <Link href={`/parca/${r.pslug}`} className="min-w-0 flex-1 truncate underline" style={{ color: "var(--fg)" }}>
+                      <Link prefetch={false} href={`/parca/${r.pslug}`} className="min-w-0 flex-1 truncate underline" style={{ color: "var(--fg)" }}>
                         {ad}
                       </Link>
                     ) : (
@@ -465,7 +465,7 @@ export default async function StationPage({ params }: { params: Promise<{ slug: 
               {similar.map((o) => {
                 const c = o.accent_color || DEFAULT_ACCENT;
                 return (
-                  <Link
+                  <Link prefetch={false}
                     key={o.slug}
                     href={`/radyo/${o.slug}`}
                     className="press flex items-center gap-3 border-b py-3"

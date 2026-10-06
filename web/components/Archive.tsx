@@ -326,7 +326,7 @@ export default function Archive() {
                     <li key={i}>
                       <div className="flex items-center gap-3 border-b py-3" style={{ borderColor: "var(--line)" }}>
                         <span className="min-w-0 flex-1">
-                          <Link
+                          <Link prefetch={false}
                             href={`/parca/${parcaSlug(r.title || "")}`}
                             className="block truncate text-[15px] hover:underline"
                           >
@@ -337,7 +337,7 @@ export default function Archive() {
                           </Link>
                           <span className="mt-0.5 block truncate text-xs" style={{ color: "var(--muted)" }}>
                             {r.slug ? (
-                              <Link href={`/radyo/${r.slug}`} className="hover:underline" style={{ color: c }}>
+                              <Link prefetch={false} href={`/radyo/${r.slug}`} className="hover:underline" style={{ color: c }}>
                                 {r.name}
                               </Link>
                             ) : (

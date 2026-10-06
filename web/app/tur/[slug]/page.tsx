@@ -95,7 +95,7 @@ export default async function TurPage({ params }: { params: Promise<{ slug: stri
             {stations.map((s) => {
               const c = s.accent_color || DEFAULT_ACCENT;
               return (
-                <Link
+                <Link prefetch={false}
                   key={s.slug}
                   href={`/radyo/${s.slug}`}
                   className="press flex items-center gap-3 border-b py-3"

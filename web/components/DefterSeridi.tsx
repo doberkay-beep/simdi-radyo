@@ -45,7 +45,7 @@ export default function DefterSeridi({ stations }: { stations: Ist[] }) {
       </p>
       <div className="defter-serit text-sm">
         {[...parcalar, ...parcalar].map((n, i) => (
-          <Link
+          <Link prefetch={false}
             key={`${n.id}-${i}`}
             href={`/radyo/${n.slug}`}
             className="shrink-0 whitespace-nowrap"

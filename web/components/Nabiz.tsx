@@ -309,7 +309,7 @@ export default function Nabiz() {
                   </div>
                   <div className="mt-2 flex flex-wrap gap-1.5">
                     {g.stations.map((s) => (
-                      <Link
+                      <Link prefetch={false}
                         key={s.slug}
                         href={`/radyo/${s.slug}`}
                         className="rounded-full border px-2.5 py-0.5 text-xs"
@@ -343,7 +343,7 @@ export default function Nabiz() {
                       {i + 1}
                     </span>
                     <span className="min-w-0 flex-1">
-                      <Link href={`/parca/${parcaSlug(s.title)}`} className="block truncate text-[15px] hover:underline">
+                      <Link prefetch={false} href={`/parca/${parcaSlug(s.title)}`} className="block truncate text-[15px] hover:underline">
                         <span className="font-semibold">{s.artist ?? s.title}</span>
                         {s.artist && s.artist !== s.title && (
                           <span style={{ color: "var(--muted)" }}> — {s.title}</span>

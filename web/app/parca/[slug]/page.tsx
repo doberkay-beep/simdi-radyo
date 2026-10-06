@@ -30,6 +30,8 @@ async function getParca(slug: string) {
       .from("plays")
       .select("station_id, artist, title, raw_title, started_at")
       .ilike("title", like)
+      // Son 60 gün: tüm tabloyu taramasın (7 Eki 2026 kilitlenmesinin 1 numaralı yükü buydu)
+      .gte("started_at", new Date(Date.now() - 60 * 864e5).toISOString())
       .order("started_at", { ascending: false })
       .limit(300);
     const plays = ((data ?? []) as Play[]).filter((p) => parcaSlug(p.title || p.raw_title || "") === slug);
@@ -141,7 +143,7 @@ export default async function ParcaPage({ params }: { params: Promise<{ slug: st
             {p.istasyonlar.map((s) => {
               const c = s.accentColor || DEFAULT_ACCENT;
               return (
-                <Link key={s.slug} href={`/radyo/${s.slug}`} className="press flex items-center gap-3 border-b py-3" style={{ borderColor: "var(--line)" }}>
+                <Link prefetch={false} key={s.slug} href={`/radyo/${s.slug}`} className="press flex items-center gap-3 border-b py-3" style={{ borderColor: "var(--line)" }}>
                   <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg text-sm font-bold" style={{ background: `linear-gradient(135deg, ${c}, color-mix(in srgb, ${c} 50%, #000))`, color: readableOn(c) }}>
                     {s.name.trim().charAt(0).toLocaleUpperCase("tr")}
                   </span>

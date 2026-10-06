@@ -56,7 +56,7 @@ export default function UlkeCanli({ sluglar, baslik = "şu an bu ülkede çalanl
       </h2>
       <div className="no-scrollbar flex gap-2 overflow-x-auto pb-1">
         {satirlar.map((s) => (
-          <Link
+          <Link prefetch={false}
             key={s.slug}
             href={`/radyo/${s.slug}`}
             className="press shrink-0 rounded-xl border px-3 py-2"

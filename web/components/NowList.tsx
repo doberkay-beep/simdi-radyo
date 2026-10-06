@@ -1694,6 +1694,68 @@ export default function NowList() {
           })()
         )}
 
+        {/* ARAÇ RAFI — eskiden ☰ menüde saklı olan her şey burada, küçük butonlar
+            halinde (kimse menüye bakmıyor). Üstteki kısayol rafıyla aynı dil. */}
+        {(() => {
+          const en = dil === "en";
+          const yukari = () => window.scrollTo({ top: 0, behavior: "smooth" });
+          const satirlar: { ad: string; ogeler: React.ReactNode[] }[] = [
+            {
+              ad: en ? "LISTEN" : "DİNLE",
+              ogeler: [
+                <button key="surus" onClick={() => setSurus(true)}>{en ? "DRIVE MODE" : "SÜRÜŞ MODU"}</button>,
+                <button key="uyku" onClick={cycleSleep} className={sleepUntil ? "on" : ""}>
+                  {sleepUntil ? `${en ? "SLEEP" : "UYKU"} · ${sleepRemain} DK` : en ? "SLEEP TIMER" : "UYKU"}
+                </button>,
+                <button key="alarm" onClick={() => { setAlarmAcik(true); yukari(); }} className={alarm ? "on" : ""}>
+                  {alarm ? `${en ? "ALARM" : "ALARM"} · ${new Date(alarm.ts).toTimeString().slice(0, 5)}` : en ? "RADIO ALARM" : "RADYO ALARMI"}
+                </button>,
+                <button key="oda" onClick={() => { if (oda) davetKopyala(oda.kod); else odaAc(); yukari(); }} className={oda ? "on" : ""}>
+                  {en ? "LISTEN TOGETHER" : "BİRLİKTE DİNLE"}
+                </button>,
+                <button key="gezinti" onClick={() => setYolculuk((v) => !v)} className={yolculuk ? "on" : ""}>
+                  {en ? "DRIFT" : "GEZİNTİ"}
+                </button>,
+                <button key="not" onClick={() => setNotAcik(true)}>{en ? "LEAVE A NOTE" : "NOT BIRAK"}</button>,
+                <button key="siir" onClick={() => { audioRef.current?.pause(); setPlaying(null); setSiirAcik(true); }}>
+                  {en ? "POETRY CORNER" : "ŞİİR KÖŞESİ"}
+                </button>,
+              ],
+            },
+            {
+              ad: en ? "EXPLORE" : "KEŞFET",
+              ogeler: [
+                <Link key="kesif" href="/kesif">{en ? "DISCOVER" : "KEŞİF"}</Link>,
+                <Link key="oyun" href="/oyun">{en ? "GAMES" : "OYUNLAR"}</Link>,
+                <Link key="fal" href="/fal">{en ? "FORTUNE" : "FREKANS FALI"}</Link>,
+                <Link key="kose" href="/kose">{en ? "ESSAYS" : "KÖŞE"}</Link>,
+                <Link key="hakkinda" href="/hakkinda">{en ? "ABOUT" : "HAKKINDA"}</Link>,
+              ],
+            },
+            {
+              ad: en ? "YOURS" : "SENİN",
+              ogeler: [
+                ...(now > 0 && !kuruluMu()
+                  ? [<button key="kur" onClick={() => setKurAcik(true)}>{en ? "INSTALL APP" : "UYGULAMA GİBİ KUR"}</button>]
+                  : []),
+                <button key="av" onClick={() => setAvAcik(true)}>{en ? "MUSIC JOURNAL" : "MÜZİK DEFTERİM"}</button>,
+                <button key="frekans" onClick={() => setFrekansAcik(true)}>{en ? "MY FREQUENCY" : "FREKANSIM"}</button>,
+                <button key="kasa" onClick={() => setKasaAcik(true)}>{en ? "MEMORY CODE" : "HAFIZA KODUM"}</button>,
+              ],
+            },
+          ];
+          return (
+            <section className="arac-raf mb-6" aria-label={en ? "tools" : "araçlar"}>
+              {satirlar.map((r) => (
+                <div key={r.ad} className="arac-satir">
+                  <span className="arac-ad">{r.ad}</span>
+                  <div className="raf minik">{r.ogeler}</div>
+                </div>
+              ))}
+            </section>
+          );
+        })()}
+
         {/* "Şu an çalanlar" yatay şerit */}
         {!playing && nowStrip.length > 0 && (
           <div className="mb-6">

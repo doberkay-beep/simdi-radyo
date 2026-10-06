@@ -296,6 +296,19 @@ body {
   border-color: transparent;
 }
 
+/* ARAÇ RAFI — menüden çıkan araçlar: solda küçük grup adı, sağda butonlar. */
+.arac-raf { display: flex; flex-direction: column; gap: 10px; padding: 14px 0; border-block: 1px solid var(--line); }
+.arac-satir { display: flex; align-items: baseline; gap: 12px; }
+.arac-ad {
+  flex: 0 0 64px; padding-top: 2px;
+  font-family: var(--font-mono), ui-monospace, monospace; font-size: 9.5px; font-weight: 700;
+  letter-spacing: 0.2em; color: var(--glow-hi);
+}
+@media (max-width: 639px) {
+  .arac-satir { flex-direction: column; gap: 6px; }
+  .arac-ad { flex-basis: auto; }
+}
+
 /* İNCE BANT — Senkron anı / gece nöbeti: kutu değil, tek satır. */
 .ince-bant {
   display: flex; align-items: center; gap: 10px; min-width: 0;

@@ -21,6 +21,18 @@ type Ozet = {
   suan: { name: string; slug: string; title: string | null }[] | null;
 };
 
+type Trend = { gunler: { gun: string; kez: number }[]; hafta_sira: number | null; hafta_kez: number | null; hafta_sanatci: number };
+
+// Günlük sayım tablosundan trend (sanatci-trend.sql). Yoksa sayfa trendsiz çalışır.
+async function trendAl(slug: string): Promise<Trend | null> {
+  try {
+    const { data, error } = await getSupabase().rpc("sanatci_trend", { p_slug: slug });
+    return error ? null : ((data as Trend | null) ?? null);
+  } catch {
+    return null;
+  }
+}
+
 async function ozetAl(slug: string): Promise<Ozet | null> {
   const { data } = await getSupabase().rpc("sanatci_ozet", { p_slug: slug });
   return (data as Ozet | null) ?? null;
@@ -53,15 +65,35 @@ function nezaman(t: string): string {
 
 export default async function Sayfa({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params;
-  const o = await ozetAl(slug);
+  const [o, trend] = await Promise.all([ozetAl(slug), trendAl(slug)]);
   if (!o) notFound();
 
+  const enCok = o.sarkilar[0];
   const jsonLd = {
     "@context": "https://schema.org",
-    "@type": "MusicGroup",
-    name: o.ad,
-    url: `https://necaliyor.co/sanatci/${slug}`,
+    "@graph": [
+      { "@type": "MusicGroup", name: o.ad, url: `https://necaliyor.co/sanatci/${slug}` },
+      {
+        // "X radyoda kaç kez çaldı?" aramalarına doğrudan cevap
+        "@type": "FAQPage",
+        mainEntity: [
+          {
+            "@type": "Question",
+            name: `${o.ad} radyoda kaç kez çaldı?`,
+            acceptedAnswer: { "@type": "Answer", text: `ŞİMDİ'nin canlı sayımına göre ${o.ad} son 7 günde Türkiye radyolarında ${o.kez7} kez, son 30 günde ${o.kez30} kez çaldı (${o.istasyonSay} istasyon).` },
+          },
+          ...(enCok
+            ? [{
+                "@type": "Question",
+                name: `${o.ad}'ın radyoda en çok çalan şarkısı hangisi?`,
+                acceptedAnswer: { "@type": "Answer", text: `Son 30 günde en çok çalan şarkısı "${enCok.title}" (${enCok.kez} kez).` },
+              }]
+            : []),
+        ],
+      },
+    ],
   };
+  const gunMax = Math.max(1, ...(trend?.gunler ?? []).map((g) => g.kez));
 
   return (
     <div className="min-h-screen" style={{ background: "var(--bg)" }}>
@@ -106,6 +138,41 @@ export default async function Sayfa({ params }: { params: Promise<{ slug: string
           ))}
         </div>
 
+        {/* Bu hafta raporda + son 30 gün grafiği (günlük sayım tablosundan) */}
+        {trend && (trend.hafta_sira || trend.gunler.length > 1) && (
+          <section className="mb-8 rounded-2xl border p-5" style={{ borderColor: "var(--line)" }}>
+            {trend.hafta_sira && (
+              <Link prefetch={false} href="/rapor" className="mb-4 flex items-baseline justify-between gap-3">
+                <span className="text-sm">
+                  📊 Bu hafta <strong>Türkiye Radyo Raporu</strong>'nda{" "}
+                  <strong style={{ color: "var(--glow-hi)" }}>{trend.hafta_sira}. sırada</strong>
+                  <span style={{ color: "var(--muted)" }}> · {trend.hafta_sanatci} sanatçı arasında</span>
+                </span>
+                <span className="mono shrink-0 text-[10px] uppercase tracking-[0.16em]" style={{ color: "var(--glow-hi)" }}>rapor →</span>
+              </Link>
+            )}
+            {trend.gunler.length > 1 && (
+              <>
+                <p className="mono mb-2 text-[10px] uppercase tracking-[0.2em]" style={{ color: "var(--muted)" }}>son 30 gün · günlük çalma</p>
+                <div className="flex h-24 items-end gap-[3px]" role="img" aria-label={`${o.ad} son 30 günde günlük çalma grafiği`}>
+                  {trend.gunler.map((g) => (
+                    <span
+                      key={g.gun}
+                      title={`${g.gun}: ${g.kez} kez`}
+                      className="flex-1 rounded-t-sm"
+                      style={{ height: `${Math.max(4, (g.kez / gunMax) * 100)}%`, background: "linear-gradient(180deg, var(--glow-hi), var(--glow))", opacity: 0.85 }}
+                    />
+                  ))}
+                </div>
+                <div className="mono mt-1 flex justify-between text-[10px]" style={{ color: "var(--faint)" }}>
+                  <span>{trend.gunler[0].gun.slice(8, 10)}.{trend.gunler[0].gun.slice(5, 7)}</span>
+                  <span>bugün</span>
+                </div>
+              </>
+            )}
+          </section>
+        )}
+
         {/* 📣 Radyo rozeti — sanatçı/menajer/hayran paylaşsın */}
         {(o.kez7 > 0 || o.kez30 > 0) && (
           <RozetPaylas
@@ -126,7 +193,7 @@ export default async function Sayfa({ params }: { params: Promise<{ slug: string
           {o.sarkilar.map((s, i) => (
             <li key={s.slug} className="flex items-baseline gap-3 border-b py-2.5" style={{ borderColor: "var(--line)" }}>
               <span className="mono w-6 text-right text-sm tabular-nums" style={{ color: "var(--muted)" }}>{i + 1}</span>
-              <Link href={`/sarki/${slug}--${s.slug}`} className="min-w-0 flex-1 truncate font-semibold underline-offset-2 hover:underline">
+              <Link prefetch={false} href={`/sarki/${slug}--${s.slug}`} className="min-w-0 flex-1 truncate font-semibold underline-offset-2 hover:underline">
                 {s.title}
               </Link>
               <span className="mono text-xs tabular-nums" style={{ color: "var(--muted)" }}>{s.kez} kez</span>

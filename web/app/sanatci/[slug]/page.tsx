@@ -3,6 +3,7 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { getSupabase } from "@/lib/supabase";
 import { sarkiSlug } from "@/lib/seoslug";
+import { adDuzelt } from "@/lib/rapor";
 import SanatciTakipDugme from "@/components/SanatciTakipDugme";
 import RozetPaylas from "@/components/RozetPaylas";
 
@@ -35,8 +36,13 @@ async function trendAl(slug: string): Promise<Trend | null> {
 
 async function ozetAl(slug: string): Promise<Ozet | null> {
   const { data } = await getSupabase().rpc("sanatci_ozet", { p_slug: slug });
-  return (data as Ozet | null) ?? null;
+  const o = (data as Ozet | null) ?? null;
+  return o ? { ...o, ad: adDuzelt(o.ad) } : null;
 }
+
+// Günlük özet tablosu 1 Ekim 2026'da başladı: 30 gün dolana dek "30 gün" yerine başlangıç tarihi.
+const OZET_BASLANGIC = Date.parse("2026-10-01T00:00:00+03:00");
+const otuzGunEtiketi = () => (Date.now() - OZET_BASLANGIC < 30 * 864e5 ? "1 Ekim'den beri" : "son 30 günde");
 
 export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }): Promise<Metadata> {
   const { slug } = await params;
@@ -44,7 +50,7 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
   if (!o) return { title: "Sanatçı bulunamadı | ŞİMDİ" };
   return {
     title: `${o.ad} radyoda ne kadar çalınıyor? | ŞİMDİ`,
-    description: `${o.ad} son 7 günde Türkiye radyolarında ${o.kez7} kez çaldı (30 günde ${o.kez30} kez, ${o.istasyonSay} istasyon). En çok çalan şarkıları ve istasyonları — canlı sayım.`,
+    description: `${o.ad} son 7 günde Türkiye radyolarında ${o.kez7} kez çaldı (${otuzGunEtiketi()} ${o.kez30} kez, ${o.istasyonSay} istasyon). En çok çalan şarkıları ve istasyonları — canlı sayım.`,
     alternates: { canonical: `/sanatci/${slug}` },
     // Link paylaşılınca önizleme = sanatçının radyo rozeti.
     openGraph: {
@@ -80,13 +86,13 @@ export default async function Sayfa({ params }: { params: Promise<{ slug: string
           {
             "@type": "Question",
             name: `${o.ad} radyoda kaç kez çaldı?`,
-            acceptedAnswer: { "@type": "Answer", text: `ŞİMDİ'nin canlı sayımına göre ${o.ad} son 7 günde Türkiye radyolarında ${o.kez7} kez, son 30 günde ${o.kez30} kez çaldı (${o.istasyonSay} istasyon).` },
+            acceptedAnswer: { "@type": "Answer", text: `ŞİMDİ'nin canlı sayımına göre ${o.ad} son 7 günde Türkiye radyolarında ${o.kez7} kez, ${otuzGunEtiketi()} ${o.kez30} kez çaldı (${o.istasyonSay} istasyon).` },
           },
           ...(enCok
             ? [{
                 "@type": "Question",
                 name: `${o.ad}'ın radyoda en çok çalan şarkısı hangisi?`,
-                acceptedAnswer: { "@type": "Answer", text: `Son 30 günde en çok çalan şarkısı "${enCok.title}" (${enCok.kez} kez).` },
+                acceptedAnswer: { "@type": "Answer", text: `${otuzGunEtiketi() === "son 30 günde" ? "Son 30 günde" : "1 Ekim'den beri"} en çok çalan şarkısı "${enCok.title}" (${enCok.kez} kez).` },
               }]
             : []),
         ],
@@ -128,12 +134,12 @@ export default async function Sayfa({ params }: { params: Promise<{ slug: string
         <div className="mb-8 grid grid-cols-3 gap-3">
           {[
             { n: o.kez7, e: "son 7 günde" },
-            { n: o.kez30, e: "son 30 günde" },
+            { n: o.kez30, e: otuzGunEtiketi() },
             { n: o.istasyonSay, e: "istasyonda" },
           ].map((k) => (
             <div key={k.e} className="rounded-2xl border p-4 text-center" style={{ borderColor: "var(--line)" }}>
               <p className="text-3xl font-bold tabular-nums">{k.n}</p>
-              <p className="mt-1 text-xs" style={{ color: "var(--muted)" }}>{k.e === "istasyonda" ? k.e : `kez ${k.e}`}</p>
+              <p className="mt-1 text-xs" style={{ color: "var(--muted)" }}>{k.e === "istasyonda" ? k.e : k.e === "1 Ekim'den beri" ? `kez · ${k.e}` : `kez ${k.e}`}</p>
             </div>
           ))}
         </div>
@@ -187,7 +193,7 @@ export default async function Sayfa({ params }: { params: Promise<{ slug: string
 
         {/* En çok çalınan şarkıları */}
         <h2 className="mb-2 text-sm font-semibold uppercase tracking-wide" style={{ color: "var(--muted)" }}>
-          en çok çalınan şarkıları (30 gün)
+          en çok çalınan şarkıları
         </h2>
         <ol className="mb-8">
           {o.sarkilar.map((s, i) => (

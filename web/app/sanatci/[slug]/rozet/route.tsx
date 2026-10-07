@@ -1,5 +1,6 @@
 import { ImageResponse } from "next/og";
 import { getSupabase } from "@/lib/supabase";
+import { adDuzelt } from "@/lib/rapor";
 import { BOYUT, boyutAl, RENK, kes, fontlar, KART_ONBELLEK, zemin, STORY_DOLGU } from "@/lib/kart-ortak";
 
 // 📻 RADYO ROZETİ — sanatçının "son 7 günde Türkiye radyolarında N kez çaldım"
@@ -62,7 +63,7 @@ export async function GET(req: Request, ctx: { params: Promise<{ slug: string }>
           📻 TÜRKİYE RADYOLARINDA
         </div>
         <div style={{ display: "flex", fontFamily: "Baslik", fontSize: adBoy, lineHeight: 1.02, marginTop: og ? 18 : 30, letterSpacing: -2 }}>
-          {kes(o.ad, 28)}
+          {kes(adDuzelt(o.ad), 28)}
         </div>
         {zirve && (
           <div style={{ display: "flex", fontFamily: "Siir", fontSize: og ? 28 : 40, color: RENK.soluk, marginTop: og ? 14 : 24 }}>

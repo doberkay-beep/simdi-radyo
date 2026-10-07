@@ -36,7 +36,9 @@ export function TurkiyeSuAn({ stations, onTune }: { stations: Stn[]; onTune: (sl
   const en = dil === "en";
 
   const a = useMemo(() => {
-    const simdi = Date.now();
+    // Referans saat: listedeki en yeni güncelleme (Date.now() değil) — sunucuda
+    // üretilen HTML ile tarayıcı aynı sonucu verir (hydration uyuşmazlığı yok).
+    const simdi = stations.reduce((m, s) => Math.max(m, s.nowPlaying ? Date.parse(s.nowPlaying.updatedAt) || 0 : 0), 0);
     const taze = stations.filter(
       (s) => s.nowPlaying?.title && simdi - Date.parse(s.nowPlaying.updatedAt) < TAZE_MS,
     );

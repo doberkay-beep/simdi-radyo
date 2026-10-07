@@ -29,8 +29,8 @@ function ayAdi(ay: string | undefined, en: boolean) {
 }
 
 // Özet satırını çeker; dakikada bir tazeler (tek satır, önemsiz yük).
-export function useAnaOzet() {
-  const [veri, setVeri] = useState<AnaOzet | null>(null);
+export function useAnaOzet(ilk: AnaOzet | null = null) {
+  const [veri, setVeri] = useState<AnaOzet | null>(ilk);
   useEffect(() => {
     let off = false;
     const al = () =>

@@ -5,7 +5,7 @@ import Link from "next/link";
 import ThemeToggle from "./ThemeToggle";
 import ToneToggle from "./ToneToggle";
 import KonsolRaylar from "./KonsolRaylar";
-import { useAnaOzet, CanliSayac, CanliListe } from "./CanliVitrin";
+import { useAnaOzet, CanliSayac, CanliListe, type AnaOzet } from "./CanliVitrin";
 import { TurkiyeSuAn, KesifKarti, KESIF_ARALIK, KESIF_SAYI } from "./AnaSayfaZenginlik";
 import { kaynagiCalistir, hlsYik } from "@/lib/cal";
 import { dinleyiciKatil, simdiDinle, type CanliKanal } from "@/lib/canli";
@@ -209,14 +209,14 @@ const KISAYOLLAR: { href: string; tr: string; en: string }[] = [
   { href: "/arsiv", tr: "ARŞİV", en: "ARCHIVE" },
 ];
 
-export default function NowList() {
+export default function NowList({ ilkIstasyonlar, ilkOzet }: { ilkIstasyonlar?: Station[]; ilkOzet?: AnaOzet | null } = {}) {
   const { t, dil } = useDil();
-  const [stations, setStations] = useState<Station[]>([]);
+  const [stations, setStations] = useState<Station[]>(ilkIstasyonlar ?? []);
   // Realtime'dan az önce parça değişimi düşen istasyonlar — kart 4 sn parlar.
   const [tazeler, setTazeler] = useState<Record<number, number>>({});
   const [playing, setPlaying] = useState<string | null>(null);
   const [ulke, setUlke] = useState<string | null>(null); // kadran ülke bandı
-  const [status, setStatus] = useState<"idle" | "loading" | "error">("loading");
+  const [status, setStatus] = useState<"idle" | "loading" | "error">(ilkIstasyonlar?.length ? "idle" : "loading");
   const [now, setNow] = useState(0); // göreli zaman için; ilk render'da 0
   const [genre, setGenre] = useState<string | null>(null); // seçili tür filtresi
   const [query, setQuery] = useState(""); // isimle arama
@@ -253,7 +253,7 @@ export default function NowList() {
   const [kasaAcik, setKasaAcik] = useState(false); // 🔐 hafıza kodu
   const [siirAcik, setSiirAcik] = useState(false); // 📖 şiir köşesi (Şiir Rafım Radyosu)
   // Canlı vitrin: ana_ozet satırı + sayfa açıkken gelen gerçek şarkı değişimleri (TR bandı)
-  const anaOzet = useAnaOzet();
+  const anaOzet = useAnaOzet(ilkOzet ?? null);
   const [canliArtis, setCanliArtis] = useState(0);
   const artisRef = useRef(0);
   const [surus, setSurus] = useState(false); // 🚗 sürüş modu
@@ -1995,7 +1995,7 @@ export default function NowList() {
                             ? isPlaying && liveNP
                               ? ` · ${t("radyo.canli")}`
                               : (() => {
-                                  const rel = np.updatedAt ? since(np.updatedAt, now || Date.now()) : "";
+                                  const rel = np.updatedAt && now > 0 ? since(np.updatedAt, now) : ""; // sunucu HTML'inde göreli zaman yok (hydration)
                                   return rel ? ` · ${rel}` : "";
                                 })()
                             : ""}

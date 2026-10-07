@@ -115,16 +115,18 @@ declare
   v_ilk5 jsonb;
   v_sanatci jsonb;
 begin
-  select coalesce(jsonb_agg(to_jsonb(x)), '[]'::jsonb) into v_ilk5 from (
-    select min(artist) as artist, min(title) as title, sum(kez)::int as kez, max(istasyon) as istasyon
+  -- Yalnız en az 2 radyoda çalan şarkılar (tek radyonun döngüsü sayılmaz)
+  with sarki as (
+    select anahtar, min(artist) as artist, min(title) as title, sum(kez)::int as kez, max(istasyon) as istasyon
     from gunluk_sayim where gun >= v_ilk
     group by anahtar having max(istasyon) >= 2
-    order by 3 desc limit 5) x;
-
-  select to_jsonb(x) into v_sanatci from (
-    select min(artist) as ad, sum(kez)::int as kez
-    from gunluk_sayim where gun >= v_ilk
-    group by lower(artist) order by 2 desc limit 1) x;
+  )
+  select coalesce((select jsonb_agg(to_jsonb(x)) from (
+           select artist, title, kez, istasyon from sarki order by kez desc limit 5) x), '[]'::jsonb),
+         (select to_jsonb(y) from (
+           select min(artist) as ad, sum(kez)::int as kez from sarki
+           group by lower(artist) order by 2 desc limit 1) y)
+    into v_ilk5, v_sanatci;
 
   update ana_ozet
      set veri = veri || jsonb_build_object('ay_ilk5', v_ilk5, 'ay_sanatci', v_sanatci, 'ay_guncel', now())

@@ -57,3 +57,10 @@ export async function raporGetir(bas: string): Promise<Rapor | null> {
     return null;
   }
 }
+
+// Bazı radyolar adı tamamen küçük harfle yazıyor ("sezen aksu") — yalnız o durumda
+// kelime başlarını Türkçe kurala göre büyüt; "BLOK3", "Manifest" gibi adlara dokunma.
+export function adDuzelt(ad: string): string {
+  if (!ad || ad !== ad.toLocaleLowerCase("tr")) return ad;
+  return ad.replace(/(^|[\s\-&(])(\p{L})/gu, (_, on: string, h: string) => on + h.toLocaleUpperCase("tr"));
+}

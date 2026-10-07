@@ -102,7 +102,7 @@ export function CanliSayac({ veri, artis, kisa = false }: { veri: AnaOzet | null
   const ilk = (veri.ay_ilk5 ?? []).slice(0, kisa ? 3 : 5);
 
   return (
-    <section className="surf p-4">
+    <section lang={dil} className="surf p-4">
       <Baslik>
         <CanliNokta /> {ayAdi(veri.ay, en)} · {en ? "counting now" : "şu an sayılıyor"}
       </Baslik>
@@ -160,7 +160,7 @@ export function CanliListe({ veri, kisa = false }: { veri: AnaOzet | null; kisa?
 
   if (liste.length === 0) return null;
   return (
-    <section className="surf p-4">
+    <section lang={dil} className="surf p-4">
       <Baslik>
         <CanliNokta /> {en ? "most played · last 3 hours" : "son 3 saatte en çok çalanlar"}
       </Baslik>

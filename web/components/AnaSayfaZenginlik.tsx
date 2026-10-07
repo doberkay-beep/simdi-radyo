@@ -68,7 +68,7 @@ export function TurkiyeSuAn({ stations, onTune }: { stations: Stn[]; onTune: (sl
   const renk = ["#e5382c", "#ee5a3f", "#ff9b76", "#f6b896", "#f2e6da"];
 
   return (
-    <section className="surf mb-5 p-4" aria-label={en ? "Turkey right now" : "Türkiye şu an"}>
+    <section lang={dil} className="surf mb-5 p-4" aria-label={en ? "Turkey right now" : "Türkiye şu an"}>
       <Baslik>
         <span className="inline-block h-2 w-2 animate-pulse rounded-full" style={{ background: "#e5382c", boxShadow: "0 0 10px #e5382c" }} />
         {en ? "Turkey right now" : "Türkiye şu an"}
@@ -164,7 +164,7 @@ export function KesifKarti({ sira, onSiir }: { sira: number; onSiir: () => void 
   const sinif = "press my-2 flex w-full items-center gap-3 rounded-2xl border border-dashed px-3 py-3 text-left";
   const stil = { borderColor: "color-mix(in srgb, var(--glow) 35%, var(--line))" };
   return (
-    <li aria-label={ad}>
+    <li aria-label={ad} lang={dil}>
       {k.eylem === "siir" ? (
         <button onClick={onSiir} className={sinif} style={stil}>{govde}</button>
       ) : (

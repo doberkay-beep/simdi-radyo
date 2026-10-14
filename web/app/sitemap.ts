@@ -19,8 +19,16 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     const { data } = await supa.from("stations").select("slug").eq("is_active", true);
     slugs = (data ?? []).map((r: { slug: string }) => r.slug);
     // Son 30 günde ≥3 kez çalan sanatçılar → /sanatci sayfaları (SEO).
-    const { data: kat } = await supa.rpc("seo_katalog");
-    sanatcilar = ((kat ?? []) as { slug: string }[]).map((r) => r.slug).filter(Boolean);
+    // PostgREST tek istekte en fazla 1.000 satır döndürür → 2.000 sanatçı iki parçada.
+    for (const [bas, son] of [[0, 999], [1000, 1999]]) {
+      const { data: kat, error } = await supa.rpc("seo_katalog").range(bas, son);
+      if (error) break;
+      const parca = ((kat ?? []) as { slug: string }[]).map((r) => r.slug).filter(Boolean);
+      sanatcilar.push(...parca);
+      if (parca.length < 1000) break;
+    }
+    // Eşit sayılı sanatçıların sırası sabit değil; parça sınırında tekrar olabilir.
+    sanatcilar = [...new Set(sanatcilar)];
   } catch {
     // veritabanı okunamazsa sadece sabit sayfalar
   }

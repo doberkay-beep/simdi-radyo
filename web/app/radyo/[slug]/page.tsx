@@ -361,7 +361,7 @@ export default async function StationPage({ params }: { params: Promise<{ slug: 
               <span></span><span></span><span></span><span></span>
             </span>
             <div className="min-w-0 flex-1">
-              <CanliParca slug={slug} initial={track} etiket={T("radyo.simdiCaliyor")} bosMetin={T("radyo.canliYayin")} />
+              <CanliParca slug={slug} initial={track} initialArtist={np?.artist ?? null} etiket={T("radyo.simdiCaliyor")} bosMetin={T("radyo.canliYayin")} />
             </div>
             <YanlisSarki slug={slug} />
           </div>

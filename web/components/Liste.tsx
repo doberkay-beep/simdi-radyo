@@ -156,7 +156,7 @@ export default function Liste() {
                   </Link>
                   <Link
                     href={`/sanatci/${sarkiSlug(s.artist)}`}
-                    className="block truncate text-sm underline-offset-2 hover:underline"
+                    className="block truncate text-sm underline decoration-dotted underline-offset-4"
                     style={{ color: "var(--muted)" }}
                   >
                     {s.artist}

@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
+import { sarkiSlug } from "@/lib/seoslug";
 
 // "Şu an çalıyor" kutusu — sunucudan gelen ilk değeri (DB, revalidate) gösterir,
 // sonra /api/live'ı CANLI yoklar: sayfa açılınca gerçek çalan parçaya anında
@@ -19,15 +20,19 @@ function metin(l: Live): string | null {
 export default function CanliParca({
   slug,
   initial,
+  initialArtist = null,
   etiket,
   bosMetin,
 }: {
   slug: string;
   initial: string | null;
+  initialArtist?: string | null;
   etiket: string;
   bosMetin: string;
 }) {
   const [track, setTrack] = useState<string | null>(initial);
+  // Sanatçı adı ayrı tutulur → "şu an çalıyor"da sanatçı sayfasına bağlantı.
+  const [artist, setArtist] = useState<string | null>(initialArtist?.trim() || null);
   const [canli, setCanli] = useState(false);
 
   useEffect(() => {
@@ -41,6 +46,8 @@ export default function CanliParca({
           if (t) {
             setTrack(t);
             setCanli(true);
+            const a = d.live?.artist?.trim() || null;
+            setArtist(a && a !== d.live?.title?.trim() ? a : null);
           }
           // live null → son bilinen değeri koru (DB/önceki), boşaltma.
         })
@@ -72,7 +79,18 @@ export default function CanliParca({
           </span>
         )}
       </div>
-      <div className="mt-1 text-2xl font-semibold">{track ?? bosMetin}</div>
+      <div className="mt-1 text-2xl font-semibold">
+        {track && artist && track.startsWith(`${artist} — `) ? (
+          <>
+            <a href={`/sanatci/${sarkiSlug(artist)}`} className="underline decoration-dotted underline-offset-4">
+              {artist}
+            </a>
+            {track.slice(artist.length)}
+          </>
+        ) : (
+          track ?? bosMetin
+        )}
+      </div>
     </div>
   );
 }

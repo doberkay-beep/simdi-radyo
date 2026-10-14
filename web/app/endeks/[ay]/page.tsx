@@ -97,7 +97,7 @@ export default async function Sayfa({ params }: { params: Promise<{ ay: string }
               <Link href={`/sarki/${sarkiSlug(s.artist)}--${sarkiSlug(s.title)}`} className="block truncate font-semibold hover:underline">
                 {s.title}
               </Link>
-              <Link href={`/sanatci/${sarkiSlug(s.artist)}`} className="block truncate text-sm hover:underline" style={{ color: "var(--muted)" }}>
+              <Link href={`/sanatci/${sarkiSlug(s.artist)}`} className="block truncate text-sm underline decoration-dotted underline-offset-4" style={{ color: "var(--muted)" }}>
                 {s.artist}
               </Link>
             </span>

@@ -53,7 +53,7 @@ export default function RaporGovde({ hafta, r }: { hafta: string; r: Rapor | nul
                   <span className="dial w-7 shrink-0 text-right text-xl" style={{ color: i < 3 ? "var(--glow-hi)" : "var(--muted)" }}>{i + 1}</span>
                   <span className="min-w-0 flex-1">
                     <span className="block truncate text-[15px] font-semibold">{s.title}</span>
-                    <Link prefetch={false} href={`/sanatci/${sarkiSlug(s.artist)}`} className="block truncate text-[13px] hover:underline" style={{ color: "var(--muted)" }}>{adDuzelt(s.artist)}</Link>
+                    <Link prefetch={false} href={`/sanatci/${sarkiSlug(s.artist)}`} className="block truncate text-[13px] underline decoration-dotted underline-offset-4" style={{ color: "var(--muted)" }}>{adDuzelt(s.artist)}</Link>
                   </span>
                   <span className="mono shrink-0 text-[11px] tabular-nums" style={{ color: "var(--muted)" }}>{s.kez}</span>
                   <Degisim sira={i + 1} onceki={s.onceki_sira} karsilastir={r.onceki_var} />
@@ -70,7 +70,7 @@ export default function RaporGovde({ hafta, r }: { hafta: string; r: Rapor | nul
                   {r.sanatcilar.map((s, i) => (
                     <li key={s.ad} className="flex items-baseline gap-2">
                       <span className="mono w-4 text-[11px]" style={{ color: i === 0 ? "var(--glow-hi)" : "var(--muted)" }}>{i + 1}</span>
-                      <Link prefetch={false} href={`/sanatci/${sarkiSlug(s.ad)}`} className="min-w-0 flex-1 truncate font-semibold hover:underline">{adDuzelt(s.ad)}</Link>
+                      <Link prefetch={false} href={`/sanatci/${sarkiSlug(s.ad)}`} className="min-w-0 flex-1 truncate font-semibold underline decoration-dotted underline-offset-4">{adDuzelt(s.ad)}</Link>
                       <span className="mono text-[11px]" style={{ color: "var(--muted)" }}>{s.kez}</span>
                     </li>
                   ))}

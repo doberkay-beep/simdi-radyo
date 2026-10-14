@@ -90,7 +90,7 @@ export function TurkiyeSuAn({ stations, onTune }: { stations: Stn[]; onTune: (sl
               <span className="block text-[12px]" style={{ color: "var(--muted)" }}>
                 {en ? `On ${a.lider.ist.length} stations at once:` : `Şu an ${a.lider.ist.length} radyoda aynı anda:`}
               </span>
-              <Link prefetch={false} href={`/sanatci/${sarkiSlug(a.lider.ad)}`} className="dial mt-0.5 block truncate text-[22px] uppercase tracking-[0.02em] hover:underline">
+              <Link prefetch={false} href={`/sanatci/${sarkiSlug(a.lider.ad)}`} className="dial mt-0.5 block truncate text-[22px] uppercase tracking-[0.02em] underline decoration-dotted underline-offset-4">
                 {a.lider.ad}
               </Link>
               <span className="mt-1 flex flex-wrap gap-1.5">

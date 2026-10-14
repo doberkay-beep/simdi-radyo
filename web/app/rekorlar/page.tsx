@@ -36,7 +36,7 @@ function Kart({ etiket, deger, alt, artist }: { etiket: string; deger: string; a
       </div>
       <p className="mt-2 text-lg font-bold leading-snug">
         {artist ? (
-          <Link href={`/sanatci/${sarkiSlug(artist)}`} className="hover:underline">{deger}</Link>
+          <Link href={`/sanatci/${sarkiSlug(artist)}`} className="underline decoration-dotted underline-offset-4">{deger}</Link>
         ) : deger}
       </p>
       <p className="mt-1 text-sm" style={{ color: "var(--muted)" }}>{alt}</p>

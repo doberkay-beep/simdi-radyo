@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { sarkiSlug } from "@/lib/seoslug";
 
 /* MÜZİK KARTI — çalan parçanın kimliği: kapak + albüm, sanatçının kısa
    hikâyesi (Wikipedia), yaklaşan konserleri. Çalma çubuğundaki parça adına
@@ -93,6 +94,20 @@ export default function MuzikKarti({
             kapat
           </button>
         </div>
+
+        {/* Sanatçı sayfası — "radyoda kaç kez çaldı?" (kart verisinden bağımsız, hep görünür) */}
+        <a
+          href={`/sanatci/${sarkiSlug(artist)}`}
+          className="press mb-5 flex items-center justify-between gap-3 rounded-xl border px-4 py-3"
+          style={{ borderColor: accent }}
+        >
+          <span className="min-w-0 text-sm">
+            📊 <strong>{artist}</strong> radyoda kaç kez çaldı?
+          </span>
+          <span className="mono shrink-0 text-[11px] uppercase tracking-[0.14em]" style={{ color: accent }}>
+            sanatçı sayfası →
+          </span>
+        </a>
 
         {durum === "yukleniyor" && (
           <div className="flex items-center gap-4">

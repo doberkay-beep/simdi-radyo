@@ -46,7 +46,7 @@ export default async function Sayfa() {
             <span className="mono w-7 shrink-0 text-right text-sm font-bold" style={{ color: i < 3 ? "var(--glow-hi)" : "var(--muted)" }}>{i + 1}</span>
             <span className="min-w-0 flex-1">
               <Link href={`/sarki/${sarkiSlug(s.artist)}--${sarkiSlug(s.title)}`} className="block truncate font-semibold hover:underline">{s.title}</Link>
-              <Link href={`/sanatci/${sarkiSlug(s.artist)}`} className="block truncate text-sm hover:underline" style={{ color: "var(--muted)" }}>{s.artist}</Link>
+              <Link href={`/sanatci/${sarkiSlug(s.artist)}`} className="block truncate text-sm underline decoration-dotted underline-offset-4" style={{ color: "var(--muted)" }}>{s.artist}</Link>
             </span>
             <span className="mono shrink-0 text-xs" style={{ color: "var(--muted)" }}>{s.kez} gece çalma · {s.istasyon} ist</span>
           </li>

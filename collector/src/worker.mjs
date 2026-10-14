@@ -23,6 +23,8 @@ const MAX_FAILURES = Number(process.env.MAX_FAILURES) || 20;
 // bu sıklıkta tazele → arayüzdeki "şu an çalıyor" tazeliği doğru olsun
 // (uzun parça/aynı yayın "8 saat önce" gibi yanıltmasın). plays'e yazılmaz.
 const FRESH_MS = Number(process.env.FRESH_MS) || 12 * 60_000;
+// Aktif istasyon listesini bu sıklıkta yeniden çek (katalog günde birkaç kez değişir).
+const STATIONS_REFRESH_MS = Number(process.env.STATIONS_REFRESH_MS) || 10 * 60_000;
 // >0 ise worker bu süre kadar çalışıp çıkar (zamanlanmış çalışma, ör. GitHub
 // Actions). 0/boş ise sonsuza kadar çalışır (yerel ya da Railway/Fly).
 const RUN_DURATION_MS = Number(process.env.RUN_DURATION_MS) || 0;
@@ -153,15 +155,21 @@ async function main() {
     log("! now_playing okunamadı (devam ediliyor):", err.message);
   }
 
-  // Döngü. Her turda aktif listeyi tazeler (pasifleşenler düşer).
+  // Döngü. Aktif listeyi STATIONS_REFRESH_MS'de bir tazeler (pasifleşenler
+  // düşer, yeni eklenenler katılır). Her turda çekmek Supabase egress'inin
+  // yarısını yiyordu (422 satır × 25 sn ≈ 230 MB/gün).
   const startedAt = Date.now();
+  let stations = [];
+  let stationsAt = 0;
   for (;;) {
     const start = Date.now();
-    let stations = [];
-    try {
-      stations = await loadActiveStations();
-    } catch (err) {
-      log("! istasyon listesi alınamadı, tur atlanıyor:", err.message);
+    if (!stations.length || start - stationsAt >= STATIONS_REFRESH_MS) {
+      try {
+        stations = await loadActiveStations();
+        stationsAt = start;
+      } catch (err) {
+        log("! istasyon listesi alınamadı:", err.message, stations.length ? "(eski liste kullanılıyor)" : "(tur atlanıyor)");
+      }
     }
     if (stations.length) await cycle(stations);
 

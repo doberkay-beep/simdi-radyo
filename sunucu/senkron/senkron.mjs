@@ -3,7 +3,8 @@
 // SENKRON ANI'dır: senkron_anlari'na yazılır, sitede bant + kart olur.
 // Veri (ikiz yayınlar ayıklandıktan sonra, 7 gün): 1 dk penceresinde 2 radyo
 // 9 kez (günde ~1-2), 3+ radyo HİÇ → 3+ olursa kendiliğinden rekor.
-// Açılışta son 7 günü tarar (defter boş başlamasın), sonra 30 sn'de bir son 12 dk.
+// Açılışta son 7 günü tarar (defter boş başlamasın), sonra 30 sn'de bir yalnız
+// yeni çalmaları çekip son 12 dk'yı bellekteki tamponda değerlendirir.
 
 import { createClient } from "@supabase/supabase-js";
 import { readFileSync } from "node:fs";
@@ -43,20 +44,38 @@ async function istasyonYukle() {
   istZaman = Date.now();
 }
 
-async function calmalar(geriMs) {
-  const bas = new Date(Date.now() - geriMs).toISOString();
+// Ham çalmaları çeker (id dahil). bas: ISO zaman.
+async function cek(bas) {
   const idler = [...istasyonlar.keys()];
   const hepsi = [];
   for (let off = 0; ; off += 1000) {
     const { data, error } = await sb.from("plays")
-      .select("artist, title, station_id, started_at")
+      .select("id, artist, title, station_id, started_at")
       .in("station_id", idler).gte("started_at", bas)
       .order("started_at").range(off, off + 999);
     if (error) throw error;
     hepsi.push(...data);
     if (data.length < 1000) break;
   }
-  return hepsi.filter((p) => {
+  return hepsi;
+}
+
+// Son 12 dakikanın çalmaları bellekte (id → çalma). Eskiden her 30 sn'de
+// 12 dk baştan okunuyordu (her satır ~24 kez → ~200 MB/gün egress); artık
+// yalnız son başarılı okumadan 1 dk öncesine kadar çekilir, id ile ayıklanır.
+// Tur atlansa bile sonraki tur aradakini yakalar → kayıp yok.
+const TAMPON = 12 * 60_000;
+const ORTUSME = 60_000;
+const tampon = new Map();
+let sonOkuma = 0;
+
+function tamponaEkle(rows, simdi) {
+  for (const p of rows) tampon.set(p.id, p);
+  for (const [id, p] of tampon) if (simdi - Date.parse(p.started_at) > TAMPON) tampon.delete(id);
+}
+
+function suz(rows) {
+  return rows.filter((p) => {
     const s = istasyonlar.get(p.station_id);
     if (!s || !p.artist || !p.title) return false;
     const a = katla(p.artist), t = katla(p.title), n = katla(s.name);
@@ -120,18 +139,39 @@ async function kaydet(an) {
   log(`⚡ SENKRON #${data.id}: ${an.artist} — ${an.title} · ${an.sayi} radyo (${an.istasyonlar.map((s) => s.name).join(", ")})`);
 }
 
-async function tur(geriMs) {
+// Bu süreçte zaten yazılmış/güncellenmiş anlar: aynı pencere her 30 sn'de
+// yeniden bulunur; değişmediyse senkron_anlari'na tekrar sorgu atma.
+const yazilan = new Set();
+
+async function kaydetBirKez(an) {
+  const k = `${an.anahtar}|${an.ilk}|${an.sayi}`;
+  if (yazilan.has(k)) return;
+  await kaydet(an);
+  yazilan.add(k);
+  if (yazilan.size > 5000) yazilan.clear();
+}
+
+async function tur() {
   await istasyonYukle();
-  const anlar = anlariBul(await calmalar(geriMs));
-  for (const an of anlar) await kaydet(an);
+  const simdi = Date.now();
+  const bas = sonOkuma ? sonOkuma - ORTUSME : simdi - TAMPON;
+  tamponaEkle(await cek(new Date(bas).toISOString()), simdi);
+  sonOkuma = simdi;
+  const anlar = anlariBul(suz([...tampon.values()]));
+  for (const an of anlar) await kaydetBirKez(an);
 }
 
 log(`Senkron nöbetçisi başladı — eşik ${ESIK} radyo / ${PENCERE / 1000} sn.`);
 try {
-  await tur(7 * 24 * 3600_000);
-  log("7 günlük geçmiş tarandı.");
+  await istasyonYukle();
+  const simdi = Date.now();
+  const gecmis = await cek(new Date(simdi - 7 * 24 * 3600_000).toISOString());
+  for (const an of anlariBul(suz(gecmis))) await kaydetBirKez(an);
+  tamponaEkle(gecmis.filter((p) => simdi - Date.parse(p.started_at) <= TAMPON), simdi);
+  sonOkuma = simdi;
+  log(`7 günlük geçmiş tarandı (${gecmis.length} çalma).`);
 } catch (e) { log("! geçmiş taraması:", e.message); }
 
 setInterval(() => {
-  tur(12 * 60_000).catch((e) => log("! tur:", e.message));
+  tur().catch((e) => log("! tur:", e.message));
 }, ARALIK);

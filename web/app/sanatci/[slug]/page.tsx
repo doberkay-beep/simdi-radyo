@@ -34,10 +34,39 @@ async function trendAl(slug: string): Promise<Trend | null> {
   }
 }
 
+// Aynı şarkının yazım varyantları ("Ara Beni" / "ARA BENİ") aynı slug'a düşer:
+// tek satırda topla, en çok sayılan yazımı göster.
+function sarkilariBirlestir(liste: Ozet["sarkilar"]): Ozet["sarkilar"] {
+  const g = new Map<string, { title: string; slug: string; kez: number; enIyi: number }>();
+  for (const s of liste) {
+    const v = g.get(s.slug);
+    if (!v) g.set(s.slug, { ...s, enIyi: s.kez });
+    else {
+      v.kez += s.kez;
+      if (s.kez > v.enIyi) { v.title = s.title; v.enIyi = s.kez; }
+    }
+  }
+  return [...g.values()].sort((a, b) => b.kez - a.kez).map(({ title, slug, kez }) => ({ title, slug, kez }));
+}
+
 async function ozetAl(slug: string): Promise<Ozet | null> {
   const { data } = await getSupabase().rpc("sanatci_ozet", { p_slug: slug });
   const o = (data as Ozet | null) ?? null;
-  return o ? { ...o, ad: adDuzelt(o.ad) } : null;
+  return o ? { ...o, ad: adDuzelt(o.ad), sarkilar: sarkilariBirlestir(o.sarkilar ?? []) } : null;
+}
+
+type Benzer = { slug: string; ad: string; ortak: number };
+
+// "Bu radyolarda bunlar da çalıyor" — sanatçı sayfalarını birbirine bağlar (sanatci-benzer.sql).
+// Fonksiyon yoksa ya da hata verirse blok hiç görünmez.
+async function benzerAl(slug: string): Promise<Benzer[]> {
+  try {
+    const { data, error } = await getSupabase().rpc("sanatci_benzer", { p_slug: slug });
+    if (error) return [];
+    return ((data as Benzer[] | null) ?? []).filter((b) => b.slug && b.ad).map((b) => ({ ...b, ad: adDuzelt(b.ad) }));
+  } catch {
+    return [];
+  }
 }
 
 // Günlük özet tablosu 1 Ekim 2026'da başladı: 30 gün dolana dek "30 gün" yerine başlangıç tarihi.
@@ -48,9 +77,12 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
   const { slug } = await params;
   const o = await ozetAl(slug);
   if (!o) return { title: "Sanatçı bulunamadı | ŞİMDİ" };
+  const enCok = o.sarkilar[0];
+  const haftaVar = o.kez7 > 0;
   return {
-    title: `${o.ad} radyoda ne kadar çalınıyor? | ŞİMDİ`,
-    description: `${o.ad} son 7 günde Türkiye radyolarında ${o.kez7} kez çaldı (${otuzGunEtiketi()} ${o.kez30} kez, ${o.istasyonSay} istasyon). En çok çalan şarkıları ve istasyonları — canlı sayım.`,
+    // İnsanlar "X şarkıları", "X <şarkı adı>" diye arıyor; başlık bunu ve canlı sayıyı taşır.
+    title: `${o.ad} şarkıları radyoda — ${haftaVar ? `bu hafta ${o.kez7}` : `${o.kez30}`} kez | ŞİMDİ`,
+    description: `${enCok ? `Radyoda en çok çalan ${o.ad} şarkısı "${enCok.title}" (${enCok.kez} kez). ` : ""}Son 7 günde Türkiye radyolarında ${o.kez7} kez çaldı (${otuzGunEtiketi()} ${o.kez30} kez, ${o.istasyonSay} istasyon)${o.istasyonlar.length ? `; en çok ${o.istasyonlar.slice(0, 3).map((s) => s.name).join(", ")}` : ""}. Canlı sayım.`,
     alternates: { canonical: `/sanatci/${slug}` },
     // Link paylaşılınca önizleme = sanatçının radyo rozeti.
     openGraph: {
@@ -71,10 +103,20 @@ function nezaman(t: string): string {
 
 export default async function Sayfa({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params;
-  const [o, trend] = await Promise.all([ozetAl(slug), trendAl(slug)]);
+  const [o, trend, benzerler] = await Promise.all([ozetAl(slug), trendAl(slug), benzerAl(slug)]);
   if (!o) notFound();
 
   const enCok = o.sarkilar[0];
+  // Her sayfaya kendine özgü, veriden kurulan bir paragraf (Google için özgün metin).
+  const ozetCumle = [
+    o.kez7 > 0
+      ? `${o.ad} son 7 günde Türkiye radyolarında ${o.kez7} kez çaldı.`
+      : `${o.ad} ${otuzGunEtiketi()} Türkiye radyolarında ${o.kez30} kez çaldı.`,
+    enCok ? `Radyoda en çok çalan ${o.ad} şarkısı "${enCok.title}" (${enCok.kez} kez).` : "",
+    o.istasyonlar.length >= 2
+      ? `En çok ${o.istasyonlar.slice(0, 3).map((s) => s.name).join(", ")} çaldı; toplam ${o.istasyonSay} istasyon.`
+      : "",
+  ].filter(Boolean).join(" ");
   const jsonLd = {
     "@context": "https://schema.org",
     "@graph": [
@@ -91,8 +133,15 @@ export default async function Sayfa({ params }: { params: Promise<{ slug: string
           ...(enCok
             ? [{
                 "@type": "Question",
-                name: `${o.ad}'ın radyoda en çok çalan şarkısı hangisi?`,
-                acceptedAnswer: { "@type": "Answer", text: `${otuzGunEtiketi() === "son 30 günde" ? "Son 30 günde" : "1 Ekim'den beri"} en çok çalan şarkısı "${enCok.title}" (${enCok.kez} kez).` },
+                name: `Radyoda en çok çalan ${o.ad} şarkısı hangisi?`,
+                acceptedAnswer: { "@type": "Answer", text: `${otuzGunEtiketi() === "son 30 günde" ? "Son 30 günde" : "1 Ekim'den beri"} radyoda en çok çalan ${o.ad} şarkısı "${enCok.title}" (${enCok.kez} kez).` },
+              }]
+            : []),
+          ...(o.istasyonlar.length
+            ? [{
+                "@type": "Question",
+                name: `${o.ad} hangi radyolarda çalıyor?`,
+                acceptedAnswer: { "@type": "Answer", text: `${o.ad} şarkılarını en çok çalan radyolar: ${o.istasyonlar.slice(0, 5).map((s) => `${s.name} (${s.kez} kez)`).join(", ")}. Toplam ${o.istasyonSay} istasyonda çaldı.` },
               }]
             : []),
         ],
@@ -111,6 +160,7 @@ export default async function Sayfa({ params }: { params: Promise<{ slug: string
           </p>
           <h1 className="brand mt-1 text-4xl font-bold tracking-tight">{o.ad}</h1>
           <p className="epigraf mt-2 text-[15px]">Türkiye radyolarında ne kadar çalınıyor — gerçek sayım.</p>
+          <p className="mt-3 text-[15px] leading-relaxed" style={{ color: "var(--muted)" }}>{ozetCumle}</p>
           <SanatciTakipDugme ad={o.ad} />
         </header>
 
@@ -234,6 +284,22 @@ export default async function Sayfa({ params }: { params: Promise<{ slug: string
             </li>
           ))}
         </ul>
+
+        {/* Bu radyolarda bunlar da çalıyor — sanatçı sayfaları arasında iç bağlantı ağı */}
+        {benzerler.length > 0 && (
+          <>
+            <h2 className="mb-2 text-sm font-semibold uppercase tracking-wide" style={{ color: "var(--muted)" }}>
+              bu radyolarda bunlar da çalıyor
+            </h2>
+            <div className="mb-10 flex flex-wrap gap-2">
+              {benzerler.map((b) => (
+                <Link prefetch={false} key={b.slug} href={`/sanatci/${b.slug}`} className="press rounded-full border px-3 py-1.5 text-sm" style={{ borderColor: "var(--line)" }}>
+                  {b.ad}
+                </Link>
+              ))}
+            </div>
+          </>
+        )}
 
         {/* CTA'lar */}
         <div className="rounded-2xl border p-5" style={{ borderColor: "var(--line)" }}>

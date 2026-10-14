@@ -3,7 +3,7 @@
 // SENKRON ANI'dır: senkron_anlari'na yazılır, sitede bant + kart olur.
 // Veri (ikiz yayınlar ayıklandıktan sonra, 7 gün): 1 dk penceresinde 2 radyo
 // 9 kez (günde ~1-2), 3+ radyo HİÇ → 3+ olursa kendiliğinden rekor.
-// Açılışta son 7 günü tarar (defter boş başlamasın), sonra 30 sn'de bir yalnız
+// Açılışta son 1 saati tarar, sonra 30 sn'de bir yalnız
 // yeni çalmaları çekip son 12 dk'yı bellekteki tamponda değerlendirir.
 
 import { createClient } from "@supabase/supabase-js";
@@ -66,6 +66,7 @@ async function cek(bas) {
 // Tur atlansa bile sonraki tur aradakini yakalar → kayıp yok.
 const TAMPON = 12 * 60_000;
 const ORTUSME = 60_000;
+const ACILIS_TARAMA = 3600_000;
 const tampon = new Map();
 let sonOkuma = 0;
 
@@ -165,11 +166,13 @@ log(`Senkron nöbetçisi başladı — eşik ${ESIK} radyo / ${PENCERE / 1000} s
 try {
   await istasyonYukle();
   const simdi = Date.now();
-  const gecmis = await cek(new Date(simdi - 7 * 24 * 3600_000).toISOString());
+  // Eskiden 7 gün (defter boşken). plays büyüdü → statement timeout; geçmiş
+  // anlar zaten senkron_anlari'nda. Yeniden başlatmada son 1 saat yeter.
+  const gecmis = await cek(new Date(simdi - ACILIS_TARAMA).toISOString());
   for (const an of anlariBul(suz(gecmis))) await kaydetBirKez(an);
   tamponaEkle(gecmis.filter((p) => simdi - Date.parse(p.started_at) <= TAMPON), simdi);
   sonOkuma = simdi;
-  log(`7 günlük geçmiş tarandı (${gecmis.length} çalma).`);
+  log(`Açılış: son 1 saat tarandı (${gecmis.length} çalma).`);
 } catch (e) { log("! geçmiş taraması:", e.message); }
 
 setInterval(() => {

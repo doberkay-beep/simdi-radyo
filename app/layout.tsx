@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Space_Grotesk, Fraunces } from "next/font/google";
 import "./globals.css";
 import { Analytics } from "@vercel/analytics/next";
+import { SpeedInsights } from "@vercel/speed-insights/next";
 
 // UI / başlık / etiket — modern grotesk (CSS'te var(--font-grotesk))
 const grotesk = Space_Grotesk({
@@ -70,6 +71,7 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
         />
         {children}
         <Analytics />
+        <SpeedInsights />
       </body>
     </html>
   );

@@ -166,6 +166,9 @@ export default function Archive() {
     setDate(d);
     setTime(t);
     fetchArchive(d, t);
+    // ?q=… ile gelindiyse (ör. eski /parca/* adresleri) aramayı da başlat.
+    const aranan = (new URLSearchParams(window.location.search).get("q") || "").trim();
+    if (aranan) { setQ(aranan); araYap(aranan); }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 

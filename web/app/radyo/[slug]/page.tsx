@@ -59,15 +59,8 @@ type Benzer = { slug: string; name: string; city: string | null; frequency: stri
 
 async function getSimilar(slug: string, genre: string | null): Promise<Benzer[]> {
   const supa = getSupabase();
-  // Önce BENZERLİK MOTORU: son 30 günde ortak çalınan şarkılara göre (Jaccard).
-  // Elle liste değil, arşivin kendisi konuşur; veri azsa tür eşine düşülür.
-  try {
-    const { data } = await supa.rpc("benzerler", { p_slug: slug });
-    const b = (data ?? []) as { slug: string; name: string; genre: string | null; accent_color: string | null; ortak: number }[];
-    if (b.length >= 3) {
-      return b.map((o) => ({ slug: o.slug, name: o.name, city: null, frequency: null, accent_color: o.accent_color, band: null, ortak: o.ortak }));
-    }
-  } catch { /* RPC yoksa/tökezlediyse tür eşine düş */ }
+  // Benzerlik motoru (benzerler RPC, ortak şarkılara göre Jaccard) ~36 sn sürüyor ve 8 sn sınırında
+  // düşüp disk bütçesini harcıyordu (21 Eki 2026). Önbellek tablosu gelene dek tür eşi kullanılır.
   if (!genre) return [];
   try {
     const { data } = await supa

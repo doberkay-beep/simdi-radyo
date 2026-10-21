@@ -9,7 +9,7 @@ import RozetPaylas from "@/components/RozetPaylas";
 
 // Sanatçı sayfası — "X radyoda ne kadar çalınıyor?" aramasının cevabı.
 // ISR: saatte bir tazelenir; veri plays arşivinden (sanatci_ozet RPC).
-export const revalidate = 3600;
+export const revalidate = 21600; // 6 saat — sanatci_ozet/trend/benzer ağır (21 Eki 2026)
 
 type Ozet = {
   ad: string;

@@ -4,7 +4,7 @@ import { endeksAylari, type EndeksOzet } from "@/lib/endeks";
 
 // GET /api/endeks — Radyo Endeksi: her ay için özet (mobil uygulama için).
 // Ağır sorgu; CDN'de 1 saat önbellekli, böylece her cihaz veritabanına gitmez.
-export const revalidate = 3600;
+export const dynamic = "force-dynamic"; // derlemede DB'ye gitmesin; CDN önbelleği Cache-Control ile
 
 export async function GET() {
   const aylar = endeksAylari();

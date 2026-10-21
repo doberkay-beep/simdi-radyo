@@ -5,7 +5,7 @@ import { getSupabase } from "@/lib/supabase";
 
 // Şarkı sayfası — "X şarkısı hangi radyoda çalıyor?" aramasının cevabı.
 // URL: /sarki/<sanatci-slug>--<sarki-slug> (çift tire ayraç). ISR saatlik.
-export const revalidate = 3600;
+export const revalidate = 43200; // 12 saat — botlar binlerce şarkı sayfası tarıyor; sarki_ozet disk bütçesini tüketiyordu (21 Eki 2026)
 
 type Ozet = {
   sanatci: string;

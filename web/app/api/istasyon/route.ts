@@ -4,7 +4,7 @@ import { json } from "@/lib/json";
 // GET /api/istasyon?s=<slug> — istasyon karnesi (son 7 gün), mobil uygulama için.
 // CDN'de 15 dk önbellekli (sitedeki /radyo/[slug] sayfasıyla aynı tazelik).
 // Benzer istasyonlar uygulamada türden hesaplanır (benzerler RPC'si ~36 sn sürüyor).
-export const revalidate = 900;
+export const dynamic = "force-dynamic"; // CDN önbelleği Cache-Control ile (15 dk)
 
 export async function GET(request: Request) {
   const slug = (new URL(request.url).searchParams.get("s") || "").trim().slice(0, 80);

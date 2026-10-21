@@ -18,7 +18,7 @@ import { turSlug } from "@/lib/turler";
 import { parcaSlug } from "@/lib/parca";
 
 // Her istasyona kendi SEO sayfası ("X Radyo canlı dinle") + gerçek çalan oynatıcı.
-export const revalidate = 900; // 15 dk — istasyon_ozet ağır (7 Eki 2026)
+export const revalidate = 3600; // 1 saat — istasyon_ozet ağır (7 Eki, 21 Eki 2026)
 
 const DEFAULT_ACCENT = "#6b7280";
 

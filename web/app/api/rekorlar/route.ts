@@ -2,7 +2,7 @@ import { getSupabase } from "@/lib/supabase";
 import { json } from "@/lib/json";
 
 // GET /api/rekorlar — arşivin uç değerleri, mobil uygulama için. Ağır sorgu; CDN'de 1 saat.
-export const revalidate = 3600;
+export const dynamic = "force-dynamic"; // derlemede DB'ye gitmesin; CDN önbelleği Cache-Control ile
 
 export async function GET() {
   let rekorlar: unknown = null;

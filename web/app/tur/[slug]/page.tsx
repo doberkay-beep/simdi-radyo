@@ -5,7 +5,7 @@ import { getSupabase } from "@/lib/supabase";
 import { TURLER, turBul } from "@/lib/turler";
 
 // Tür merkez sayfası — "caz radyosu" gibi yüksek hacimli aramalar için.
-export const revalidate = 600;
+export const revalidate = 1800;
 
 const DEFAULT_ACCENT = "#6b7280";
 
@@ -18,7 +18,8 @@ function readableOn(hex: string): string {
 }
 
 export function generateStaticParams() {
-  return TURLER.map((t) => ({ slug: t.slug }));
+  // Derlemede üretme (DB yükü + 60 sn derleme sınırı); ilk ziyaretle üretilip önbellekte kalır.
+  return [];
 }
 
 export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }): Promise<Metadata> {

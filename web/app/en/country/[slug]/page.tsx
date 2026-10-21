@@ -4,10 +4,11 @@ import { ULKELER, ULKE_SLUG_EN, ulkeSlug } from "@/lib/ulkeler";
 import UlkeSayfasi, { ulkeBaslik } from "@/components/UlkeSayfasi";
 
 // Country hub page (EN) — international long-tail: "germany radio live" etc.
-export const revalidate = 600;
+export const revalidate = 1800;
 
 export function generateStaticParams() {
-  return Object.keys(ULKE_SLUG_EN).map((slug) => ({ slug }));
+  // Derlemede üretme (DB yükü + 60 sn derleme sınırı); ilk ziyaretle üretilip önbellekte kalır.
+  return [];
 }
 
 export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }): Promise<Metadata> {

@@ -3,7 +3,7 @@ import { json } from "@/lib/json";
 
 // GET /api/gece — Gece 3 Listesi (02:00–05:00, son 7 gece), mobil uygulama için.
 // CDN'de 30 dk önbellekli; her cihaz veritabanına gitmez.
-export const revalidate = 1800;
+export const dynamic = "force-dynamic"; // derlemede DB'ye gitmesin; CDN önbelleği Cache-Control ile
 
 export async function GET() {
   let satirlar: unknown[] = [];

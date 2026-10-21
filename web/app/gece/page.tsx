@@ -7,7 +7,7 @@ import { sarkiSlug } from "@/lib/seoslug";
 export const revalidate = 1800;
 
 export const metadata: Metadata = {
-  title: "Gece 3 Listesi — uykusuzların listesi | ŞİMDİ",
+  title: "Gece 3 Listesi — uykusuzların listesi | nowby.",
   description:
     "Türkiye radyolarında gece 02:00 ile 05:00 arası en çok çalan şarkılar — son 7 gecenin gerçek sayımı. Şehir uyurken radyo ne çalıyor?",
   alternates: { canonical: "/gece" },
@@ -25,7 +25,7 @@ export default async function Sayfa() {
   return (
     <main className="mx-auto max-w-2xl px-5 py-10">
       <p className="mono text-[11px] uppercase tracking-[0.22em]" style={{ color: "var(--muted)" }}>
-        <Link href="/" className="nav-link">ŞİMDİ</Link> · 02:00 – 05:00 · son 7 gece
+        <Link href="/" className="nav-link">nowby.</Link> · 02:00 – 05:00 · son 7 gece
       </p>
       <h1 className="brand mt-2 text-4xl font-bold leading-tight">🌙 GECE 3 LİSTESİ</h1>
       <p className="epigraf mt-3 text-base">

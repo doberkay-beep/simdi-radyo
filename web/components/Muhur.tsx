@@ -11,7 +11,7 @@ export default function Muhur({ dize }: { dize?: string }) {
       )}
       <p className="mt-3 text-sm" style={{ color: "var(--muted)" }}>
         <span className="brand font-bold" style={{ color: "var(--fg)" }}>
-          ŞİMDİ
+          nowby.
         </span>{" "}
         — bir şairin frekansı ·{" "}
         <Link href="/hakkinda" className="underline">

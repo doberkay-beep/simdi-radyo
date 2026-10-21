@@ -4,7 +4,7 @@ import { adDuzelt } from "@/lib/rapor";
 import { BOYUT, boyutAl, RENK, kes, fontlar, KART_ONBELLEK, zemin, STORY_DOLGU } from "@/lib/kart-ortak";
 
 // 📻 RADYO ROZETİ — sanatçının "son 7 günde Türkiye radyolarında N kez çaldım"
-// kartı. Sanatçı/menajer story'sinde paylaşsın diye: kendi kitlesini ŞİMDİ'ye taşır.
+// kartı. Sanatçı/menajer story'sinde paylaşsın diye: kendi kitlesini nowby'ye taşır.
 //   ?boyut=post  1080×1350 (varsayılan, IG/X gönderisi)
 //   ?boyut=story 1080×1920 (IG story)
 //   ?boyut=og    1200×630  (link önizlemesi — sanatçı sayfasının og:image'ı)
@@ -107,10 +107,10 @@ export async function GET(req: Request, ctx: { params: Promise<{ slug: string }>
       {!og && (
         <div style={{ display: "flex", flexDirection: "column", borderTop: `2px solid ${RENK.cizgi}`, paddingTop: 34 }}>
           <div style={{ display: "flex", fontSize: 34, letterSpacing: 4, color: RENK.sicak }}>
-            necaliyor.co/sanatci/{kes(slug, 24)}
+            nowby.co/sanatci/{kes(slug, 24)}
           </div>
           <div style={{ display: "flex", fontFamily: "Siir", fontSize: 28, color: RENK.soluk, marginTop: 10 }}>
-            ŞİMDİ · canlı radyo sayacı — gerçek sayım, anket değil
+            nowby. · canlı radyo sayacı — gerçek sayım, anket değil
           </div>
         </div>
       )}

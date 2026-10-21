@@ -33,9 +33,9 @@ async function ozetAl(slug: string): Promise<{ o: Ozet; aslug: string } | null> 
 export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }): Promise<Metadata> {
   const { slug } = await params;
   const r = await ozetAl(slug);
-  if (!r) return { title: "Şarkı bulunamadı | ŞİMDİ" };
+  if (!r) return { title: "Şarkı bulunamadı | nowby." };
   return {
-    title: `${r.o.sanatci} — ${r.o.ad}: hangi radyoda çalıyor? | ŞİMDİ`,
+    title: `${r.o.sanatci} — ${r.o.ad}: hangi radyoda çalıyor? | nowby.`,
     description: `${r.o.sanatci} — ${r.o.ad} son 7 günde Türkiye radyolarında ${r.o.kez7} kez çaldı. Hangi istasyonlarda, en son ne zaman — canlı arşivden gerçek sayım.`,
     alternates: { canonical: `/sarki/${slug}` },
   };
@@ -59,8 +59,8 @@ export default async function Sayfa({ params }: { params: Promise<{ slug: string
     "@context": "https://schema.org",
     "@type": "MusicRecording",
     name: o.ad,
-    byArtist: { "@type": "MusicGroup", name: o.sanatci, url: `https://necaliyor.co/sanatci/${aslug}` },
-    url: `https://necaliyor.co/sarki/${slug}`,
+    byArtist: { "@type": "MusicGroup", name: o.sanatci, url: `https://nowby.co/sanatci/${aslug}` },
+    url: `https://nowby.co/sarki/${slug}`,
   };
 
   return (
@@ -131,10 +131,10 @@ export default async function Sayfa({ params }: { params: Promise<{ slug: string
         <div className="rounded-2xl border p-5" style={{ borderColor: "var(--line)" }}>
           <p className="text-sm">
             🔔 <strong>{o.sanatci}</strong> yine çalınca haber almak için{" "}
-            <Link href="/" className="underline">ŞİMDİ&apos;de</Link> izlemeye al, radar zilini kur.
+            <Link href="/" className="underline">nowby&apos;de</Link> izlemeye al, radar zilini kur.
           </p>
           <p className="mt-2 text-sm" style={{ color: "var(--muted)" }}>
-            Haftanın tam listesi: <Link href="/liste" className="underline">ŞİMDİ LİSTESİ →</Link>
+            Haftanın tam listesi: <Link href="/liste" className="underline">nowby. LİSTESİ →</Link>
           </p>
         </div>
       </div>

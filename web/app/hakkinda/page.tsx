@@ -11,10 +11,10 @@ export async function generateMetadata(): Promise<Metadata> {
   const dil = await dilSunucu();
   const en = dil === "en";
   return {
-    title: en ? "About — ŞİMDİ" : "Hakkında — ŞİMDİ",
+    title: en ? "About — nowby." : "Hakkında — nowby.",
     description: en
-      ? "Why does ŞİMDİ exist? The small story of a writer's radio project."
-      : "ŞİMDİ neden var? Bir yazarın radyo girişiminin küçük hikâyesi.",
+      ? "Why does nowby exist? The small story of a writer's radio project."
+      : "nowby neden var? Bir yazarın radyo girişiminin küçük hikâyesi.",
     alternates: { canonical: "/hakkinda" },
   };
 }
@@ -28,7 +28,7 @@ export default async function Hakkinda() {
         <header className="mb-10 flex items-end justify-between">
           <div>
             <h1 className="brand text-4xl font-bold tracking-tight">
-              ŞİMDİ <span style={{ color: "var(--muted)" }}>· {en ? "about" : "hakkında"}</span>
+              nowby. <span style={{ color: "var(--muted)" }}>· {en ? "about" : "hakkında"}</span>
             </h1>
           </div>
           <span className="flex items-center gap-3">
@@ -49,7 +49,7 @@ export default async function Hakkinda() {
           {en ? (
             <>
               <p className="dropcap">
-                <strong>ŞİMDİ</strong> (Turkish for &ldquo;now&rdquo;) grew out of a simple
+                <strong>nowby.</strong> grew out of a simple
                 curiosity: what is playing on the radio <em>right now</em>? Instead of hopping
                 between dozens of stations, I wanted to see what each one was playing on a
                 single screen, live.
@@ -75,7 +75,7 @@ export default async function Hakkinda() {
           ) : (
             <>
               <p className="dropcap">
-                <strong>ŞİMDİ</strong>, basit bir merakın ürünü: şu anda radyoda ne çalıyor?
+                <strong>nowby</strong>, basit bir merakın ürünü: şu anda radyoda ne çalıyor?
                 Onlarca istasyonu tek tek gezmek yerine, hepsinin o an çaldığı parçayı tek bir
                 ekranda, canlı görmek istedim.
               </p>
@@ -108,8 +108,8 @@ export default async function Hakkinda() {
           </h2>
           <p className="epigraf mt-2 text-[15px]">
             {en
-              ? "The city sleeps; frequencies don't. ŞİMDİ's animated short — Istanbul to Seoul, all at once."
-              : "Şehir uyur; frekanslar uyumaz. ŞİMDİ'nin animasyon kısa filmi — İstanbul'dan Seul'e, aynı anda."}
+              ? "The city sleeps; frequencies don't. nowby's animated short — Istanbul to Seoul, all at once."
+              : "Şehir uyur; frekanslar uyumaz. nowby'nin animasyon kısa filmi — İstanbul'dan Seul'e, aynı anda."}
           </p>
           <div
             className="mt-5 overflow-hidden rounded-2xl border"
@@ -117,7 +117,7 @@ export default async function Hakkinda() {
           >
             <iframe
               src="https://www.youtube-nocookie.com/embed/a0WP9eqXzN0"
-              title={en ? "ŞİMDİ — Night Windows (animated short)" : "ŞİMDİ — Gece Pencereleri (animasyon film)"}
+              title={en ? "nowby. — Night Windows (animated short)" : "nowby. — Gece Pencereleri (animasyon film)"}
               allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
               allowFullScreen
               loading="lazy"
@@ -137,8 +137,8 @@ export default async function Hakkinda() {
           <div className="mt-8 rounded-lg border px-4 py-3 text-sm" style={{ borderColor: "var(--line)" }}>
             <p style={{ color: "var(--fg)" }}>
               {en
-                ? "ŞİMDİ is free, ad-free and stays that way."
-                : "ŞİMDİ ücretsiz ve reklamsız; öyle de kalacak."}
+                ? "nowby is free, ad-free and stays that way."
+                : "nowby ücretsiz ve reklamsız; öyle de kalacak."}
             </p>
             <a
               href={DESTEK_URL}
@@ -168,7 +168,7 @@ export default async function Hakkinda() {
           </p>
           <p className="mt-2">
             <Link href="/" className="underline" style={{ color: "var(--fg)" }}>
-              necaliyor.co
+              nowby.co
             </Link>{" "}
             {en ? "— what's playing on the radio right now" : "— radyoda şu an ne çalıyor"}
           </p>

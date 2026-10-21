@@ -1,4 +1,4 @@
-// ŞİMDİ — servis çalışanı (PWA çevrimdışı kabuk).
+// nowby. — servis çalışanı (PWA çevrimdışı kabuk).
 // Canlı yayın ve API her zaman ağdan gider; yalnızca uygulama kabuğu ve
 // statik varlıklar önbelleğe alınır ki çevrimdışıyken uygulama açılsın.
 
@@ -23,10 +23,10 @@ self.addEventListener("push", (e) => {
   try {
     d = e.data ? e.data.json() : {};
   } catch {
-    d = { baslik: "ŞİMDİ", metin: e.data ? e.data.text() : "" };
+    d = { baslik: "nowby.", metin: e.data ? e.data.text() : "" };
   }
   e.waitUntil(
-    self.registration.showNotification(d.baslik || "📻 ŞİMDİ", {
+    self.registration.showNotification(d.baslik || "📻 nowby.", {
       body: d.metin || "",
       icon: "/icon.png",
       badge: "/icon.png",

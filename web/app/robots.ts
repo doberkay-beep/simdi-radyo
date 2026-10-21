@@ -5,7 +5,7 @@ export default function robots(): MetadataRoute.Robots {
     // /parca/* eski şarkı sayfaları: her açılışta arşivi baştan sona tarıyordu (ILIKE %…%);
     // botlar bunları dolaşınca veritabanı yoruluyordu. Arama motoru için /sarki/* sayfaları var.
     rules: { userAgent: "*", allow: "/", disallow: ["/api/", "/parca/"] },
-    sitemap: "https://necaliyor.co/sitemap.xml",
-    host: "https://necaliyor.co",
+    sitemap: "https://nowby.co/sitemap.xml",
+    host: "https://nowby.co",
   };
 }

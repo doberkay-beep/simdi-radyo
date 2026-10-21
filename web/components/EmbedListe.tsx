@@ -2,9 +2,9 @@
 
 import { useEffect, useState } from "react";
 
-/* Gömülebilir ŞİMDİ LİSTESİ rozeti — haftanın en çok çalan 5 şarkısı, canlı.
+/* Gömülebilir nowby. LİSTESİ rozeti — haftanın en çok çalan 5 şarkısı, canlı.
    ?boy=genis → 728×90 yatay (ilk 3). Varsayılan: 300×250 dikey kart.
-   Her gömme necaliyor.co/liste'ye gerçek bağlantı taşır. */
+   Her gömme nowby.co/liste'ye gerçek bağlantı taşır. */
 
 type Satir = { artist: string; title: string; kez: number };
 
@@ -33,10 +33,10 @@ export default function EmbedListe({ boy }: { boy: "kart" | "genis" }) {
 
   if (boy === "genis") {
     return (
-      <a href="https://necaliyor.co/liste" target="_blank" rel="noopener" style={{ textDecoration: "none" }}>
+      <a href="https://nowby.co/liste" target="_blank" rel="noopener" style={{ textDecoration: "none" }}>
         <div style={{ ...govde, width: 728, height: 90, display: "flex", alignItems: "center", gap: 14, padding: "0 16px" }}>
           <div style={{ fontWeight: 800, fontSize: 13, letterSpacing: "0.12em", color: "#ff9b76", whiteSpace: "nowrap" }}>
-            ŞİMDİ<br />LİSTESİ
+            nowby.<br />LİSTESİ
           </div>
           <div style={{ display: "flex", gap: 18, minWidth: 0, flex: 1 }}>
             {satirlar.map((s, i) => (
@@ -50,17 +50,17 @@ export default function EmbedListe({ boy }: { boy: "kart" | "genis" }) {
               </div>
             ))}
           </div>
-          <div style={{ fontSize: 10, color: "#8d6f63", whiteSpace: "nowrap" }}>canlı · necaliyor.co</div>
+          <div style={{ fontSize: 10, color: "#8d6f63", whiteSpace: "nowrap" }}>canlı · nowby.co</div>
         </div>
       </a>
     );
   }
 
   return (
-    <a href="https://necaliyor.co/liste" target="_blank" rel="noopener" style={{ textDecoration: "none" }}>
+    <a href="https://nowby.co/liste" target="_blank" rel="noopener" style={{ textDecoration: "none" }}>
       <div style={{ ...govde, width: 300, height: 250, padding: "12px 14px", display: "flex", flexDirection: "column" }}>
         <div style={{ display: "flex", alignItems: "baseline", justifyContent: "space-between", marginBottom: 8 }}>
-          <span style={{ fontWeight: 800, fontSize: 14, letterSpacing: "0.08em", color: "#ff9b76" }}>ŞİMDİ LİSTESİ</span>
+          <span style={{ fontWeight: 800, fontSize: 14, letterSpacing: "0.08em", color: "#ff9b76" }}>nowby. LİSTESİ</span>
           <span style={{ fontSize: 10, color: "#8d6f63" }}>bu hafta · canlı</span>
         </div>
         <div style={{ flex: 1, display: "flex", flexDirection: "column", gap: 6 }}>
@@ -79,7 +79,7 @@ export default function EmbedListe({ boy }: { boy: "kart" | "genis" }) {
           ))}
           {satirlar.length === 0 && <span style={{ fontSize: 12, color: "#8d6f63" }}>liste ısınıyor…</span>}
         </div>
-        <div style={{ fontSize: 10, color: "#8d6f63", marginTop: 6 }}>Türkiye radyolarının gerçek sayımı → necaliyor.co/liste</div>
+        <div style={{ fontSize: 10, color: "#8d6f63", marginTop: 6 }}>Türkiye radyolarının gerçek sayımı → nowby.co/liste</div>
       </div>
     </a>
   );

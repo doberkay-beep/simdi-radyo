@@ -28,7 +28,7 @@ export const metadata: Metadata = { robots: { index: false, follow: true } };
 export default async function EmbedPage({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params;
   const s = await getStation(slug);
-  const name = s?.name ?? "ŞİMDİ";
+  const name = s?.name ?? "nowby.";
   const accent = s?.accent_color || DEFAULT_ACCENT;
 
   // Boyu (?boy=ince|genis) client okur — sayfa ISR kalsın (CPU kotası).

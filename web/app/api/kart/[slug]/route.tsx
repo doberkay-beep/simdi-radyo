@@ -124,7 +124,7 @@ export async function GET(req: Request, { params }: { params: Promise<{ slug: st
     logoDataUri(station?.homepage ?? null),
   ]);
 
-  const name = station?.name ?? "ŞİMDİ";
+  const name = station?.name ?? "nowby.";
   const accent = station?.accent_color || DEFAULT_ACCENT;
   const ink = readableOn(accent);
   const genre = station?.genre ?? null;
@@ -275,12 +275,12 @@ export async function GET(req: Request, { params }: { params: Promise<{ slug: st
           </div>
           <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginTop: 28 }}>
             <div style={{ display: "flex", alignItems: "baseline", gap: 14 }}>
-              <div style={{ fontSize: fmt === "yatay" ? 34 : 40, fontWeight: 700, letterSpacing: -1 }}>ŞİMDİ</div>
+              <div style={{ fontSize: fmt === "yatay" ? 34 : 40, fontWeight: 700, letterSpacing: -1 }}>nowby.</div>
               <div style={{ fontSize: fmt === "yatay" ? 22 : 26, color: "#8a8a92", fontStyle: "italic", fontFamily: "Lora" }}>
                 bir şairin frekansı
               </div>
             </div>
-            <div style={{ fontSize: fmt === "yatay" ? 30 : 34, color: "#9a9aa2" }}>necaliyor.co</div>
+            <div style={{ fontSize: fmt === "yatay" ? 30 : 34, color: "#9a9aa2" }}>nowby.co</div>
           </div>
         </div>
       </div>

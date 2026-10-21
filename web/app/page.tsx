@@ -21,9 +21,9 @@ async function anaOzet(): Promise<AnaOzet | null> {
 const jsonLd = {
   "@context": "https://schema.org",
   "@type": "WebSite",
-  name: "ŞİMDİ",
-  alternateName: "necaliyor.co",
-  url: "https://necaliyor.co",
+  name: "nowby.",
+  alternateName: "nowby.co",
+  url: "https://nowby.co",
   inLanguage: "tr-TR",
   description: "Türkiye'deki ve dünyadan seçili radyolarda şu an çalan parçalar, canlı.",
   creator: { "@type": "Person", name: "Berkay Doğan", url: "https://berkaydogan.co" },

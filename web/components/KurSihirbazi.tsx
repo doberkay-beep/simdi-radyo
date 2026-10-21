@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 
-// 📲 KUR SİHİRBAZI — ŞİMDİ'yi uygulama gibi ana ekrana kurdurur.
+// 📲 KUR SİHİRBAZI — nowby'yi uygulama gibi ana ekrana kurdurur.
 // Android/Chrome: yakalanan beforeinstallprompt ile TEK dokunuş gerçek kurulum.
 // iOS Safari: sistem izin vermez — iki adımlı resimli tarif gösterilir.
 // Zaten kurulu (standalone) açılmışsa hiç görünmez.
@@ -56,21 +56,21 @@ export default function KurSihirbazi({ acik, kapat, dil }: { acik: boolean; kapa
       <div className="menu-sayfa absolute inset-x-0 bottom-0 rounded-t-2xl p-5 pb-8 sm:inset-x-auto sm:left-1/2 sm:top-1/2 sm:bottom-auto sm:w-[420px] sm:-translate-x-1/2 sm:-translate-y-1/2 sm:rounded-2xl sm:border" >
         <div className="mb-3 flex items-center justify-between">
           <span className="mono text-[11px] font-bold uppercase tracking-[0.2em]" style={{ color: "var(--muted)" }}>
-            📲 {en ? "INSTALL ŞİMDİ" : "ŞİMDİ'Yİ KUR"}
+            📲 {en ? "INSTALL nowby." : "nowby'yi kur"}
           </span>
           <button onClick={kapat} className="press text-xl leading-none" aria-label={en ? "close" : "kapat"}>×</button>
         </div>
 
         {sonuc === "kuruldu" ? (
           <p className="text-base font-semibold">
-            🎉 {en ? "Installed! ŞİMDİ now lives on your home screen." : "Kuruldu! ŞİMDİ artık ana ekranında yaşıyor."}
+            🎉 {en ? "Installed! nowby now lives on your home screen." : "Kuruldu! nowby artık ana ekranında yaşıyor."}
           </p>
         ) : (
           <>
             <p className="text-sm leading-relaxed" style={{ color: "var(--muted)" }}>
               {en
-                ? "App store? No need. ŞİMDİ installs from the browser: full screen, its own icon, and artist radar notifications work properly."
-                : "Mağaza yok, indirme yok. ŞİMDİ tarayıcıdan kurulur: tam ekran açılır, kendi simgesi olur, Sanatçı Radarı bildirimleri de tam çalışır."}
+                ? "App store? No need. nowby installs from the browser: full screen, its own icon, and artist radar notifications work properly."
+                : "Mağaza yok, indirme yok. nowby tarayıcıdan kurulur: tam ekran açılır, kendi simgesi olur, Sanatçı Radarı bildirimleri de tam çalışır."}
             </p>
 
             {ios ? (

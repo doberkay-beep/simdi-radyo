@@ -4,7 +4,7 @@ import { json } from "@/lib/json";
 export const dynamic = "force-dynamic";
 
 // GET /api/liste?a=gun|hafta[&q=sanatçı]
-// ŞİMDİ LİSTESİ: plays arşivinden canlı sayım (liste-canli.sql fonksiyonları).
+// nowby. LİSTESİ: plays arşivinden canlı sayım (liste-canli.sql fonksiyonları).
 export async function GET(request: Request) {
   const u = new URL(request.url);
   const aralik = u.searchParams.get("a") === "hafta" ? 7 : 1;

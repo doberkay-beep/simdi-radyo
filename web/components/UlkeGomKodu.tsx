@@ -7,7 +7,7 @@ import { ulkeSlug, type UlkeKodu } from "@/lib/ulkeler";
 export default function UlkeGomKodu({ kod, baslik, dil }: { kod: UlkeKodu; baslik: string; dil: "tr" | "en" }) {
   const [kopyalandi, setKopyalandi] = useState(false);
   const en = dil === "en";
-  const kodMetni = `<iframe src="https://necaliyor.co/embed/ulke/${ulkeSlug(kod)}" width="360" height="180" style="border:0;border-radius:16px;max-width:100%" title="${baslik} — ŞİMDİ" loading="lazy"></iframe>`;
+  const kodMetni = `<iframe src="https://nowby.co/embed/ulke/${ulkeSlug(kod)}" width="360" height="180" style="border:0;border-radius:16px;max-width:100%" title="${baslik} — nowby." loading="lazy"></iframe>`;
 
   async function kopyala() {
     try {

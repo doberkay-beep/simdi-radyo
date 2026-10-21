@@ -196,7 +196,7 @@ export default function SanatciTakip({
             <span>🔔 {en ? "Notifications are on — even when the site is closed." : "Bildirimler açık — site kapalıyken bile haber gelir."}</span>
           ) : iosKurulmamis ? (
             <span className="flex flex-wrap items-center justify-between gap-2">
-              <span style={{ color: "var(--muted)" }}>{en ? "On iPhone, install ŞİMDİ to the home screen first for notifications." : "iPhone'da bildirim için önce ŞİMDİ'yi ana ekrana kur."}</span>
+              <span style={{ color: "var(--muted)" }}>{en ? "On iPhone, install nowby to the home screen first for notifications." : "iPhone'da bildirim için önce nowby'yi ana ekrana kur."}</span>
               <button onClick={() => { kapat(); kurAc(); }} className="hap-marka press !py-1.5 text-xs">📲 {en ? "how?" : "nasıl?"}</button>
             </span>
           ) : radarDestekleniyor() ? (

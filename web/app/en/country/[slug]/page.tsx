@@ -13,11 +13,11 @@ export function generateStaticParams() {
 export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }): Promise<Metadata> {
   const { slug } = await params;
   const kod = ULKE_SLUG_EN[slug];
-  if (!kod) return { title: "Country not found — ŞİMDİ" };
+  if (!kod) return { title: "Country not found — nowby." };
   const u = ULKELER[kod];
   const baslik = ulkeBaslik(kod, "en");
   return {
-    title: `${baslik} — listen live, now playing | ŞİMDİ`,
+    title: `${baslik} — listen live, now playing | nowby.`,
     description: `${baslik}: hand-picked stations, one-tap live streams and what's playing right now in ${u.en}.`,
     alternates: {
       canonical: `/en/country/${slug}`,

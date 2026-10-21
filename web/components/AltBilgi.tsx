@@ -5,7 +5,7 @@ import { usePathname } from "next/navigation";
 import { useDil } from "@/lib/i18n";
 import ToneToggle from "./ToneToggle";
 
-// Site-geneli künye — her sayfanın altında. ŞİMDİ'nin bir yazar projesi
+// Site-geneli künye — her sayfanın altında. nowby'nin bir yazar projesi
 // olduğunu söyler ve berkaydogan.co'ya (aynı kişi → funnel + entity) bağlar.
 // rel="me": iki siteyi aynı kişinin sahiplendiğini arama motorlarına bildirir.
 // Gömme (/embed) sayfalarında gösterilmez — rozet iframe'i temiz kalsın.
@@ -20,7 +20,7 @@ export default function AltBilgi() {
       <div className="border-t pt-6" style={{ borderColor: "var(--line)" }}>
         <p>
           <span className="brand font-bold" style={{ color: "var(--fg)" }}>
-            ŞİMDİ
+            nowby.
           </span>{" "}
           — {en ? "a radio project by the writer " : "bir yazarın radyo projesi · "}
           <a

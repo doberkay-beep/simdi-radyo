@@ -1,7 +1,7 @@
 import { getSupabase } from "@/lib/supabase";
 
 // AÇIK VERİ — Türkiye Radyo Endeksi'nin ham JSON'u. Gazeteci ve araştırmacılar
-// için; CORS açık, CDN'de 1 saat taze kalır. Alıntı: "necaliyor.co Türkiye Radyo Endeksi".
+// için; CORS açık, CDN'de 1 saat taze kalır. Alıntı: "nowby.co Türkiye Radyo Endeksi".
 export const revalidate = 3600;
 
 const CORS = {
@@ -20,7 +20,7 @@ export async function GET(_req: Request, ctx: { params: Promise<{ ay: string }> 
     return new Response(JSON.stringify({ hata: "bu ay için veri yok" }), { status: 404, headers: CORS });
   }
   return new Response(
-    JSON.stringify({ kaynak: "necaliyor.co Türkiye Radyo Endeksi", iletisim: "do.berkay@icloud.com", ...data }, null, 1),
+    JSON.stringify({ kaynak: "nowby.co Türkiye Radyo Endeksi", iletisim: "do.berkay@icloud.com", ...data }, null, 1),
     { headers: CORS },
   );
 }

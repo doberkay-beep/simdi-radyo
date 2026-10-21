@@ -8,7 +8,7 @@ export const revalidate = 3600;
 export async function generateMetadata(): Promise<Metadata> {
   const h = buHafta();
   return {
-    title: `Türkiye Radyo Raporu · ${haftaEtiketi(h)} | ŞİMDİ`,
+    title: `Türkiye Radyo Raporu · ${haftaEtiketi(h)} | nowby.`,
     description: "Türkiye radyolarında bu hafta en çok çalan 20 şarkı, haftanın sanatçıları, yükselenler ve yeni girenler — 7/24 canlı sayımla.",
     alternates: { canonical: "/rapor" },
   };

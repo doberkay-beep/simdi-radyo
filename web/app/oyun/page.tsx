@@ -2,9 +2,9 @@ import Link from "next/link";
 import ThemeToggle from "@/components/ThemeToggle";
 
 export const metadata = {
-  title: "Oyunlar — kulağınla oyna | ŞİMDİ",
+  title: "Oyunlar — kulağınla oyna | nowby.",
   description:
-    "ŞİMDİ'nin radyo oyunları: Kör Dinleme'de istasyonu, Nereden Çalıyor?'da ülkeyi tahmin et. Kulağın ne kadar keskin?",
+    "nowby'nin radyo oyunları: Kör Dinleme'de istasyonu, Nereden Çalıyor?'da ülkeyi tahmin et. Kulağın ne kadar keskin?",
   alternates: { canonical: "/oyun" },
 };
 

@@ -108,7 +108,7 @@ export default function StationPlayer({
   }
 
   async function share() {
-    const url = `https://necaliyor.co/radyo/${slug}`;
+    const url = `https://nowby.co/radyo/${slug}`;
     try {
       if (navigator.share) await navigator.share({ url });
       else {
@@ -166,7 +166,7 @@ export default function StationPlayer({
         onError={reconnect}
       />
       {kartAcik && (
-        <KartModal slug={slug} name={name ?? "ŞİMDİ"} accent={accent} onClose={() => setKartAcik(false)} />
+        <KartModal slug={slug} name={name ?? "nowby."} accent={accent} onClose={() => setKartAcik(false)} />
       )}
     </div>
   );

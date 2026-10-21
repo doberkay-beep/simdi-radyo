@@ -130,7 +130,7 @@ export const SOZLUK: Record<string, { tr: string; en: string }> = {
   // rozetler & şairin frekansı
   "rozet.baslik": { tr: "rozetler", en: "badges" },
   "sair.baslik": { tr: "şairin frekansı", en: "the poet's pick" },
-  "kopru.kitap": { tr: "ŞİMDİ'yi kuran yazarın kitabı:", en: "A book by the writer who built ŞİMDİ:" },
+  "kopru.kitap": { tr: "nowby'yi kuran yazarın kitabı:", en: "A book by the writer who built nowby.:" },
   "wrapped.baslik": { tr: "ay kapandı — frekans karnen hazır", en: "the month is in — your frequency report is ready" },
   "wrapped.alt": { tr: "Karnenle yüzleş, kartını bas, story'ne at.", en: "Face the numbers, print your card, share it." },
   "manset.istasyon": { tr: "istasyon", en: "stations" },

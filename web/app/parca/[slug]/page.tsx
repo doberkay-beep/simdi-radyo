@@ -71,11 +71,11 @@ async function getParca(slug: string) {
 export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }): Promise<Metadata> {
   const { slug } = await params;
   const p = await getParca(slug);
-  if (!p) return { title: "Parça bulunamadı — ŞİMDİ" };
+  if (!p) return { title: "Parça bulunamadı — nowby." };
   const ad = p.artist && p.artist !== p.baslik ? `${p.artist} — ${p.baslik}` : p.baslik;
-  const desc = `"${ad}" necaliyor arşivinde ${p.toplam} kez, ${p.istasyonlar.length} istasyonda çaldı. Hangi radyolarda çaldığını gör.`;
+  const desc = `"${ad}" nowby arşivinde ${p.toplam} kez, ${p.istasyonlar.length} istasyonda çaldı. Hangi radyolarda çaldığını gör.`;
   return {
-    title: `${ad} — hangi radyoda çaldı? | ŞİMDİ`,
+    title: `${ad} — hangi radyoda çaldı? | nowby.`,
     description: desc,
     alternates: { canonical: `/parca/${slug}` },
     openGraph: { title: `${ad} — hangi radyoda çaldı?`, description: desc, type: "music.song" },
@@ -88,7 +88,7 @@ export default async function ParcaPage({ params }: { params: Promise<{ slug: st
   if (!p) notFound();
   const ad = p.artist && p.artist !== p.baslik ? `${p.artist} — ${p.baslik}` : p.baslik;
 
-  const url = `https://necaliyor.co/parca/${slug}`;
+  const url = `https://nowby.co/parca/${slug}`;
   const jsonLd = {
     "@context": "https://schema.org",
     "@graph": [
@@ -102,8 +102,8 @@ export default async function ParcaPage({ params }: { params: Promise<{ slug: st
       {
         "@type": "BreadcrumbList",
         itemListElement: [
-          { "@type": "ListItem", position: 1, name: "ŞİMDİ", item: "https://necaliyor.co" },
-          { "@type": "ListItem", position: 2, name: "Arşiv", item: "https://necaliyor.co/arsiv" },
+          { "@type": "ListItem", position: 1, name: "nowby.", item: "https://nowby.co" },
+          { "@type": "ListItem", position: 2, name: "Arşiv", item: "https://nowby.co/arsiv" },
           { "@type": "ListItem", position: 3, name: ad, item: url },
         ],
       },
@@ -123,7 +123,7 @@ export default async function ParcaPage({ params }: { params: Promise<{ slug: st
           <Link href="/arsiv" className="text-sm underline" style={{ color: "var(--muted)" }}>
             ← arşiv
           </Link>
-          <span className="brand text-sm font-bold tracking-tight">ŞİMDİ</span>
+          <span className="brand text-sm font-bold tracking-tight">nowby.</span>
         </header>
 
         <p className="text-xs uppercase tracking-wide" style={{ color: "var(--muted)" }}>
@@ -131,7 +131,7 @@ export default async function ParcaPage({ params }: { params: Promise<{ slug: st
         </p>
         <h1 className="brand mt-1 text-3xl font-bold tracking-tight">{ad}</h1>
         <p className="epigraf mt-3 text-[15px]">
-          necaliyor arşivinde <strong style={{ color: "var(--fg)" }}>{p.toplam}</strong> kez,{" "}
+          nowby arşivinde <strong style={{ color: "var(--fg)" }}>{p.toplam}</strong> kez,{" "}
           <strong style={{ color: "var(--fg)" }}>{p.istasyonlar.length}</strong> istasyonda çaldı.
         </p>
 
@@ -174,7 +174,7 @@ export default async function ParcaPage({ params }: { params: Promise<{ slug: st
 
         <div className="read mt-10 text-[15px] leading-relaxed" style={{ color: "var(--muted)" }}>
           <p>
-            Bir parçanın nerede, ne zaman çaldığı da bir hikâyedir. necaliyor.co her &quot;şimdi&quot;yi kalıcı
+            Bir parçanın nerede, ne zaman çaldığı da bir hikâyedir. nowby.co her &quot;şimdi&quot;yi kalıcı
             arşive yazar; böylece bir şarkının frekanslardaki yolculuğunu geriye dönüp görebilirsin.
           </p>
         </div>

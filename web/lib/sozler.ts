@@ -1,5 +1,5 @@
 // ───────────────────────────────────────────────────────────────
-//  ŞİMDİ — şiir defteri
+//  nowby. — şiir defteri
 //  Sitenin bütün edebi sesi burada. Bu dizeler taslaktır; KENDİ
 //  kalemininkilerle değiştir. Bir yerini değiştirdiğinde site
 //  boyunca o ses değişir.

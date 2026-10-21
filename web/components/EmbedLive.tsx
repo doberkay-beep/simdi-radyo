@@ -56,7 +56,7 @@ export default function EmbedLive({ slug, name, accent, boy: boyProp }: { slug: 
   return (
     <div style={{ padding: boy === "kart" ? 8 : 0, height: "100dvh", boxSizing: "border-box", background: "transparent" }}>
     <a
-      href={`https://necaliyor.co/radyo/${slug}`}
+      href={`https://nowby.co/radyo/${slug}`}
       target="_blank"
       rel="noopener"
       style={{
@@ -98,7 +98,7 @@ export default function EmbedLive({ slug, name, accent, boy: boyProp }: { slug: 
           {track}
         </span>
       </span>
-      <span style={{ fontSize: B.etiket, fontWeight: 700, opacity: 0.85, whiteSpace: "nowrap" }}>necaliyor.co</span>
+      <span style={{ fontSize: B.etiket, fontWeight: 700, opacity: 0.85, whiteSpace: "nowrap" }}>nowby.co</span>
     </a>
     </div>
   );

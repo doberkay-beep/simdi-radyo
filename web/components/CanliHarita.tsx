@@ -166,7 +166,7 @@ export default function CanliHarita({ embed = false }: { embed?: boolean }) {
       {!embed && (
         <header className="relative z-10 flex flex-wrap items-center justify-between gap-y-2 px-6 py-4">
           <Link href="/" className="brand text-xl font-bold tracking-tight" style={{ color: "#f2e6da" }}>
-            ŞİMDİ <span style={{ color: "#8d6f63" }}>· canlı harita</span>
+            nowby. <span style={{ color: "#8d6f63" }}>· canlı harita</span>
           </Link>
           <span className="mono flex items-center gap-4 text-[11px] uppercase tracking-[0.18em]" style={{ color: "#b0938a" }}>
             {calan && (

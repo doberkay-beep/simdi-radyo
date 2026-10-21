@@ -9,7 +9,7 @@ export async function generateMetadata({ params }: { params: Promise<{ hafta: st
   const { hafta } = await params;
   if (!gecerliHafta(hafta)) return {};
   return {
-    title: `Türkiye Radyo Raporu · ${haftaEtiketi(hafta)} | ŞİMDİ`,
+    title: `Türkiye Radyo Raporu · ${haftaEtiketi(hafta)} | nowby.`,
     description: `${haftaEtiketi(hafta)} haftasında Türkiye radyolarında en çok çalan 20 şarkı ve sanatçılar.`,
     alternates: { canonical: `/rapor/${hafta}` },
   };

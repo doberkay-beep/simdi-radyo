@@ -40,8 +40,8 @@ const mono = Space_Mono({
 });
 
 export const metadata = {
-  metadataBase: new URL("https://necaliyor.co"),
-  title: "ŞİMDİ — radyoda şu an ne çalıyor",
+  metadataBase: new URL("https://nowby.co"),
+  title: "nowby. — radyoda şu an ne çalıyor",
   description:
     "Türkiye'deki (ve seçili yabancı) radyolarda şu an çalan parçalar, canlı. What's playing right now on Turkish radio.",
   keywords: ["radyo", "canlı radyo", "şu an çalan", "Turkish radio", "now playing", "live radio"],
@@ -51,11 +51,11 @@ export const metadata = {
   },
   appleWebApp: {
     capable: true,
-    title: "ŞİMDİ",
+    title: "nowby.",
     statusBarStyle: "black-translucent" as const,
   },
   openGraph: {
-    title: "ŞİMDİ — radyoda şu an ne çalıyor",
+    title: "nowby. — radyoda şu an ne çalıyor",
     description:
       "Türkiye'deki radyolarda şu an çalan parçalar, canlı. Now playing on Turkish & world radio.",
     type: "website",

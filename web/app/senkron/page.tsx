@@ -7,9 +7,9 @@ import { senkronDefteri, senkronRekoru, yayilma, trZaman } from "@/lib/senkron";
 export const revalidate = 120;
 
 export const metadata: Metadata = {
-  title: "Senkron Defteri — aynı şarkı, aynı anda, birbirinden habersiz radyolarda | ŞİMDİ",
+  title: "Senkron Defteri — aynı şarkı, aynı anda, birbirinden habersiz radyolarda | nowby.",
   description:
-    "Türkiye'nin radyoları birbirinden habersiz yayın yapar. Bazen aynı şarkı aynı dakika içinde iki ayrı radyoda başlar — nadir bir an. ŞİMDİ hepsini yakalayıp buraya yazıyor.",
+    "Türkiye'nin radyoları birbirinden habersiz yayın yapar. Bazen aynı şarkı aynı dakika içinde iki ayrı radyoda başlar — nadir bir an. nowby hepsini yakalayıp buraya yazıyor.",
   alternates: { canonical: "/senkron" },
 };
 
@@ -20,7 +20,7 @@ export default async function Sayfa() {
   return (
     <main className="mx-auto max-w-2xl px-5 py-10">
       <p className="mono text-[11px] uppercase tracking-[0.22em]" style={{ color: "var(--muted)" }}>
-        <Link href="/" className="nav-link">ŞİMDİ</Link> · nadir anlar kaydı
+        <Link href="/" className="nav-link">nowby.</Link> · nadir anlar kaydı
       </p>
       <h1 className="brand mt-2 text-4xl font-bold leading-tight">⚡ SENKRON DEFTERİ</h1>
       <p className="epigraf mt-3 text-base">

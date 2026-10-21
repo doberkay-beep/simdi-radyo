@@ -6,7 +6,7 @@ import Muhur from "@/components/Muhur";
 import ThemeToggle from "@/components/ThemeToggle";
 
 export const metadata: Metadata = {
-  title: "Köşe — denemeler | ŞİMDİ",
+  title: "Köşe — denemeler | nowby.",
   description: "Radyo, dinlemek ve 'şimdi' üzerine kısa denemeler. Bir şairin köşesi.",
   alternates: { canonical: "/kose" },
 };

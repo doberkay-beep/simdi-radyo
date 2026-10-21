@@ -22,9 +22,9 @@ function tarihTR(s: string): string {
 export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }): Promise<Metadata> {
   const { slug } = await params;
   const d = denemeBul(slug);
-  if (!d) return { title: "Deneme bulunamadı — ŞİMDİ" };
+  if (!d) return { title: "Deneme bulunamadı — nowby." };
   return {
-    title: `${d.baslik} — Köşe | ŞİMDİ`,
+    title: `${d.baslik} — Köşe | nowby.`,
     description: d.ozet,
     alternates: { canonical: `/kose/${slug}` },
     openGraph: { title: d.baslik, description: d.ozet, type: "article" },
@@ -42,7 +42,7 @@ export default async function Page({ params }: { params: Promise<{ slug: string 
     headline: d.baslik,
     datePublished: d.tarih,
     author: { "@type": "Person", name: "Berkay Doğan" },
-    url: `https://necaliyor.co/kose/${slug}`,
+    url: `https://nowby.co/kose/${slug}`,
   };
 
   return (

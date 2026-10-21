@@ -5,7 +5,7 @@ export default function NotFound() {
   return (
     <div className="spread min-h-screen">
       <div className="mx-auto flex min-h-screen max-w-2xl flex-col items-start justify-center px-5">
-        <span className="brand text-5xl font-bold tracking-tight">ŞİMDİ</span>
+        <span className="brand text-5xl font-bold tracking-tight">nowby.</span>
         <h1 className="read mt-6 text-3xl italic" style={{ color: "var(--fg)" }}>
           {YOK.baslik}
         </h1>

@@ -73,9 +73,9 @@ export async function GET(req: Request, ctx: { params: Promise<{ slug: string }>
 
       {!og && (
         <div style={{ display: "flex", flexDirection: "column", borderTop: `2px solid ${RENK.cizgi}`, paddingTop: 34 }}>
-          <div style={{ display: "flex", fontSize: 34, letterSpacing: 4, color: RENK.sicak }}>necaliyor.co/radyo/{kes(slug, 22)}</div>
+          <div style={{ display: "flex", fontSize: 34, letterSpacing: 4, color: RENK.sicak }}>nowby.co/radyo/{kes(slug, 22)}</div>
           <div style={{ display: "flex", fontFamily: "Siir", fontSize: 28, color: RENK.soluk, marginTop: 10 }}>
-            ŞİMDİ · radyonun haftalık karnesi — canlı arşivden
+            nowby. · radyonun haftalık karnesi — canlı arşivden
           </div>
         </div>
       )}

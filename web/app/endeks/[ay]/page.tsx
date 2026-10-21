@@ -23,10 +23,10 @@ export function generateStaticParams() {
 export async function generateMetadata({ params }: { params: Promise<{ ay: string }> }): Promise<Metadata> {
   const { ay } = await params;
   const o = await ozet(ay);
-  if (!o) return { title: "Endeks bulunamadı | ŞİMDİ" };
+  if (!o) return { title: "Endeks bulunamadı | nowby." };
   const zirve = o.liste[0];
   return {
-    title: `Türkiye Radyo Endeksi — ${ayAdi(ay)} | ŞİMDİ`,
+    title: `Türkiye Radyo Endeksi — ${ayAdi(ay)} | nowby.`,
     description: `${ayAdi(ay)}: ${o.toplam.toLocaleString("tr-TR")} kayıtlı çalma. Ayın şarkısı: ${zirve ? `${zirve.artist} — ${zirve.title}` : "—"}. Ayın sanatçısı: ${o.sanatci?.ad ?? "—"}. Radyolarda gerçekte en çok çalanların resmi sayımı.`,
     alternates: { canonical: `/endeks/${ay}` },
   };
@@ -111,7 +111,7 @@ export default async function Sayfa({ params }: { params: Promise<{ ay: string }
       <section className="mt-8 rounded-2xl border p-4 text-sm" style={{ borderColor: "var(--line-hi)", color: "var(--muted)" }}>
         📂 Bu ayın ham verisi:{" "}
         <a href={`/endeks/${ay}/veri`} className="nav-link mono">/endeks/{ay}/veri</a> (JSON, açık veri).
-        Alıntı: <em>&quot;necaliyor.co Türkiye Radyo Endeksi&quot;</em>
+        Alıntı: <em>&quot;nowby.co Türkiye Radyo Endeksi&quot;</em>
       </section>
     </main>
   );

@@ -1,7 +1,7 @@
 import CanliHarita from "@/components/CanliHarita";
 
 export const metadata = {
-  title: "Canlı Harita — dünyada şu an çalan radyolar | ŞİMDİ",
+  title: "Canlı Harita — dünyada şu an çalan radyolar | nowby.",
   description:
     "Dünya bir gece göğü, her istasyon bir ışık: 50+ ülkede radyolarda şu an ne çalıyor, şarkı değiştiği an haritada parlıyor. Tam ekran yap, arkaya bırak.",
   alternates: { canonical: "/harita" },

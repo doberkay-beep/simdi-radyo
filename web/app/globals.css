@@ -221,7 +221,7 @@ body {
 /* Başlık altı ince vurgu çizgisi — çalan renge göre belirginleşir. */
 .title-underline { transition: opacity 600ms ease; }
 
-/* Marka yazı tipi — "ŞİMDİ" kelime işareti. */
+/* Marka yazı tipi — "nowby." kelime işareti. */
 .brand { font-family: var(--font-brand), ui-sans-serif, system-ui, sans-serif; }
 
 /* KADRAN yazı tipleri — kadran/rakam (sıkışık) ve enstrüman okuması (mono). */

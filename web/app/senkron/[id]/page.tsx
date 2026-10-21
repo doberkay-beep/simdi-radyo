@@ -11,10 +11,10 @@ export const revalidate = 300;
 export async function generateMetadata({ params }: { params: Promise<{ id: string }> }): Promise<Metadata> {
   const { id } = await params;
   const an = await senkronAl(Number(id));
-  if (!an) return { title: "Senkron anı bulunamadı | ŞİMDİ" };
+  if (!an) return { title: "Senkron anı bulunamadı | nowby." };
   const baslik = `⚡ ${an.sayi} radyo aynı anda: ${an.artist} — ${an.title}`;
   return {
-    title: `${baslik} | ŞİMDİ`,
+    title: `${baslik} | nowby.`,
     description: `${trZaman(an.ilk)} — ${an.istasyonlar.map((s) => s.name).join(", ")} birbirinden habersiz, ${yayilma(an)} aynı şarkıyı çalmaya başladı.`,
     alternates: { canonical: `/senkron/${an.id}` },
     openGraph: { title: baslik, images: [{ url: `/senkron/${an.id}/kart?boyut=og`, width: 1200, height: 630 }] },
@@ -65,7 +65,7 @@ export default async function Sayfa({ params }: { params: Promise<{ id: string }
           etiket="⚡ senkron kartı"
           baslik="Bu nadir anı paylaş."
           aciklama={`${an.artist} — ${an.title}: ${an.sayi} radyo, ${yayilma(an)}. Radyolar anlaşmadı; şarkı kendi buldu.`}
-          metin={`⚡ Senkron anı: ${an.sayi} radyo birbirinden habersiz aynı anda "${an.title}" (${an.artist}) çalmaya başladı. https://necaliyor.co/senkron/${an.id}`}
+          metin={`⚡ Senkron anı: ${an.sayi} radyo birbirinden habersiz aynı anda "${an.title}" (${an.artist}) çalmaya başladı. https://nowby.co/senkron/${an.id}`}
         />
       </div>
     </main>

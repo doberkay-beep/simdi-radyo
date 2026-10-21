@@ -58,7 +58,7 @@ export async function GET(req: Request, ctx: { params: Promise<{ id: string }> }
       {!og && (
         <div style={{ display: "flex", flexDirection: "column", borderTop: `2px solid ${RENK.cizgi}`, paddingTop: 34 }}>
           <div style={{ display: "flex", fontSize: 30, color: RENK.soluk }}>{trZaman(an.ilk)}</div>
-          <div style={{ display: "flex", fontSize: 34, letterSpacing: 4, color: RENK.sicak, marginTop: 8 }}>necaliyor.co/senkron</div>
+          <div style={{ display: "flex", fontSize: 34, letterSpacing: 4, color: RENK.sicak, marginTop: 8 }}>nowby.co/senkron</div>
         </div>
       )}
     </div>

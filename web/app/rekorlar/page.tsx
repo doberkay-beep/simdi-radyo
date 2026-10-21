@@ -7,7 +7,7 @@ import { sarkiSlug } from "@/lib/seoslug";
 export const revalidate = 3600;
 
 export const metadata: Metadata = {
-  title: "Radyo Rekorları — Türkiye radyolarının uç değerleri | ŞİMDİ",
+  title: "Radyo Rekorları — Türkiye radyolarının uç değerleri | nowby.",
   description:
     "Bir günde en çok çalınan şarkı, gecenin kralı, sabahın şampiyonu, bir istasyonun tek şarkıya aşkı… Türkiye radyo arşivinin rekor defteri — canlı sayımdan.",
   alternates: { canonical: "/rekorlar" },
@@ -54,7 +54,7 @@ export default async function Sayfa() {
   return (
     <main className="mx-auto max-w-2xl px-5 py-10">
       <p className="mono text-[11px] uppercase tracking-[0.22em]" style={{ color: "var(--muted)" }}>
-        <Link href="/" className="nav-link">ŞİMDİ</Link> · arşivin uç değerleri
+        <Link href="/" className="nav-link">nowby.</Link> · arşivin uç değerleri
       </p>
       <h1 className="brand mt-2 text-4xl font-bold leading-tight">🏆 RADYO REKORLARI</h1>
       {r?.arsiv && (

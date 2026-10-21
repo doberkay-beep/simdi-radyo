@@ -38,7 +38,7 @@ export default function FrekansKarti({
   const { dil, t } = useDil();
   const en = dil === "en";
   const [kartUrl, setKartUrl] = useState<string | null>(null);
-  // "hep" = tüm günlük, "ay" = ŞİMDİ Wrapped (bu ayın dinlemeleri)
+  // "hep" = tüm günlük, "ay" = nowby. Wrapped (bu ayın dinlemeleri)
   const [kip, setKip] = useState<"hep" | "ay">(baslangicKip);
   const kazanilan = useMemo(() => rozetleriHesapla(), []);
   const tumGunluk = useMemo(oku, []);
@@ -176,10 +176,10 @@ export default function FrekansKarti({
       }
       x.fillStyle = ozet.accent;
       x.font = "bold 44px 'Instrument Sans', system-ui, sans-serif";
-      x.fillText("ŞİMDİ", 540, 1720);
+      x.fillText("nowby.", 540, 1720);
       x.fillStyle = "#8a8a8a";
       x.font = "500 34px 'Instrument Sans', system-ui, sans-serif";
-      x.fillText("necaliyor.co", 540, 1780);
+      x.fillText("nowby.co", 540, 1780);
       setKartUrl(c.toDataURL("image/png"));
     } catch {
       // kart üretilemedi — modal yine metinle çalışır
@@ -217,7 +217,7 @@ export default function FrekansKarti({
             {t("frekans.kapat")}
           </button>
         </div>
-        {/* ŞİMDİ Wrapped — tümü / bu ay */}
+        {/* nowby. Wrapped — tümü / bu ay */}
         <div className="mb-3 inline-flex rounded-full border p-0.5 text-xs" style={{ borderColor: "var(--line)" }}>
           {(
             [

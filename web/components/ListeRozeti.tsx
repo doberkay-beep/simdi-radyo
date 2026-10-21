@@ -2,13 +2,13 @@
 
 import { useState } from "react";
 
-/* Rozet sayfası bölümü: ŞİMDİ LİSTESİ rozetini göm — önizleme + kopyala. */
+/* Rozet sayfası bölümü: nowby. LİSTESİ rozetini göm — önizleme + kopyala. */
 export default function ListeRozeti() {
   const [boy, setBoy] = useState<"kart" | "genis">("kart");
   const [kopyalandi, setKopyalandi] = useState(false);
 
   const [w, h] = boy === "genis" ? [728, 90] : [300, 250];
-  const kod = `<iframe src="https://necaliyor.co/embed/liste${boy === "genis" ? "?boy=genis" : ""}" width="${w}" height="${h}" frameborder="0" scrolling="no" title="ŞİMDİ LİSTESİ — Türkiye radyolarında bu hafta" loading="lazy"></iframe>`;
+  const kod = `<iframe src="https://nowby.co/embed/liste${boy === "genis" ? "?boy=genis" : ""}" width="${w}" height="${h}" frameborder="0" scrolling="no" title="nowby. LİSTESİ — Türkiye radyolarında bu hafta" loading="lazy"></iframe>`;
 
   function kopyala() {
     navigator.clipboard?.writeText(kod).then(() => {
@@ -20,7 +20,7 @@ export default function ListeRozeti() {
   return (
     <div className="mt-12 border-t pt-8" style={{ borderColor: "var(--line)" }}>
       <h2 className="brand text-2xl font-bold tracking-tight">
-        🏆 ŞİMDİ LİSTESİ <span className="text-base font-normal" style={{ color: "var(--muted)" }}>· haftanın 5&apos;i, sitene</span>
+        🏆 nowby. LİSTESİ <span className="text-base font-normal" style={{ color: "var(--muted)" }}>· haftanın 5&apos;i, sitene</span>
       </h2>
       <p className="read mt-2 text-[15px]" style={{ color: "var(--muted)" }}>
         Türkiye radyolarında bu hafta gerçekte en çok çalanlar — canlı sayım, kendi kendine güncellenir.

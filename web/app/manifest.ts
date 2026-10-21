@@ -3,13 +3,13 @@ import type { MetadataRoute } from "next";
 // Telefonda "ana ekrana ekle" için: düzgün isim, ikon, tam ekran, koyu tema.
 export default function manifest(): MetadataRoute.Manifest {
   return {
-    name: "ŞİMDİ — radyoda şu an ne çalıyor",
-    short_name: "ŞİMDİ",
+    name: "nowby. — radyoda şu an ne çalıyor",
+    short_name: "nowby.",
     description: "Türkiye'deki radyolarda şu an çalan parçalar, canlı.",
     start_url: "/",
     display: "standalone",
-    background_color: "#0a0a0b",
-    theme_color: "#0a0a0b",
+    background_color: "#0b0605",
+    theme_color: "#0b0605",
     lang: "tr",
     dir: "ltr",
     orientation: "portrait",

@@ -30,8 +30,8 @@ export default function SanatciTakipDugme({ ad }: { ad: string }) {
     radarEsitle().catch(() => {});
     if (!simdi) { setMesaj(""); return; }
     if (radarAcikMi()) { setMesaj(`Tamam — ${ad} bir radyoda çaldığı an haberin olacak.`); return; }
-    if (iosKurulmamis()) { setMesaj("iPhone'da bildirim için önce ŞİMDİ'yi ana ekrana kur."); setKurAcik(true); return; }
-    if (!radarDestekleniyor()) { setMesaj("Takiptesin. Bu tarayıcı bildirim alamıyor; ŞİMDİ açıkken bant düşer."); return; }
+    if (iosKurulmamis()) { setMesaj("iPhone'da bildirim için önce nowby'yi ana ekrana kur."); setKurAcik(true); return; }
+    if (!radarDestekleniyor()) { setMesaj("Takiptesin. Bu tarayıcı bildirim alamıyor; nowby açıkken bant düşer."); return; }
     const s = await radarAc();
     setMesaj(
       s === "acik" ? `🔔 Tamam — ${ad} bir radyoda çaldığı an telefonuna düşecek.`

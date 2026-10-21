@@ -181,8 +181,8 @@ async function govde(tur: Tur, og: boolean, ay: string | null) {
 }
 
 const ADRES: Record<Tur, string> = {
-  tanisma: "necaliyor.co", nasil: "necaliyor.co", rekorlar: "necaliyor.co/rekorlar", gece: "necaliyor.co/gece",
-  duyuru: "instagram.com/necaliyor.co", endeks: "necaliyor.co/endeks",
+  tanisma: "nowby.co", nasil: "nowby.co", rekorlar: "nowby.co/rekorlar", gece: "nowby.co/gece",
+  duyuru: "instagram.com/necaliyor.co", endeks: "nowby.co/endeks",
 };
 
 export async function GET(req: Request, ctx: { params: Promise<{ tur: string }> }) {

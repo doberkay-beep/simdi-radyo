@@ -20,7 +20,7 @@ export default function RaporGovde({ hafta, r }: { hafta: string; r: Rapor | nul
   return (
     <main className="mx-auto max-w-2xl px-5 py-10">
       <p className="mono text-[11px] uppercase tracking-[0.22em]" style={{ color: "var(--muted)" }}>
-        <Link href="/" className="nav-link">ŞİMDİ</Link> · haftalık rapor
+        <Link href="/" className="nav-link">nowby.</Link> · haftalık rapor
       </p>
       <h1 className="brand mt-2 text-4xl font-bold leading-tight">TÜRKİYE RADYO RAPORU</h1>
       <p className="mono mt-2 text-[12px] uppercase tracking-[0.18em]" style={{ color: "var(--glow-hi)" }}>
@@ -100,9 +100,9 @@ export default function RaporGovde({ hafta, r }: { hafta: string; r: Rapor | nul
           </div>
 
           <p className="mt-8 text-[12px] leading-relaxed" style={{ color: "var(--muted)" }}>
-            Yöntem: ŞİMDİ, Türkiye'deki radyoların canlı yayınındaki parça bilgisini 7/24 kaydeder. Liste, hafta
+            Yöntem: nowby, Türkiye'deki radyoların canlı yayınındaki parça bilgisini 7/24 kaydeder. Liste, hafta
             içinde (Pazartesi–Pazar, İstanbul saati) en az iki farklı istasyonda çalan parçaların çalınma sayısıdır;
-            reklam, jingle ve istasyon adı içeren kayıtlar ayıklanır. Alıntılarken “ŞİMDİ verisine göre” kaynağını belirtin.
+            reklam, jingle ve istasyon adı içeren kayıtlar ayıklanır. Alıntılarken “nowby verisine göre” kaynağını belirtin.
           </p>
         </>
       )}

@@ -124,7 +124,7 @@ function since(iso: string, now: number): string {
 const DEFAULT_ACCENT = "#6b7280";
 const FAV_KEY = "favoriler";
 
-// Kilit ekranı kapağı: istasyon renginde degrade + baş harf + ŞİMDİ imzası.
+// Kilit ekranı kapağı: istasyon renginde degrade + baş harf + nowby imzası.
 // Canvas bir kez çizilir, data URL slug başına önbellekte tutulur.
 const kapakOnbellek = new Map<string, string>();
 function kapakUret(slug: string, name: string, accent: string): string {
@@ -148,7 +148,7 @@ function kapakUret(slug: string, name: string, accent: string): string {
     ctx.fillText(name.trim().charAt(0).toLocaleUpperCase("tr"), 256, 268);
     ctx.globalAlpha = 0.85;
     ctx.font = "600 40px 'Instrument Sans', system-ui, sans-serif";
-    ctx.fillText("ŞİMDİ", 256, 452);
+    ctx.fillText("nowby.", 256, 452);
     const url = c.toDataURL("image/png");
     kapakOnbellek.set(slug, url);
     return url;
@@ -935,7 +935,7 @@ export default function NowList({ ilkIstasyonlar, ilkOzet }: { ilkIstasyonlar?: 
     const link = `${window.location.origin}/?oda=${kod}`;
     try {
       if (navigator.share) {
-        await navigator.share({ title: "ŞİMDİ — birlikte dinle", url: link });
+        await navigator.share({ title: "nowby. — birlikte dinle", url: link });
         return;
       }
     } catch { /* paylaşım iptal — panoya düş */ }
@@ -997,16 +997,16 @@ export default function NowList({ ilkIstasyonlar, ilkOzet }: { ilkIstasyonlar?: 
   // Sekme başlığı çalanı göstersin + favicon çalarken renklensin.
   useEffect(() => {
     if (typeof document === "undefined") return;
-    const base = "ŞİMDİ — radyoda şu an ne çalıyor";
+    const base = "nowby. — radyoda şu an ne çalıyor";
     const np = current ? liveNP ?? current.nowPlaying : null;
     if (current && np) {
       const t =
         np.artist && np.title && np.artist !== np.title
           ? `${np.artist} — ${np.title}`
           : np.title || np.rawTitle || current.name;
-      document.title = `♪ ${t} · ŞİMDİ`;
+      document.title = `♪ ${t} · nowby.`;
     } else if (current) {
-      document.title = `♪ ${current.name} · ŞİMDİ`;
+      document.title = `♪ ${current.name} · nowby.`;
     } else {
       document.title = base;
     }
@@ -1107,7 +1107,7 @@ export default function NowList({ ilkIstasyonlar, ilkOzet }: { ilkIstasyonlar?: 
     const bilgi = {
       title: parca ?? current.name,
       artist: parca ? current.name : "canlı radyo",
-      album: "ŞİMDİ · necaliyor.co",
+      album: "nowby.co",
     };
     const istasyonKapak = { src: kapakUret(current.slug, current.name, accent), sizes: "512x512", type: "image/png" };
     try {
@@ -1126,7 +1126,7 @@ export default function NowList({ ilkIstasyonlar, ilkOzet }: { ilkIstasyonlar?: 
           try {
             ms.metadata = new MediaMetadata({
               ...bilgi,
-              album: d.album ? `${d.album} · ŞİMDİ` : bilgi.album,
+              album: d.album ? `${d.album} · nowby.` : bilgi.album,
               artwork: [{ src: d.kapak, sizes: "600x600", type: "image/jpeg" }, istasyonKapak],
             });
           } catch { /* yoksay */ }
@@ -1210,7 +1210,7 @@ export default function NowList({ ilkIstasyonlar, ilkOzet }: { ilkIstasyonlar?: 
             opacity: 0.03,
           }}
         >
-          ŞİMDİ
+          nowby.
         </span>
       </div>
 
@@ -1232,7 +1232,7 @@ export default function NowList({ ilkIstasyonlar, ilkOzet }: { ilkIstasyonlar?: 
             className="brand text-lg font-bold tracking-tight"
             aria-label="başa dön"
           >
-            ŞİMDİ
+            nowby.
           </button>
           {current && (
             <span className="min-w-0 flex-1 truncate text-xs" style={{ color: "var(--muted)" }}>
@@ -1268,7 +1268,7 @@ export default function NowList({ ilkIstasyonlar, ilkOzet }: { ilkIstasyonlar?: 
         {/* Başlık — logo yok, sadece kelime işareti */}
         <header className="mb-6 flex items-start justify-between gap-3">
           <div>
-            <h1 className="brand text-[42px] font-bold leading-none tracking-tight">ŞİMDİ</h1>
+            <h1 className="brand text-[42px] font-bold leading-none tracking-tight">nowby.</h1>
             <span
               className="title-underline mt-2 block h-[2px] rounded-full"
               style={{ width: 40, background: accent, opacity: playing ? 1 : 0.25 }}
@@ -2321,7 +2321,7 @@ export default function NowList({ ilkIstasyonlar, ilkOzet }: { ilkIstasyonlar?: 
           <div className="menu-sayfa absolute inset-x-0 bottom-0 rounded-t-2xl p-5 pb-8 sm:inset-x-auto sm:bottom-auto sm:left-1/2 sm:top-1/2 sm:w-[560px] sm:-translate-x-1/2 sm:-translate-y-1/2 sm:rounded-2xl sm:border">
             <div className="mb-3 flex items-center justify-between">
               <span className="mono text-[11px] font-bold uppercase tracking-[0.2em]" style={{ color: "var(--muted)" }}>
-                ŞİMDİ · {dil === "en" ? "MENU" : "MENÜ"}
+                nowby. · {dil === "en" ? "MENU" : "MENÜ"}
               </span>
               <button onClick={() => setNavAcik(false)} className="press text-xl leading-none" aria-label="kapat">×</button>
             </div>
@@ -2702,7 +2702,7 @@ export default function NowList({ ilkIstasyonlar, ilkOzet }: { ilkIstasyonlar?: 
         >
           <span aria-hidden>📱</span>
           <span className="flex-1">
-            ŞİMDİ&apos;yi uygulama yap: <b>Paylaş</b> → <b>Ana Ekrana Ekle</b>
+            nowby&apos;yi uygulama yap: <b>Paylaş</b> → <b>Ana Ekrana Ekle</b>
           </span>
           <button
             onClick={() => {
@@ -2758,7 +2758,7 @@ export default function NowList({ ilkIstasyonlar, ilkOzet }: { ilkIstasyonlar?: 
           style={{ background: "color-mix(in srgb, var(--bg) 92%, transparent)" }}
           onClick={dismissWelcome}
         >
-          <span className="brand text-5xl font-bold tracking-tight">ŞİMDİ</span>
+          <span className="brand text-5xl font-bold tracking-tight">nowby.</span>
           <h2 className="read mt-6 text-2xl italic" style={{ color: "var(--fg)" }}>
             {HOSGELDIN.baslik}
           </h2>

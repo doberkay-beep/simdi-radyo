@@ -4,7 +4,7 @@ import { ULKELER, ULKE_SLUG_EN, bayrakEmoji, ulkeIstasyonSluglari } from "@/lib/
 // Country share card (EN) — flag + title + station count.
 export const size = { width: 1200, height: 630 };
 export const contentType = "image/png";
-export const alt = "Country radio — ŞİMDİ";
+export const alt = "Country radio — nowby.";
 
 export default async function OG({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params;
@@ -24,8 +24,8 @@ export default async function OG({ params }: { params: Promise<{ slug: string }>
         }}
       >
         <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
-          <div style={{ display: "flex", fontSize: 40, fontWeight: 800, letterSpacing: -1 }}>ŞİMDİ</div>
-          <div style={{ display: "flex", fontSize: 24, color: "#8f8f96" }}>necaliyor.co</div>
+          <div style={{ display: "flex", fontSize: 40, fontWeight: 800, letterSpacing: -1 }}>nowby.</div>
+          <div style={{ display: "flex", fontSize: 24, color: "#8f8f96" }}>nowby.co</div>
         </div>
         <div style={{ display: "flex", flexDirection: "column", gap: 18 }}>
           <div style={{ display: "flex", fontSize: 120, lineHeight: 1 }}>{kod ? bayrakEmoji(kod) : "🌍"}</div>

@@ -76,12 +76,12 @@ const otuzGunEtiketi = () => (Date.now() - OZET_BASLANGIC < 30 * 864e5 ? "1 Ekim
 export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }): Promise<Metadata> {
   const { slug } = await params;
   const o = await ozetAl(slug);
-  if (!o) return { title: "Sanatçı bulunamadı | ŞİMDİ" };
+  if (!o) return { title: "Sanatçı bulunamadı | nowby." };
   const enCok = o.sarkilar[0];
   const haftaVar = o.kez7 > 0;
   return {
     // İnsanlar "X şarkıları", "X <şarkı adı>" diye arıyor; başlık bunu ve canlı sayıyı taşır.
-    title: `${o.ad} şarkıları radyoda — ${haftaVar ? `bu hafta ${o.kez7}` : `${o.kez30}`} kez | ŞİMDİ`,
+    title: `${o.ad} şarkıları radyoda — ${haftaVar ? `bu hafta ${o.kez7}` : `${o.kez30}`} kez | nowby.`,
     description: `${enCok ? `Radyoda en çok çalan ${o.ad} şarkısı "${enCok.title}" (${enCok.kez} kez). ` : ""}Son 7 günde Türkiye radyolarında ${o.kez7} kez çaldı (${otuzGunEtiketi()} ${o.kez30} kez, ${o.istasyonSay} istasyon)${o.istasyonlar.length ? `; en çok ${o.istasyonlar.slice(0, 3).map((s) => s.name).join(", ")}` : ""}. Canlı sayım.`,
     alternates: { canonical: `/sanatci/${slug}` },
     // Link paylaşılınca önizleme = sanatçının radyo rozeti.
@@ -120,7 +120,7 @@ export default async function Sayfa({ params }: { params: Promise<{ slug: string
   const jsonLd = {
     "@context": "https://schema.org",
     "@graph": [
-      { "@type": "MusicGroup", name: o.ad, url: `https://necaliyor.co/sanatci/${slug}` },
+      { "@type": "MusicGroup", name: o.ad, url: `https://nowby.co/sanatci/${slug}` },
       {
         // "X radyoda kaç kez çaldı?" aramalarına doğrudan cevap
         "@type": "FAQPage",
@@ -128,7 +128,7 @@ export default async function Sayfa({ params }: { params: Promise<{ slug: string
           {
             "@type": "Question",
             name: `${o.ad} radyoda kaç kez çaldı?`,
-            acceptedAnswer: { "@type": "Answer", text: `ŞİMDİ'nin canlı sayımına göre ${o.ad} son 7 günde Türkiye radyolarında ${o.kez7} kez, ${otuzGunEtiketi()} ${o.kez30} kez çaldı (${o.istasyonSay} istasyon).` },
+            acceptedAnswer: { "@type": "Answer", text: `nowby'nin canlı sayımına göre ${o.ad} son 7 günde Türkiye radyolarında ${o.kez7} kez, ${otuzGunEtiketi()} ${o.kez30} kez çaldı (${o.istasyonSay} istasyon).` },
           },
           ...(enCok
             ? [{
@@ -237,7 +237,7 @@ export default async function Sayfa({ params }: { params: Promise<{ slug: string
             etiket="📣 radyo rozeti"
             baslik="Sanatçısı, menajeri ya da hayranı mısın? Bunu paylaş."
             aciklama={`Anket değil, gerçek sayım: ${o.ad} ${o.kez7 > 0 ? "son 7 günde" : "son 30 günde"} Türkiye radyolarında ${o.kez7 > 0 ? o.kez7 : o.kez30} kez çaldı. Rozet her saat tazelenir.`}
-            metin={`${o.ad} ${o.kez7 > 0 ? "son 7 günde" : "son 30 günde"} Türkiye radyolarında ${o.kez7 > 0 ? o.kez7 : o.kez30} kez çaldı 📻 Gerçek sayım: https://necaliyor.co/sanatci/${slug}`}
+            metin={`${o.ad} ${o.kez7 > 0 ? "son 7 günde" : "son 30 günde"} Türkiye radyolarında ${o.kez7 > 0 ? o.kez7 : o.kez30} kez çaldı 📻 Gerçek sayım: https://nowby.co/sanatci/${slug}`}
           />
         )}
 
@@ -308,7 +308,7 @@ export default async function Sayfa({ params }: { params: Promise<{ slug: string
           </p>
           <SanatciTakipDugme ad={o.ad} />
           <p className="mt-3 text-sm" style={{ color: "var(--muted)" }}>
-            Haftanın tam listesi: <Link href="/liste" className="underline">ŞİMDİ LİSTESİ →</Link>
+            Haftanın tam listesi: <Link href="/liste" className="underline">nowby. LİSTESİ →</Link>
           </p>
         </div>
       </div>

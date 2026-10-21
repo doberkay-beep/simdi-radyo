@@ -65,13 +65,13 @@ export default async function UlkeSayfasi({ kod, dil }: { kod: UlkeKodu; dil: "t
   const jsonLd = {
     "@context": "https://schema.org",
     "@type": "CollectionPage",
-    name: `${baslik} — ŞİMDİ`,
-    url: `https://necaliyor.co${sayfaUrl(kod)}`,
+    name: `${baslik} — nowby.`,
+    url: `https://nowby.co${sayfaUrl(kod)}`,
     inLanguage: en ? "en" : "tr",
     hasPart: stations.slice(0, 30).map((s) => ({
       "@type": "RadioStation",
       name: s.name,
-      url: `https://necaliyor.co/radyo/${s.slug}`,
+      url: `https://nowby.co/radyo/${s.slug}`,
     })),
   };
 
@@ -91,7 +91,7 @@ export default async function UlkeSayfasi({ kod, dil }: { kod: UlkeKodu; dil: "t
             >
               {en ? "TR" : "EN"}
             </Link>
-            <Link href="/" className="brand text-sm font-bold tracking-tight">ŞİMDİ</Link>
+            <Link href="/" className="brand text-sm font-bold tracking-tight">nowby.</Link>
           </span>
         </header>
 

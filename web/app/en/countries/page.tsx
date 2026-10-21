@@ -6,13 +6,13 @@ import DunyaHaritasi from "@/components/DunyaHaritasi";
 
 // World Atlas (EN) — radio by country.
 export const metadata: Metadata = {
-  title: "World Atlas — live radio by country | ŞİMDİ",
+  title: "World Atlas — live radio by country | nowby.",
   description: "From Turkey to Japan, Brazil to Sweden: hand-picked radio stations by country, one-tap live streams and what's playing right now.",
   alternates: {
     canonical: "/en/countries",
     languages: { "tr": "/ulke", "en": "/en/countries", "x-default": "/ulke" },
   },
-  openGraph: { title: "World Atlas — ŞİMDİ", description: "Live radio by country — now playing.", type: "website" },
+  openGraph: { title: "World Atlas — nowby.", description: "Live radio by country — now playing.", type: "website" },
 };
 
 export default function AtlasPageEn() {
@@ -21,13 +21,13 @@ export default function AtlasPageEn() {
   const jsonLd = {
     "@context": "https://schema.org",
     "@type": "CollectionPage",
-    name: "World Atlas — ŞİMDİ",
-    url: "https://necaliyor.co/en/countries",
+    name: "World Atlas — nowby.",
+    url: "https://nowby.co/en/countries",
     inLanguage: "en",
     hasPart: ulkeler.map((k) => ({
       "@type": "WebPage",
       name: `${ULKELER[k].en} Radio Stations`,
-      url: `https://necaliyor.co/en/country/${ulkeSlugEn(k)}`,
+      url: `https://nowby.co/en/country/${ulkeSlugEn(k)}`,
     })),
   };
 
@@ -41,7 +41,7 @@ export default function AtlasPageEn() {
           </Link>
           <span className="flex items-center gap-3">
             <Link href="/ulke" className="text-xs underline" style={{ color: "var(--muted)" }}>TR</Link>
-            <Link href="/" className="brand text-sm font-bold tracking-tight">ŞİMDİ</Link>
+            <Link href="/" className="brand text-sm font-bold tracking-tight">nowby.</Link>
           </span>
         </header>
 

@@ -49,8 +49,8 @@ export default function AvDefteri({ onClose }: { onClose: () => void }) {
             ? en ? "notification permission denied" : "bildirim izni verilmedi"
             : sonuc === "desteklenmiyor"
               ? en
-                ? "not supported here — on iPhone, add ŞİMDİ to your home screen first"
-                : "bu tarayıcıda yok — iPhone'da önce ŞİMDİ'yi ana ekrana ekle"
+                ? "not supported here — on iPhone, add nowby to your home screen first"
+                : "bu tarayıcıda yok — iPhone'da önce nowby'yi ana ekrana ekle"
               : en ? "something went wrong, try again" : "bir şey ters gitti, yeniden dene",
         );
       }
@@ -113,8 +113,8 @@ export default function AvDefteri({ onClose }: { onClose: () => void }) {
             ) : (
               <p className="mt-3 text-[11px]" style={{ color: "var(--muted)" }}>
                 {en
-                  ? "📲 for push alerts on iPhone, add ŞİMDİ to your home screen"
-                  : "📲 iPhone'da bildirim için ŞİMDİ'yi ana ekrana ekle"}
+                  ? "📲 for push alerts on iPhone, add nowby to your home screen"
+                  : "📲 iPhone'da bildirim için nowby'yi ana ekrana ekle"}
               </p>
             )}
           </div>

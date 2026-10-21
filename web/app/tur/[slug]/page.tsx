@@ -24,9 +24,9 @@ export function generateStaticParams() {
 export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }): Promise<Metadata> {
   const { slug } = await params;
   const t = turBul(slug);
-  if (!t) return { title: "Tür bulunamadı — ŞİMDİ" };
+  if (!t) return { title: "Tür bulunamadı — nowby." };
   return {
-    title: `${t.baslik} — canlı dinle, şu an ne çalıyor | ŞİMDİ`,
+    title: `${t.baslik} — canlı dinle, şu an ne çalıyor | nowby.`,
     description: t.ozet,
     alternates: { canonical: `/tur/${slug}` },
     openGraph: { title: `${t.baslik} — canlı`, description: t.ozet, type: "website" },
@@ -59,13 +59,13 @@ export default async function TurPage({ params }: { params: Promise<{ slug: stri
   const jsonLd = {
     "@context": "https://schema.org",
     "@type": "CollectionPage",
-    name: `${t.baslik} — ŞİMDİ`,
-    url: `https://necaliyor.co/tur/${slug}`,
+    name: `${t.baslik} — nowby.`,
+    url: `https://nowby.co/tur/${slug}`,
     description: t.ozet,
     hasPart: stations.slice(0, 25).map((s) => ({
       "@type": "RadioStation",
       name: s.name,
-      url: `https://necaliyor.co/radyo/${s.slug}`,
+      url: `https://nowby.co/radyo/${s.slug}`,
     })),
   };
 
@@ -77,7 +77,7 @@ export default async function TurPage({ params }: { params: Promise<{ slug: stri
           <Link href="/" className="text-sm underline" style={{ color: "var(--muted)" }}>
             ← şimdi
           </Link>
-          <span className="brand text-sm font-bold tracking-tight">ŞİMDİ</span>
+          <span className="brand text-sm font-bold tracking-tight">nowby.</span>
         </header>
 
         <h1 className="dial text-5xl uppercase tracking-[0.02em]" style={{ fontWeight: 500 }}>{t.baslik}</h1>

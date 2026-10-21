@@ -155,7 +155,7 @@ export default function GununFrekansi() {
     if (!cevap) return "";
     const kutular = tahminler.map((t) => (t === cevap.ulke ? "🟩" : "⬛")).join("");
     const skor = kazandi ? `${tahminler.length}/3` : "X/3";
-    return `🌍 Günün Frekansı #${no}\n${kutular} ${skor}\nnecaliyor.co/oyun/gunun-frekansi`;
+    return `🌍 Günün Frekansı #${no}\n${kutular} ${skor}\nnowby.co/oyun/gunun-frekansi`;
   }, [cevap, tahminler, kazandi, no]);
 
   function kopyala() {

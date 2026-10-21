@@ -85,7 +85,7 @@ export default function KartModal({
       const file = new File([blob], `${slug}-${fmt}.png`, { type: "image/png" });
       const nav = navigator as Navigator & { canShare?: (d: unknown) => boolean };
       if (nav.share && nav.canShare && nav.canShare({ files: [file] })) {
-        await nav.share({ files: [file], text: `${name} — şimdi çalıyor · necaliyor.co` });
+        await nav.share({ files: [file], text: `${name} — şimdi çalıyor · nowby.co` });
       } else {
         await indir();
       }

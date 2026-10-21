@@ -41,7 +41,7 @@ export default function UlkeRozet({
 
   return (
     <a
-      href={`https://necaliyor.co/ulke/${ulkeSlugu}`}
+      href={`https://nowby.co/ulke/${ulkeSlugu}`}
       target="_top"
       style={{
         display: "block", fontFamily: "system-ui, sans-serif", background: "#050505",
@@ -51,7 +51,7 @@ export default function UlkeRozet({
     >
       <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 8 }}>
         <span style={{ fontSize: 13, fontWeight: 700 }}>{bayrak} {baslikDa} şu an</span>
-        <span style={{ fontSize: 11, color: "#8f8f96" }}>ŞİMDİ →</span>
+        <span style={{ fontSize: 11, color: "#8f8f96" }}>nowby. →</span>
       </div>
       {satirlar.length === 0 ? (
         <div style={{ fontSize: 12, color: "#8f8f96" }}>canlı yayına bağlanılıyor…</div>

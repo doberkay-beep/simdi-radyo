@@ -96,7 +96,7 @@ export default function Archive() {
       .filter((r) => r.artist || r.title)
       .slice(0, 12)
       .map((r) => `📻 ${r.name}: ${[r.artist, r.title].filter(Boolean).join(" — ")}`);
-    const metin = `⏳ ${baslikTarih} — o anda radyoda çalanlar:\n\n${satirlar.join("\n")}\n\nBu âna ışınlan: necaliyor.co/arsiv?t=${date}T${time}`;
+    const metin = `⏳ ${baslikTarih} — o anda radyoda çalanlar:\n\n${satirlar.join("\n")}\n\nBu âna ışınlan: nowby.co/arsiv?t=${date}T${time}`;
     // Paylaşım sayfası olan cihazlarda (mobil) yerel paylaşım; masaüstünde kopya.
     if (navigator.share && window.matchMedia("(max-width: 639px)").matches) {
       try {
@@ -176,7 +176,7 @@ export default function Archive() {
           <div className="flex items-end justify-between">
             <div>
               <h1 className="brand text-4xl font-bold tracking-tight">
-                ŞİMDİ <span style={{ color: "var(--muted)" }}>· {t("arsiv.sozcuk")}</span>
+                nowby. <span style={{ color: "var(--muted)" }}>· {t("arsiv.sozcuk")}</span>
               </h1>
               <p className="mt-1 text-sm" style={{ color: "var(--muted)" }}>
                 {t("arsiv.alt")}

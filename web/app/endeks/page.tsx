@@ -7,7 +7,7 @@ import { endeksAylari, ayAdi, type EndeksOzet } from "@/lib/endeks";
 export const revalidate = 3600;
 
 export const metadata: Metadata = {
-  title: "Türkiye Radyo Endeksi — radyolarda gerçekte en çok çalanlar | ŞİMDİ",
+  title: "Türkiye Radyo Endeksi — radyolarda gerçekte en çok çalanlar | nowby.",
   description:
     "Türkiye radyolarının aylık karnesi: yüzlerce istasyonun canlı yayın arşivinden ayın şarkısı, ayın sanatçısı ve toplam çalma sayımı. Açık veri — gazeteciler alıntılayabilir.",
   alternates: { canonical: "/endeks" },
@@ -28,7 +28,7 @@ export default async function Sayfa() {
   return (
     <main className="mx-auto max-w-2xl px-5 py-10">
       <p className="mono text-[11px] uppercase tracking-[0.22em]" style={{ color: "var(--muted)" }}>
-        <Link href="/" className="nav-link">ŞİMDİ</Link> · resmi aylık rapor
+        <Link href="/" className="nav-link">nowby.</Link> · resmi aylık rapor
       </p>
       <h1 className="brand mt-2 text-4xl font-bold leading-tight">TÜRKİYE RADYO ENDEKSİ</h1>
       <p className="epigraf mt-3 text-base">
@@ -81,9 +81,9 @@ export default async function Sayfa() {
         </h2>
         <p className="mt-2 text-sm leading-relaxed" style={{ color: "var(--muted)" }}>
           Her ayın ham verisi herkese açık JSON olarak sunulur:{" "}
-          <code className="mono text-xs">necaliyor.co/endeks/YYYY-AA/veri</code>. Gazeteciler ve
+          <code className="mono text-xs">nowby.co/endeks/YYYY-AA/veri</code>. Gazeteciler ve
           araştırmacılar serbestçe kullanabilir; kaynak gösterimi:{" "}
-          <em>&quot;necaliyor.co Türkiye Radyo Endeksi&quot;</em>. Yöntem: yalnız Türkiye bandı,
+          <em>&quot;nowby.co Türkiye Radyo Endeksi&quot;</em>. Yöntem: yalnız Türkiye bandı,
           en az 2 istasyonda çalınan şarkılar; jingle ve tekrar otomasyonları elenir.
           İletişim: do.berkay@icloud.com
         </p>

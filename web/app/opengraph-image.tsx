@@ -3,7 +3,7 @@ import { readFile } from "node:fs/promises";
 import { join } from "node:path";
 
 // Paylaşım görseli (WhatsApp/X/iMessage önizlemesi).
-export const alt = "ŞİMDİ — radyoda şu an ne çalıyor";
+export const alt = "nowby. — radyoda şu an ne çalıyor";
 export const size = { width: 1200, height: 630 };
 export const contentType = "image/png";
 
@@ -44,7 +44,7 @@ export default async function Image() {
         </div>
         <div style={{ display: "flex", flexDirection: "column", marginTop: 40 }}>
           <div style={{ fontSize: 128, fontWeight: 700, letterSpacing: -4, lineHeight: 1 }}>
-            ŞİMDİ
+            nowby.
           </div>
           <div style={{ fontSize: 40, color: "#8a8a92", marginTop: 16 }}>
             radyoda şu an ne çalıyor

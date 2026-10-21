@@ -9,7 +9,7 @@ import { haftalar } from "@/lib/rapor";
 // Aktif istasyonları da haritaya koy → Google her radyonun sayfasını indeksler.
 export const revalidate = 3600;
 
-const BASE = "https://necaliyor.co";
+const BASE = "https://nowby.co";
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   let slugs: string[] = [];

@@ -1,5 +1,5 @@
 // ───────────────────────────────────────────────────────────────
-//  ŞİMDİ — Deneme Köşesi
+//  nowby. — Deneme Köşesi
 //  Sitenin nesir sesi. Bu denemeler taslaktır; KENDİ kalemininkilerle
 //  değiştir ya da yenilerini ekle. Bir deneme eklemek için diziye yeni
 //  bir nesne koyman yeter — köşe ve okuma sayfası kendiliğinden oluşur.

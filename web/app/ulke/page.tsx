@@ -7,13 +7,13 @@ import { dilSunucu } from "@/lib/dil-sunucu";
 
 // Dünya Atlası — ülke ülke radyo gezgini.
 export const metadata: Metadata = {
-  title: "Dünya Atlası — ülke ülke canlı radyo | ŞİMDİ",
+  title: "Dünya Atlası — ülke ülke canlı radyo | nowby.",
   description: "Türkiye'den Japonya'ya, Brezilya'dan İsveç'e: ülke ülke seçme radyolar, tek tıkla canlı yayın ve şu an çalan parçalar. World radio by country, live.",
   alternates: {
     canonical: "/ulke",
     languages: { "tr": "/ulke", "en": "/en/countries", "x-default": "/ulke" },
   },
-  openGraph: { title: "Dünya Atlası — ŞİMDİ", description: "Ülke ülke canlı radyo. World radio by country.", type: "website" },
+  openGraph: { title: "Dünya Atlası — nowby.", description: "Ülke ülke canlı radyo. World radio by country.", type: "website" },
 };
 
 export default async function AtlasPage() {
@@ -24,12 +24,12 @@ export default async function AtlasPage() {
   const jsonLd = {
     "@context": "https://schema.org",
     "@type": "CollectionPage",
-    name: "Dünya Atlası — ŞİMDİ",
-    url: "https://necaliyor.co/ulke",
+    name: "Dünya Atlası — nowby.",
+    url: "https://nowby.co/ulke",
     hasPart: ulkeler.map((k) => ({
       "@type": "WebPage",
       name: `${ULKELER[k].tr} Radyoları`,
-      url: `https://necaliyor.co/ulke/${ulkeSlug(k)}`,
+      url: `https://nowby.co/ulke/${ulkeSlug(k)}`,
     })),
   };
 
@@ -41,7 +41,7 @@ export default async function AtlasPage() {
           <Link href="/" className="text-sm underline" style={{ color: "var(--muted)" }}>
             {en ? "← now" : "← şimdi"}
           </Link>
-          <Link href="/" className="brand text-sm font-bold tracking-tight">ŞİMDİ</Link>
+          <Link href="/" className="brand text-sm font-bold tracking-tight">nowby.</Link>
         </header>
 
         {/* Bant seçici — Dünya aktif */}

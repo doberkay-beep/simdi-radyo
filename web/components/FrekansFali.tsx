@@ -173,7 +173,7 @@ export default function FrekansFali() {
     // Alt: marka
     ctx.fillStyle = "#f5ece4";
     ctx.font = `700 64px ${fBrand}`;
-    ctx.fillText("ŞİMDİ", W / 2, H - 210);
+    ctx.fillText("nowby.", W / 2, H - 210);
     ctx.fillStyle = "#e9b9a4";
     ctx.font = `700 28px ${fMono}`;
     ctx.fillText("n e c a l i y o r . c o / f a l", W / 2, H - 150);
@@ -271,7 +271,7 @@ export default function FrekansFali() {
               </button>
             </div>
             <p className="mt-4 text-xs" style={{ color: "var(--muted)" }}>
-              kart story boyutunda iner — Instagram&apos;da paylaşırken bağlantıya necaliyor.co/fal yaz, falın arkadaşına da düşsün.
+              kart story boyutunda iner — Instagram&apos;da paylaşırken bağlantıya nowby.co/fal yaz, falın arkadaşına da düşsün.
             </p>
           </div>
         )}

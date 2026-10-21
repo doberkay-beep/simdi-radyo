@@ -7,7 +7,7 @@ import { sarkiSlug } from "@/lib/seoslug";
 
 type Satir = { artist: string; title: string; kez: number; istasyon: number };
 
-// ŞİMDİ LİSTESİ — Türkiye radyolarının canlı hit listesi. Veri: plays arşivi.
+// nowby. LİSTESİ — Türkiye radyolarının canlı hit listesi. Veri: plays arşivi.
 export default function Liste() {
   const [aralik, setAralik] = useState<"gun" | "hafta">("gun");
   const [q, setQ] = useState("");
@@ -33,7 +33,7 @@ export default function Liste() {
   const araliktext = aralik === "gun" ? "son 24 saatte" : "bu hafta";
 
   function sanatciKarnesi() {
-    const metin = `📻 ${satirlar[0]?.artist ?? aranan} ${araliktext} Türkiye radyolarında ${toplamKez} kez çaldı.\nCanlı sayım: necaliyor.co/liste`;
+    const metin = `📻 ${satirlar[0]?.artist ?? aranan} ${araliktext} Türkiye radyolarında ${toplamKez} kez çaldı.\nCanlı sayım: nowby.co/liste`;
     navigator.clipboard?.writeText(metin).then(() => {
       setKopyalandi(true);
       setTimeout(() => setKopyalandi(false), 2000);
@@ -45,7 +45,7 @@ export default function Liste() {
       <div className="mx-auto max-w-2xl px-5 pb-24 pt-10">
         <header className="mb-8 flex items-start justify-between">
           <div>
-            <h1 className="brand text-4xl font-bold tracking-tight">ŞİMDİ LİSTESİ</h1>
+            <h1 className="brand text-4xl font-bold tracking-tight">nowby. LİSTESİ</h1>
             <p className="epigraf mt-2 text-[15px]">
               Türkiye radyolarında gerçekte ne çalıyor — canlı sayım, itiraz kabul etmez.
             </p>
@@ -172,7 +172,7 @@ export default function Liste() {
         )}
 
         <p className="mt-8 text-xs" style={{ color: "var(--muted)" }}>
-          Sayılar {aralik === "gun" ? "son 24 saatin" : "son 7 günün"} gerçek yayın arşivinden; ŞİMDİ
+          Sayılar {aralik === "gun" ? "son 24 saatin" : "son 7 günün"} gerçek yayın arşivinden; nowby
           355 istasyonu 25 saniyede bir dinler. Liste ~2 dakikada bir tazelenir.
         </p>
       </div>

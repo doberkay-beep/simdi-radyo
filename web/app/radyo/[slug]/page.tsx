@@ -200,7 +200,7 @@ export async function generateMetadata({
   const s = await getStation(slug);
   const dil = await dilSunucu();
   const en = dil === "en";
-  if (!s) return { title: en ? "Station not found — ŞİMDİ" : "İstasyon bulunamadı — ŞİMDİ" };
+  if (!s) return { title: en ? "Station not found — nowby." : "İstasyon bulunamadı — nowby." };
   const np = await getNowPlaying(slug);
   const track = trackText(np);
   const bits = [s.frequency, s.city].filter(Boolean).join(" · ");
@@ -213,8 +213,8 @@ export async function generateMetadata({
       : `${s.name}${bits ? ` (${bits})` : ""} canlı dinle — şu an ne çaldığını gör.`;
   return {
     title: en
-      ? `${s.name} Live — What's Playing Now | ŞİMDİ`
-      : `${s.name} Canlı Dinle — Şu An Ne Çalıyor | ŞİMDİ`,
+      ? `${s.name} Live — What's Playing Now | nowby.`
+      : `${s.name} Canlı Dinle — Şu An Ne Çalıyor | nowby.`,
     description: desc,
     alternates: { canonical: `/radyo/${slug}` },
     openGraph: {
@@ -260,9 +260,9 @@ export default async function StationPage({ params }: { params: Promise<{ slug: 
     "@graph": [
       {
         "@type": "RadioStation",
-        "@id": `https://necaliyor.co/radyo/${slug}#station`,
+        "@id": `https://nowby.co/radyo/${slug}#station`,
         name: s.name,
-        url: `https://necaliyor.co/radyo/${slug}`,
+        url: `https://nowby.co/radyo/${slug}`,
         ...(s.genre ? { genre: s.genre } : {}),
         ...(s.city ? { areaServed: s.city } : {}),
         ...(s.homepage ? { sameAs: s.homepage } : {}),
@@ -280,8 +280,8 @@ export default async function StationPage({ params }: { params: Promise<{ slug: 
       {
         "@type": "BreadcrumbList",
         itemListElement: [
-          { "@type": "ListItem", position: 1, name: "ŞİMDİ", item: "https://necaliyor.co" },
-          { "@type": "ListItem", position: 2, name: s.name, item: `https://necaliyor.co/radyo/${slug}` },
+          { "@type": "ListItem", position: 1, name: "nowby.", item: "https://nowby.co" },
+          { "@type": "ListItem", position: 2, name: s.name, item: `https://nowby.co/radyo/${slug}` },
         ],
       },
     ],
@@ -297,7 +297,7 @@ export default async function StationPage({ params }: { params: Promise<{ slug: 
           </Link>
           <span className="flex items-center gap-3">
             <DilToggle />
-            <span className="brand text-sm font-bold tracking-tight">ŞİMDİ</span>
+            <span className="brand text-sm font-bold tracking-tight">nowby.</span>
           </span>
         </header>
 
@@ -395,7 +395,7 @@ export default async function StationPage({ params }: { params: Promise<{ slug: 
               etiket="📻 haftalık karne"
               baslik={`${s.name} son 7 günde ${karne.farkliSarki.toLocaleString("tr-TR")} farklı şarkı çaldı.`}
               aciklama={`Radyoda çalışıyor musun, dinleyicisi misin? Karneyi paylaş.${karne.sarki ? ` En sevdiği şarkı: “${karne.sarki.title}” — ${karne.sarki.artist}.` : ""}`}
-              metin={`📻 ${s.name} son 7 günde ${karne.farkliSarki.toLocaleString("tr-TR")} farklı şarkı çaldı${karne.sarki ? `; en sevdiği “${karne.sarki.title}” (${karne.sarki.artist})` : ""}. Haftalık karne: https://necaliyor.co/radyo/${slug}`}
+              metin={`📻 ${s.name} son 7 günde ${karne.farkliSarki.toLocaleString("tr-TR")} farklı şarkı çaldı${karne.sarki ? `; en sevdiği “${karne.sarki.title}” (${karne.sarki.artist})` : ""}. Haftalık karne: https://nowby.co/radyo/${slug}`}
             />
           </div>
         )}
@@ -508,7 +508,7 @@ export default async function StationPage({ params }: { params: Promise<{ slug: 
               <>
                 Listen to <strong style={{ color: "var(--fg)" }}>{s.name}</strong> live on{" "}
                 <Link href={`/?ist=${slug}`} className="underline" style={{ color: "var(--fg)" }}>
-                  necaliyor.co
+                  nowby.co
                 </Link>{" "}
                 and see what&apos;s playing right now.
               </>
@@ -516,7 +516,7 @@ export default async function StationPage({ params }: { params: Promise<{ slug: 
               <>
                 <strong style={{ color: "var(--fg)" }}>{s.name}</strong> yayınını{" "}
                 <Link href={`/?ist=${slug}`} className="underline" style={{ color: "var(--fg)" }}>
-                  necaliyor.co
+                  nowby.co
                 </Link>{" "}
                 üzerinden canlı dinleyebilir, o an çalan parçayı görebilirsin.
               </>

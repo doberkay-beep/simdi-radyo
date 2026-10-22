@@ -16,7 +16,8 @@ import {
   deactivateStation,
 } from "./supabase.mjs";
 
-const POLL_INTERVAL_MS = Number(process.env.POLL_INTERVAL_MS) || 25_000;
+import { anlikKoy } from "./anlik.mjs";
+const POLL_INTERVAL_MS = Number(process.env.POLL_INTERVAL_MS) || 10_000;
 const PROBE_TIMEOUT_MS = Number(process.env.PROBE_TIMEOUT_MS) || 8_000;
 const MAX_FAILURES = Number(process.env.MAX_FAILURES) || 20;
 // Parça değişmese de yayın doğrulandığında now_playing.updated_at'i en fazla
@@ -95,6 +96,8 @@ async function probeAndStore(station) {
   // Başlık değişmediyse: arşive yazma. Ama yayın DOĞRULANDIĞI için, arayüzün
   // tazelik göstergesi doğru olsun diye updated_at'i arada bir tazele (kısmalı).
   if (lastRaw.get(station.id) === clean) {
+    // Anlık kopyada tazelik her yoklamada güncellenir (veritabanına yük yok).
+    anlikKoy(station.slug, parseTitle(clean));
     if (now - (lastWrite.get(station.id) || 0) < FRESH_MS) return;
     try {
       await upsertNowPlaying(station.id, parseTitle(clean)); // yalnız updated_at tazelenir
@@ -108,6 +111,7 @@ async function probeAndStore(station) {
   const parsed = parseTitle(clean);
   // Gidip-gelen başlık: yakın zamanda arşivlenmiş parça geri döndüyse arşive
   // yeniden yazma; yalnız "şimdi çalan"ı güncelle.
+  anlikKoy(station.slug, parsed);
   if (yakindaYazildi(station.id, clean, now)) {
     try {
       await upsertNowPlaying(station.id, parsed);
@@ -146,8 +150,10 @@ async function main() {
   log(`Toplayıcı başladı. Aralık ${POLL_INTERVAL_MS}ms, zaman aşımı ${PROBE_TIMEOUT_MS}ms.`);
 
   // Yeniden başlatmada tekrar yazmamak için son başlıkları belleğe al.
+  let ilkSatirlar = [];
   try {
-    for (const row of await loadNowPlaying()) {
+    ilkSatirlar = await loadNowPlaying();
+    for (const row of ilkSatirlar) {
       if (row.raw_title) lastRaw.set(row.station_id, row.raw_title);
     }
     log(`${lastRaw.size} istasyonun son başlığı belleğe alındı.`);
@@ -165,8 +171,18 @@ async function main() {
     const start = Date.now();
     if (!stations.length || start - stationsAt >= STATIONS_REFRESH_MS) {
       try {
+        const ilkTur = !stations.length;
         stations = await loadActiveStations();
         stationsAt = start;
+        // İlk listede anlık kopyayı veritabanındaki son (temizlenmiş) başlıklarla doldur.
+        if (ilkTur) {
+          const istasyon = new Map(stations.map((s) => [s.id, s]));
+          for (const row of ilkSatirlar) {
+            const st = istasyon.get(row.station_id);
+            const temiz = st && row.raw_title ? normalizeTitle(row.raw_title, st.name) : "";
+            if (temiz) anlikKoy(st.slug, parseTitle(temiz), row.updated_at);
+          }
+        }
       } catch (err) {
         log("! istasyon listesi alınamadı:", err.message, stations.length ? "(eski liste kullanılıyor)" : "(tur atlanıyor)");
       }

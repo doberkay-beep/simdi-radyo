@@ -86,5 +86,31 @@ check("normalize: 'Unknown' çöp", () => {
   assert.equal(normalizeTitle("Unknown"), "");
 });
 
+// --- 23 Eki temizlik kuralları ---
+check("XML RadioInfo içinden sanatçı ve parça", () => {
+  const x = '<?xml version="1.0"?><RadioInfo><Table><DB_DALET_ARTIST_NAME>Janet Jackson</DB_DALET_ARTIST_NAME><DB_DALET_TITLE_NAME>Let\'s Wait Awhile</DB_DALET_TITLE_NAME></Table></RadioInfo>';
+  assert.equal(normalizeTitle(x, "Smooth FM"), "Janet Jackson - Let's Wait Awhile");
+});
+check("reklam kodu çöp", () => assert.equal(normalizeTitle("start_ad_break_30000", "Newstalk"), ""));
+check("şablon metin çöp", () => assert.equal(normalizeTitle("Now Playing info goes here", "Oui FM"), ""));
+check("boş liste çöp", () => assert.equal(normalizeTitle("Empty playlist", "X"), ""));
+check("yalnız alt çizgi çöp", () => assert.equal(normalizeTitle("_", "Talk"), ""));
+check("artı ile yapışık program adı çöp", () => assert.equal(normalizeTitle("Free+FMRokola+I", "Free FM"), ""));
+check("istasyon çekirdek adı çöp", () => assert.equal(normalizeTitle("Kent Fm", "Radyo Kent"), ""));
+check("alt çizgili başlık boşluğa", () => assert.equal(normalizeTitle("Enta_Maghroor", "Amr Diab Radio"), "Enta Maghroor"));
+check("@sayaç atılır", () => assert.equal(normalizeTitle("Bedia Akartürk - Kesik Çayır@12022", "Ankara"), "Bedia Akartürk - Kesik Çayır"));
+check("sonda sarkan tire atılır", () => assert.equal(normalizeTitle("Extreme Deep House Radio -", "Başka"), "Extreme Deep House Radio"));
+check("'Sanatçı- Şarkı' bölünür", () => {
+  const r = parseTitle("Ceylan- Hep Ezildim");
+  assert.equal(r.artist, "Ceylan"); assert.equal(r.title, "Hep Ezildim");
+});
+check("yıldız ayracı", () => {
+  const r = parseTitle("ELTON JOHN * DON'T LET THE SUN GO DOWN ON ME");
+  assert.equal(r.artist, "ELTON JOHN");
+});
+check("modifier tire ayracı", () => assert.equal(parseTitle("Kim Wilde ˗ Cambodia").title, "Cambodia"));
+check("gerçek parça bozulmaz", () => assert.equal(normalizeTitle("Sezen Aksu - Firuze", "Kral FM"), "Sezen Aksu - Firuze"));
+check("tireli parça adı bozulmaz", () => assert.equal(parseTitle("MFÖ - Ele Güne Karşı - Remix").title, "Ele Güne Karşı - Remix"));
+
 console.log(failed === 0 ? "\nTüm testler geçti." : `\n${failed} test başarısız.`);
 process.exitCode = failed === 0 ? 0 : 1;

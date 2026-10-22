@@ -33,7 +33,7 @@ export async function loadActiveStations() {
 
 // Worker başlangıcında son bilinen başlıkları belleğe almak için.
 export async function loadNowPlaying() {
-  const { data, error } = await supa.from("now_playing").select("station_id, raw_title");
+  const { data, error } = await supa.from("now_playing").select("station_id, artist, title, raw_title, updated_at");
   if (error) throw error;
   return data ?? [];
 }

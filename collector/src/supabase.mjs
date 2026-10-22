@@ -38,15 +38,26 @@ export async function loadNowPlaying() {
   return data ?? [];
 }
 
-// plays'e YENİ satır ekler (arşivin kalbi — sadece INSERT).
+// plays'e YENİ satır ekler (arşivin kalbi — sadece INSERT). Satır numarası ve zamanı
+// döner: Hetzner'deki arşive aynısı yazılır (bkz. arsiv.mjs).
 export async function insertPlay(stationId, parsed) {
-  const { error } = await supa.from("plays").insert({
+  const { data, error } = await supa.from("plays").insert({
     station_id: stationId,
     artist: parsed.artist,
     title: parsed.title,
     raw_title: parsed.raw_title,
-  });
+  }).select("id, started_at").single();
   if (error) throw error;
+  return data;
+}
+
+// İstasyon listesinin tamamı (pasifler dahil) — Hetzner arşivindeki kopyayı eşitlemek için.
+export async function loadAllStationsFull() {
+  const { data, error } = await supa
+    .from("stations")
+    .select("id, slug, name, city, frequency, stream_url, homepage, accent_color, band, metadata_quality, is_active, sort_order, created_at, genre");
+  if (error) throw error;
+  return data ?? [];
 }
 
 // now_playing satırının üzerine yazar (istasyon başına tek satır).

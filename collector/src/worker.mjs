@@ -13,10 +13,12 @@ import {
   loadNowPlaying,
   insertPlay,
   upsertNowPlaying,
+  loadAllStationsFull,
   deactivateStation,
 } from "./supabase.mjs";
 
 import { anlikKoy } from "./anlik.mjs";
+import { arsivePlay, arsivNowPlaying, arsivIstasyonlar } from "./arsiv.mjs";
 const POLL_INTERVAL_MS = Number(process.env.POLL_INTERVAL_MS) || 10_000;
 const PROBE_TIMEOUT_MS = Number(process.env.PROBE_TIMEOUT_MS) || 8_000;
 const MAX_FAILURES = Number(process.env.MAX_FAILURES) || 20;
@@ -115,6 +117,7 @@ async function probeAndStore(station) {
   if (yakindaYazildi(station.id, clean, now)) {
     try {
       await upsertNowPlaying(station.id, parsed);
+      arsivNowPlaying(station.id, parsed);
       lastRaw.set(station.id, clean);
       lastWrite.set(station.id, now);
     } catch (err) {
@@ -123,8 +126,10 @@ async function probeAndStore(station) {
     return;
   }
   try {
-    await insertPlay(station.id, parsed); // arşive ekle
+    const satir = await insertPlay(station.id, parsed); // arşive ekle
     await upsertNowPlaying(station.id, parsed); // "şimdi çalan"ı güncelle
+    arsivePlay(satir, station.id, parsed); // Hetzner arşivine aynısı (beklenmez)
+    arsivNowPlaying(station.id, parsed);
     lastRaw.set(station.id, clean);
     lastWrite.set(station.id, now);
     yazildiIsaretle(station.id, clean, now);
@@ -174,6 +179,8 @@ async function main() {
         const ilkTur = !stations.length;
         stations = await loadActiveStations();
         stationsAt = start;
+        // Hetzner arşivindeki istasyon kopyasını eşitle (10 dakikada bir).
+        loadAllStationsFull().then(arsivIstasyonlar).catch((err) => log("! istasyon eşitleme:", err.message));
         // İlk listede anlık kopyayı veritabanındaki son (temizlenmiş) başlıklarla doldur.
         if (ilkTur) {
           const istasyon = new Map(stations.map((s) => [s.id, s]));

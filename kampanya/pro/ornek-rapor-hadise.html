@@ -1,0 +1,230 @@
+<title>nowby. pro Yayın Raporu</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo+Narrow:wght@500;700&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+/* Düzen: yayın kaydı gibi okunan tek sütun rapor; künye, dört temel sayı, sonra günlük akış, şarkılar, radyolar, kuşaklar, öneriler, yöntem. */
+:root {
+  --zemin: #F3F5F4;
+  --kagit: #FFFFFF;
+  --murekkep: #14211F;
+  --soluk: #5A6966;
+  --cizgi: #D9DFDD;
+  --sinyal: #0B7A6B;
+  --sinyal-acik: #CFE8E3;
+  --uyari: #B5651D;
+  --f-baslik: "Archivo Narrow", "Arial Narrow", "Helvetica Neue", sans-serif;
+  --f-govde: "IBM Plex Sans", "Helvetica Neue", Arial, sans-serif;
+  --f-veri: "IBM Plex Mono", ui-monospace, Menlo, monospace;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --zemin: #0F1615; --kagit: #172120; --murekkep: #E6EEEC; --soluk: #93A4A0;
+    --cizgi: #2A3735; --sinyal: #3FC2AD; --sinyal-acik: #1C3D38; --uyari: #E39A55; color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --zemin: #0F1615; --kagit: #172120; --murekkep: #E6EEEC; --soluk: #93A4A0;
+  --cizgi: #2A3735; --sinyal: #3FC2AD; --sinyal-acik: #1C3D38; --uyari: #E39A55; color-scheme: dark;
+}
+* { box-sizing: border-box; }
+body {
+  background: var(--zemin); color: var(--murekkep);
+  font: 15px/1.6 var(--f-govde);
+  padding-left: max(16px, env(safe-area-inset-left, 0px));
+  padding-right: max(16px, env(safe-area-inset-right, 0px));
+  padding-block: 32px 64px;
+}
+.sayfa { max-width: 860px; margin: 0 auto; display: grid; gap: 40px; }
+h1, h2 { font-family: var(--f-baslik); font-weight: 700; line-height: 1.05; text-wrap: balance; margin: 0; }
+h2 { font-size: 1.55rem; letter-spacing: .01em; }
+p { margin: 0; max-width: 65ch; }
+.etiket { font: 500 .72rem/1 var(--f-veri); letter-spacing: .12em; text-transform: uppercase; color: var(--soluk); }
+.veri { font-family: var(--f-veri); font-variant-numeric: tabular-nums; }
+
+/* künye */
+.kunye { display: grid; gap: 14px; border-bottom: 2px solid var(--murekkep); padding-bottom: 22px; }
+.kunye-ust { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 8px 20px; }
+.ornek { color: var(--uyari); }
+h1 { font-size: clamp(2.6rem, 8vw, 4.4rem); }
+h1 span { color: var(--sinyal); }
+.kunye p { color: var(--soluk); }
+
+/* temel sayılar */
+.sayilar { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 1px; background: var(--cizgi); border: 1px solid var(--cizgi); }
+.sayi { background: var(--kagit); padding: 18px 16px; display: grid; gap: 6px; align-content: start; }
+.sayi b { font: 700 2.3rem/1 var(--f-baslik); }
+.sayi small { color: var(--soluk); font-size: .85rem; line-height: 1.4; }
+@media (max-width: 640px) { .sayilar { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+
+.bolum { display: grid; gap: 16px; }
+.bolum-bas { display: grid; gap: 6px; }
+.bolum-bas p { color: var(--soluk); }
+
+/* günlük grafik */
+.grafik { background: var(--kagit); border: 1px solid var(--cizgi); padding: 16px 12px 8px; overflow-x: auto; }
+.grafik svg { display: block; width: 100%; min-width: 520px; height: auto; }
+.grafik text { fill: var(--soluk); font: 10px var(--f-veri); }
+.cubuk { fill: var(--sinyal); }
+.cubuk-kismi { fill: var(--sinyal-acik); stroke: var(--sinyal); stroke-dasharray: 2 2; }
+.ort { stroke: var(--murekkep); stroke-dasharray: 4 3; }
+.ort-yazi { fill: var(--murekkep) !important; }
+.lejant { display: flex; flex-wrap: wrap; gap: 6px 18px; font-size: .82rem; color: var(--soluk); padding: 8px 4px 4px; }
+.lejant i { display: inline-block; width: 10px; height: 10px; margin-right: 6px; vertical-align: -1px; }
+
+/* tablolar */
+.tablo { width: 100%; border-collapse: collapse; background: var(--kagit); border: 1px solid var(--cizgi); }
+.tablo th { text-align: left; font: 500 .72rem var(--f-veri); letter-spacing: .1em; text-transform: uppercase; color: var(--soluk); padding: 10px 12px; border-bottom: 1px solid var(--cizgi); }
+.tablo td { padding: 9px 12px; border-bottom: 1px solid var(--cizgi); vertical-align: middle; }
+.tablo tr:last-child td { border-bottom: 0; }
+.tablo .sag { text-align: right; }
+.tablo .ad { font-weight: 500; }
+.tablo .alt { color: var(--soluk); font-size: .82rem; }
+.bar { height: 6px; background: var(--sinyal-acik); position: relative; min-width: 60px; }
+.bar span { position: absolute; inset: 0 auto 0 0; background: var(--sinyal); }
+.sarma { overflow-x: auto; }
+
+/* kuşaklar */
+.kusaklar { display: grid; gap: 10px; background: var(--kagit); border: 1px solid var(--cizgi); padding: 16px; }
+.kusak { display: grid; grid-template-columns: 9.5rem minmax(0, 1fr) 4.5rem; gap: 12px; align-items: center; }
+.kusak .bar { height: 14px; }
+.kusak.vurgu .bar span { background: var(--uyari); }
+@media (max-width: 520px) { .kusak { grid-template-columns: 7rem minmax(0, 1fr) 3.6rem; font-size: .88rem; } }
+
+/* öneriler */
+.oneriler { display: grid; gap: 1px; background: var(--cizgi); border: 1px solid var(--cizgi); }
+.oneri { background: var(--kagit); padding: 16px 18px; display: grid; grid-template-columns: 2.2rem minmax(0, 1fr); gap: 4px 12px; }
+.oneri .no { font: 700 1.5rem/1 var(--f-baslik); color: var(--sinyal); grid-row: span 2; }
+.oneri h3 { margin: 0; font-size: 1rem; font-weight: 600; }
+.oneri p { color: var(--soluk); }
+
+.yontem { font-size: .85rem; color: var(--soluk); border-top: 1px solid var(--cizgi); padding-top: 18px; display: grid; gap: 8px; }
+.yontem strong { color: var(--murekkep); font-weight: 600; }
+</style>
+
+<main class="sayfa">
+  <header class="kunye">
+    <div class="kunye-ust">
+      <span class="etiket">nowby. pro · Radyo yayın raporu</span>
+      <span class="etiket ornek">Örnek rapor</span>
+    </div>
+    <h1>Hadise <span>·</span> 1–21 Ekim 2026</h1>
+    <p>Türkiye'de yayın akışını yayımlayan 351 radyonun 21 günlük kaydı. Her çalınma, radyonun kendi yayın bilgisinden dakikası dakikasına alındı.</p>
+  </header>
+
+  <section class="sayilar" aria-label="Temel sayılar">
+    <div class="sayi"><span class="etiket">Çalınma</span><b class="veri">1.064</b><small>Günde ortalama 51</small></div>
+    <div class="sayi"><span class="etiket">Radyo</span><b class="veri">21</b><small>Hadise'yi en az bir kez çalan istasyon</small></div>
+    <div class="sayi"><span class="etiket">Şarkı</span><b class="veri">42</b><small>Farklı Hadise şarkısı yayına girdi</small></div>
+    <div class="sayi"><span class="etiket">Liste</span><b class="veri">1.</b><small>“Ara Beni”, nowby. haftalık Türkiye listesi</small></div>
+  </section>
+
+  <section class="bolum">
+    <div class="bolum-bas">
+      <h2>Gün gün çalınma</h2>
+      <p>Çalınma sayısı üç hafta boyunca sabit kaldı; her 10.000 radyo çalınmasından yaklaşık 5'i Hadise.</p>
+    </div>
+    <div class="grafik">
+      <svg id="gunluk" viewBox="0 0 640 210" role="img" aria-label="1–21 Ekim arası günlük çalınma sayıları"></svg>
+      <div class="lejant">
+        <span><i style="background: var(--sinyal)"></i>Tam kayıt</span>
+        <span><i style="background: var(--sinyal-acik); outline: 1px dashed var(--sinyal)"></i>Kısmi kayıt (8, 19 ve 21 Ekim: ölçüm sunucusunda kesinti)</span>
+      </div>
+    </div>
+  </section>
+
+  <section class="bolum">
+    <div class="bolum-bas">
+      <h2>Şarkılar</h2>
+      <p>Toplam çalınmanın neredeyse yarısı tek şarkıdan geliyor.</p>
+    </div>
+    <div class="sarma">
+      <table class="tablo">
+        <thead><tr><th>Şarkı</th><th class="sag">Çalınma</th><th class="sag">Radyo</th><th style="width: 34%">Pay</th></tr></thead>
+        <tbody id="sarkilar"></tbody>
+      </table>
+    </div>
+  </section>
+
+  <section class="bolum">
+    <div class="bolum-bas">
+      <h2>Radyolar</h2>
+      <p>En çok çalan 10 istasyon. “Ara Beni”nin çalınmalarının %88'i yalnız beş radyodan geliyor.</p>
+    </div>
+    <div class="sarma">
+      <table class="tablo">
+        <thead><tr><th>Radyo</th><th class="sag">Çalınma</th><th class="sag">Farklı şarkı</th><th style="width: 30%"></th></tr></thead>
+        <tbody id="radyolar"></tbody>
+      </table>
+    </div>
+  </section>
+
+  <section class="bolum">
+    <div class="bolum-bas">
+      <h2>Yayın kuşakları</h2>
+      <p>Hangi saatlerde çalındı (İstanbul saati). Dinleyicinin en kalabalık olduğu sabah kuşağının payı düşük.</p>
+    </div>
+    <div class="kusaklar" id="kusaklar"></div>
+  </section>
+
+  <section class="bolum">
+    <div class="bolum-bas"><h2>Bu veriden çıkanlar</h2></div>
+    <div class="oneriler">
+      <div class="oneri"><span class="no">1</span><h3>Tek şarkıya, beş radyoya yaslanma</h3><p>“Ara Beni” toplamın %48'i ve onun da %88'i Joy Türk, Virgin Radio, Kiss Türk, Süper FM ve Beste FM'den. Bu radyolardan biri listeden çıkarırsa haftalık çalınma belirgin düşer.</p></div>
+      <div class="oneri"><span class="no">2</span><h3>Sabah kuşağı boşta</h3><p>Çalınmaların yalnız %14'ü 07.00–10.00 arasında. Yol saatindeki dinleyiciye ulaşmak için sabah programlarına yönelik bir tanıtım işe yarayabilir.</p></div>
+      <div class="oneri"><span class="no">3</span><h3>“Küçük Bir Yol” yayılıyor</h3><p>99 çalınmayla ikinci sırada ama 10 farklı radyoda. “Ara Beni”den sonra yayın listelerine girmeye en hazır şarkı bu.</p></div>
+      <div class="oneri"><span class="no">4</span><h3>Çalınma düzeyi oturdu</h3><p>Tam kayıtlı haftalarda pay neredeyse aynı: 6–12 Ekim'de her 10.000 çalınmada 4,87, 13–19 Ekim'de 4,84. Şarkı yükselişini tamamladı; bundan sonraki artış yeni radyolardan ya da yeni şarkıdan gelecek.</p></div>
+    </div>
+  </section>
+
+  <footer class="yontem">
+    <span class="etiket">Yöntem</span>
+    <p><strong>Ne ölçülür:</strong> Radyonun yayınladığı “şu an çalan” bilgisi her 10 saniyede bir okunur; aynı şarkının ardışık okumaları tek çalınma sayılır. Yayın bilgisi vermeyen radyolar ve reklam, jingle, program anonsları sayıma girmez.</p>
+    <p><strong>Kapsam:</strong> 1–21 Ekim 2026, 351 radyo. 8, 19 ve 21 Ekim'de ölçüm sunucusundaki kesintiler nedeniyle kayıt kısmidir; bu günler grafikte ayrı gösterildi, oranlar etkilenmez.</p>
+    <p><strong>Sınır:</strong> Bu rapor çalınmayı ölçer, dinleyici sayısını değil. Telif birliklerine yapılan bildirimlerle karşılaştırmak için kanıt olarak kullanılabilir, resmî bir telif belgesi değildir.</p>
+    <p>Bu bir örnek rapordur ve herkese açık radyo yayın bilgisinden hazırlanmıştır. Hadise ya da temsilcileriyle bir ilişkisi yoktur.</p>
+  </footer>
+</main>
+
+<script>
+const gunler = [60,42,56,59,52,51,54,37,51,51,67,51,48,51,56,51,57,60,22,57,34];
+const kismi = new Set([8, 19, 21]);
+const svg = document.getElementById("gunluk");
+const NS = "http://www.w3.org/2000/svg";
+const sol = 34, sag = 8, ust = 12, alt = 28, W = 640, H = 210;
+const tavan = 70, yuk = H - ust - alt, gen = (W - sol - sag) / gunler.length;
+const y = (v) => ust + yuk - (v / tavan) * yuk;
+const el = (ad, a, metin) => { const e = document.createElementNS(NS, ad); for (const k in a) e.setAttribute(k, a[k]); if (metin != null) e.textContent = metin; svg.appendChild(e); return e; };
+for (const t of [0, 20, 40, 60]) {
+  el("line", { x1: sol, x2: W - sag, y1: y(t), y2: y(t), stroke: "var(--cizgi)", "stroke-width": 1 });
+  el("text", { x: sol - 6, y: y(t) + 3, "text-anchor": "end" }, t);
+}
+gunler.forEach((v, i) => {
+  const gun = i + 1, x = sol + i * gen + gen * 0.18, w = gen * 0.64;
+  el("rect", { x, y: y(v), width: w, height: y(0) - y(v), class: kismi.has(gun) ? "cubuk-kismi" : "cubuk" }).appendChild(
+    Object.assign(document.createElementNS(NS, "title"), { textContent: `${gun} Ekim: ${v} çalınma${kismi.has(gun) ? " (kısmi kayıt)" : ""}` }));
+  if (gun === 1 || gun % 5 === 0 || gun === 21) el("text", { x: x + w / 2, y: H - 10, "text-anchor": "middle" }, `${gun} Eki`);
+});
+const tam = gunler.filter((_, i) => !kismi.has(i + 1));
+const ort = tam.reduce((a, b) => a + b, 0) / tam.length;
+el("line", { x1: sol, x2: W - sag, y1: y(ort), y2: y(ort), class: "ort", "stroke-width": 1 });
+el("text", { x: W - sag, y: y(ort) - 5, "text-anchor": "end", class: "ort-yazi" }, `tam günlerin ortalaması ${Math.round(ort)}`);
+
+const toplam = 1064;
+const sarkilar = [["Ara Beni",514,12],["Küçük Bir Yol",99,10],["Feryat",46,5],["Kalbine Yalan Bulma",33,1],["Gece Puslu",32,3],["Farkımız Var",27,4]];
+const digerSarki = toplam - sarkilar.reduce((a, s) => a + s[1], 0);
+const tr = (n) => n.toLocaleString("tr-TR");
+const pay = (n) => (n / toplam * 100).toLocaleString("tr-TR", { maximumFractionDigits: 1 });
+document.getElementById("sarkilar").innerHTML = sarkilar.map(([ad, k, r]) =>
+  `<tr><td class="ad">${ad}</td><td class="sag veri">${tr(k)}</td><td class="sag veri">${r}</td><td><div class="bar"><span style="width:${k / sarkilar[0][1] * 100}%"></span></div><div class="alt veri">%${pay(k)}</div></td></tr>`).join("")
+  + `<tr><td class="ad alt">Diğer 36 şarkı</td><td class="sag veri">${tr(digerSarki)}</td><td class="sag veri">–</td><td><div class="alt veri">%${pay(digerSarki)}</div></td></tr>`;
+
+const radyolar = [["Virgin Radio","İstanbul",146,3],["Joy Türk","",130,7],["Süper FM","İstanbul",129,10],["Hey Radyo","İzmir",127,7],["Kiss Türk","",88,3],["Alem FM","İstanbul",84,16],["Slow FM","",76,8],["Beste FM","",73,1],["Türkiyem FM","",56,6],["Halk Radyo","",36,2]];
+document.getElementById("radyolar").innerHTML = radyolar.map(([ad, yer, k, s]) =>
+  `<tr><td><div class="ad">${ad}</div>${(() => { const n = [yer, s === 1 ? "yalnız “Ara Beni”" : s >= 10 ? "en geniş repertuvar" : ""].filter(Boolean).join(" · "); return n ? `<div class="alt">${n}</div>` : ""; })()}</td><td class="sag veri">${k}</td><td class="sag veri">${s}</td><td><div class="bar"><span style="width:${k / radyolar[0][2] * 100}%"></span></div></td></tr>`).join("");
+
+const kusaklar = [["Sabah 07–10",145,true],["Gündüz 10–17",338],["Akşam 17–20",107],["Gece 20–24",189],["Geç saat 00–07",285]];
+document.getElementById("kusaklar").innerHTML = kusaklar.map(([ad, k, v]) =>
+  `<div class="kusak${v ? " vurgu" : ""}"><span>${ad}</span><div class="bar"><span style="width:${k / 338 * 100}%"></span></div><span class="veri" style="text-align:right">%${pay(k)}</span></div>`).join("");
+</script>

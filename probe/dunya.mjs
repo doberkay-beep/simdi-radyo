@@ -20,7 +20,10 @@ const UA = "Simdi/0.2";
 const API = "https://de1.api.radio-browser.info";
 
 // Hedef ülkeler → ülke başına aday üst sınırı. (TR hariç — o katalog zaten dolu.)
-const ULKELER = [
+// DUNYA_ULKELER="es:8,fr:7" ile ezilebilir; DUNYA_BASLIKLI=1 yalnız şu an çalanı okunabilenleri seçer.
+const ORTAM = process.env.DUNYA_ULKELER?.split(",").map((x) => { const [c, n] = x.split(":"); return [c, Number(n)]; });
+const SADECE_BASLIKLI = process.env.DUNYA_BASLIKLI === "1";
+const ULKELER = ORTAM ?? [
   ["de", 8], ["cn", 6], ["kr", 5], ["ru", 5], ["ua", 4], ["kz", 4],
   ["rs", 4], ["hr", 3], ["bg", 3], ["is", 3],
   ["ma", 4], ["eg", 4], ["ae", 3],
@@ -76,7 +79,7 @@ function isimKok(name) {
 }
 
 async function ulkeGetir(cc) {
-  const url = `${API}/json/stations/bycountrycodeexact/${cc}?hidebroken=true&order=votes&reverse=true&limit=60`;
+  const url = `${API}/json/stations/bycountrycodeexact/${cc}?hidebroken=true&order=votes&reverse=true&limit=120`;
   const r = await fetch(url, { headers: { "User-Agent": UA } });
   if (!r.ok) throw new Error(`${cc}: HTTP ${r.status}`);
   return r.json();
@@ -132,7 +135,7 @@ async function main() {
 
     // Sırala: canlı metadata > metadata'sız-ama-canlı; sonra oy
     const secim = sonuc
-      .filter((x) => x.icy === "ok")
+      .filter((x) => x.icy === "ok" && (!SADECE_BASLIKLI || x.title))
       .sort((a, b) => (b.title ? 1 : 0) - (a.title ? 1 : 0) || (b.st.votes || 0) - (a.st.votes || 0))
       .slice(0, kota);
 

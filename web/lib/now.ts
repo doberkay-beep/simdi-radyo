@@ -1,5 +1,6 @@
 import { getSupabase } from "./supabase";
 import { temizMetin } from "./cop";
+import { istasyonUlkesi } from "./ulkeler";
 
 // Aktif istasyonlar + şu an çalan parça — /api/now ve ana sayfanın sunucu
 // tarafı ilk yüklemesi aynı veriyi kullanır.
@@ -58,6 +59,8 @@ export async function aktifIstasyonlar() {
       const c = anlik[s.slug];
       return {
         ...s,
+        // Uygulamalar ülkeyi buradan okur; yeni eklenen radyo için uygulama güncellemesi gerekmez.
+        country: istasyonUlkesi(s.slug),
         nowPlaying: c
           ? { artist: temizMetin(c.artist), title: temizMetin(c.title), rawTitle: temizMetin(c.rawTitle), updatedAt: c.updatedAt }
           : null,
@@ -97,6 +100,7 @@ async function veritabanindanIstasyonlar() {
       band: s.band as "tr" | "int" | "own",
       genre: (s.genre ?? null) as string | null,
       homepage: (s.homepage ?? null) as string | null,
+      country: istasyonUlkesi(s.slug as string),
       nowPlaying: np
         ? {
             artist: temizMetin(np.artist),

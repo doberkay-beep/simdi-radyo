@@ -4,11 +4,25 @@ import { useEffect, useState } from "react";
 import Link from "next/link";
 import ThemeToggle from "./ThemeToggle";
 import { sarkiSlug } from "@/lib/seoslug";
+import { ULKELER, doluUlkeler, ulkeIstasyonSluglari, bayrakEmoji, type UlkeKodu } from "@/lib/ulkeler";
 
 type Satir = { artist: string; title: string; kez: number; istasyon: number };
 
-// nowby. LİSTESİ — Türkiye radyolarının canlı hit listesi. Veri: plays arşivi.
+// Ülke şeridi: önce Türkiye, sonra Dünya (bütün radyolar), sonra radyo sayısına göre ülkeler.
+// Uygulamadaki bayrak şeridiyle aynı veri; seçim adrese yazılır (/liste?ulke=jp), paylaşılabilir.
+type Secim = UlkeKodu | "hepsi";
+const SAYI = Object.fromEntries(doluUlkeler().map((k) => [k, ulkeIstasyonSluglari(k).length])) as Record<UlkeKodu, number>;
+const SERIT: Secim[] = [
+  "tr",
+  "hepsi",
+  ...doluUlkeler().filter((k) => k !== "tr" && k !== "www").sort((a, b) => SAYI[b] - SAYI[a] || ULKELER[a].sira - ULKELER[b].sira),
+];
+const TOPLAM = Object.values(SAYI).reduce((t, n) => t + n, 0);
+const ad = (k: Secim) => (k === "hepsi" ? "Dünya" : ULKELER[k].tr);
+
+// nowby. LİSTESİ — radyoların canlı hit listesi, ülke ülke. Veri: plays arşivi.
 export default function Liste() {
+  const [ulke, setUlke] = useState<Secim>("tr");
   const [aralik, setAralik] = useState<"gun" | "hafta">("gun");
   const [q, setQ] = useState("");
   const [aranan, setAranan] = useState("");
@@ -16,9 +30,26 @@ export default function Liste() {
   const [durum, setDurum] = useState<"yukleniyor" | "hazir" | "bos" | "hata">("yukleniyor");
   const [kopyalandi, setKopyalandi] = useState(false);
 
+  // Adresteki ?ulke= ile aç; seçim değişince adresi güncelle (sayfa yeniden yüklenmez).
+  useEffect(() => {
+    const k = new URLSearchParams(window.location.search).get("ulke");
+    if (k && (k === "hepsi" || SERIT.includes(k as Secim))) setUlke(k as Secim);
+  }, []);
+  function ulkeSec(k: Secim) {
+    setUlke(k);
+    setQ("");
+    setAranan("");
+    const u = new URL(window.location.href);
+    if (k === "tr") u.searchParams.delete("ulke"); else u.searchParams.set("ulke", k);
+    window.history.replaceState(null, "", u);
+  }
+
   useEffect(() => {
     setDurum("yukleniyor");
-    const url = `/api/liste?a=${aralik}${aranan ? `&q=${encodeURIComponent(aranan)}` : ""}`;
+    // Sanatçı araması yalnız Türkiye listesinde (sayaç Türkiye arşivinden).
+    const url = aranan
+      ? `/api/liste?a=${aralik}&q=${encodeURIComponent(aranan)}`
+      : `/api/liste?a=${aralik}&ulke=${ulke}`;
     fetch(url, { cache: "no-store" })
       .then((r) => r.json())
       .then((d) => {
@@ -27,7 +58,7 @@ export default function Liste() {
         setDurum(d.error ? "hata" : s.length ? "hazir" : "bos");
       })
       .catch(() => setDurum("hata"));
-  }, [aralik, aranan]);
+  }, [aralik, aranan, ulke]);
 
   const toplamKez = satirlar.reduce((t, s) => t + Number(s.kez), 0);
   const araliktext = aralik === "gun" ? "son 24 saatte" : "bu hafta";
@@ -47,7 +78,7 @@ export default function Liste() {
           <div>
             <h1 className="brand text-4xl font-bold tracking-tight">nowby. LİSTESİ</h1>
             <p className="epigraf mt-2 text-[15px]">
-              Türkiye radyolarında gerçekte ne çalıyor — canlı sayım, itiraz kabul etmez.
+              {ulke === "hepsi" ? "Dünyanın radyolarında" : `${ad(ulke)} radyolarında`} gerçekte ne çalıyor — canlı sayım, itiraz kabul etmez.
             </p>
           </div>
           <span className="flex items-center gap-3">
@@ -57,6 +88,27 @@ export default function Liste() {
             </Link>
           </span>
         </header>
+
+        {/* Ülke şeridi */}
+        <div className="-mx-5 mb-5 flex gap-2 overflow-x-auto px-5 pb-1" style={{ scrollbarWidth: "none" }}>
+          {SERIT.map((k) => (
+            <button
+              key={k}
+              onClick={() => ulkeSec(k)}
+              aria-pressed={ulke === k}
+              className="press flex shrink-0 items-center gap-1.5 rounded-full border px-3.5 py-1.5 text-sm font-semibold"
+              style={
+                ulke === k
+                  ? { background: "var(--fg)", color: "var(--bg)", borderColor: "var(--fg)" }
+                  : { borderColor: "var(--line)" }
+              }
+            >
+              <span aria-hidden>{k === "hepsi" ? "🌍" : bayrakEmoji(k)}</span>
+              {ad(k)}
+              {k !== "hepsi" && <span className="mono text-xs opacity-60">{SAYI[k]}</span>}
+            </button>
+          ))}
+        </div>
 
         {/* Aralık + sanatçı arama */}
         <div className="mb-6 flex flex-wrap items-center gap-3">
@@ -76,7 +128,7 @@ export default function Liste() {
               </button>
             ))}
           </div>
-          <form
+          {ulke === "tr" && <form
             className="flex flex-1 items-center gap-2"
             onSubmit={(e) => {
               e.preventDefault();
@@ -103,7 +155,7 @@ export default function Liste() {
                 temizle
               </button>
             )}
-          </form>
+          </form>}
         </div>
 
         {/* Sanatçı karnesi */}
@@ -128,7 +180,7 @@ export default function Liste() {
         )}
         {durum === "bos" && (
           <p className="epigraf">
-            {aranan ? `"${aranan}" ${araliktext} radyolarda hiç çalmamış. 🤫` : "henüz veri yok."}
+            {aranan ? `"${aranan}" ${araliktext} radyolarda hiç çalmamış. 🤫` : ulke === "tr" ? "henüz veri yok." : "bu ülkede henüz yeterince çalma yok — biraz sonra yine bak."}
           </p>
         )}
 
@@ -172,8 +224,11 @@ export default function Liste() {
         )}
 
         <p className="mt-8 text-xs" style={{ color: "var(--muted)" }}>
-          Sayılar {aralik === "gun" ? "son 24 saatin" : "son 7 günün"} gerçek yayın arşivinden; nowby
-          355 istasyonu 25 saniyede bir dinler. Liste ~2 dakikada bir tazelenir.
+          Sayılar {aralik === "gun" ? "son 24 saatin" : "son 7 günün"} gerçek yayın arşivinden; nowby{" "}
+          {ulke === "hepsi" ? TOPLAM : ulke === "tr" ? SAYI.tr : SAYI[ulke]} istasyonu 25 saniyede bir dinler.{" "}
+          {ulke === "tr"
+            ? "Liste ~2 dakikada bir tazelenir."
+            : "Bir radyonun aynı şarkıya katkısı günde en fazla 3 çalma sayılır; önce en az iki radyoda çalanlar. Liste ~10 dakikada bir tazelenir."}
         </p>
       </div>
     </div>

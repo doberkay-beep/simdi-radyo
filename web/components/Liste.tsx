@@ -35,6 +35,10 @@ export default function Liste() {
     const k = new URLSearchParams(window.location.search).get("ulke");
     if (k && (k === "hepsi" || SERIT.includes(k as Secim))) setUlke(k as Secim);
   }, []);
+  // Seçili ülke şeridin dışında kalmasın (ör. adresten ?ulke=jp ile açılınca).
+  useEffect(() => {
+    document.getElementById(`ulke-${ulke}`)?.scrollIntoView({ inline: "center", block: "nearest" });
+  }, [ulke]);
   function ulkeSec(k: Secim) {
     setUlke(k);
     setQ("");
@@ -94,6 +98,7 @@ export default function Liste() {
           {SERIT.map((k) => (
             <button
               key={k}
+              id={`ulke-${k}`}
               onClick={() => ulkeSec(k)}
               aria-pressed={ulke === k}
               className="press flex shrink-0 items-center gap-1.5 rounded-full border px-3.5 py-1.5 text-sm font-semibold"

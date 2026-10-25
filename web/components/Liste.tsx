@@ -50,7 +50,8 @@ const METIN = {
 // nowby. LİSTESİ — radyoların canlı hit listesi, ülke ülke. Veri: plays arşivi.
 export default function Liste({ dil = "tr" }: { dil?: Dil }) {
   const m = METIN[dil];
-  const ad = (k: Secim) => (k === "hepsi" ? m.dunya : ULKELER[k][dil]);
+  // İngilizcede resmî adı "Türkiye" (ULKELER.en "Turkey" kalır; /en/country/turkey adresi ondan üretiliyor).
+  const ad = (k: Secim) => (k === "hepsi" ? m.dunya : dil === "en" && k === "tr" ? "Türkiye" : ULKELER[k][dil]);
   const serit: Secim[] = dil === "tr" ? SERIT : ["hepsi", ...SERIT.filter((k) => k !== "hepsi")];
   const varsayilan: Secim = dil === "tr" ? "tr" : "hepsi";
   const [ulke, setUlke] = useState<Secim>(varsayilan);

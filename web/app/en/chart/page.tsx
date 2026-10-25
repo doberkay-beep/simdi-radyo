@@ -13,7 +13,7 @@ export async function generateMetadata({ searchParams }: PageProps<"/en/chart">)
   const k = typeof u === "string" ? u.toLowerCase() : "";
 
   if (k && k !== "hepsi" && (DOLU as string[]).includes(k)) {
-    const ad = ULKELER[k as UlkeKodu].en;
+    const ad = k === "tr" ? "Türkiye" : ULKELER[k as UlkeKodu].en;
     const n = ulkeIstasyonSluglari(k as UlkeKodu).length;
     const tr = k === "tr" ? "/liste" : `/liste?ulke=${k}`;
     return {

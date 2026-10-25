@@ -24,7 +24,7 @@ const ARSIV_URL = pick(process.env.ARSIV_URL, "https://api.nowby.co");
 const ARSIV_KAPALI = process.env.ARSIV_KAPALI === "1";
 const AGIR = new Set([
   "archive_at", "endeks_ozet", "gece_listesi", "hafta_raporu", "istasyon_ozet",
-  "katalog_sanatci_ara", "katalog_sarki_ara", "liste_araligi", "nabiz_artists", "nabiz_saat",
+  "katalog_sanatci_ara", "katalog_sarki_ara", "liste_araligi", "liste_ulke", "nabiz_artists", "nabiz_saat",
   "nabiz_top", "nabiz_trend", "rekorlar", "sanatci_ara", "sanatci_araligi", "sanatci_benzer",
   "sanatci_ozet", "sanatci_trend", "sarki_ozet", "seo_katalog",
 ]);

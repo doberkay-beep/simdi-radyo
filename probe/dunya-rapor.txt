@@ -1,7 +1,2 @@
-es: liste=120 filtre=17 probe=15 secilen=9
-fr: liste=120 filtre=10 probe=10 secilen=8
-br: liste=120 filtre=8 probe=8 secilen=6
-de: liste=120 filtre=14 probe=10 secilen=7
-nl: liste=120 filtre=19 probe=10 secilen=7
-it: liste=120 filtre=4 probe=4 secilen=4
-jp: liste=120 filtre=18 probe=10 secilen=6
+br: liste=400 filtre=21 probe=10 secilen=7
+es: liste=400 filtre=12 probe=12 secilen=4

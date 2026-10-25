@@ -79,7 +79,7 @@ function isimKok(name) {
 }
 
 async function ulkeGetir(cc) {
-  const url = `${API}/json/stations/bycountrycodeexact/${cc}?hidebroken=true&order=votes&reverse=true&limit=120`;
+  const url = `${API}/json/stations/bycountrycodeexact/${cc}?hidebroken=true&order=votes&reverse=true&limit=${process.env.DUNYA_LIMIT || 120}`;
   const r = await fetch(url, { headers: { "User-Agent": UA } });
   if (!r.ok) throw new Error(`${cc}: HTTP ${r.status}`);
   return r.json();

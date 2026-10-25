@@ -70,6 +70,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     { url: `${BASE}/fal`, changeFrequency: "monthly", priority: 0.6 },
     { url: `${BASE}/harita`, changeFrequency: "monthly", priority: 0.6 },
     { url: `${BASE}/liste`, changeFrequency: "hourly", priority: 0.8 },
+    { url: `${BASE}/en/chart`, changeFrequency: "hourly", priority: 0.7 },
     ...sanatcilar.map((s) => ({
       url: `${BASE}/sanatci/${s}`,
       changeFrequency: "daily" as const,

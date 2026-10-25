@@ -40,6 +40,7 @@ export default function AtlasPageEn() {
             ← now
           </Link>
           <span className="flex items-center gap-3">
+            <Link href="/en/chart" className="text-xs underline" style={{ color: "var(--muted)" }}>Chart</Link>
             <Link href="/ulke" className="text-xs underline" style={{ color: "var(--muted)" }}>TR</Link>
             <Link href="/" className="brand text-sm font-bold tracking-tight">nowby.</Link>
           </span>

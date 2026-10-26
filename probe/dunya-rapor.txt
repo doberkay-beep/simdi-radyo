@@ -1,2 +1,10 @@
-br: liste=400 filtre=21 probe=10 secilen=7
-es: liste=400 filtre=12 probe=12 secilen=4
+br: liste=300 filtre=15 probe=10 secilen=5
+es: liste=300 filtre=12 probe=12 secilen=3
+de: liste=300 filtre=12 probe=10 secilen=4
+it: liste=300 filtre=12 probe=5 secilen=4
+kr: liste=118 filtre=2 probe=2 secilen=2
+mx: liste=300 filtre=24 probe=20 secilen=8
+ca: liste=300 filtre=15 probe=5 secilen=5
+au: liste=300 filtre=18 probe=15 secilen=6
+ar: liste=300 filtre=15 probe=15 secilen=3
+se: liste=267 filtre=12 probe=12 secilen=3

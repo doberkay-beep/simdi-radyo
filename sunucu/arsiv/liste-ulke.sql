@@ -11,7 +11,7 @@ DROP FUNCTION IF EXISTS public.liste_ulke(timestamp with time zone, timestamp wi
 CREATE OR REPLACE FUNCTION public.liste_ulke_ham(bastan timestamp with time zone, sona timestamp with time zone,
                                              sluglar text[] DEFAULT NULL, adet integer DEFAULT 50)
  RETURNS TABLE(artist text, title text, kez bigint, istasyon bigint)
- LANGUAGE sql STABLE SET search_path TO 'public' SET enable_nestloop TO off
+ LANGUAGE sql STABLE SET search_path TO 'public'
 AS $function$
   with ham as materialized (
     select p.station_id, p.artist, p.title,
@@ -67,8 +67,10 @@ CREATE TABLE IF NOT EXISTS public.liste_ulke_onbellek (
 );
 GRANT SELECT ON public.liste_ulke_onbellek TO PUBLIC;
 
+-- enable_nestloop yalnız burada kapalı: bütün dünya taramasında hash join ~20 sn, iç içe döngüyle ~110 sn.
+-- Ülke sorgularında (az istasyon) tersi geçerli: istasyon indeksiyle iç içe döngü 1-2 sn, bu yüzden liste_ulke_ham'da açık.
 CREATE OR REPLACE FUNCTION public.liste_ulke_onbellek_yaz(p_gun integer)
- RETURNS void LANGUAGE plpgsql SECURITY DEFINER SET search_path TO 'public'
+ RETURNS void LANGUAGE plpgsql SECURITY DEFINER SET search_path TO 'public' SET enable_nestloop TO off
 AS $function$
 begin
   insert into liste_ulke_onbellek (gun_sayi, satirlar, guncel)

@@ -5,9 +5,11 @@ import { aktifIstasyonlar } from "@/lib/now";
 export const dynamic = "force-dynamic";
 
 // GET /api/now — tüm aktif istasyonlar + şu an çalan parça. "Şu an çalan" Hetzner'deki anlık dosyadan (lib/now), 3 sn cache.
-export async function GET() {
+// ?uygulama=1 — App Store uygulamaları: yalnız izinli radyolar (sorgu dizesi CDN önbellek anahtarına dahil).
+export async function GET(req: Request) {
   try {
-    const stations = await aktifIstasyonlar();
+    const uygulama = new URL(req.url).searchParams.get("uygulama") === "1";
+    const stations = await aktifIstasyonlar({ uygulama });
     return json(
       { stations },
       { headers: { "Cache-Control": "public, s-maxage=3, stale-while-revalidate=5" } },

@@ -17,6 +17,7 @@ const BAYAT_MS = 3 * 60_000;
 type Istasyon = {
   id: number; slug: string; name: string; city: string | null; frequency: string | null;
   accentColor: string | null; band: "tr" | "int" | "own"; genre: string | null; homepage: string | null;
+  appIzinli: boolean;
 };
 type Calan = { artist: string | null; title: string | null; rawTitle: string | null; updatedAt: string };
 
@@ -26,7 +27,7 @@ async function istasyonListesi(): Promise<Istasyon[]> {
   if (listeOnbellek && Date.now() - listeOnbellek.at < LISTE_SURE_MS) return listeOnbellek.liste;
   const { data, error } = await getSupabase()
     .from("stations")
-    .select("id, slug, name, city, frequency, accent_color, band, genre, homepage")
+    .select("id, slug, name, city, frequency, accent_color, band, genre, homepage, app_izinli")
     .eq("is_active", true)
     .order("sort_order", { ascending: true });
   if (error) throw new Error(error.message);
@@ -35,6 +36,7 @@ async function istasyonListesi(): Promise<Istasyon[]> {
     city: s.city as string | null, frequency: s.frequency as string | null,
     accentColor: s.accent_color as string | null, band: s.band as "tr" | "int" | "own",
     genre: (s.genre ?? null) as string | null, homepage: (s.homepage ?? null) as string | null,
+    appIzinli: s.app_izinli === true,
   }));
   listeOnbellek = { at: Date.now(), liste };
   return liste;
@@ -52,10 +54,13 @@ async function anlikDurum(): Promise<Record<string, Calan> | null> {
   }
 }
 
-export async function aktifIstasyonlar() {
-  const [anlik, liste] = await Promise.all([anlikDurum(), istasyonListesi().catch(() => null)]);
+// uygulama: App Store uygulamaları yalnız yazılı izin veren radyoları görür (Apple 5.2.3,
+// stations.app_izinli). Site tüm aktif radyoları gösterir.
+export async function aktifIstasyonlar({ uygulama = false }: { uygulama?: boolean } = {}) {
+  const [anlik, tumListe] = await Promise.all([anlikDurum(), istasyonListesi().catch(() => null)]);
+  const liste = tumListe && uygulama ? tumListe.filter((s) => s.appIzinli) : tumListe;
   if (anlik && liste) {
-    return liste.map((s) => {
+    return liste.map(({ appIzinli: _, ...s }) => {
       const c = anlik[s.slug];
       return {
         ...s,
@@ -67,19 +72,20 @@ export async function aktifIstasyonlar() {
       };
     });
   }
-  return veritabanindanIstasyonlar();
+  return veritabanindanIstasyonlar(uygulama);
 }
 
 // Yedek yol: istasyonlar ve now_playing doğrudan veritabanından.
-async function veritabanindanIstasyonlar() {
+async function veritabanindanIstasyonlar(uygulama: boolean) {
   const supabase = getSupabase();
-  const { data, error } = await supabase
+  let sorgu = supabase
     .from("stations")
     .select(
       "id, slug, name, city, frequency, accent_color, band, genre, homepage, now_playing(artist, title, raw_title, updated_at)",
     )
-    .eq("is_active", true)
-    .order("sort_order", { ascending: true });
+    .eq("is_active", true);
+  if (uygulama) sorgu = sorgu.eq("app_izinli", true);
+  const { data, error } = await sorgu.order("sort_order", { ascending: true });
 
   if (error) throw new Error(error.message);
 

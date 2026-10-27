@@ -205,6 +205,7 @@ const KISAYOLLAR: { href: string; tr: string; en: string }[] = [
   { href: "/harita", tr: "HARİTA", en: "MAP" },
   { href: "/rekorlar", tr: "REKORLAR", en: "RECORDS" },
   { href: "/senkron", tr: "SENKRON", en: "SYNC" },
+  { href: "/ayni-anda", tr: "AYNI ANDA", en: "SAME TIME" },
   { href: "/gece", tr: "GECE 3", en: "3 AM" },
   { href: "/arsiv", tr: "ARŞİV", en: "ARCHIVE" },
 ];

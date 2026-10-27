@@ -1450,59 +1450,7 @@ export default function NowList({ ilkIstasyonlar, ilkOzet }: { ilkIstasyonlar?: 
         {/* RUH — Aynı anda ve Gece 3 */}
         <RuhKartlari />
 
-        {/* KADRAN — analog ayar bandı (yalnız geniş ekranda; mobilde oynatıcı yeter) */}
-        <div className="hidden pt-3 sm:block">
-        <Kadran
-          stations={shown.map((s) => ({
-            slug: s.slug,
-            name: s.name,
-            accent_color: s.accentColor,
-            nowText: s.nowPlaying?.title
-              ? [s.nowPlaying.artist, s.nowPlaying.title].filter(Boolean).join(" — ")
-              : null,
-          }))}
-          playing={playing}
-          onTune={(slug) => {
-            const st = shown.find((x) => x.slug === slug);
-            if (st) toggle(st);
-          }}
-        />
-        </div>
-
-        {/* Sanatçı radarı — izlediğin sanatçı şu an bir istasyonda çalıyorsa */}
-        <SanatciRadari
-          stations={stations}
-          onTune={(slug) => {
-            const st = stations.find((x) => x.slug === slug);
-            if (st) { setUlke(null); setRegion("all"); toggle(st); }
-          }}
-        />
-
-        {/* Şairin frekansı — Berkay'ın seçkisi (seçki yoksa görünmez) */}
-        <SairinFrekansi
-          stations={stations}
-          onTune={(slug) => {
-            const st = stations.find((x) => x.slug === slug);
-            if (st) { setUlke(null); setRegion("all"); toggle(st); }
-          }}
-        />
-
-        {/* Canlı vitrin (dar ekran) — geniş ekranda aynı içerik yan raylarda */}
-        <div className="mb-4 grid gap-3 xl:hidden">
-          <CanliSayac veri={anaOzet} artis={canliArtis} kisa />
-          <CanliListe veri={anaOzet} kisa />
-        </div>
-
-        {/* Türkiye şu an — canlı listeden anlık gözlemler (ek sorgu yok) */}
-        <TurkiyeSuAn
-          stations={stations}
-          onTune={(slug) => {
-            const st = stations.find((x) => x.slug === slug);
-            if (st) { setUlke(null); setRegion("all"); toggle(st); }
-          }}
-        />
-
-        {/* Arama */}
+        {/* Arama, ülke, bayraklar, türler — ana sayfanın üstünde (27 Eki: liste uzaktaydı) */}
         <input
           ref={searchRef}
           type="search"
@@ -1551,9 +1499,7 @@ export default function NowList({ ilkIstasyonlar, ilkOzet }: { ilkIstasyonlar?: 
           ⚙ {t("home.filtreler")} {filtrelerAcik ? "▲" : "▼"}
         </button>
 
-        {filtrelerAcik && (
-        <>
-        {/* Kadran ülke bandı — bayrağa dokun: liste + kadran o ülkeye ayarlanır */}
+        {/* Ülke bayrakları — her zaman açık (27 Eki); bayrağa dokun: liste + kadran o ülkeye ayarlanır */}
         <div className="no-scrollbar mb-4 flex items-center gap-2 overflow-x-auto whitespace-nowrap text-sm">
           {doluUlkeler().map((k) => {
             const aktif = ulke === k;
@@ -1590,6 +1536,8 @@ export default function NowList({ ilkIstasyonlar, ilkOzet }: { ilkIstasyonlar?: 
           )}
         </div>
 
+        {filtrelerAcik && (
+        <>
         {/* Favori filtresi + sıralama + Şairin Frekansı */}
         <div className="mb-4 flex flex-wrap items-center gap-3 text-xs">
           <button
@@ -1641,6 +1589,43 @@ export default function NowList({ ilkIstasyonlar, ilkOzet }: { ilkIstasyonlar?: 
             )}
           </div>
         )}
+
+        {/* KADRAN — analog ayar bandı (yalnız geniş ekranda; mobilde oynatıcı yeter) */}
+        <div className="hidden pt-3 sm:block">
+        <Kadran
+          stations={shown.map((s) => ({
+            slug: s.slug,
+            name: s.name,
+            accent_color: s.accentColor,
+            nowText: s.nowPlaying?.title
+              ? [s.nowPlaying.artist, s.nowPlaying.title].filter(Boolean).join(" — ")
+              : null,
+          }))}
+          playing={playing}
+          onTune={(slug) => {
+            const st = shown.find((x) => x.slug === slug);
+            if (st) toggle(st);
+          }}
+        />
+        </div>
+
+        {/* Sanatçı radarı — izlediğin sanatçı şu an bir istasyonda çalıyorsa */}
+        <SanatciRadari
+          stations={stations}
+          onTune={(slug) => {
+            const st = stations.find((x) => x.slug === slug);
+            if (st) { setUlke(null); setRegion("all"); toggle(st); }
+          }}
+        />
+
+        {/* Şairin frekansı — Berkay'ın seçkisi (seçki yoksa görünmez) */}
+        <SairinFrekansi
+          stations={stations}
+          onTune={(slug) => {
+            const st = stations.find((x) => x.slug === slug);
+            if (st) { setUlke(null); setRegion("all"); toggle(st); }
+          }}
+        />
 
         {/* Şairin Frekansı — girişte edebi tanıtım */}
         {sairMode && (
@@ -1979,6 +1964,21 @@ export default function NowList({ ilkIstasyonlar, ilkOzet }: { ilkIstasyonlar?: 
             );
           })}
         </ul>
+
+        {/* Canlı vitrin (dar ekran, listenin altında) — geniş ekranda aynı içerik yan raylarda */}
+        <div className="mb-4 grid gap-3 xl:hidden">
+          <CanliSayac veri={anaOzet} artis={canliArtis} kisa />
+          <CanliListe veri={anaOzet} kisa />
+        </div>
+
+        {/* Türkiye şu an — canlı listeden anlık gözlemler (ek sorgu yok) */}
+        <TurkiyeSuAn
+          stations={stations}
+          onTune={(slug) => {
+            const st = stations.find((x) => x.slug === slug);
+            if (st) { setUlke(null); setRegion("all"); toggle(st); }
+          }}
+        />
 
         {/* Listenin altı: dünyadan canlı kesit + kalp defteri (dinleyiciyi listeden önce yormasın) */}
         <div className="mt-10">

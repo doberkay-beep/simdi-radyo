@@ -19,3 +19,10 @@ CREATE TABLE IF NOT EXISTS public.istasyon_ulke (slug text PRIMARY KEY, ulke tex
 GRANT SELECT, INSERT, UPDATE ON public.dunya_anlari TO toplayici;
 GRANT USAGE ON SEQUENCE public.dunya_anlari_id_seq TO toplayici;
 GRANT SELECT, INSERT, UPDATE, DELETE ON public.istasyon_ulke TO toplayici;
+
+-- Site arşivi (nowby.co/ayni-anda) bunu okuma ucundan (uc.mjs, IZINLI) çağırır.
+CREATE OR REPLACE FUNCTION public.dunya_anlari_liste(adet integer DEFAULT 60)
+ RETURNS TABLE(id bigint, zaman timestamptz, artist text, title text, ulkeler text[], radyolar jsonb)
+ LANGUAGE sql STABLE SET search_path TO 'public'
+AS $$ select id, zaman, artist, title, ulkeler, radyolar from dunya_anlari order by zaman desc limit least(adet, 200) $$;
+GRANT EXECUTE ON FUNCTION public.dunya_anlari_liste(integer) TO PUBLIC;

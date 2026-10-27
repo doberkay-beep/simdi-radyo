@@ -15,6 +15,8 @@ import { readFileSync } from "node:fs";
 const PENCERE = 5 * 60_000;      // aynı şarkının başlangıçları arası en fazla 5 dk (zincir)
 const GERI = Number(process.env.GERI_MS) || 12 * 60_000; // her turda son 12 dk okunur
 const KURU = process.env.KURU === "1"; // deneme: yazmaz, yalnız basar, tek tur
+const TEK = process.env.TEK === "1"; // geçmişi doldurma: yazar, tek tur
+const GERI_SON = Number(process.env.GERI_SON_MS) || 0; // geçmiş doldurmada pencerenin yeni ucu
 const ARALIK = 60_000;
 const TEKRAR = 60 * 60_000;      // aynı şarkı 60 dk içinde ikinci kez an olmaz (varsa güncellenir)
 const AG_ESIK = 10, HIT_ESIK = 6, ULKE_ESIK = 3, KITA_ESIK = 2;
@@ -119,7 +121,8 @@ async function tur() {
     `select p.started_at t, s.slug, s.name ad, p.artist, p.title
      from plays p join stations s on s.id = p.station_id
      where p.started_at > now() - ($1 || ' milliseconds')::interval
-       and coalesce(p.artist,'') <> '' and coalesce(p.title,'') <> ''`, [GERI]);
+       and p.started_at <= now() - ($2 || ' milliseconds')::interval
+       and coalesce(p.artist,'') <> '' and coalesce(p.title,'') <> ''`, [GERI, GERI_SON]);
 
   const gruplar = new Map();
   for (const r of rows) {
@@ -181,7 +184,7 @@ async function main() {
   // Yeniden başlatmada son saatin anlarını belleğe al (tekrar yazmasın).
   const { rows } = await db.query("select id, anahtar, zaman, cardinality(ulkeler) n from dunya_anlari where zaman > now() - interval '2 hours'");
   for (const r of rows) sonAnlar.set(r.anahtar, { id: r.id, zaman: new Date(r.zaman).getTime(), ulkeSayi: r.n });
-  if (KURU) { await tur(); await db.end(); return; }
+  if (KURU || TEK) { await tur(); await db.end(); return; }
   for (;;) {
     const bas = Date.now();
     await tur().catch((e) => log("! tur:", e.message));

@@ -17,7 +17,7 @@ pg.types.setTypeParser(1114, (v) => v.replace(" ", "T"));
 const PORT = Number(process.env.UC_PORT) || 3010;
 const db = new pg.Pool({ connectionString: process.env.OKUYUCU_PG_URL, max: 8, statement_timeout: 15_000 });
 const IZINLI = new Set([
-  "archive_at", "benzerler", "endeks_ozet", "gece_listesi", "hafta_raporu", "istasyon_ozet",
+  "archive_at", "benzerler", "dunya_anlari_liste", "endeks_ozet", "gece_listesi", "hafta_raporu", "istasyon_ozet",
   "katalog_sanatci_ara", "katalog_sarki_ara", "liste_araligi", "liste_ulke", "nabiz_artists", "nabiz_saat", "nabiz_top",
   "nabiz_trend", "rekorlar", "sanatci_ara", "sanatci_araligi", "sanatci_benzer", "sanatci_ozet",
   "sanatci_trend", "sarki_ozet", "seo_katalog", "endeks_hesapla",

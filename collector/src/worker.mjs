@@ -37,6 +37,8 @@ const log = (...a) => console.log(new Date().toISOString(), ...a);
 
 // station_id → son yazılan raw_title
 const lastRaw = new Map();
+// main döngüsünün son aktif istasyon listesi (SomaFM turu buradan okur).
+let guncelIstasyonlar = [];
 // station_id → now_playing'e en son yazma zamanı (tazelik kısması için)
 const lastWrite = new Map();
 // station_id → üst üste başarısızlık sayısı
@@ -70,12 +72,66 @@ function yazildiIsaretle(stationId, clean, now) {
   m.set(clean, now);
 }
 
+// Hız sınırı (27 Eki): bazı sağlayıcılar 10 sn'de bir bağlanmamıza "429 Too Many Requests"
+// diyor (Absolut Relax). 429 gelince o istasyon BEKLE_429_MS boyunca yoklanmaz ve bu
+// başarısızlık sayılmaz (pasifleştirmeye götürmesin).
+const BEKLE_429_MS = Number(process.env.BEKLE_429_MS) || 10 * 60_000;
+const bekle = new Map(); // station_id → bu zamana kadar yoklama
+
+// SomaFM (27 Eki): yayınlarına sık bağlanmak zaman aşımına düşüyordu. Şarkı adları
+// SomaFM'in herkese açık kanal listesinden (channels.json) dakikada tek istekle alınır;
+// somafm.com yayınları ICY ile yoklanmaz. Dinleme yine doğrudan yayından olur.
+const SOMA_URL = "https://somafm.com/channels.json";
+const SOMA_MS = Number(process.env.SOMA_MS) || 60_000;
+function somaKanal(streamUrl) {
+  try {
+    const u = new URL(streamUrl);
+    if (!/(^|\.)somafm\.com$/i.test(u.hostname)) return null;
+    return u.pathname.replace(/^\//, "").split(/[-.]/)[0] || null; // "/groovesalad-128-mp3" → "groovesalad"
+  } catch {
+    return null;
+  }
+}
+async function somaTur(stations) {
+  const soma = stations.map((s) => [s, somaKanal(s.stream_url)]).filter(([, k]) => k);
+  if (!soma.length) return;
+  let kanallar;
+  try {
+    const r = await fetch(SOMA_URL, {
+      headers: { "User-Agent": "nowby/1.0 (+https://nowby.co)" },
+      signal: AbortSignal.timeout(10_000),
+    });
+    if (!r.ok) throw new Error(`http-${r.status}`);
+    kanallar = new Map(((await r.json()).channels || []).map((c) => [c.id, c.lastPlaying]));
+  } catch (err) {
+    log("! SomaFM kanal listesi alınamadı:", err.message);
+    return;
+  }
+  for (const [station, kanal] of soma) {
+    const title = kanallar.get(kanal);
+    await isle(station, title ? { status: "ok", title } : { status: "none", reason: "soma-kanal-yok" });
+  }
+}
+
 async function probeAndStore(station) {
+  if ((bekle.get(station.id) || 0) > Date.now()) return;
   let res;
   try {
     res = await probeIcy(station.stream_url, { timeout: PROBE_TIMEOUT_MS });
   } catch (err) {
     res = { status: "dead", reason: err?.message || "hata" };
+  }
+  await isle(station, res);
+}
+
+// Yoklama sonucunu işler (ICY ya da SomaFM listesi).
+async function isle(station, res) {
+  if (res.reason === "http-429") {
+    if (!bekle.has(station.id) || bekle.get(station.id) <= Date.now()) {
+      log(`429: ${station.slug} — ${Math.round(BEKLE_429_MS / 60_000)} dk beklenecek`);
+    }
+    bekle.set(station.id, Date.now() + BEKLE_429_MS);
+    return;
   }
 
   // Başarısızlık: bağlanılamadı ya da kullanılabilir metadata yok.
@@ -192,6 +248,13 @@ async function main() {
   // düşer, yeni eklenenler katılır). Her turda çekmek Supabase egress'inin
   // yarısını yiyordu (422 satır × 25 sn ≈ 230 MB/gün).
   const startedAt = Date.now();
+  // SomaFM döngüsü ana turdan bağımsız, dakikada bir.
+  (async () => {
+    for (;;) {
+      await delay(SOMA_MS);
+      await somaTur(guncelIstasyonlar).catch((err) => log("! SomaFM turu:", err.message));
+    }
+  })();
   let stations = [];
   let stationsAt = 0;
   for (;;) {
@@ -216,7 +279,8 @@ async function main() {
         log("! istasyon listesi alınamadı:", err.message, stations.length ? "(eski liste kullanılıyor)" : "(tur atlanıyor)");
       }
     }
-    if (stations.length) await cycle(stations);
+    guncelIstasyonlar = stations;
+    if (stations.length) await cycle(stations.filter((s) => !somaKanal(s.stream_url)));
 
     // Zamanlanmış çalışmada süre dolduysa temiz çık.
     if (RUN_DURATION_MS && Date.now() - startedAt >= RUN_DURATION_MS) {

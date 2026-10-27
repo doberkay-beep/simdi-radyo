@@ -198,15 +198,10 @@ function trackQuery(np: NowPlaying): string | null {
 
 const low = (s: string) => s.toLocaleLowerCase("tr");
 
-// Ana sayfa kısayolları — menüde kaybolan, en çok merak edilen sayfalar.
+// Ana sayfa kısayolları — sade tutulur (27 Eki): Aynı anda ve Gece 3 ruh kartlarında, gerisi ☰ menüde.
 const KISAYOLLAR: { href: string; tr: string; en: string }[] = [
   { href: "/liste", tr: "LİSTE", en: "CHART" },
   { href: "/endeks", tr: "ENDEKS", en: "INDEX" },
-  { href: "/harita", tr: "HARİTA", en: "MAP" },
-  { href: "/rekorlar", tr: "REKORLAR", en: "RECORDS" },
-  { href: "/senkron", tr: "SENKRON", en: "SYNC" },
-  { href: "/ayni-anda", tr: "AYNI ANDA", en: "SAME TIME" },
-  { href: "/gece", tr: "GECE 3", en: "3 AM" },
   { href: "/arsiv", tr: "ARŞİV", en: "ARCHIVE" },
 ];
 
@@ -1708,69 +1703,6 @@ export default function NowList({ ilkIstasyonlar, ilkOzet }: { ilkIstasyonlar?: 
           })()
         )}
 
-        {/* ARAÇ RAFI — eskiden ☰ menüde saklı olan her şey burada, küçük butonlar
-            halinde (kimse menüye bakmıyor). Üstteki kısayol rafıyla aynı dil. */}
-        {(() => {
-          const en = dil === "en";
-          const yukari = () => window.scrollTo({ top: 0, behavior: "smooth" });
-          const satirlar: { ad: string; ogeler: React.ReactNode[] }[] = [
-            {
-              ad: en ? "LISTEN" : "DİNLE",
-              ogeler: [
-                <button key="surus" onClick={() => setSurus(true)}>{en ? "DRIVE MODE" : "SÜRÜŞ MODU"}</button>,
-                <button key="uyku" onClick={cycleSleep} className={sleepUntil ? "on" : ""}>
-                  {sleepUntil ? `${en ? "SLEEP" : "UYKU"} · ${sleepRemain} DK` : en ? "SLEEP TIMER" : "UYKU"}
-                </button>,
-                <button key="alarm" onClick={() => { setAlarmAcik(true); yukari(); }} className={alarm ? "on" : ""}>
-                  {alarm ? `${en ? "ALARM" : "ALARM"} · ${new Date(alarm.ts).toTimeString().slice(0, 5)}` : en ? "RADIO ALARM" : "RADYO ALARMI"}
-                </button>,
-                <button key="oda" onClick={() => { if (oda) davetKopyala(oda.kod); else odaAc(); yukari(); }} className={oda ? "on" : ""}>
-                  {en ? "LISTEN TOGETHER" : "BİRLİKTE DİNLE"}
-                </button>,
-                <button key="gezinti" onClick={() => setYolculuk((v) => !v)} className={yolculuk ? "on" : ""}>
-                  {en ? "DRIFT" : "GEZİNTİ"}
-                </button>,
-                <button key="not" onClick={() => setNotAcik(true)}>{en ? "LEAVE A NOTE" : "NOT BIRAK"}</button>,
-                <button key="siir" onClick={() => { audioRef.current?.pause(); setPlaying(null); setSiirAcik(true); }}>
-                  {en ? "POETRY CORNER" : "ŞİİR KÖŞESİ"}
-                </button>,
-              ],
-            },
-            {
-              ad: en ? "EXPLORE" : "KEŞFET",
-              ogeler: [
-                <Link key="rapor" href="/rapor" prefetch={false}>{en ? "WEEKLY REPORT" : "HAFTALIK RAPOR"}</Link>,
-                <Link key="kesif" href="/kesif">{en ? "DISCOVER" : "KEŞİF"}</Link>,
-                <Link key="oyun" href="/oyun">{en ? "GAMES" : "OYUNLAR"}</Link>,
-                <Link key="fal" href="/fal">{en ? "FORTUNE" : "FREKANS FALI"}</Link>,
-                <Link key="kose" href="/kose">{en ? "ESSAYS" : "KÖŞE"}</Link>,
-                <Link key="hakkinda" href="/hakkinda">{en ? "ABOUT" : "HAKKINDA"}</Link>,
-              ],
-            },
-            {
-              ad: en ? "YOURS" : "SENİN",
-              ogeler: [
-                ...(now > 0 && !kuruluMu()
-                  ? [<button key="kur" onClick={() => setKurAcik(true)}>{en ? "INSTALL APP" : "UYGULAMA GİBİ KUR"}</button>]
-                  : []),
-                <button key="av" onClick={() => setAvAcik(true)}>{en ? "MUSIC JOURNAL" : "MÜZİK DEFTERİM"}</button>,
-                <button key="frekans" onClick={() => setFrekansAcik(true)}>{en ? "MY FREQUENCY" : "FREKANSIM"}</button>,
-                <button key="kasa" onClick={() => setKasaAcik(true)}>{en ? "MEMORY CODE" : "HAFIZA KODUM"}</button>,
-              ],
-            },
-          ];
-          return (
-            <section className="arac-raf mb-6" aria-label={en ? "tools" : "araçlar"}>
-              {satirlar.map((r) => (
-                <div key={r.ad} className="arac-satir">
-                  <span className="arac-ad">{r.ad}</span>
-                  <div className="raf minik">{r.ogeler}</div>
-                </div>
-              ))}
-            </section>
-          );
-        })()}
-
         {/* "Şu an çalanlar" yatay şerit */}
         {!playing && nowStrip.length > 0 && (
           <div className="mb-6">
@@ -2356,6 +2288,10 @@ export default function NowList({ ilkIstasyonlar, ilkOzet }: { ilkIstasyonlar?: 
               <Link href="/oyun" className="menu-kalem" onClick={() => setNavAcik(false)}>🎮 {dil === "en" ? "games" : "oyunlar"}</Link>
               <Link href="/fal" className="menu-kalem" onClick={() => setNavAcik(false)}>🔮 {dil === "en" ? "fortune" : "frekans falı"}</Link>
               <Link href="/kose" className="menu-kalem" onClick={() => setNavAcik(false)}>✒ {t("nav.kose")}</Link>
+              <Link href="/rapor" prefetch={false} className="menu-kalem" onClick={() => setNavAcik(false)}>📊 {dil === "en" ? "weekly report" : "haftalık rapor"}</Link>
+              <Link href="/harita" className="menu-kalem" onClick={() => setNavAcik(false)}>📍 {dil === "en" ? "map" : "harita"}</Link>
+              <Link href="/rekorlar" className="menu-kalem" onClick={() => setNavAcik(false)}>🎖 {dil === "en" ? "records" : "rekorlar"}</Link>
+              <Link href="/senkron" className="menu-kalem" onClick={() => setNavAcik(false)}>⚡ {dil === "en" ? "sync moments" : "senkron defteri"}</Link>
               <button onClick={() => { setNavAcik(false); audioRef.current?.pause(); setPlaying(null); setSiirAcik(true); }} className="menu-kalem press col-span-2">📖 {dil === "en" ? "poetry corner · Şiir Rafım Radio" : "şiir köşesi · Şiir Rafım Radyosu"}</button>
             </div>
 

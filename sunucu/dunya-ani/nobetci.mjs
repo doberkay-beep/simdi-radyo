@@ -11,6 +11,8 @@
 
 import pg from "pg";
 import { readFileSync } from "node:fs";
+import { createClient } from "@supabase/supabase-js";
+import webpush from "/opt/simdi/radar/node_modules/web-push/src/index.js";
 
 const PENCERE = 5 * 60_000;      // aynı şarkının başlangıçları arası en fazla 5 dk (zincir)
 const GERI = Number(process.env.GERI_MS) || 12 * 60_000; // her turda son 12 dk okunur
@@ -28,6 +30,67 @@ const env = Object.fromEntries(
 );
 const db = new pg.Pool({ connectionString: env.ARSIV_PG_URL, max: 2, idleTimeoutMillis: 30_000 });
 const log = (...a) => console.log(new Date().toISOString(), ...a);
+
+// ---- web push (27 Eki): yalnız nowby.co/ayni-anda'da abone olanlara; radar ile aynı VAPID çifti ----
+const sb = createClient(env.SUPABASE_URL, env.SUPABASE_SERVICE_ROLE_KEY, { auth: { persistSession: false, autoRefreshToken: false } });
+const vapid = JSON.parse(readFileSync("/opt/simdi/radar/vapid.json", "utf8"));
+webpush.setVapidDetails("mailto:hello@berkaydogan.co", vapid.publicKey, vapid.privateKey);
+const BILDIRIM_ARA = 3 * 3600_000; // iki bildirim arası en az 3 saat (an yine arşive yazılır)
+let sonBildirim = 0;
+
+// Bildirim cümlesi için ülke adları: Türkçede bulunma hâli elle (ünlü uyumu + sert ünsüz + kısaltma okunuşu).
+const ULKE_TR = {
+  tr: "Türkiye'de", de: "Almanya'da", fr: "Fransa'da", gb: "Birleşik Krallık'ta", us: "ABD'de", it: "İtalya'da",
+  es: "İspanya'da", nl: "Hollanda'da", be: "Belçika'da", ch: "İsviçre'de", at: "Avusturya'da", pt: "Portekiz'de",
+  gr: "Yunanistan'da", se: "İsveç'te", no: "Norveç'te", dk: "Danimarka'da", fi: "Finlandiya'da", ie: "İrlanda'da",
+  pl: "Polonya'da", cz: "Çekya'da", hu: "Macaristan'da", ro: "Romanya'da", jp: "Japonya'da", kr: "Güney Kore'de",
+  in: "Hindistan'da", br: "Brezilya'da", ar: "Arjantin'de", mx: "Meksika'da", ca: "Kanada'da", au: "Avustralya'da",
+  za: "Güney Afrika'da", ru: "Rusya'da", ua: "Ukrayna'da", rs: "Sırbistan'da", hr: "Hırvatistan'da", bg: "Bulgaristan'da",
+  is: "İzlanda'da", cn: "Çin'de", kz: "Kazakistan'da", id: "Endonezya'da", th: "Tayland'da", vn: "Vietnam'da",
+  ph: "Filipinler'de", cl: "Şili'de", co: "Kolombiya'da", pe: "Peru'da", ma: "Fas'ta", eg: "Mısır'da",
+  ae: "Birleşik Arap Emirlikleri'nde", ng: "Nijerya'da", ke: "Kenya'da",
+};
+const ULKE_EN = {
+  tr: "Türkiye", de: "Germany", fr: "France", gb: "the United Kingdom", us: "the United States", it: "Italy",
+  es: "Spain", nl: "the Netherlands", be: "Belgium", ch: "Switzerland", at: "Austria", pt: "Portugal",
+  gr: "Greece", se: "Sweden", no: "Norway", dk: "Denmark", fi: "Finland", ie: "Ireland", pl: "Poland",
+  cz: "Czechia", hu: "Hungary", ro: "Romania", jp: "Japan", kr: "South Korea", in: "India", br: "Brazil",
+  ar: "Argentina", mx: "Mexico", ca: "Canada", au: "Australia", za: "South Africa", ru: "Russia", ua: "Ukraine",
+  rs: "Serbia", hr: "Croatia", bg: "Bulgaria", is: "Iceland", cn: "China", kz: "Kazakhstan", id: "Indonesia",
+  th: "Thailand", vn: "Vietnam", ph: "the Philippines", cl: "Chile", co: "Colombia", pe: "Peru", ma: "Morocco",
+  eg: "Egypt", ae: "the United Arab Emirates", ng: "Nigeria", ke: "Kenya",
+};
+const birlestir = (l, ve) => (l.length < 2 ? l.join("") : `${l.slice(0, -1).join(", ")} ${ve} ${l.at(-1)}`);
+function bildirimMetni(an, ulkeler, dil) {
+  const sarki = `${an.artist} — ${an.title}`;
+  if (dil === "en") {
+    const l = ulkeler.map((u) => ULKE_EN[u] || u.toUpperCase());
+    return { baslik: "🌍 Same time", metin: `${sarki} is playing right now in ${birlestir(l, "and")}.`, url: "/en/same-time" };
+  }
+  const l = ulkeler.map((u) => ULKE_TR[u] || `${u.toUpperCase()}'de`);
+  return { baslik: "🌍 Aynı anda", metin: `${sarki} şu an ${birlestir(l, "ve")} çalıyor.`, url: "/ayni-anda" };
+}
+
+async function bildir(id, an, ulkeler) {
+  if (Date.now() - sonBildirim < BILDIRIM_ARA) { log(`🔕 an #${id}: son bildirimden 3 saat geçmedi, gönderilmedi`); return; }
+  const { data: aboneler, error } = await sb.from("ayni_anda_abone").select("endpoint, abone, dil");
+  if (error) { log("! aboneler okunamadı:", error.message); return; }
+  sonBildirim = Date.now();
+  let giden = 0;
+  for (const a of aboneler || []) {
+    const m = bildirimMetni(an, ulkeler, a.dil);
+    try {
+      await webpush.sendNotification(a.abone, JSON.stringify({ ...m, tag: `dunya-ani-${id}` }), { TTL: 1800, urgency: "normal" });
+      giden++;
+    } catch (err) {
+      if (err?.statusCode === 404 || err?.statusCode === 410) await sb.from("ayni_anda_abone").delete().eq("endpoint", a.endpoint);
+      else log("! push:", err?.statusCode || err?.message);
+    }
+  }
+  await sb.from("ayni_anda_abone").update({ son_bildirim: new Date().toISOString() }).in("endpoint", (aboneler || []).map((a) => a.endpoint));
+  await db.query("update dunya_anlari set bildirim = now() where id = $1", [id]);
+  log(`🔔 an #${id}: ${giden}/${(aboneler || []).length} aboneye gitti`);
+}
 
 const KITA = {};
 for (const k of "at be bg ch cz de dk es fi fr gb gr hr hu ie is it nl no pl pt ro rs se ua ru".split(" ")) KITA[k] = "Avrupa";
@@ -175,6 +238,8 @@ async function anDegerlendir(k, an) {
        values ($1, $2, $3, $4, $5, $6) returning id`,
       [new Date(an[0].t), k, an[0].artist, an[0].title, ulkeler, JSON.stringify(govde)]);
     sonAnlar.set(k, { id: y.id, zaman: an[0].t, ulkeSayi: ulkeler.length });
+    // Geçmiş doldurmada (TEK) ya da eski bir an için bildirim yok; yalnız son 15 dakikadaki canlı anlar.
+    if (!TEK && Date.now() - an[0].t < 15 * 60_000) await bildir(y.id, an[0], ulkeler).catch((e) => log("! bildirim:", e.message));
     log(`🌍 DÜNYA ANI #${y.id}: ${an[0].artist} — ${an[0].title} · ${ulkeler.join(",")} (${radyolar.map((r) => r.ad).join(" · ")})`);
   }
 }
@@ -184,6 +249,8 @@ async function main() {
   // Yeniden başlatmada son saatin anlarını belleğe al (tekrar yazmasın).
   const { rows } = await db.query("select id, anahtar, zaman, cardinality(ulkeler) n from dunya_anlari where zaman > now() - interval '2 hours'");
   for (const r of rows) sonAnlar.set(r.anahtar, { id: r.id, zaman: new Date(r.zaman).getTime(), ulkeSayi: r.n });
+  const { rows: [b] } = await db.query("select max(bildirim) son from dunya_anlari");
+  if (b?.son) sonBildirim = new Date(b.son).getTime();
   if (KURU || TEK) { await tur(); await db.end(); return; }
   for (;;) {
     const bas = Date.now();

@@ -121,7 +121,8 @@ async function probeAndStore(station) {
   if ((bekle.get(station.id) || 0) > Date.now()) return;
   let res;
   try {
-    res = await probeIcy(station.stream_url, { timeout: PROBE_TIMEOUT_MS });
+    // meta_url: dinleyici HLS/https'e bağlanırken başlık eski ICY kaynağından okunur (aktarma yok, yalnız başlık).
+    res = await probeIcy(station.meta_url || station.stream_url, { timeout: PROBE_TIMEOUT_MS });
   } catch (err) {
     res = { status: "dead", reason: err?.message || "hata" };
   }

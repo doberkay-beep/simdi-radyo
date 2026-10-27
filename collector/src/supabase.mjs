@@ -24,7 +24,7 @@ const supa = createClient(url, key, {
 export async function loadActiveStations() {
   const { data, error } = await supa
     .from("stations")
-    .select("id, slug, name, stream_url")
+    .select("id, slug, name, stream_url, meta_url")
     .eq("is_active", true)
     .order("sort_order", { ascending: true });
   if (error) throw error;

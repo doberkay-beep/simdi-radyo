@@ -1,15 +1,11 @@
 import { getSupabase } from "@/lib/supabase";
 
-// Ses akışı proxy'si. Sürekli akıştır — istek anında çalışır, cache'lenmez.
-// EDGE runtime: Node serverless fonksiyonu ~10-60 sn sonra kesilirdi (yayın
-// "arada duruyordu"); Edge, veri aktıkça uzun uzun akıtabilir.
+// Ses akışı yönlendiricisi — istek anında çalışır, cache'lenmez.
 export const runtime = "edge";
 export const dynamic = "force-dynamic";
 
-// GET /api/stream/[slug]
-// Zorunlu: Türk istasyonlarının çoğu düz HTTP yayın yapıyor; HTTPS sayfaya
-// doğrudan gömülemez (mixed content). Bu proxy akışı OLDUĞU GİBİ geçirir —
-// içeriğe dokunmaz, reklam kesmez. (Not: params bu sürümde Promise.)
+// GET /api/stream/[slug] — yalnız yönlendirir: dinleyici radyonun resmî https
+// yayınına 302 ile gider. Aktarma (proxy) 27 Eki 2026'da kaldırıldı. (params bu sürümde Promise.)
 export async function GET(request: Request, ctx: { params: Promise<{ slug: string }> }) {
   const { slug } = await ctx.params;
   const supabase = getSupabase();
@@ -37,36 +33,14 @@ export async function GET(request: Request, ctx: { params: Promise<{ slug: strin
   }
 
   // HTTPS yayınlar sayfaya doğrudan gömülebilir (mixed content yok): proxy'lemek
-  // yerine yönlendir. Dinleme süresi boyunca fonksiyon açık kalmaz — Fluid Active
-  // CPU ve provisioned memory maliyeti saatlerden milisaniyelere iner. Düz HTTP
-  // yayınlar için proxy zorunlu olduğundan aşağıdaki akış aynen kalır.
+  // yerine yönlendir. Dinleme süresi boyunca fonksiyon açık kalmaz.
   if (typeof data.stream_url === "string" && data.stream_url.startsWith("https://")) {
     // Response.redirect immutable başlık döndürür; Next bazı yollarda başlığa
     // dokunmaya kalkınca TypeError atıyor — elle kurulan 302 her yerde çalışır.
     return new Response(null, { status: 302, headers: { Location: data.stream_url } });
   }
 
-  let upstream: Response;
-  try {
-    upstream = await fetch(data.stream_url, {
-      headers: { "User-Agent": "Simdi/0.1", "Icy-MetaData": "0" },
-      redirect: "follow",
-      signal: request.signal, // istemci bağlantıyı kapatınca üst akışı da iptal et
-    });
-  } catch {
-    return new Response("yayına ulaşılamadı", { status: 502 });
-  }
-
-  if (!upstream.ok || !upstream.body) {
-    return new Response("yayın hatası", { status: 502 });
-  }
-
-  // Akışı olduğu gibi geçir; sadece içerik türünü aktar.
-  return new Response(upstream.body, {
-    status: 200,
-    headers: {
-      "Content-Type": upstream.headers.get("content-type") ?? "audio/mpeg",
-      "Cache-Control": "no-store",
-    },
-  });
+  // 27 Eki 2026: nowby yayın AKTARMAZ (hak sahipleri notu, Funky Corner koşulu).
+  // Düz HTTP yayın katalogda olmamalı; olursa çalınmaz, sunucudan geçirilmez.
+  return new Response("bu radyonun güvenli (https) resmî yayını yok; nowby yayın aktarmaz", { status: 410 });
 }

@@ -33,18 +33,16 @@ export async function kaynagiCalistir(audio: HTMLAudioElement, slug: string): Pr
   }
 
   if (meta.hls && meta.url) {
-    if (a.canPlayType("application/vnd.apple.mpegurl")) {
-      a.src = meta.url; // Safari — native HLS
+    // Önce hls.js (MSE): yeni Chromium sürümleri HLS için "maybe" deyip çalamıyor (27 Eki).
+    // MSE yoksa (eski iPhone Safari) tarayıcının kendi HLS'i.
+    if (!HlsCtor) HlsCtor = (await import("hls.js")).default;
+    if (HlsCtor.isSupported()) {
+      const h = new HlsCtor({ maxBufferLength: 30, backBufferLength: 30 });
+      h.loadSource(meta.url);
+      h.attachMedia(a);
+      a.__hls = h;
     } else {
-      if (!HlsCtor) HlsCtor = (await import("hls.js")).default;
-      if (HlsCtor.isSupported()) {
-        const h = new HlsCtor({ maxBufferLength: 30, backBufferLength: 30 });
-        h.loadSource(meta.url);
-        h.attachMedia(a);
-        a.__hls = h;
-      } else {
-        a.src = meta.url; // son çare: tarayıcı ne yapabiliyorsa
-      }
+      a.src = meta.url; // Safari — native HLS (ya da son çare)
     }
   } else {
     a.src = `/api/stream/${slug}?r=${Date.now()}`;

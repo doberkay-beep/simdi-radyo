@@ -355,7 +355,7 @@
   "band": "tr",
   "genre": "klasik",
   "metadata_quality": "good",
-  "is_active": true,
+  "is_active": false,
   "sort_order": 230,
   "country": "tr"
  },

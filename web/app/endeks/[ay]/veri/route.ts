@@ -20,7 +20,7 @@ export async function GET(_req: Request, ctx: { params: Promise<{ ay: string }> 
     return new Response(JSON.stringify({ hata: "bu ay için veri yok" }), { status: 404, headers: CORS });
   }
   return new Response(
-    JSON.stringify({ kaynak: "nowby.co Türkiye Radyo Endeksi", iletisim: "do.berkay@icloud.com", ...data }, null, 1),
+    JSON.stringify({ kaynak: "nowby.co Türkiye Radyo Endeksi", iletisim: "hello@berkaydogan.co", ...data }, null, 1),
     { headers: CORS },
   );
 }

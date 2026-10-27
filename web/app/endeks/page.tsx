@@ -85,7 +85,7 @@ export default async function Sayfa() {
           araştırmacılar serbestçe kullanabilir; kaynak gösterimi:{" "}
           <em>&quot;nowby.co Türkiye Radyo Endeksi&quot;</em>. Yöntem: yalnız Türkiye bandı,
           en az 2 istasyonda çalınan şarkılar; jingle ve tekrar otomasyonları elenir.
-          İletişim: do.berkay@icloud.com
+          İletişim: hello@berkaydogan.co
         </p>
       </section>
 

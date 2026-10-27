@@ -445,7 +445,7 @@
   "band": "tr",
   "genre": "türkçe pop",
   "metadata_quality": "good",
-  "is_active": true,
+  "is_active": false,
   "sort_order": 290,
   "country": "tr"
  },
@@ -1689,7 +1689,7 @@
   "accent_color": "#5a7ab0",
   "band": "int",
   "metadata_quality": "unknown",
-  "is_active": true,
+  "is_active": false,
   "sort_order": 915,
   "genre": "alternatif",
   "country": "us"
@@ -5200,7 +5200,7 @@
   "band": "int",
   "genre": "pop",
   "metadata_quality": "good",
-  "is_active": true,
+  "is_active": false,
   "sort_order": 1491,
   "country": "pe"
  },
@@ -5844,7 +5844,7 @@
   "accent_color": "#4e9a6f",
   "band": "int",
   "metadata_quality": "good",
-  "is_active": true,
+  "is_active": false,
   "sort_order": 5034,
   "genre": null,
   "country": "ma"

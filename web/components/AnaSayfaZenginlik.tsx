@@ -142,14 +142,13 @@ export function RuhKartlari() {
   const { dil } = useDil();
   return (
     <nav className="mb-5 grid grid-cols-2 gap-3" aria-label={dil === "en" ? "the heart of nowby" : "nowby'ın kalbi"}>
-      {RUH.map((k) => {
+      {RUH.map((k, i) => {
         const [ad, alt] = dil === "en" ? k.en : k.tr;
         return (
-          <Link key={k.href} prefetch={false} href={k.href} lang={dil} className="press flex min-w-0 flex-col gap-1.5 rounded-2xl border px-4 py-3.5"
-            style={{ borderColor: "color-mix(in srgb, var(--glow) 45%, var(--line))", background: "color-mix(in srgb, var(--glow) 8%, var(--panel))" }}>
-            <span aria-hidden className="text-2xl">{k.ikon}</span>
-            <span className="dial block text-[18px] uppercase tracking-[0.03em]">{ad}</span>
-            <span className="block text-[12px] leading-snug" style={{ color: "var(--muted)" }}>{alt}</span>
+          <Link key={k.href} prefetch={false} href={k.href} lang={dil} className="ruh-kart press flex min-w-0 flex-col gap-2 px-4 py-4">
+            <span className="kicker flex items-center gap-2"><span className="no">№ 0{i + 1}</span><span aria-hidden>{k.ikon}</span></span>
+            <span className="manset-kart block">{ad}</span>
+            <span className="block text-[12.5px] leading-snug" style={{ color: "var(--muted)" }}>{alt}</span>
           </Link>
         );
       })}

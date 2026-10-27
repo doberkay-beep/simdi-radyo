@@ -1246,33 +1246,10 @@ export default function NowList({ ilkIstasyonlar, ilkOzet }: { ilkIstasyonlar?: 
         </div>
       </div>
 
-      {/* KAYAN MANŞET — köz şeridi (yazar sitesiyle ortak sansasyon dili) */}
-      <div className="simdi-marquee" aria-hidden>
-        <div className="simdi-marquee-track">
-          {[0, 1].map((k) =>
-            [
-              `${stations.length} ${t("manset.istasyon")}`,
-              `${doluUlkeler().length} ${t("manset.ulke")}`,
-              t("manset.rota"),
-              t("manset.canli"),
-            ].map((parca) => <span key={`${k}-${parca}`}>{parca}</span>)
-          )}
-        </div>
-      </div>
-
-      <div className="relative z-10 mx-auto max-w-2xl px-5 pb-32 pt-10">
-        {/* Başlık — logo yok, sadece kelime işareti */}
-        <header className="mb-6 flex items-start justify-between gap-3">
-          <div>
-            <h1 className="brand text-[42px] font-bold leading-none tracking-tight">nowby.</h1>
-            <span
-              className="title-underline mt-2 block h-[2px] rounded-full"
-              style={{ width: 40, background: accent, opacity: playing ? 1 : 0.25 }}
-            />
-            <p className="mono mt-2 text-[11px] uppercase tracking-[0.18em]" style={{ color: "var(--muted)" }}>
-              {t("home.altyazi")}
-            </p>
-          </div>
+      <div className="relative z-10 mx-auto max-w-2xl px-5 pb-32 pt-5">
+        {/* Üst çubuk — berkaydogan.co dili: kelime işareti solda, dil + MENÜ sağda */}
+        <header className="flex items-center justify-between gap-3">
+          <span className="brand text-[17px] font-semibold tracking-tight">nowby<span style={{ color: "var(--glow)" }}>.</span></span>
           {/* Sağ üst: yalnız dil + ☰ MENÜ. Tema/ton menünün "Görünüm" grubunda. */}
           <div className="flex shrink-0 items-center gap-3 text-xs" style={{ color: "var(--muted)" }}>
             <DilToggle />
@@ -1286,6 +1263,19 @@ export default function NowList({ ilkIstasyonlar, ilkOzet }: { ilkIstasyonlar?: 
             </button>
           </div>
         </header>
+
+        {/* MASTHEAD — gazete künyesi gibi ince çizgiler arasında üç küçük not */}
+        <div className="masthead mt-4" aria-hidden>
+          <span>nowby.co</span>
+          <span className="hidden sm:inline">{t("home.altyazi")}</span>
+          <span>{stations.length} {t("manset.istasyon")} · {doluUlkeler().length} {t("manset.ulke")}</span>
+        </div>
+
+        {/* MANŞET — büyük serif kelime işareti (uygulama simgesindeki "n." gibi) */}
+        <h1 className="manset-baslik mb-3 mt-9">
+          nowby<span style={{ color: "var(--glow)" }}>.</span>
+        </h1>
+        <p className="manset-alt mb-7">{(() => { const a = t("home.altyazi"); return a.charAt(0).toLocaleUpperCase(dil === "en" ? "en" : "tr") + a.slice(1) + "?"; })()}</p>
 
         {/* Bant seçici — radyo bant düğmesi: FM (buradasın) / Dünya / Nabız */}
         <nav className="bandsel mb-3" aria-label="bant">

@@ -1,16 +1,25 @@
 import type { ReactNode } from "react";
-import { Instrument_Sans, Fraunces, Oswald, Space_Mono } from "next/font/google";
+import { Inter, Playfair_Display, Fraunces, Oswald, Space_Mono } from "next/font/google";
 import { Analytics } from "@vercel/analytics/next";
 import RegisterSW from "@/components/RegisterSW";
 import AltBilgi from "@/components/AltBilgi";
 import KasaBekcisi from "@/components/KasaBekcisi";
 import "./globals.css";
 
-// Marka/UI yazı tipi — berkaydogan.co ailesiyle aynı dil: zarif modern sans.
-const brand = Instrument_Sans({
+// Marka/UI yazı tipi — berkaydogan.co ile aynı: Inter (27 Eki).
+const brand = Inter({
   subsets: ["latin", "latin-ext"],
   weight: ["400", "500", "600", "700"],
   variable: "--font-brand",
+  display: "swap",
+});
+
+// Manşet yazı tipi — berkaydogan.co'nun büyük serif başlıkları (Playfair Display).
+const manset = Playfair_Display({
+  subsets: ["latin", "latin-ext"],
+  weight: ["400", "500", "600"],
+  style: ["normal", "italic"],
+  variable: "--font-display",
   display: "swap",
 });
 
@@ -70,7 +79,7 @@ export const viewport = {
 
 export default function RootLayout({ children }: { children: ReactNode }) {
   return (
-    <html lang="tr" className={`${brand.variable} ${read.variable} ${dial.variable} ${mono.variable}`} suppressHydrationWarning>
+    <html lang="tr" className={`${brand.variable} ${manset.variable} ${read.variable} ${dial.variable} ${mono.variable}`} suppressHydrationWarning>
       <head>
         {/* Tema seçimini boyamadan önce uygula (flaş olmasın). Dil de: html lang hep "tr"
             kalınca İngilizce metinde CSS uppercase "i"yi "İ" yapıyordu (PLAYİNG). */}

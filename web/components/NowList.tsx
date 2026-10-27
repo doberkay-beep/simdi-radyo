@@ -6,7 +6,7 @@ import ThemeToggle from "./ThemeToggle";
 import ToneToggle from "./ToneToggle";
 import KonsolRaylar from "./KonsolRaylar";
 import { useAnaOzet, CanliSayac, CanliListe, type AnaOzet } from "./CanliVitrin";
-import { TurkiyeSuAn, KesifKarti, KESIF_ARALIK, KESIF_SAYI } from "./AnaSayfaZenginlik";
+import { TurkiyeSuAn, KesifKarti, RuhKartlari, KESIF_ARALIK, KESIF_SAYI } from "./AnaSayfaZenginlik";
 import { kaynagiCalistir, hlsYik } from "@/lib/cal";
 import { dinleyiciKatil, simdiDinle, type CanliKanal } from "@/lib/canli";
 import { temizMetin } from "@/lib/cop";
@@ -1451,6 +1451,9 @@ export default function NowList({ ilkIstasyonlar, ilkOzet }: { ilkIstasyonlar?: 
             — {EPIGRAFLAR[epi]}
           </p>
         )}
+
+        {/* RUH — Aynı anda ve Gece 3 */}
+        <RuhKartlari />
 
         {/* KADRAN — analog ayar bandı (yalnız geniş ekranda; mobilde oynatıcı yeter) */}
         <div className="hidden pt-3 sm:block">

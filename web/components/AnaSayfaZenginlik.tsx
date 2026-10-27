@@ -131,18 +131,39 @@ export function TurkiyeSuAn({ stations, onTune }: { stations: Stn[]; onTune: (sl
   );
 }
 
+/* RUH — nowby'ın kalbi: Aynı anda ve Gece 3. Ana sayfanın üstünde, yan yana (27 Eki, Berkay).
+   Oyunlar listeden çıktı, ☰ menüde "Oyunlar" altında. */
+const RUH: { href: string; ikon: string; tr: [string, string]; en: [string, string] }[] = [
+  { href: "/ayni-anda", ikon: "🌍", tr: ["Aynı anda", "Farklı kıtalarda, aynı dakikalarda aynı şarkı."], en: ["Same time", "Different continents, the same song, the same minutes."] },
+  { href: "/gece", ikon: "🌙", tr: ["Gece 3", "Türkiye uyurken radyolar ne çalıyor?"], en: ["3 AM", "What do stations play while Turkey sleeps?"] },
+];
+
+export function RuhKartlari() {
+  const { dil } = useDil();
+  return (
+    <nav className="mb-5 grid grid-cols-2 gap-3" aria-label={dil === "en" ? "the heart of nowby" : "nowby'ın kalbi"}>
+      {RUH.map((k) => {
+        const [ad, alt] = dil === "en" ? k.en : k.tr;
+        return (
+          <Link key={k.href} prefetch={false} href={k.href} lang={dil} className="press flex min-w-0 flex-col gap-1.5 rounded-2xl border px-4 py-3.5"
+            style={{ borderColor: "color-mix(in srgb, var(--glow) 45%, var(--line))", background: "color-mix(in srgb, var(--glow) 8%, var(--panel))" }}>
+            <span aria-hidden className="text-2xl">{k.ikon}</span>
+            <span className="dial block text-[18px] uppercase tracking-[0.03em]">{ad}</span>
+            <span className="block text-[12px] leading-snug" style={{ color: "var(--muted)" }}>{alt}</span>
+          </Link>
+        );
+      })}
+    </nav>
+  );
+}
+
 /* KEŞİF KARTLARI — istasyon listesinin arasına serpiştirilir (her 8 radyoda bir). */
 type Kart = { href?: string; eylem?: "siir"; ikon: string; tr: [string, string, string]; en: [string, string, string] };
 const KARTLAR: Kart[] = [
-  { href: "/oyun/gunun-frekansi", ikon: "🎯", tr: ["Günün Frekansı", "Herkese aynı gizli radyo. 3 hakta bul, karneni paylaş.", "Oyna"], en: ["Daily Frequency", "Same secret station for everyone. Find it in 3 tries.", "Play"] },
   { href: "/fal", ikon: "🔮", tr: ["Frekans Falı", "Ruh hâlini seç: sana bir dize ve bir radyo çıksın.", "Falına bak"], en: ["Frequency Fortune", "Pick a mood: get a line of poetry and a station.", "Read it"] },
-  { href: "/gece", ikon: "🌙", tr: ["Gece 3 Listesi", "Türkiye uyurken radyolar ne çalıyor?", "Listeye bak"], en: ["3 AM Chart", "What do stations play while Turkey sleeps?", "See the chart"] },
-  { href: "/oyun/kor-dinleme", ikon: "🎧", tr: ["Kör Dinleme", "Sadece sesi duy: hangi radyo çalıyor?", "Tahmin et"], en: ["Blind Listening", "Just listen: which station is it?", "Guess"] },
   { href: "/rekorlar", ikon: "🎖", tr: ["Rekorlar", "En çok çalan, en uzun, en sadık radyo.", "Rekorlara bak"], en: ["Records", "Most played, longest, most loyal.", "See records"] },
   { eylem: "siir", ikon: "📖", tr: ["Şiir Köşesi", "Şiir Rafım Radyosu'ndan sesli şiirler.", "Dinle"], en: ["Poetry Corner", "Spoken poems from Şiir Rafım Radio.", "Listen"] },
-  { href: "/oyun/nereden", ikon: "🌍", tr: ["Nereden Çalıyor?", "Dünya radyosunu dinle, ülkesini bil.", "Oyna"], en: ["Where's It From?", "Listen to a world station, guess the country.", "Play"] },
   { href: "/arsiv", ikon: "⏳", tr: ["Zaman Makinesi", "Geçmişte o saatte hangi radyo ne çaldı?", "Geçmişe git"], en: ["Time Machine", "What played on which station back then?", "Go back"] },
-  { href: "/ayni-anda", ikon: "🌍", tr: ["Aynı anda", "Farklı kıtalarda, aynı dakikalarda aynı şarkı.", "Anlara bak"], en: ["Same time", "Different continents, the same song, the same minutes.", "See moments"] },
   { href: "/senkron", ikon: "⚡", tr: ["Senkron Defteri", "Birbirinden habersiz radyolar, aynı şarkı, aynı dakika.", "Defteri aç"], en: ["Sync Moments", "Unconnected stations, same song, same minute.", "Open"] },
   { href: "/rapor", ikon: "📊", tr: ["Haftalık Radyo Raporu", "Bu hafta Türkiye radyolarında en çok çalan 20 şarkı.", "Rapora bak"], en: ["Weekly Radio Report", "This week's top 20 on Turkish radio.", "See report"] },
   { href: "/endeks", ikon: "📰", tr: ["Radyo Endeksi", "Ayın gerçek listesi: 7/24 sayımla.", "Endekse bak"], en: ["Radio Index", "The month's real chart, counted 24/7.", "See index"] },

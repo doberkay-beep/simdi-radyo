@@ -17,7 +17,7 @@ import {
   deactivateStation,
 } from "./supabase.mjs";
 
-import { anlikKoy } from "./anlik.mjs";
+import { anlikKoy, anlikKaldir } from "./anlik.mjs";
 import { arsivePlay, arsivNowPlaying, arsivIstasyonlar } from "./arsiv.mjs";
 const POLL_INTERVAL_MS = Number(process.env.POLL_INTERVAL_MS) || 10_000;
 const PROBE_TIMEOUT_MS = Number(process.env.PROBE_TIMEOUT_MS) || 8_000;
@@ -47,6 +47,17 @@ const failCount = new Map();
 // Aynı başlık TEKRAR_MS içinde zaten arşivlendiyse yeni satır açılmaz.
 const recent = new Map();
 const TEKRAR_MS = Number(process.env.TEKRAR_MS) || 20 * 60_000;
+// Donmuş başlık (27 Eki): bazı yayınlar günlerce aynı başlığı gönderiyor (Radyo Alaturka
+// 3 gün aynı şarkı, Cool Fahrenheit yalnız slogan). Aynı başlık DONMUS_MS'den uzun
+// sürerse "şu an çalıyor" gösterilmez: anlık kopyadan çıkar, updated_at tazelenmez.
+// Başlık değişince kendiliğinden geri gelir. Uzun klasik eserler de bu süreyi aşınca gizlenir.
+const DONMUS_MS = Number(process.env.DONMUS_MS) || 30 * 60_000;
+const ilkGorulme = new Map(); // station_id → bu başlığın ilk görüldüğü an
+const donmus = new Set(); // şu an gizlenen station_id'ler
+function yeniBaslik(station, now) {
+  ilkGorulme.set(station.id, now);
+  if (donmus.delete(station.id)) log(`çözüldü: ${station.slug}`);
+}
 function yakindaYazildi(stationId, clean, now) {
   const m = recent.get(stationId);
   if (!m) return false;
@@ -98,6 +109,15 @@ async function probeAndStore(station) {
   // Başlık değişmediyse: arşive yazma. Ama yayın DOĞRULANDIĞI için, arayüzün
   // tazelik göstergesi doğru olsun diye updated_at'i arada bir tazele (kısmalı).
   if (lastRaw.get(station.id) === clean) {
+    if (!ilkGorulme.has(station.id)) ilkGorulme.set(station.id, now);
+    if (now - ilkGorulme.get(station.id) > DONMUS_MS) {
+      if (!donmus.has(station.id)) {
+        donmus.add(station.id);
+        anlikKaldir(station.slug);
+        log(`donmuş başlık: ${station.slug} (${Math.round(DONMUS_MS / 60_000)} dk+ aynı) — gizlendi`);
+      }
+      return;
+    }
     // Anlık kopyada tazelik her yoklamada güncellenir (veritabanına yük yok).
     anlikKoy(station.slug, parseTitle(clean));
     if (now - (lastWrite.get(station.id) || 0) < FRESH_MS) return;
@@ -119,6 +139,7 @@ async function probeAndStore(station) {
       await upsertNowPlaying(station.id, parsed);
       arsivNowPlaying(station.id, parsed);
       lastRaw.set(station.id, clean);
+      yeniBaslik(station, now);
       lastWrite.set(station.id, now);
     } catch (err) {
       log(`! ${station.slug} tazelenemedi:`, err.message);
@@ -131,6 +152,7 @@ async function probeAndStore(station) {
     arsivePlay(satir, station.id, parsed); // Hetzner arşivine aynısı (beklenmez)
     arsivNowPlaying(station.id, parsed);
     lastRaw.set(station.id, clean);
+    yeniBaslik(station, now);
     lastWrite.set(station.id, now);
     yazildiIsaretle(station.id, clean, now);
     log(`♪ ${station.slug}: ${parsed.artist} — ${parsed.title}`);

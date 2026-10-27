@@ -16,6 +16,11 @@ export function anlikKoy(slug, parsed, updatedAt = new Date().toISOString()) {
   if (!zamanlayici) zamanlayici = setTimeout(yaz, 1000);
 }
 
+/** Donmuş başlıklı istasyonu anlık kopyadan çıkarır; uygulamada yalnız istasyon adı görünür. */
+export function anlikKaldir(slug) {
+  if (durum.delete(slug) && !zamanlayici) zamanlayici = setTimeout(yaz, 1000);
+}
+
 async function yaz() {
   zamanlayici = null;
   const govde = JSON.stringify({ at: new Date().toISOString(), stations: Object.fromEntries(durum) });

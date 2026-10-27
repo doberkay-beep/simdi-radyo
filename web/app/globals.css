@@ -862,3 +862,26 @@ body {
 }
 :root:not([data-tone]) .menu-hap { color: var(--fg); font-weight: 500; border-color: var(--line-hi); background: transparent; padding: 9px 16px; }
 :root:not([data-tone]) .menu-hap:hover { border-color: color-mix(in srgb, var(--fg) 40%, var(--line-hi)); }
+
+/* ── Alt sayfalar — berkaydogan.co dili (27 Eki, 3. adım). Mürekkep tonunda eski
+   sıkışık/mono yazı değişkenleri gövde yazısına bağlanır; sayfa başlıkları serif manşet,
+   ilk künye satırı gazete künyesi çizgisi. Magma tonu eskisi gibi kalır. ── */
+:root:not([data-tone]) {
+  --font-mono: var(--font-brand);
+  --font-dial: var(--font-brand);
+}
+:root:not([data-tone]) h1.brand,
+:root:not([data-tone]) h1.dial {
+  font-family: var(--font-display), Georgia, serif;
+  font-weight: 400; letter-spacing: -0.01em; line-height: 1.02;
+  font-size: clamp(38px, 9vw, 60px);
+}
+:root:not([data-tone]) h2.brand {
+  font-family: var(--font-display), Georgia, serif; font-weight: 400; letter-spacing: -0.005em;
+}
+:root:not([data-tone]) main > p.mono:first-child {
+  border-top: 2px solid var(--fg); border-bottom: 1px solid var(--line);
+  padding: 0.55rem 0; letter-spacing: 0.2em; font-size: 10px; font-weight: 500;
+}
+:root:not([data-tone]) main h2.mono { letter-spacing: 0.22em; font-weight: 500; }
+:root:not([data-tone]) .senkron-bant { font-family: var(--font-brand), sans-serif; }

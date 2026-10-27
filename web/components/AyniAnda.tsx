@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { anTarihi, yerelSaatler, type DunyaAni } from "@/lib/dunyaAnlari";
+import AyniAndaAbone from "./AyniAndaAbone";
 
 // AYNI ANDA — dünyanın rastlantıları. Senkron Defteri'nin (Türkiye içi) kıtalar arası kardeşi.
 const METIN = {
@@ -36,6 +37,7 @@ export default function AyniAnda({ anlar, dil }: { anlar: DunyaAni[]; dil: "tr" 
       <h1 className="brand mt-2 text-4xl font-bold leading-tight">🌍 {m.baslik}</h1>
       <p className="epigraf mt-3 text-base">{m.giris}</p>
       <p className="mono mt-3 text-[11px] uppercase tracking-[0.16em]" style={{ color: "var(--muted)" }}>{m.kural(ay)}</p>
+      <AyniAndaAbone dil={dil} />
 
       <ol className="mt-8 grid gap-3">
         {anlar.map((a) => (

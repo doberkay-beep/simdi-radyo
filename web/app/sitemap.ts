@@ -46,6 +46,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     })),
     { url: `${BASE}/rekorlar`, changeFrequency: "daily", priority: 0.8 },
     { url: `${BASE}/senkron`, changeFrequency: "daily", priority: 0.7 },
+    { url: `${BASE}/ayni-anda`, changeFrequency: "daily", priority: 0.7 },
     { url: `${BASE}/gece`, changeFrequency: "daily", priority: 0.7 },
     ...TURLER.map((t) => ({
       url: `${BASE}/tur/${t.slug}`,
@@ -71,6 +72,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     { url: `${BASE}/harita`, changeFrequency: "monthly", priority: 0.6 },
     { url: `${BASE}/liste`, changeFrequency: "hourly", priority: 0.8 },
     { url: `${BASE}/en/chart`, changeFrequency: "hourly", priority: 0.7 },
+    { url: `${BASE}/en/same-time`, changeFrequency: "daily", priority: 0.6 },
     ...sanatcilar.map((s) => ({
       url: `${BASE}/sanatci/${s}`,
       changeFrequency: "daily" as const,

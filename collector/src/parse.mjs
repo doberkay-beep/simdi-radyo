@@ -48,6 +48,12 @@ function xmldenBaslik(s) {
 
 // tr-özel küçük harf + boşlukları sadeleştir.
 const low = (s) => s.replace(/\s+/g, " ").trim().toLocaleLowerCase("tr");
+// p, istasyon adının başı mı ve bir radyo markası mı ("VOX FM" ← "Vox Fm 128")? Yalnız marka sözcüğü
+// (fm/radio/radyo) taşıyan önekler sayılır; "Queen" ya da kendi adıyla yayın yapan "irvess" gibi sanatçı adları değil.
+const markaOneki = (p, ad) => {
+  const lp = low(p), la = low(ad);
+  return lp.length >= 3 && la.startsWith(lp) && /\b(fm|radio|radyo)\b/.test(lp);
+};
 
 // Aynı başlığın iki kez yapışmasını düzelt: "A - B - A - B" → "A - B".
 function dedupeDoubled(s) {
@@ -97,6 +103,16 @@ export function normalizeTitle(rawTitle, stationName = "") {
     const [baslik, sanatci] = s.split("~").map((x) => x.trim());
     s = sanatci && baslik ? `${sanatci} - ${baslik}` : baslik || "";
     if (!s) return "";
+  }
+  // İstasyon markası önek (27 Eki): "VOX FM: Naja - Body Talk" → "Naja - Body Talk";
+  // "VOX FM - W Rytmie Hitów" gibi marka + slogan → çöp.
+  if (stationName) {
+    const m = s.match(/^(.{2,40}?)\s*(:|\s[-–—]\s)\s*(.+)$/);
+    if (m && markaOneki(m[1], stationName)) {
+      // "KAMEME FM - Parça - Sanatçı": markadan sonra hâlâ bir ayraç varsa geri kalanı parçadır.
+      if (m[2] !== ":" && !/\s[-–—]\s/.test(m[3])) return "";
+      s = m[3].trim();
+    }
   }
   const l = low(s);
 

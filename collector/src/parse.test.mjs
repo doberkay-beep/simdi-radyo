@@ -112,5 +112,15 @@ check("modifier tire ayracı", () => assert.equal(parseTitle("Kim Wilde ˗ Cambo
 check("gerçek parça bozulmaz", () => assert.equal(normalizeTitle("Sezen Aksu - Firuze", "Kral FM"), "Sezen Aksu - Firuze"));
 check("tireli parça adı bozulmaz", () => assert.equal(parseTitle("MFÖ - Ele Güne Karşı - Remix").title, "Ele Güne Karşı - Remix"));
 
+
+check("istasyon markası öneki atılır, marka + slogan çöp", () => {
+  assert.equal(normalizeTitle("VOX FM: Naja - Body Talk", "Vox Fm 128"), "Naja - Body Talk");
+  assert.equal(normalizeTitle("VOX FM - Pobierz apkę i słuchaj wszędzie!", "Vox Fm 128"), "");
+  assert.equal(normalizeTitle("Queen - Bohemian Rhapsody", "Queen FM"), "Queen - Bohemian Rhapsody");
+  assert.equal(normalizeTitle("Sezen Aksu - Firuze", "Kral FM"), "Sezen Aksu - Firuze");
+  assert.equal(normalizeTitle("KAMEME FM - WENYENYA LES LES - MONICA", "Kameme FM"), "WENYENYA LES LES - MONICA");
+  assert.equal(normalizeTitle("irvess - Siege", "irvess"), "irvess - Siege");
+});
+
 console.log(failed === 0 ? "\nTüm testler geçti." : `\n${failed} test başarısız.`);
 process.exitCode = failed === 0 ? 0 : 1;

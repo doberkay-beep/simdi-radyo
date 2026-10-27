@@ -76,7 +76,7 @@ export default function RootLayout({ children }: { children: ReactNode }) {
             kalınca İngilizce metinde CSS uppercase "i"yi "İ" yapıyordu (PLAYİNG). */}
         <script
           dangerouslySetInnerHTML={{
-            __html: `try{var t=localStorage.getItem('tema');var l=t==='light'||(t==='system'&&matchMedia('(prefers-color-scheme: light)').matches);if(l)document.documentElement.dataset.theme='light'}catch(e){}try{var tn=localStorage.getItem('ton');if(tn&&tn!=='magma')document.documentElement.dataset.tone=tn;else if(!tn&&new Date().getHours()<7)document.documentElement.dataset.tone='siyah'}catch(e){}try{var d=localStorage.getItem('dil');if(d!=='en'&&d!=='tr')d=(navigator.language||'tr').toLowerCase().indexOf('tr')===0?'tr':'en';document.documentElement.lang=d}catch(e){}`,
+            __html: `try{var t=localStorage.getItem('tema');var l=t==='light'||(t==='system'&&matchMedia('(prefers-color-scheme: light)').matches);if(l)document.documentElement.dataset.theme='light'}catch(e){}try{var tn=localStorage.getItem('ton');if(tn&&tn!=='murekkep')document.documentElement.dataset.tone=tn}catch(e){}try{var d=localStorage.getItem('dil');if(d!=='en'&&d!=='tr')d=(navigator.language||'tr').toLowerCase().indexOf('tr')===0?'tr':'en';document.documentElement.lang=d}catch(e){}`,
           }}
         />
       </head>

@@ -3,10 +3,11 @@
 import { useEffect, useState } from "react";
 
 // KADRAN ton seçici — kadranın şasi rengini (arka plan + parıltı) değiştirir.
-// Magma varsayılan; seçim data-tone olarak köke yazılır, localStorage'da tutulur.
-type Ton = "magma" | "kizil" | "radyum" | "tungsten" | "kobalt" | "ametist" | "kaset" | "siyah" | "beyaz";
+// Mürekkep varsayılan (27 Eki: berkaydogan.co ile kardeş dil); seçim data-tone olarak köke yazılır, localStorage'da tutulur.
+type Ton = "murekkep" | "magma" | "kizil" | "radyum" | "tungsten" | "kobalt" | "ametist" | "kaset" | "siyah" | "beyaz";
 
 const TONLAR: { id: Ton; renk: string; ad: string }[] = [
+  { id: "murekkep", renk: "#e5382c", ad: "mürekkep" },
   { id: "magma", renk: "#ff6a3d", ad: "magma" },
   { id: "kizil", renk: "#e5382c", ad: "kızıl vardiya" },
   { id: "radyum", renk: "#37d67a", ad: "radyum" },
@@ -20,12 +21,12 @@ const TONLAR: { id: Ton; renk: string; ad: string }[] = [
 
 function apply(t: Ton) {
   const root = document.documentElement;
-  if (t === "magma") delete root.dataset.tone;
+  if (t === "murekkep") delete root.dataset.tone;
   else root.dataset.tone = t;
 }
 
 export default function ToneToggle() {
-  const [ton, setTon] = useState<Ton>("magma");
+  const [ton, setTon] = useState<Ton>("murekkep");
   const [acik, setAcik] = useState(false); // katlanır: kapalıyken tek top
 
   useEffect(() => {
@@ -36,10 +37,8 @@ export default function ToneToggle() {
     } catch {
       // yok say
     }
-    // Elle seçim yoksa gece (00–07) kadran kendiliğinden siyaha kayar;
-    // localStorage'a yazılmaz, sabah magma'ya döner.
-    const saat = new Date().getHours();
-    const secim = t ?? (saat < 7 ? "siyah" : "magma");
+    // Elle seçim yoksa mürekkep (zaten gece rengi; eski gece→siyah kayması gerekmiyor).
+    const secim = t ?? "murekkep";
     setTon(secim);
     apply(secim);
   }, []);

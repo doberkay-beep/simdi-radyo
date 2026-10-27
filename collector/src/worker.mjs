@@ -54,6 +54,10 @@ const TEKRAR_MS = Number(process.env.TEKRAR_MS) || 20 * 60_000;
 // sürerse "şu an çalıyor" gösterilmez: anlık kopyadan çıkar, updated_at tazelenmez.
 // Başlık değişince kendiliğinden geri gelir. Uzun klasik eserler de bu süreyi aşınca gizlenir.
 const DONMUS_MS = Number(process.env.DONMUS_MS) || 30 * 60_000;
+// Uzun yayın işaretli başlıklar (DJ seti, bölüm, program) için süre 3 saat: "Solar Power Sessions 957",
+// "This Is Freestyle Episode 260", "Budots Remix Nonstop" gibi başlıklar doğru ama saatlerce sürer (27 Eki ölçümü).
+const DONMUS_UZUN_MS = Number(process.env.DONMUS_UZUN_MS) || 3 * 3600_000;
+const UZUN_YAYIN = /\b(episode|ep\.?\s?\d+|sessions?|mix|mixtape|nonstop|non-stop|presents|show|podcast|live set|radio show|bölüm|program)\b/i;
 const ilkGorulme = new Map(); // station_id → bu başlığın ilk görüldüğü an
 const donmus = new Set(); // şu an gizlenen station_id'ler
 function yeniBaslik(station, now) {
@@ -166,7 +170,7 @@ async function isle(station, res) {
   // tazelik göstergesi doğru olsun diye updated_at'i arada bir tazele (kısmalı).
   if (lastRaw.get(station.id) === clean) {
     if (!ilkGorulme.has(station.id)) ilkGorulme.set(station.id, now);
-    if (now - ilkGorulme.get(station.id) > DONMUS_MS) {
+    if (now - ilkGorulme.get(station.id) > (UZUN_YAYIN.test(clean) ? DONMUS_UZUN_MS : DONMUS_MS)) {
       if (!donmus.has(station.id)) {
         donmus.add(station.id);
         anlikKaldir(station.slug);

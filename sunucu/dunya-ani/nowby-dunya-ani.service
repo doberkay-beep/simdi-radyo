@@ -1,0 +1,13 @@
+[Unit]
+Description=nowby Ayni anda nobetcisi - farkli kitalarda ayni sarki ayni anda
+After=network-online.target postgresql.service
+
+[Service]
+WorkingDirectory=/opt/simdi/dunya-ani
+ExecStart=/usr/bin/node nobetci.mjs
+Restart=always
+RestartSec=30
+MemoryMax=300M
+
+[Install]
+WantedBy=multi-user.target

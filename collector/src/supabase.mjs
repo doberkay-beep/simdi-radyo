@@ -26,6 +26,8 @@ export async function loadActiveStations() {
     .from("stations")
     .select("id, slug, name, stream_url, meta_url")
     .eq("is_active", true)
+    // meta_gizli: radyo şu an çalan/geçmişin gösterilmesini istemedi — başlık hiç toplanmaz.
+    .eq("meta_gizli", false)
     .order("sort_order", { ascending: true });
   if (error) throw error;
   return data ?? [];
@@ -55,7 +57,7 @@ export async function insertPlay(stationId, parsed) {
 export async function loadAllStationsFull() {
   const { data, error } = await supa
     .from("stations")
-    .select("id, slug, name, city, frequency, stream_url, homepage, accent_color, band, metadata_quality, is_active, sort_order, created_at, genre");
+    .select("id, slug, name, city, frequency, stream_url, homepage, accent_color, band, metadata_quality, is_active, sort_order, created_at, genre, meta_gizli");
   if (error) throw error;
   return data ?? [];
 }

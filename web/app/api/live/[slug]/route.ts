@@ -55,15 +55,17 @@ export async function GET(request: Request, ctx: { params: Promise<{ slug: strin
 
   const { data, error } = await supabase
     .from("stations")
-    .select("stream_url, is_active, name")
+    .select("stream_url, meta_url, is_active, name, meta_gizli")
     .eq("slug", slug)
     .maybeSingle();
 
   if (error) return json({ error: "sunucu hatası" }, { status: 500 });
   if (!data || !data.is_active) return json({ error: "istasyon bulunamadı" }, { status: 404 });
 
-  const res = await probeIcy(data.stream_url, { timeout: 7000 });
   const headers = { "Cache-Control": "no-store" };
+  // Radyo şu an çalanın gösterilmesini istemedi (meta_gizli) — başlık çekilmez.
+  if (data.meta_gizli) return json({ live: null, reason: "gizli" }, { headers });
+  const res = await probeIcy(data.meta_url || data.stream_url, { timeout: 7000 });
 
   if (res.status !== "ok" || !res.title) {
     return json({ live: null, reason: res.status }, { headers });

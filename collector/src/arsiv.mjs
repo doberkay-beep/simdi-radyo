@@ -37,6 +37,8 @@ export function arsivNowPlaying(stationId, parsed) {
 /** İstasyon listesinin tamamını (pasifler dahil) eşitler. */
 export async function arsivIstasyonlar(satirlar) {
   if (!havuz || !satirlar.length) return;
+  // meta_gizli radyolar arşivde pasif görünür: geçmişleri hiçbir arşiv sayfasında çıkmaz (Vanilla Radio koşulu).
+  satirlar = satirlar.map((s) => (s.meta_gizli ? { ...s, is_active: false } : s));
   const kolonlar = ["id", "slug", "name", "city", "frequency", "stream_url", "homepage", "accent_color",
     "band", "metadata_quality", "is_active", "sort_order", "created_at", "genre"];
   const guncelle = kolonlar.filter((k) => k !== "id").map((k) => `${k} = excluded.${k}`).join(", ");

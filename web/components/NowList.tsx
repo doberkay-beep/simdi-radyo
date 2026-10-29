@@ -85,6 +85,7 @@ type Station = {
   band: "tr" | "int" | "own";
   genre: string | null;
   homepage: string | null;
+  logoUrl?: string | null;
   nowPlaying: NowPlaying;
 };
 
@@ -1858,12 +1859,12 @@ export default function NowList({ ilkIstasyonlar, ilkOzet }: { ilkIstasyonlar?: 
                           >
                             {s.name.trim().charAt(0).toLocaleUpperCase("tr")}
                           </span>
-                          {faviconOf(s.homepage) && (
+                          {(s.logoUrl || faviconOf(s.homepage)) && (
                             <img
-                              src={faviconOf(s.homepage)!}
+                              src={s.logoUrl || faviconOf(s.homepage)!}
                               alt=""
                               loading="lazy"
-                              className="absolute inset-0 m-auto h-7 w-7 rounded-md object-contain"
+                              className={s.logoUrl ? "absolute inset-0 h-full w-full rounded-[inherit] bg-white object-contain p-0.5" : "absolute inset-0 m-auto h-7 w-7 rounded-md object-contain"}
                               onError={(e) => {
                                 e.currentTarget.style.display = "none";
                               }}

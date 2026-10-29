@@ -38,6 +38,8 @@ type Station = {
   accent_color: string | null;
   genre: string | null;
   homepage: string | null;
+  meta_gizli?: boolean;
+  logo_url?: string | null;
 };
 
 async function getStation(slug: string): Promise<Station | null> {
@@ -45,7 +47,7 @@ async function getStation(slug: string): Promise<Station | null> {
     const supa = getSupabase();
     const { data } = await supa
       .from("stations")
-      .select("slug, name, city, frequency, accent_color, genre, homepage")
+      .select("slug, name, city, frequency, accent_color, genre, homepage, meta_gizli, logo_url")
       .eq("slug", slug)
       .eq("is_active", true)
       .maybeSingle();
@@ -194,7 +196,7 @@ export async function generateMetadata({
   const dil = await dilSunucu();
   const en = dil === "en";
   if (!s) return { title: en ? "Station not found — nowby." : "İstasyon bulunamadı — nowby." };
-  const np = await getNowPlaying(slug);
+  const np = s.meta_gizli ? null : await getNowPlaying(slug);
   const track = trackText(np);
   const bits = [s.frequency, s.city].filter(Boolean).join(" · ");
   const desc = en
@@ -231,14 +233,16 @@ export default async function StationPage({ params }: { params: Promise<{ slug: 
   const { slug } = await params;
   const s = await getStation(slug);
   if (!s) notFound();
-  const np = await getNowPlaying(slug);
+  // meta_gizli: radyo şu an çalan / geçmişin gösterilmesini istemedi (Vanilla Radio koşulu, 28 Eki).
+  const gizli = s.meta_gizli === true;
+  const np = gizli ? null : await getNowPlaying(slug);
   const track = trackText(np);
   const accent = s.accent_color || DEFAULT_ACCENT;
   const [similar, topArtists, recent, karne] = await Promise.all([
     getSimilarC(slug, s.genre),
-    getTopArtistsC(slug),
-    getRecentPlaysC(slug),
-    getKarneC(slug),
+    gizli ? Promise.resolve([]) : getTopArtistsC(slug),
+    gizli ? Promise.resolve([]) : getRecentPlaysC(slug),
+    gizli ? Promise.resolve(null) : getKarneC(slug),
   ]);
   const dil = await dilSunucu();
   const T = (k: string) => ceviri(dil, k);
@@ -293,6 +297,18 @@ export default async function StationPage({ params }: { params: Promise<{ slug: 
             <span className="brand text-sm font-bold tracking-tight">nowby.</span>
           </span>
         </header>
+
+        {/* Resmî logo + site — radyonun istediği gibi net ve değiştirilmeden */}
+        {s.logo_url ? (
+          <div className="mb-6 flex items-center gap-4">
+            <img src={s.logo_url} alt={`${s.name} logo`} width={96} height={96} className="h-24 w-24 shrink-0 rounded-2xl bg-white object-contain p-1" />
+            {s.homepage ? (
+              <a href={s.homepage} target="_blank" rel="noopener noreferrer" className="underline" style={{ color: "var(--fg)" }}>
+                {T("radyo.resmiSite")} {s.homepage.replace(/^https?:\/\//, "").replace(/\/$/, "")}
+              </a>
+            ) : null}
+          </div>
+        ) : null}
 
         {/* KADRAN enstrümanı — bu istasyon (büyük frekans + ibre bandı + VU) */}
         <div

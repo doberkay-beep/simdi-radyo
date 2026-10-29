@@ -18,6 +18,8 @@ type Istasyon = {
   id: number; slug: string; name: string; city: string | null; frequency: string | null;
   accentColor: string | null; band: "tr" | "int" | "own"; genre: string | null; homepage: string | null;
   appIzinli: boolean;
+  metaGizli: boolean;
+  logoUrl: string | null;
 };
 type Calan = { artist: string | null; title: string | null; rawTitle: string | null; updatedAt: string };
 
@@ -27,7 +29,7 @@ async function istasyonListesi(): Promise<Istasyon[]> {
   if (listeOnbellek && Date.now() - listeOnbellek.at < LISTE_SURE_MS) return listeOnbellek.liste;
   const { data, error } = await getSupabase()
     .from("stations")
-    .select("id, slug, name, city, frequency, accent_color, band, genre, homepage, app_izinli")
+    .select("id, slug, name, city, frequency, accent_color, band, genre, homepage, app_izinli, meta_gizli, logo_url")
     .eq("is_active", true)
     .order("sort_order", { ascending: true });
   if (error) throw new Error(error.message);
@@ -37,6 +39,8 @@ async function istasyonListesi(): Promise<Istasyon[]> {
     accentColor: s.accent_color as string | null, band: s.band as "tr" | "int" | "own",
     genre: (s.genre ?? null) as string | null, homepage: (s.homepage ?? null) as string | null,
     appIzinli: s.app_izinli === true,
+    metaGizli: s.meta_gizli === true,
+    logoUrl: (s.logo_url ?? null) as string | null,
   }));
   listeOnbellek = { at: Date.now(), liste };
   return liste;
@@ -60,8 +64,9 @@ export async function aktifIstasyonlar({ uygulama = false }: { uygulama?: boolea
   const [anlik, tumListe] = await Promise.all([anlikDurum(), istasyonListesi().catch(() => null)]);
   const liste = tumListe && uygulama ? tumListe.filter((s) => s.appIzinli) : tumListe;
   if (anlik && liste) {
-    return liste.map(({ appIzinli: _, ...s }) => {
-      const c = anlik[s.slug];
+    return liste.map(({ appIzinli: _, metaGizli, ...s }) => {
+      // metaGizli: radyo şu an çalanın gösterilmesini istemedi.
+      const c = metaGizli ? undefined : anlik[s.slug];
       return {
         ...s,
         // Uygulamalar ülkeyi buradan okur; yeni eklenen radyo için uygulama güncellemesi gerekmez.
@@ -81,7 +86,7 @@ async function veritabanindanIstasyonlar(uygulama: boolean) {
   let sorgu = supabase
     .from("stations")
     .select(
-      "id, slug, name, city, frequency, accent_color, band, genre, homepage, now_playing(artist, title, raw_title, updated_at)",
+      "id, slug, name, city, frequency, accent_color, band, genre, homepage, meta_gizli, logo_url, now_playing(artist, title, raw_title, updated_at)",
     )
     .eq("is_active", true);
   if (uygulama) sorgu = sorgu.eq("app_izinli", true);
@@ -91,7 +96,7 @@ async function veritabanindanIstasyonlar(uygulama: boolean) {
 
   return (data ?? []).map((s) => {
     // now_playing tekil ilişki; istemci bazen dizi, bazen nesne döndürür.
-    const raw = s.now_playing as unknown;
+    const raw = (s.meta_gizli ? null : s.now_playing) as unknown;
     const np = (Array.isArray(raw) ? raw[0] : raw) as
       | { artist: string | null; title: string | null; raw_title: string | null; updated_at: string }
       | null
@@ -106,6 +111,7 @@ async function veritabanindanIstasyonlar(uygulama: boolean) {
       band: s.band as "tr" | "int" | "own",
       genre: (s.genre ?? null) as string | null,
       homepage: (s.homepage ?? null) as string | null,
+      logoUrl: (s.logo_url ?? null) as string | null,
       country: istasyonUlkesi(s.slug as string),
       nowPlaying: np
         ? {

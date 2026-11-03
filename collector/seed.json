@@ -1299,7 +1299,7 @@
   "accent_color": "#5b8c5a",
   "band": "int",
   "metadata_quality": "good",
-  "is_active": true,
+  "is_active": false,
   "sort_order": 600,
   "genre": "elektronik",
   "country": "us"
@@ -1314,7 +1314,7 @@
   "accent_color": "#c65b7c",
   "band": "int",
   "metadata_quality": "good",
-  "is_active": true,
+  "is_active": false,
   "sort_order": 610,
   "genre": "alternatif",
   "country": "us"
@@ -1389,7 +1389,7 @@
   "accent_color": "#b08d57",
   "band": "int",
   "metadata_quality": "good",
-  "is_active": true,
+  "is_active": false,
   "sort_order": 660,
   "genre": "caz",
   "country": "us"
@@ -1404,7 +1404,7 @@
   "accent_color": "#555b6e",
   "band": "int",
   "metadata_quality": "good",
-  "is_active": true,
+  "is_active": false,
   "sort_order": 670,
   "genre": "rock",
   "country": "us"
@@ -1749,7 +1749,7 @@
   "accent_color": "#5a7a9a",
   "band": "int",
   "metadata_quality": "unknown",
-  "is_active": true,
+  "is_active": false,
   "sort_order": 921,
   "genre": "elektronik",
   "country": "us"
@@ -1764,7 +1764,7 @@
   "accent_color": "#6a5a9a",
   "band": "int",
   "metadata_quality": "unknown",
-  "is_active": true,
+  "is_active": false,
   "sort_order": 922,
   "genre": "elektronik",
   "country": "us"
@@ -1854,7 +1854,7 @@
   "accent_color": "#5a6a9a",
   "band": "int",
   "metadata_quality": "unknown",
-  "is_active": true,
+  "is_active": false,
   "sort_order": 930,
   "genre": "elektronik",
   "country": "us"
@@ -1869,7 +1869,7 @@
   "accent_color": "#b06a9a",
   "band": "int",
   "metadata_quality": "unknown",
-  "is_active": true,
+  "is_active": false,
   "sort_order": 931,
   "genre": "pop",
   "country": "us"

@@ -1824,7 +1824,7 @@
   "accent_color": "#e04a7a",
   "band": "int",
   "metadata_quality": "unknown",
-  "is_active": true,
+  "is_active": false,
   "sort_order": 928,
   "genre": "pop",
   "country": "gb"
@@ -1975,7 +1975,7 @@
   "band": "int",
   "genre": "nostalji",
   "metadata_quality": "good",
-  "is_active": true,
+  "is_active": false,
   "sort_order": 506,
   "country": "gb"
  },
@@ -2005,7 +2005,7 @@
   "band": "int",
   "genre": "nostalji",
   "metadata_quality": "good",
-  "is_active": true,
+  "is_active": false,
   "sort_order": 508,
   "country": "gb"
  },
@@ -2020,7 +2020,7 @@
   "band": "int",
   "genre": "nostalji",
   "metadata_quality": "good",
-  "is_active": true,
+  "is_active": false,
   "sort_order": 509,
   "country": "gb"
  },
@@ -2035,7 +2035,7 @@
   "band": "int",
   "genre": "elektronik",
   "metadata_quality": "good",
-  "is_active": true,
+  "is_active": false,
   "sort_order": 510,
   "country": "gb"
  },
@@ -2050,7 +2050,7 @@
   "band": "int",
   "genre": "elektronik",
   "metadata_quality": "good",
-  "is_active": true,
+  "is_active": false,
   "sort_order": 511,
   "country": "gb"
  },
@@ -2065,7 +2065,7 @@
   "band": "int",
   "genre": "nostalji",
   "metadata_quality": "good",
-  "is_active": true,
+  "is_active": false,
   "sort_order": 512,
   "country": "gb"
  },
@@ -2140,7 +2140,7 @@
   "band": "int",
   "genre": "pop",
   "metadata_quality": "good",
-  "is_active": true,
+  "is_active": false,
   "sort_order": 517,
   "country": "gb"
  },

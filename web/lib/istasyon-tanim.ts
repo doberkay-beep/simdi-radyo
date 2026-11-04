@@ -211,7 +211,7 @@ const TANIMLAR: Record<string, { tr: string; en?: string }> = {
   "p6-rock-mp3-128k": { tr: "Norveç rock'ının altıncı vitesi.", en: "Norwegian rock in sixth gear." },
   "classic-rock-danmark": { tr: "Danimarka'nın klasik rock ambarı.", en: "Denmark's classic rock barn." },
   "radio-abc": { tr: "Danimarka pop'unun alfabesi.", en: "The ABC of Danish pop." },
-  "wmr-world-music-radio": { tr: "Danimarka'dan dünyaya açılan hoparlör.", en: "A Danish loudspeaker aimed at the world." },
+  "wmr-world-music-radio": { tr: "Tropikal dünya müziğinden neşeli bir karışım.", en: "A cheerful mix of tropical world music." },
   "always-elvis-radio": { tr: "Kral hiç sahneden inmedi.", en: "The King never left the building." },
   "nova-100-dansk": { tr: "Yüzde yüz Danca şarkı sözü.", en: "Lyrics one hundred percent Danish." },
   "doubleclap-radio": { tr: "Helsinki'den çift alkışlı elektronik.", en: "Double-clap electronics from Helsinki." },

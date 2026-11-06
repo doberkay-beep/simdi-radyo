@@ -29,6 +29,7 @@ const read = Fraunces({
   weight: ["300", "400", "500"],
   style: ["normal", "italic"],
   variable: "--font-read",
+  preload: false, // açılışta öncelik başlık ve gövde yazı tiplerinde
   display: "swap",
 });
 
@@ -37,6 +38,7 @@ const dial = Oswald({
   subsets: ["latin", "latin-ext"],
   weight: ["300", "400", "500", "600"],
   variable: "--font-dial",
+  preload: false, // açılışta öncelik başlık ve gövde yazı tiplerinde
   display: "swap",
 });
 
@@ -45,6 +47,7 @@ const mono = Space_Mono({
   subsets: ["latin"],
   weight: ["400", "700"],
   variable: "--font-mono",
+  preload: false, // açılışta öncelik başlık ve gövde yazı tiplerinde
   display: "swap",
 });
 

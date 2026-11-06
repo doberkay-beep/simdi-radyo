@@ -42,10 +42,12 @@ export function useAnaOzet(ilk: AnaOzet | null = null) {
         .then(({ data }) => {
           if (!off && data?.veri) setVeri(data.veri as AnaOzet);
         });
-    al();
+    // Sunucudan dolu geldiyse açılışı yormasın; biraz sonra tazelenir.
+    const ilkT = setTimeout(al, ilk ? 5000 : 0);
     const id = setInterval(al, 60_000);
     return () => {
       off = true;
+      clearTimeout(ilkT);
       clearInterval(id);
     };
   }, []);

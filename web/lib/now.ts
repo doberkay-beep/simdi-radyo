@@ -46,9 +46,16 @@ async function istasyonListesi(): Promise<Istasyon[]> {
   return liste;
 }
 
-async function anlikDurum(): Promise<Record<string, Calan> | null> {
+// onbellekli: ana sayfa içindir. "no-store" sayfayı her ziyarette yeniden ürettirip
+// önbelleğini kapatıyordu; canlı akış zaten istemcide sürer.
+async function anlikDurum(onbellekli: boolean): Promise<Record<string, Calan> | null> {
   try {
-    const r = await fetch(ANLIK_URL, { cache: "no-store", signal: AbortSignal.timeout(2500) });
+    const r = await fetch(
+      ANLIK_URL,
+      onbellekli
+        ? { next: { revalidate: 30 }, signal: AbortSignal.timeout(2500) }
+        : { cache: "no-store", signal: AbortSignal.timeout(2500) },
+    );
     if (!r.ok) return null;
     const y = (await r.json()) as { at?: string; stations?: Record<string, Calan> };
     if (!y.stations || !y.at || Date.now() - Date.parse(y.at) > BAYAT_MS) return null;
@@ -60,8 +67,11 @@ async function anlikDurum(): Promise<Record<string, Calan> | null> {
 
 // uygulama: App Store uygulamaları yalnız yazılı izin veren radyoları görür (Apple 5.2.3,
 // stations.app_izinli). Site tüm aktif radyoları gösterir.
-export async function aktifIstasyonlar({ uygulama = false }: { uygulama?: boolean } = {}) {
-  const [anlik, tumListe] = await Promise.all([anlikDurum(), istasyonListesi().catch(() => null)]);
+export async function aktifIstasyonlar({
+  uygulama = false,
+  onbellekli = false,
+}: { uygulama?: boolean; onbellekli?: boolean } = {}) {
+  const [anlik, tumListe] = await Promise.all([anlikDurum(onbellekli), istasyonListesi().catch(() => null)]);
   const liste = tumListe && uygulama ? tumListe.filter((s) => s.appIzinli) : tumListe;
   if (anlik && liste) {
     return liste.map(({ appIzinli: _, metaGizli, ...s }) => {

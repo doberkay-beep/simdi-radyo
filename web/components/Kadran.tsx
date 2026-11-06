@@ -16,6 +16,7 @@ type KadranIstasyon = {
 };
 
 const ARALIK = 30; // çentikler arası px
+const PENCERE = 30; // ibrenin iki yanında çizilen çentik (band görünürde ~25 çentik)
 const BOS_CENTIK = "color-mix(in srgb, var(--fg) 34%, transparent)";
 
 // Tek çentik. memo: bant kayarken yalnız ibrenin geçtiği iki çentik yeniden çizilir.
@@ -194,6 +195,7 @@ export default memo(function Kadran({
             {stations.map((s, i) => {
               const seçili = s.slug === playing;
               const merkezde = i === merkez;
+              if (Math.abs(i - merkez) > PENCERE) return null;
               return (
                 <Centik
                   key={s.slug}
@@ -209,7 +211,7 @@ export default memo(function Kadran({
             })}
             {/* Frekans rakamları — her 10 çentikte bir */}
             {stations.map((_, i) =>
-              i % 10 === 0 ? (
+              i % 10 === 0 && Math.abs(i - merkez) <= PENCERE ? (
                 <span
                   key={`f${i}`}
                   className="pointer-events-none absolute top-1 text-[10px] tabular-nums"

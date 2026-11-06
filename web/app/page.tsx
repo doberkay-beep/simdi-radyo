@@ -30,7 +30,7 @@ const jsonLd = {
 };
 
 export default async function Home() {
-  const [ilkIstasyonlar, ilkOzet] = await Promise.all([aktifIstasyonlar().catch(() => []), anaOzet()]);
+  const [ilkIstasyonlar, ilkOzet] = await Promise.all([aktifIstasyonlar({ onbellekli: true }).catch(() => []), anaOzet()]);
   return (
     <>
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />

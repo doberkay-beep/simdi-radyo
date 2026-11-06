@@ -208,6 +208,11 @@ const KISAYOLLAR: { href: string; tr: string; en: string }[] = [
 
 // Tek istasyon satırı. memo: şarkısı, durumu ya da kalbi değişmeyen satır yeniden
 // çizilmez; liste 450+ satır olduğu için sayfanın akıcılığı buna bağlı.
+const ILK_SATIR = 40; // ilk çizilen satır; gerisi kaydırdıkça eklenir
+const SATIR_ADIM = 60;
+// İstasyon sayfasından geri dönünce kaldığı yere dönebilsin diye bileşen dışında.
+let sonSinir = ILK_SATIR;
+
 const IstasyonSatir = memo(function IstasyonSatir({
   s,
   sira,
@@ -337,6 +342,7 @@ const IstasyonSatir = memo(function IstasyonSatir({
         {/* İstasyon sayfası (SEO/paylaş) — fareyle belirir */}
         <Link
           href={`/radyo/${s.slug}`}
+          prefetch={false}
           aria-label={`${s.name} sayfası`}
           className="shrink-0 px-1 py-4 text-sm leading-none opacity-0 transition-opacity group-hover:opacity-100"
           style={{ color: "var(--muted)" }}
@@ -688,7 +694,8 @@ export default function NowList({ ilkIstasyonlar, ilkOzet }: { ilkIstasyonlar?: 
     } catch {
       // yok say
     }
-    load();
+    // Sayfa sunucudan dolu geldiyse tam liste isteği açılışı yormasın.
+    const ilkYukleme = setTimeout(load, ilkIstasyonlar?.length ? 3000 : 0);
     // Şarkı değişimleri Realtime'dan anında düşer; yoklama bağlıyken seyrek
     // yedek (60 sn), bağlantı yoksa eski sıklıkta (15 sn) çalışır.
     let bagli = false;
@@ -766,6 +773,7 @@ export default function NowList({ ilkIstasyonlar, ilkOzet }: { ilkIstasyonlar?: 
     );
     const clockTimer = setInterval(() => setNow(Date.now()), 20000);
     return () => {
+      clearTimeout(ilkYukleme);
       clearInterval(dataTimer);
       clearInterval(bosaltTimer);
       clearInterval(clockTimer);
@@ -852,6 +860,33 @@ export default function NowList({ ilkIstasyonlar, ilkOzet }: { ilkIstasyonlar?: 
 
   // Türe göre gruplama sadece "tür" sıralamasında, filtre/arama yokken.
   const grouped = sort === "tur" && !genre && !favOnly && !query.trim() && !sairMode;
+
+  // Liste kaydırdıkça uzar: 450+ satırı açılışta çizmek ilk yüklemeyi ağırlaştırıyordu.
+  const [sinir, setSinir] = useState(sonSinir);
+  const sonRef = useRef<HTMLDivElement | null>(null);
+  const filtreAnahtari = [sairMode, query, region, ulke, genre, favOnly, sort].join("|");
+  const oncekiFiltre = useRef(filtreAnahtari);
+  useEffect(() => {
+    if (oncekiFiltre.current === filtreAnahtari) return;
+    oncekiFiltre.current = filtreAnahtari;
+    setSinir(ILK_SATIR);
+  }, [filtreAnahtari]);
+  useEffect(() => {
+    sonSinir = sinir;
+  }, [sinir]);
+  useEffect(() => {
+    const el = sonRef.current;
+    if (!el) return;
+    const io = new IntersectionObserver(
+      ([e]) => {
+        if (e.isIntersecting) setSinir((n) => n + SATIR_ADIM);
+      },
+      { rootMargin: "1500px 0px" },
+    );
+    io.observe(el);
+    return () => io.disconnect();
+  }, [sinir, shown.length]);
+  const listeBitti = sinir >= shown.length;
 
   // Ülkeye göre sayılar (segment etiketleri için).
   const kadranListesi = useMemo(
@@ -2022,7 +2057,7 @@ export default function NowList({ ilkIstasyonlar, ilkOzet }: { ilkIstasyonlar?: 
         )}
 
         <ul className="flex flex-col">
-          {shown.map((s, i) => {
+          {shown.slice(0, sinir).map((s, i) => {
             const isPlaying = playing === s.slug;
             const np = isPlaying && liveNP ? liveNP : s.nowPlaying;
             const rel = np?.updatedAt && now > 0 ? since(np.updatedAt, now) : ""; // sunucu HTML'inde göreli zaman yok
@@ -2069,6 +2104,11 @@ export default function NowList({ ilkIstasyonlar, ilkOzet }: { ilkIstasyonlar?: 
           })}
         </ul>
 
+        {!listeBitti && <div ref={sonRef} aria-hidden style={{ height: 1 }} />}
+
+        {/* Listenin altındaki bölümler ve istekleri, liste bitince yüklenir. */}
+        {listeBitti && (
+        <>
         {/* Canlı vitrin (dar ekran, listenin altında) — geniş ekranda aynı içerik yan raylarda */}
         <div className="mb-4 grid gap-3 xl:hidden">
           <CanliSayac veri={anaOzet} artis={canliArtis} kisa />
@@ -2099,6 +2139,8 @@ export default function NowList({ ilkIstasyonlar, ilkOzet }: { ilkIstasyonlar?: 
         <DefterSeridi stations={stations} />
 
         </div>
+        </>
+        )}
 
         {/* Kitap köprüsü — tek satır, sayfanın dibinde */}
         <p className="mt-10 text-center text-xs" style={{ color: "var(--muted)" }}>

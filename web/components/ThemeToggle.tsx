@@ -26,7 +26,7 @@ export default function ThemeToggle() {
     let p: Pref = "dark"; // KİNETİK MANŞET: kayıtlı tercih yoksa magma şasi (koyu)
     try {
       const v = localStorage.getItem("tema") as Pref | null;
-      if (v === "light" || v === "dark" || v === "system") p = v;
+      if (v === "light" || v === "dark") p = v;
     } catch {
       // yok say
     }
@@ -44,7 +44,7 @@ export default function ThemeToggle() {
   }, [pref]);
 
   function cycle() {
-    const next: Pref = pref === "dark" ? "light" : pref === "light" ? "system" : "dark";
+    const next: Pref = pref === "dark" ? "light" : "dark"; // yalnız aydınlık ve karanlık
     setPref(next);
     apply(next);
     try {

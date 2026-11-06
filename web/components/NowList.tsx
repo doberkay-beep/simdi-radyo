@@ -3,10 +3,10 @@
 import { Fragment, memo, useCallback, useEffect, useMemo, useRef, useState } from "react";
 import Link from "next/link";
 import ThemeToggle from "./ThemeToggle";
-import ToneToggle from "./ToneToggle";
 import KonsolRaylar from "./KonsolRaylar";
+import { CanliDuvar } from "./CanliDuvar";
 import { useAnaOzet, CanliSayac, CanliListe, type AnaOzet } from "./CanliVitrin";
-import { TurkiyeSuAn, KesifKarti, RuhKartlari, KESIF_ARALIK, KESIF_SAYI } from "./AnaSayfaZenginlik";
+import { TurkiyeSuAn, RuhKartlari } from "./AnaSayfaZenginlik";
 import { kaynagiCalistir, hlsYik } from "@/lib/cal";
 import { dinleyiciKatil, simdiDinle, type CanliKanal, type SimdiDegisim } from "@/lib/canli";
 import { temizMetin } from "@/lib/cop";
@@ -206,170 +206,98 @@ const KISAYOLLAR: { href: string; tr: string; en: string }[] = [
   { href: "/arsiv", tr: "ARŞİV", en: "ARCHIVE" },
 ];
 
-// Tek istasyon satırı. memo: şarkısı, durumu ya da kalbi değişmeyen satır yeniden
-// çizilmez; liste 450+ satır olduğu için sayfanın akıcılığı buna bağlı.
-const ILK_SATIR = 40; // ilk çizilen satır; gerisi kaydırdıkça eklenir
-const SATIR_ADIM = 60;
+const ILK_SATIR = 36; // süzülmüş listede ilk çizilen eser; gerisi kaydırdıkça eklenir
+const SATIR_ADIM = 48;
+const SALON_ESER = 12; // her salonun duvarında asılı eser
 // İstasyon sayfasından geri dönünce kaldığı yere dönebilsin diye bileşen dışında.
 let sonSinir = ILK_SATIR;
 
-const IstasyonSatir = memo(function IstasyonSatir({
+// Sergi mührü: radyonun adından iki harf. Logo taklidi değil, müze envanter işareti gibi.
+const MUHUR_DISI = new Set(["radyo", "radio", "fm", "am", "the", "web", "online", "net", "tv"]);
+function muhur(ad: string): string {
+  const kelime = ad.trim().split(/[\s\-–·|/]+/).filter(Boolean);
+  const anlamli = kelime.filter((k) => !MUHUR_DISI.has(k.toLocaleLowerCase("tr")));
+  const liste = anlamli.length ? anlamli : kelime;
+  return liste.slice(0, 2).map((k) => [...k][0]?.toLocaleUpperCase("tr") ?? "").join("");
+}
+
+// Tek eser: sergideki bir radyo. memo: şarkısı, durumu ya da kalbi değişmeyen yeniden çizilmez.
+const EserKart = memo(function EserKart({
   s,
-  sira,
   isPlaying,
   np,
   taze,
   isFav,
   kalp,
-  showHeader,
   durum,
-  sairEtiket,
   onToggle,
   onKalp,
   onFav,
 }: {
   s: Station;
-  sira: number;
   isPlaying: boolean;
   np: NowPlaying;
   taze: boolean;
   isFav: boolean;
   kalp: number;
-  showHeader: boolean;
   durum: string;
-  sairEtiket: string;
   onToggle: (s: Station) => void;
   onKalp: (slug: string) => void;
   onFav: (slug: string) => void;
 }) {
-  const c = s.accentColor || DEFAULT_ACCENT;
   const artist = np?.artist?.trim() || null;
   const title = np?.title?.trim() || null;
-  const sameArtistTitle = artist && title && artist === title;
+  const ayni = artist && title && artist === title;
+  const yer = [s.band === "int" ? bayrakEmoji(istasyonUlkesi(s.slug)) : null, s.frequency, s.city].filter(Boolean).join(" · ");
   return (
-    <li className="istasyon-li">
-      {showHeader && (
-        <div
-          className="mb-1 mt-4 px-1 text-xs uppercase tracking-wide"
-          style={{ color: "var(--muted)" }}
-        >
-          {s.genre || "diğer"}
-        </div>
-      )}
-      <div
-        className={`station-card${sira < 18 ? " row-in" : ""} group flex w-full items-center px-2${taze ? " np-taze" : ""}`}
-        style={{
-          background: isPlaying
-            ? `color-mix(in srgb, ${c} 15%, transparent)`
-            : undefined,
-          borderColor: isPlaying ? `color-mix(in srgb, ${c} 45%, var(--line))` : undefined,
-          boxShadow: isPlaying ? `inset 3px 0 0 ${c}` : undefined,
-          animationDelay: sira < 18 ? `${sira * 22}ms` : undefined,
-          ["--taze-renk" as string]: c,
-        }}
-      >
-        <button
-          onClick={() => onToggle(s)}
-          className="press flex min-w-0 flex-1 items-center gap-4 py-3 pl-1.5 pr-2 text-left"
-        >
-          {/* İstasyonun renginden türeyen kapak karesi */}
-          <span
-            className="relative flex h-11 w-11 shrink-0 items-center justify-center overflow-hidden rounded-xl"
-            style={{
-              background: `linear-gradient(135deg, ${c}, color-mix(in srgb, ${c} 50%, #000))`,
-              ["--eq-color" as string]: readableOn(c),
-            }}
-          >
-            {isPlaying ? (
-              <span className="eq flex items-end gap-[2px]" aria-hidden>
-                <span /><span /><span /><span />
-              </span>
+    <article className={`eser${isPlaying ? " calan" : ""}${taze ? " np-taze" : ""}`}>
+      <button type="button" onClick={() => onToggle(s)} className="eser-cal">
+        <span className="eser-logo" aria-hidden>
+          {isPlaying ? (
+            <span className="eq flex items-end gap-[2px]"><span /><span /><span /><span /></span>
+          ) : (
+            <>
+              <span>{muhur(s.name)}</span>
+              {s.logoUrl ? (
+                <img
+                  src={s.logoUrl}
+                  alt=""
+                  loading="lazy"
+                  onError={(e) => {
+                    e.currentTarget.style.display = "none";
+                  }}
+                />
+              ) : null}
+            </>
+          )}
+        </span>
+        <span className="eser-ad">{s.name}</span>
+        <span className="eser-sarki">
+          {np ? (
+            ayni || !artist ? (
+              title
             ) : (
               <>
-                <span
-                  className="text-[15px] font-bold"
-                  style={{ color: readableOn(c), opacity: 0.92 }}
-                >
-                  {s.name.trim().charAt(0).toLocaleUpperCase("tr")}
-                </span>
-                {(s.logoUrl || faviconOf(s.homepage)) && (
-                  <img
-                    src={s.logoUrl || faviconOf(s.homepage)!}
-                    alt=""
-                    loading="lazy"
-                    className={s.logoUrl ? "absolute inset-0 h-full w-full rounded-[inherit] bg-white object-contain p-0.5" : "absolute inset-0 m-auto h-7 w-7 rounded-md object-contain"}
-                    onError={(e) => {
-                      e.currentTarget.style.display = "none";
-                    }}
-                  />
-                )}
+                {artist}
+                {title ? <em> {title}</em> : null}
               </>
-            )}
-          </span>
-
-          {/* Parça ön planda, istasyon ikincil */}
-          <span className="min-w-0 flex-1">
-            {np ? (
-              sameArtistTitle ? (
-                <span className="block truncate text-[17px] font-semibold">{title}</span>
-              ) : (
-                <span className="block truncate text-[17px]">
-                  <span className="font-semibold">{artist ?? title}</span>
-                  {artist && title && (
-                    <span style={{ color: "var(--muted)" }}> — {title}</span>
-                  )}
-                </span>
-              )
-            ) : (
-              <span
-                className="block truncate text-[17px] italic"
-                style={{ color: "var(--muted)" }}
-              >
-                {tagline(s.genre, s.slug)}
-              </span>
-            )}
-            <span className="mono mt-1 block truncate text-[11px] tracking-[0.02em]" style={{ color: "var(--muted)" }}>
-              {SAIR_SET.has(s.slug) ? <span title={sairEtiket}>✍ </span> : ""}
-              {s.band === "int" ? `${bayrakEmoji(istasyonUlkesi(s.slug))} ` : ""}
-              <span style={{ color: c }}>{s.name}</span>
-              {s.frequency ? ` · ${s.frequency}` : ""}
-              {s.city ? ` · ${s.city}` : ""}
-              {durum}
-            </span>
-          </span>
+            )
+          ) : (
+            <em>{tagline(s.genre, s.slug)}</em>
+          )}
+        </span>
+        <span className="eser-kunye">{[yer, durum].filter(Boolean).join(" · ")}</span>
+      </button>
+      <div className="eser-eylem">
+        <Link href={`/radyo/${s.slug}`} prefetch={false} aria-label={`${s.name} sayfası`}>↗</Link>
+        <button type="button" onClick={() => onKalp(s.slug)} aria-label="kalp gönder" title="bu istasyona kalp gönder">
+          ♥{kalp ? ` ${kalp}` : ""}
         </button>
-
-        {/* İstasyon sayfası (SEO/paylaş) — fareyle belirir */}
-        <Link
-          href={`/radyo/${s.slug}`}
-          prefetch={false}
-          aria-label={`${s.name} sayfası`}
-          className="shrink-0 px-1 py-4 text-sm leading-none opacity-0 transition-opacity group-hover:opacity-100"
-          style={{ color: "var(--muted)" }}
-        >
-          ↗
-        </Link>
-        {/* Anonim kalp — çalmayı tetiklemez */}
-        <button
-          onClick={() => onKalp(s.slug)}
-          aria-label="kalp gönder"
-          title="bu istasyona kalp gönder"
-          className="press shrink-0 px-1.5 py-4 text-sm leading-none"
-          style={{ color: kalp ? "#e0475f" : "var(--muted)" }}
-        >
-          ♥{kalp ? <span className="ml-0.5 text-xs tabular-nums">{kalp}</span> : ""}
-        </button>
-        {/* Favori yıldızı — ayrı düğme (çalmayı tetiklemez) */}
-        <button
-          onClick={() => onFav(s.slug)}
-          aria-label={isFav ? "favoriden çıkar" : "favorilere ekle"}
-          className="press shrink-0 px-2 py-4 text-lg leading-none transition-colors"
-          style={{ color: isFav ? "#ffcf4d" : "var(--muted)" }}
-        >
+        <button type="button" onClick={() => onFav(s.slug)} aria-label={isFav ? "favoriden çıkar" : "favorilere ekle"}>
           {isFav ? "★" : "☆"}
         </button>
       </div>
-    </li>
+    </article>
   );
 });
 
@@ -886,7 +814,18 @@ export default function NowList({ ilkIstasyonlar, ilkOzet }: { ilkIstasyonlar?: 
     io.observe(el);
     return () => io.disconnect();
   }, [sinir, shown.length]);
-  const listeBitti = sinir >= shown.length;
+  const salonModu = !genre && !favOnly && !query.trim() && !sairMode && !ulke && sort === "liste";
+  const salonlar = useMemo(() => {
+    const m = new Map<string | null, Station[]>();
+    for (const s of shown) {
+      const g = s.genre ?? null;
+      const l = m.get(g);
+      if (l) l.push(s);
+      else m.set(g, [s]);
+    }
+    return [...m.entries()].sort((a, b) => (a[0] === null ? 1 : b[0] === null ? -1 : b[1].length - a[1].length));
+  }, [shown]);
+  const listeBitti = salonModu || sinir >= shown.length;
 
   // Ülkeye göre sayılar (segment etiketleri için).
   const kadranListesi = useMemo(
@@ -1437,6 +1376,27 @@ export default function NowList({ ilkIstasyonlar, ilkOzet }: { ilkIstasyonlar?: 
 
   // Alt çubuktaki parça metni (canlı bilgi öncelikli).
   shownRef.current = shown;
+  const eser = (s: Station) => {
+    const isPlaying = playing === s.slug;
+    const np = isPlaying && liveNP ? liveNP : s.nowPlaying;
+    const rel = np?.updatedAt && now > 0 ? since(np.updatedAt, now) : ""; // sunucu HTML'inde göreli zaman yok
+    const durum = isPlaying && phase === "connecting" ? t("player.baglaniyor") : np ? (isPlaying && liveNP ? t("radyo.canli") : rel) : "";
+    return (
+      <EserKart
+        key={s.slug}
+        s={s}
+        isPlaying={isPlaying}
+        np={np}
+        taze={Boolean(tazeler[s.id]) && !isPlaying}
+        isFav={favs.has(s.slug)}
+        kalp={kalpler[s.slug] || 0}
+        durum={durum}
+        onToggle={satirCal}
+        onKalp={satirKalp}
+        onFav={satirFav}
+      />
+    );
+  };
   const barNp = current ? liveNP ?? current.nowPlaying : null;
   const barQuery = trackQuery(barNp);
 
@@ -1460,24 +1420,6 @@ export default function NowList({ ilkIstasyonlar, ilkOzet }: { ilkIstasyonlar?: 
         playing={playing}
         onTune={konsolAyar}
       />
-
-      {/* Geniş ekranda yan boşluklara çok soluk dev kelime işareti (ambient). */}
-      <div
-        aria-hidden
-        className="brand pointer-events-none fixed inset-0 z-0 hidden select-none items-center justify-center overflow-hidden lg:flex"
-      >
-        <span
-          style={{
-            fontSize: "40vw",
-            lineHeight: 1,
-            letterSpacing: "-0.05em",
-            color: "var(--fg)",
-            opacity: 0.03,
-          }}
-        >
-          nowby.
-        </span>
-      </div>
 
       {/* Çalarken sayfanın çok yavaş nefes alması */}
       {playing && <div className="breathe" aria-hidden />}
@@ -1517,10 +1459,11 @@ export default function NowList({ ilkIstasyonlar, ilkOzet }: { ilkIstasyonlar?: 
 
       <div className="relative z-10 mx-auto max-w-2xl px-5 pb-32 pt-5">
         {/* Üst çubuk — berkaydogan.co dili: kelime işareti solda, dil + MENÜ sağda */}
-        <header className="flex items-center justify-between gap-3">
+        <header className="ust-cubuk flex items-center justify-between gap-3">
           <span className="brand text-[17px] font-semibold tracking-tight">nowby<span style={{ color: "var(--glow)" }}>.</span></span>
           {/* Sağ üst: yalnız dil + ☰ MENÜ. Tema/ton menünün "Görünüm" grubunda. */}
           <div className="flex shrink-0 items-center gap-3 text-xs" style={{ color: "var(--muted)" }}>
+            <ThemeToggle />
             <DilToggle />
             <button
               onClick={() => setNavAcik(true)}
@@ -1533,18 +1476,8 @@ export default function NowList({ ilkIstasyonlar, ilkOzet }: { ilkIstasyonlar?: 
           </div>
         </header>
 
-        {/* MASTHEAD — gazete künyesi gibi ince çizgiler arasında üç küçük not */}
-        <div className="masthead mt-4" aria-hidden>
-          <span>nowby.co</span>
-          <span className="hidden sm:inline">{t("home.altyazi")}</span>
-          <span>{stations.length} {t("manset.istasyon")} · {doluUlkeler().length} {t("manset.ulke")}</span>
-        </div>
-
-        {/* MANŞET — büyük serif kelime işareti (uygulama simgesindeki "n." gibi) */}
-        <h1 className="manset-baslik mb-3 mt-9">
-          nowby<span style={{ color: "var(--glow)" }}>.</span>
-        </h1>
-        <p className="manset-alt mb-7">{(() => { const a = t("home.altyazi"); return a.charAt(0).toLocaleUpperCase(dil === "en" ? "en" : "tr") + a.slice(1) + "?"; })()}</p>
+        {/* Açılış duvarı: o an radyoda çalan gerçek şarkılar */}
+        <CanliDuvar stations={stations} playing={playing} onTune={konsolAyar} soru={(() => { const a = t("home.altyazi"); return a.charAt(0).toLocaleUpperCase(dil === "en" ? "en" : "tr") + a.slice(1) + "?"; })()} en={dil === "en"} />
 
         {/* Bant seçici — radyo bant düğmesi: FM (buradasın) / Dünya / Nabız */}
         <nav className="bandsel mb-3" aria-label="bant">
@@ -1699,16 +1632,7 @@ export default function NowList({ ilkIstasyonlar, ilkOzet }: { ilkIstasyonlar?: 
           </p>
         )}
 
-        {/* Günün epigrafı — boştayken yavaşça döner */}
-        {!playing && now > 0 && (new Date(now).getHours() < 2 || new Date(now).getHours() >= 5) && (
-          <p className="epigraf fade-in mb-5 text-lg" key={epi}>
-            — {EPIGRAFLAR[epi]}
-          </p>
-        )}
-
-        {/* RUH — Aynı anda ve Gece 3 */}
-        <RuhKartlari />
-
+        <div className="sergi sergi-kontrol">
         {/* Arama, ülke, bayraklar, türler — ana sayfanın üstünde (27 Eki: liste uzaktaydı) */}
         <input
           ref={searchRef}
@@ -1849,13 +1773,6 @@ export default function NowList({ ilkIstasyonlar, ilkOzet }: { ilkIstasyonlar?: 
           </div>
         )}
 
-        {/* KADRAN — analog ayar bandı (yalnız geniş ekranda; mobilde oynatıcı yeter) */}
-        <div className="hidden pt-3 sm:block">
-        <Kadran
-          stations={kadranListesi}
-          playing={playing}
-          onTune={kadranAyar}
-        />
         </div>
 
         {/* Sanatçı radarı — izlediğin sanatçı şu an bir istasyonda çalıyorsa */}
@@ -1890,6 +1807,91 @@ export default function NowList({ ilkIstasyonlar, ilkOzet }: { ilkIstasyonlar?: 
             {TUR_EPIGRAF[genre]}
           </p>
         )}
+
+        {status === "loading" && (
+          <>
+          <p className="epigraf mb-3 text-sm">{YUKLENIYOR[epi % YUKLENIYOR.length]}</p>
+          <ul className="flex flex-col">
+            {Array.from({ length: 8 }).map((_, i) => (
+              <li key={i} className="flex items-center gap-4 border-b py-3" style={{ borderColor: "var(--line)" }}>
+                <span className="skeleton h-11 w-11 shrink-0 rounded-xl" />
+                <span className="min-w-0 flex-1">
+                  <span className="skeleton block h-4" style={{ width: `${55 + ((i * 7) % 35)}%` }} />
+                  <span className="skeleton mt-2 block h-3" style={{ width: `${30 + ((i * 5) % 25)}%` }} />
+                </span>
+              </li>
+            ))}
+          </ul>
+          </>
+        )}
+        {status === "error" && (
+          <p style={{ color: "var(--muted)" }}>Bağlanılamadı. Toplayıcı ve API çalışıyor mu?</p>
+        )}
+        {status === "idle" && shown.length === 0 && (
+          <div style={{ color: "var(--muted)" }}>
+            <p>Eşleşen istasyon yok.</p>
+            {(query || genre || favOnly || region !== "all") && (
+              <button
+                onClick={() => {
+                  setQuery("");
+                  setGenre(null);
+                  setFavOnly(false);
+                  setRegion("all");
+                }}
+                className="mt-2 underline"
+                style={{ color: "var(--fg)" }}
+              >
+                {t("home.filtreleriTemizle")}
+              </button>
+            )}
+          </div>
+        )}
+
+        {/* SERGİ: varsayılan görünümde radyolar tür salonlarında, süzünce tek büyük duvarda */}
+        {salonModu ? (
+          <div className="sergi">
+            {salonlar.map(([tur, liste]) => (
+              <section key={tur ?? "diger"} className="salon">
+                <header className="salon-baslik">
+                  <h2>{tur ? turAdi(dil, tur) : dil === "en" ? "Others" : "Diğer"}</h2>
+                  <span>{liste.length} {dil === "en" ? "stations" : "radyo"}</span>
+                  {tur && liste.length > SALON_ESER / 2 ? (
+                    <button type="button" onClick={() => { setGenre(tur); window.scrollTo({ top: 0 }); }}>
+                      {dil === "en" ? "Enter the room" : "Salona gir"}
+                    </button>
+                  ) : null}
+                </header>
+                <div className="salon-duvar">{liste.slice(0, SALON_ESER).map(eser)}</div>
+              </section>
+            ))}
+          </div>
+        ) : (
+          <div className="sergi">
+            {genre ? (
+              <header className="salon-baslik">
+                <h2>{turAdi(dil, genre)}</h2>
+                <span>{shown.length} {dil === "en" ? "stations" : "radyo"}</span>
+                <button type="button" onClick={() => setGenre(null)}>{dil === "en" ? "Back to all rooms" : "Tüm salonlar"}</button>
+              </header>
+            ) : null}
+            <div className="sergi-duvar">{shown.slice(0, sinir).map(eser)}</div>
+          </div>
+        )}
+
+        {!listeBitti && <div ref={sonRef} aria-hidden style={{ height: 1 }} />}
+
+        {/* Listenin altındaki bölümler ve istekleri, liste bitince yüklenir. */}
+        {listeBitti && (
+        <>
+        <div className="sergi sergi-alt">
+        {/* KADRAN — analog ayar bandı (yalnız geniş ekranda; mobilde oynatıcı yeter) */}
+        <div className="hidden pt-3 sm:block">
+        <Kadran
+          stations={kadranListesi}
+          playing={playing}
+          onTune={kadranAyar}
+        />
+        </div>
 
         {/* "Ne dinlesem?" — boştayken rastgele bir istasyon öner */}
         {!playing && featured && (
@@ -2017,100 +2019,19 @@ export default function NowList({ ilkIstasyonlar, ilkOzet }: { ilkIstasyonlar?: 
           );
         })()}
 
-        {status === "loading" && (
-          <>
-          <p className="epigraf mb-3 text-sm">{YUKLENIYOR[epi % YUKLENIYOR.length]}</p>
-          <ul className="flex flex-col">
-            {Array.from({ length: 8 }).map((_, i) => (
-              <li key={i} className="flex items-center gap-4 border-b py-3" style={{ borderColor: "var(--line)" }}>
-                <span className="skeleton h-11 w-11 shrink-0 rounded-xl" />
-                <span className="min-w-0 flex-1">
-                  <span className="skeleton block h-4" style={{ width: `${55 + ((i * 7) % 35)}%` }} />
-                  <span className="skeleton mt-2 block h-3" style={{ width: `${30 + ((i * 5) % 25)}%` }} />
-                </span>
-              </li>
-            ))}
-          </ul>
-          </>
-        )}
-        {status === "error" && (
-          <p style={{ color: "var(--muted)" }}>Bağlanılamadı. Toplayıcı ve API çalışıyor mu?</p>
-        )}
-        {status === "idle" && shown.length === 0 && (
-          <div style={{ color: "var(--muted)" }}>
-            <p>Eşleşen istasyon yok.</p>
-            {(query || genre || favOnly || region !== "all") && (
-              <button
-                onClick={() => {
-                  setQuery("");
-                  setGenre(null);
-                  setFavOnly(false);
-                  setRegion("all");
-                }}
-                className="mt-2 underline"
-                style={{ color: "var(--fg)" }}
-              >
-                {t("home.filtreleriTemizle")}
-              </button>
-            )}
-          </div>
+        {/* Günün epigrafı — boştayken yavaşça döner */}
+        {!playing && now > 0 && (new Date(now).getHours() < 2 || new Date(now).getHours() >= 5) && (
+          <p className="epigraf fade-in mb-5 text-lg" key={epi}>
+            — {EPIGRAFLAR[epi]}
+          </p>
         )}
 
-        <ul className="flex flex-col">
-          {shown.slice(0, sinir).map((s, i) => {
-            const isPlaying = playing === s.slug;
-            const np = isPlaying && liveNP ? liveNP : s.nowPlaying;
-            const rel = np?.updatedAt && now > 0 ? since(np.updatedAt, now) : ""; // sunucu HTML'inde göreli zaman yok
-            const durum =
-              isPlaying && phase === "connecting"
-                ? ` · ${t("player.baglaniyor")}`
-                : np
-                  ? isPlaying && liveNP
-                    ? ` · ${t("radyo.canli")}`
-                    : rel
-                      ? ` · ${rel}`
-                      : ""
-                  : "";
-            const showHeader = grouped && shown[i - 1]?.genre !== s.genre;
+        {/* RUH — Aynı anda ve Gece 3 */}
+        <RuhKartlari />
 
-            // Keşif kartı: filtre/arama yokken her KESIF_ARALIK radyoda bir
-            const kesifVar = !grouped && !genre && !favOnly && !query.trim() && !sairMode && (i + 1) % KESIF_ARALIK === 0 && (i + 1) / KESIF_ARALIK <= KESIF_SAYI;
-
-            return (
-              <Fragment key={s.slug}>
-              <IstasyonSatir
-                s={s}
-                sira={Math.min(i, 18)}
-                isPlaying={isPlaying}
-                np={np}
-                taze={Boolean(tazeler[s.id]) && !isPlaying}
-                isFav={favs.has(s.slug)}
-                kalp={kalpler[s.slug] || 0}
-                showHeader={showHeader}
-                durum={durum}
-                sairEtiket={sairEtiket}
-                onToggle={satirCal}
-                onKalp={satirKalp}
-                onFav={satirFav}
-              />
-              {kesifVar && (
-                <KesifKarti
-                  sira={(i + 1) / KESIF_ARALIK - 1}
-                  onSiir={() => { audioRef.current?.pause(); setPlaying(null); setSiirAcik(true); }}
-                />
-              )}
-              </Fragment>
-            );
-          })}
-        </ul>
-
-        {!listeBitti && <div ref={sonRef} aria-hidden style={{ height: 1 }} />}
-
-        {/* Listenin altındaki bölümler ve istekleri, liste bitince yüklenir. */}
-        {listeBitti && (
-        <>
+        </div>
         {/* Canlı vitrin (dar ekran, listenin altında) — geniş ekranda aynı içerik yan raylarda */}
-        <div className="mb-4 grid gap-3 xl:hidden">
+        <div className="mb-4 grid gap-3 sergi-vitrin">
           <CanliSayac veri={anaOzet} artis={canliArtis} kisa />
           <CanliListe veri={anaOzet} kisa />
         </div>
@@ -2410,35 +2331,35 @@ export default function NowList({ ilkIstasyonlar, ilkOzet }: { ilkIstasyonlar?: 
 
             <p className="menu-grup">{dil === "en" ? "LISTEN" : "DİNLE"}</p>
             <div className="grid grid-cols-2 gap-2">
-              <button onClick={() => { setNavAcik(false); setSurus(true); }} className="menu-kalem press">🚗 {dil === "en" ? "drive mode" : "sürüş modu"}</button>
+              <button onClick={() => { setNavAcik(false); setSurus(true); }} className="menu-kalem press">{dil === "en" ? "drive mode" : "sürüş modu"}</button>
               <button onClick={() => { cycleSleep(); }} className={`menu-kalem press ${sleepUntil ? "on" : ""}`}>
-                🌙 {sleepUntil ? `${sleepRemain} dk` : dil === "en" ? "sleep timer" : "uyku"}
+                {sleepUntil ? `${sleepRemain} dk` : dil === "en" ? "sleep timer" : "uyku"}
               </button>
               <button onClick={() => { setNavAcik(false); setAlarmAcik(true); }} className={`menu-kalem press ${alarm ? "on" : ""}`}>
-                ⏰ {alarm ? new Date(alarm.ts).toTimeString().slice(0, 5) : dil === "en" ? "radio alarm" : "radyo alarmı"}
+                {alarm ? new Date(alarm.ts).toTimeString().slice(0, 5) : dil === "en" ? "radio alarm" : "radyo alarmı"}
               </button>
               <button onClick={() => { setNavAcik(false); if (oda) davetKopyala(oda.kod); else odaAc(); }} className={`menu-kalem press ${oda ? "on" : ""}`}>
-                👥 {dil === "en" ? "listen together" : "birlikte dinle"}
+                {dil === "en" ? "listen together" : "birlikte dinle"}
               </button>
               <button onClick={() => { setYolculuk((v) => !v); setNavAcik(false); }} className={`menu-kalem press ${yolculuk ? "on" : ""}`}>
-                🧭 {dil === "en" ? "drift" : "gezinti"}
+                {dil === "en" ? "drift" : "gezinti"}
               </button>
-              <button onClick={() => { setNavAcik(false); setNotAcik(true); }} className="menu-kalem press">✍ {dil === "en" ? "leave a note" : "not bırak"}</button>
+              <button onClick={() => { setNavAcik(false); setNotAcik(true); }} className="menu-kalem press">{dil === "en" ? "leave a note" : "not bırak"}</button>
             </div>
 
             <p className="menu-grup">{dil === "en" ? "EXPLORE" : "KEŞFET"}</p>
             <div className="grid grid-cols-2 gap-2">
-              <Link href="/kesif" className="menu-kalem" onClick={() => setNavAcik(false)}>🎧 {t("nav.kesif")}</Link>
-              <Link href="/ulke" className="menu-kalem" onClick={() => setNavAcik(false)}>🗺 atlas</Link>
-              <Link href="/nabiz" className="menu-kalem" onClick={() => setNavAcik(false)}>📈 {t("nav.nabiz")}</Link>
-              <Link href="/oyun" className="menu-kalem" onClick={() => setNavAcik(false)}>🎮 {dil === "en" ? "games" : "oyunlar"}</Link>
-              <Link href="/fal" className="menu-kalem" onClick={() => setNavAcik(false)}>🔮 {dil === "en" ? "fortune" : "frekans falı"}</Link>
-              <Link href="/kose" className="menu-kalem" onClick={() => setNavAcik(false)}>✒ {t("nav.kose")}</Link>
-              <Link href="/rapor" prefetch={false} className="menu-kalem" onClick={() => setNavAcik(false)}>📊 {dil === "en" ? "weekly report" : "haftalık rapor"}</Link>
-              <Link href="/harita" className="menu-kalem" onClick={() => setNavAcik(false)}>📍 {dil === "en" ? "map" : "harita"}</Link>
-              <Link href="/rekorlar" className="menu-kalem" onClick={() => setNavAcik(false)}>🎖 {dil === "en" ? "records" : "rekorlar"}</Link>
-              <Link href="/senkron" className="menu-kalem" onClick={() => setNavAcik(false)}>⚡ {dil === "en" ? "sync moments" : "senkron defteri"}</Link>
-              <button onClick={() => { setNavAcik(false); audioRef.current?.pause(); setPlaying(null); setSiirAcik(true); }} className="menu-kalem press col-span-2">📖 {dil === "en" ? "poetry corner · Şiir Rafım Radio" : "şiir köşesi · Şiir Rafım Radyosu"}</button>
+              <Link href="/kesif" className="menu-kalem" onClick={() => setNavAcik(false)}>{t("nav.kesif")}</Link>
+              <Link href="/ulke" className="menu-kalem" onClick={() => setNavAcik(false)}>atlas</Link>
+              <Link href="/nabiz" className="menu-kalem" onClick={() => setNavAcik(false)}>{t("nav.nabiz")}</Link>
+              <Link href="/oyun" className="menu-kalem" onClick={() => setNavAcik(false)}>{dil === "en" ? "games" : "oyunlar"}</Link>
+              <Link href="/fal" className="menu-kalem" onClick={() => setNavAcik(false)}>{dil === "en" ? "fortune" : "frekans falı"}</Link>
+              <Link href="/kose" className="menu-kalem" onClick={() => setNavAcik(false)}>{t("nav.kose")}</Link>
+              <Link href="/rapor" prefetch={false} className="menu-kalem" onClick={() => setNavAcik(false)}>{dil === "en" ? "weekly report" : "haftalık rapor"}</Link>
+              <Link href="/harita" className="menu-kalem" onClick={() => setNavAcik(false)}>{dil === "en" ? "map" : "harita"}</Link>
+              <Link href="/rekorlar" className="menu-kalem" onClick={() => setNavAcik(false)}>{dil === "en" ? "records" : "rekorlar"}</Link>
+              <Link href="/senkron" className="menu-kalem" onClick={() => setNavAcik(false)}>{dil === "en" ? "sync moments" : "senkron defteri"}</Link>
+              <button onClick={() => { setNavAcik(false); audioRef.current?.pause(); setPlaying(null); setSiirAcik(true); }} className="menu-kalem press col-span-2">{dil === "en" ? "poetry corner · Şiir Rafım Radio" : "şiir köşesi · Şiir Rafım Radyosu"}</button>
             </div>
 
             <p className="menu-grup">{dil === "en" ? "YOURS" : "SENİN"}</p>
@@ -2449,20 +2370,19 @@ export default function NowList({ ilkIstasyonlar, ilkOzet }: { ilkIstasyonlar?: 
                   className="menu-kalem press col-span-2"
                   style={{ borderColor: "color-mix(in srgb, var(--glow) 55%, var(--line-hi))" }}
                 >
-                  📲 {dil === "en" ? "install as an app" : "uygulama gibi kur"}
+                  {dil === "en" ? "install as an app" : "uygulama gibi kur"}
                 </button>
               )}
-              <button onClick={() => { setNavAcik(false); setTakipAcik(true); }} className="menu-kalem press">🔔 {dil === "en" ? "follow artists" : "sanatçı takip"}</button>
-              <button onClick={() => { setNavAcik(false); setAvAcik(true); }} className="menu-kalem press">🎣 {t("nav.avlarim")}</button>
-              <button onClick={() => { setNavAcik(false); setFrekansAcik(true); }} className="menu-kalem press">📻 {t("nav.frekansim")}</button>
-              <button onClick={() => { setNavAcik(false); setKasaAcik(true); }} className="menu-kalem press">🔐 {dil === "en" ? "memory code" : "hafıza kodum"}</button>
-              <Link href="/hakkinda" className="menu-kalem col-span-2" onClick={() => setNavAcik(false)}>ℹ {t("nav.gelistirici")}</Link>
+              <button onClick={() => { setNavAcik(false); setTakipAcik(true); }} className="menu-kalem press">{dil === "en" ? "follow artists" : "sanatçı takip"}</button>
+              <button onClick={() => { setNavAcik(false); setAvAcik(true); }} className="menu-kalem press">{t("nav.avlarim")}</button>
+              <button onClick={() => { setNavAcik(false); setFrekansAcik(true); }} className="menu-kalem press">{t("nav.frekansim")}</button>
+              <button onClick={() => { setNavAcik(false); setKasaAcik(true); }} className="menu-kalem press">{dil === "en" ? "memory code" : "hafıza kodum"}</button>
+              <Link href="/hakkinda" className="menu-kalem col-span-2" onClick={() => setNavAcik(false)}>{t("nav.gelistirici")}</Link>
             </div>
 
             <p className="menu-grup">{dil === "en" ? "LOOK" : "GÖRÜNÜM"}</p>
             <div className="flex items-center gap-4 px-1 text-sm" style={{ color: "var(--muted)" }}>
               <ThemeToggle />
-              <ToneToggle />
             </div>
           </div>
         </div>
@@ -2490,7 +2410,7 @@ export default function NowList({ ilkIstasyonlar, ilkOzet }: { ilkIstasyonlar?: 
                   onClick={() => { setCipMenu(false); setMuzikKart({ artist: barNp.artist!, title: barNp.title }); }}
                   className="menu-kalem press col-span-2"
                 >
-                  ♪ {barNp.artist.length > 24 ? barNp.artist.slice(0, 23) + "…" : barNp.artist}
+                  {barNp.artist.length > 24 ? barNp.artist.slice(0, 23) + "…" : barNp.artist}
                 </button>
               )}
               <button onClick={() => { setCipMenu(false); setKartAcik(true); }} className="menu-kalem press">

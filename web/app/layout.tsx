@@ -1,53 +1,27 @@
 import type { ReactNode } from "react";
-import { Inter, Playfair_Display, Fraunces, Oswald, Space_Mono } from "next/font/google";
+import { Newsreader, Bodoni_Moda } from "next/font/google";
 import { Analytics } from "@vercel/analytics/next";
 import RegisterSW from "@/components/RegisterSW";
 import AltBilgi from "@/components/AltBilgi";
 import KasaBekcisi from "@/components/KasaBekcisi";
 import "./globals.css";
+import "./yeni-dil.css";
 
-// Marka/UI yazı tipi — berkaydogan.co ile aynı: Inter (27 Eki).
-const brand = Inter({
-  subsets: ["latin", "latin-ext"],
-  weight: ["400", "500", "600", "700"],
-  variable: "--font-brand",
-  display: "swap",
-});
-
-// Manşet yazı tipi — berkaydogan.co'nun büyük serif başlıkları (Playfair Display).
-const manset = Playfair_Display({
-  subsets: ["latin", "latin-ext"],
-  weight: ["400", "500", "600"],
-  style: ["normal", "italic"],
-  variable: "--font-display",
-  display: "swap",
-});
-
-// Edebi "okuma" fontu — mısralar, epigraflar, düzyazı (kitap hissi).
-const read = Fraunces({
+// Tek yazı ailesi: berkaydogan.co ile aynı.
+const yazi = Newsreader({
   subsets: ["latin", "latin-ext"],
   weight: ["300", "400", "500"],
   style: ["normal", "italic"],
-  variable: "--font-read",
-  preload: false, // açılışta öncelik başlık ve gövde yazı tiplerinde
+  variable: "--font-yazi",
   display: "swap",
 });
 
-// KADRAN kadran/rakam fontu — sıkışık endüstriyel (frekans, etiketler).
-const dial = Oswald({
+// Başlık yazısı: büyük ve az kullanılır; küçük metinler Newsreader.
+const baslik = Bodoni_Moda({
   subsets: ["latin", "latin-ext"],
-  weight: ["300", "400", "500", "600"],
-  variable: "--font-dial",
-  preload: false, // açılışta öncelik başlık ve gövde yazı tiplerinde
-  display: "swap",
-});
-
-// KADRAN enstrüman okumaları — mono (frekans, sayaç, künye).
-const mono = Space_Mono({
-  subsets: ["latin"],
-  weight: ["400", "700"],
-  variable: "--font-mono",
-  preload: false, // açılışta öncelik başlık ve gövde yazı tiplerinde
+  weight: ["400", "500"],
+  style: ["normal", "italic"],
+  variable: "--font-baslik",
   display: "swap",
 });
 
@@ -82,13 +56,13 @@ export const viewport = {
 
 export default function RootLayout({ children }: { children: ReactNode }) {
   return (
-    <html lang="tr" className={`${brand.variable} ${manset.variable} ${read.variable} ${dial.variable} ${mono.variable}`} suppressHydrationWarning>
+    <html lang="tr" className={`${yazi.variable} ${baslik.variable}`} suppressHydrationWarning>
       <head>
         {/* Tema seçimini boyamadan önce uygula (flaş olmasın). Dil de: html lang hep "tr"
             kalınca İngilizce metinde CSS uppercase "i"yi "İ" yapıyordu (PLAYİNG). */}
         <script
           dangerouslySetInnerHTML={{
-            __html: `try{var t=localStorage.getItem('tema');var l=t==='light'||(t==='system'&&matchMedia('(prefers-color-scheme: light)').matches);if(l)document.documentElement.dataset.theme='light'}catch(e){}try{var tn=localStorage.getItem('ton');if(tn&&tn!=='murekkep')document.documentElement.dataset.tone=tn}catch(e){}try{var d=localStorage.getItem('dil');if(d!=='en'&&d!=='tr')d=(navigator.language||'tr').toLowerCase().indexOf('tr')===0?'tr':'en';document.documentElement.lang=d}catch(e){}`,
+            __html: `try{var t=localStorage.getItem('tema');if(t==='light')document.documentElement.dataset.theme='light'}catch(e){}try{var d=localStorage.getItem('dil');if(d!=='en'&&d!=='tr')d=(navigator.language||'tr').toLowerCase().indexOf('tr')===0?'tr':'en';document.documentElement.lang=d}catch(e){}`,
           }}
         />
       </head>

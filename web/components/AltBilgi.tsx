@@ -3,7 +3,6 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useDil } from "@/lib/i18n";
-import ToneToggle from "./ToneToggle";
 
 // Site-geneli künye — her sayfanın altında. nowby'nin bir yazar projesi
 // olduğunu söyler ve berkaydogan.co'ya (aynı kişi → funnel + entity) bağlar.
@@ -72,12 +71,6 @@ export default function AltBilgi() {
           <a href="mailto:hello@berkaydogan.co" className="underline" style={{ color: "var(--fg)" }}>hello@berkaydogan.co</a>
           {en ? " and we will remove it the same day." : " adresine yazın, aynı gün kaldırırız."}
         </p>
-        <div className="mt-4 flex items-center gap-2.5">
-          <span className="mono text-[11px] uppercase tracking-[0.16em]" style={{ color: "var(--faint)" }}>
-            {en ? "tone" : "ton"}
-          </span>
-          <ToneToggle />
-        </div>
       </div>
     </footer>
   );

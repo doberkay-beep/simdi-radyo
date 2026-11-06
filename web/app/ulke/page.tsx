@@ -39,7 +39,7 @@ export default async function AtlasPage() {
       <div className="mx-auto max-w-2xl px-5 pb-24 pt-10">
         <header className="mb-6 flex items-center justify-between">
           <Link href="/" className="text-sm underline" style={{ color: "var(--muted)" }}>
-            {en ? "← now" : "← şimdi"}
+            {en ? "← nowby" : "← nowby"}
           </Link>
           <Link href="/" className="brand text-sm font-bold tracking-tight">nowby.</Link>
         </header>

@@ -22,7 +22,7 @@ export default async function Sayfa() {
       <p className="mono text-[11px] uppercase tracking-[0.22em]" style={{ color: "var(--muted)" }}>
         <Link href="/" className="nav-link">nowby.</Link> · nadir anlar kaydı
       </p>
-      <h1 className="brand mt-2 text-4xl font-bold leading-tight">⚡ SENKRON DEFTERİ</h1>
+      <h1 className="brand mt-2 text-4xl font-bold leading-tight">Senkron Defteri</h1>
       <p className="epigraf mt-3 text-base">
         Radyolar birbirini duymaz. Her biri kendi listesini, kendi saatini çalar. Ama bazen aynı
         şarkı, aynı dakika içinde, iki ayrı radyoda birden başlar. Kimse anlaşmamıştır. Buna

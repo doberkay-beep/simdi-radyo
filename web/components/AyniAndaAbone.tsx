@@ -95,7 +95,7 @@ export default function AyniAndaAbone({ dil }: { dil: "tr" | "en" }) {
       ) : (
         <>
           <button type="button" onClick={ac} disabled={durum === "bekliyor"} className="press rounded-full px-4 py-2 text-sm font-bold"
-            style={{ background: "var(--glow-hi)", color: "#160806", opacity: durum === "bekliyor" ? 0.6 : 1 }}>
+            style={{ background: "none", color: "var(--fg)", border: 0, borderBottom: "1px solid var(--glow)", borderRadius: 0, padding: "2px 0", opacity: durum === "bekliyor" ? 0.6 : 1 }}>
             🌍 {m.dugme}
           </button>
           <p className="mt-2 text-xs" style={{ color: "var(--muted)" }}>{m.not}</p>

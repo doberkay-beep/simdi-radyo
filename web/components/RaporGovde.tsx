@@ -22,7 +22,7 @@ export default function RaporGovde({ hafta, r }: { hafta: string; r: Rapor | nul
       <p className="mono text-[11px] uppercase tracking-[0.22em]" style={{ color: "var(--muted)" }}>
         <Link href="/" className="nav-link">nowby.</Link> · haftalık rapor
       </p>
-      <h1 className="brand mt-2 text-4xl font-bold leading-tight">TÜRKİYE RADYO RAPORU</h1>
+      <h1 className="brand mt-2 text-4xl font-bold leading-tight">Türkiye Radyo Raporu</h1>
       <p className="mono mt-2 text-[12px] uppercase tracking-[0.18em]" style={{ color: "var(--glow-hi)" }}>
         {haftaEtiketi(hafta)}{devam ? " · hafta sürüyor" : ""}
       </p>

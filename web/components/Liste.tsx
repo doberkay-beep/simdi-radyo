@@ -24,7 +24,7 @@ const TOPLAM = Object.values(SAYI).reduce((t, n) => t + n, 0);
 type Dil = "tr" | "en";
 const METIN = {
   tr: {
-    baslik: "nowby. LİSTESİ", geri: "← şimdi", dunya: "Dünya",
+    baslik: "nowby. LİSTESİ", geri: "← nowby", dunya: "Dünya",
     alt: (yer: string | null) => `${yer ? `${yer} radyolarında` : "Dünyanın radyolarında"} gerçekte ne çalıyor — canlı sayım, itiraz kabul etmez.`,
     gun: "son 24 saat", hafta: "bu hafta", yukleniyor: "sayım sürüyor…", hata: "liste ısınıyor — birazdan yeniden dene.",
     bosTr: "henüz veri yok.", bos: "bu ülkede henüz yeterince çalma yok — biraz sonra yine bak.",
@@ -35,7 +35,7 @@ const METIN = {
     diger: { href: "/en/chart", ad: "EN" },
   },
   en: {
-    baslik: "nowby. CHART", geri: "← now", dunya: "World",
+    baslik: "nowby. CHART", geri: "← nowby", dunya: "World",
     alt: (yer: string | null) => `What's really playing on ${yer ? `the radio in ${yer}` : "the world's radio"} — counted live, no arguments.`,
     gun: "last 24 hours", hafta: "this week", yukleniyor: "counting…", hata: "the chart is warming up — try again in a moment.",
     bosTr: "no data yet.", bos: "not enough plays in this country yet — check back soon.",

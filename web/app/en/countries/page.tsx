@@ -37,7 +37,7 @@ export default function AtlasPageEn() {
       <div className="mx-auto max-w-2xl px-5 pb-24 pt-10">
         <header className="mb-6 flex items-center justify-between">
           <Link href="/" className="text-sm underline" style={{ color: "var(--muted)" }}>
-            ← now
+            ← nowby
           </Link>
           <span className="flex items-center gap-3">
             <Link href="/en/chart" className="text-xs underline" style={{ color: "var(--muted)" }}>Chart</Link>

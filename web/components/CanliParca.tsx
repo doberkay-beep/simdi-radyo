@@ -71,9 +71,9 @@ export default function CanliParca({
       <div className="flex items-center gap-2 text-xs uppercase tracking-wide" style={{ color: "var(--muted)" }}>
         {etiket}
         {canli && (
-          <span className="inline-flex items-center gap-1" style={{ color: "#e0475f" }}>
+          <span className="inline-flex items-center gap-1" style={{ color: "var(--glow)" }}>
             <span
-              style={{ width: 6, height: 6, borderRadius: 999, background: "#e0475f", display: "inline-block" }}
+              style={{ width: 6, height: 6, borderRadius: 999, background: "var(--glow)", display: "inline-block" }}
             />
             canlı
           </span>

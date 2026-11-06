@@ -184,7 +184,7 @@ export default function NeredenCaliyor() {
                     disabled={acik}
                     className="press rounded-xl border px-4 py-4 text-left text-[15px] font-semibold"
                     style={{
-                      borderColor: acik && dogruMu ? "#e5382c" : acik && secildi ? "#e0475f" : "var(--line)",
+                      borderColor: acik && dogruMu ? "#e5382c" : acik && secildi ? "var(--glow)" : "var(--line)",
                       background:
                         acik && dogruMu
                           ? "color-mix(in srgb, #e5382c 15%, transparent)"

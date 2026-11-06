@@ -42,7 +42,7 @@ export default function Page() {
           <span className="flex items-center gap-3">
             <ThemeToggle />
             <Link href="/" className="text-sm underline" style={{ color: "var(--muted)" }}>
-              ← şimdi
+              ← nowby
             </Link>
           </span>
         </header>
@@ -56,7 +56,7 @@ export default function Page() {
               style={{ borderColor: "var(--line)" }}
             >
               <p className="text-xl font-bold">
-                <span className="mr-2" aria-hidden>{o.emoji}</span>
+                
                 {o.ad}
                 {o.yeni && (
                   <span

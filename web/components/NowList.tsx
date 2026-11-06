@@ -318,7 +318,6 @@ export default function NowList({ ilkIstasyonlar, ilkOzet }: { ilkIstasyonlar?: 
   const [phase, setPhase] = useState<"idle" | "connecting" | "playing" | "error">("idle");
   const [sleepUntil, setSleepUntil] = useState<number | null>(null); // uyku zamanlayıcı
   const [favOnly, setFavOnly] = useState(false); // sadece favoriler
-  const [filtrelerAcik, setFiltrelerAcik] = useState(false); // ikincil filtreler katlanır
   const [sairMode, setSairMode] = useState(false); // Şairin Frekansı seçkisi
   const [sort, setSort] = useState<"liste" | "az" | "tur">("liste"); // sıralama
   const [volume, setVolume] = useState(1); // ses seviyesi 0..1
@@ -1672,16 +1671,33 @@ export default function NowList({ ilkIstasyonlar, ilkOzet }: { ilkIstasyonlar?: 
           })}
         </div>
 
-        {/* Filtreler — ikincil kontrolleri katla, üst temiz kalsın */}
-        <button
-          onClick={() => setFiltrelerAcik((v) => !v)}
-          className="chip mb-4 ml-2 align-middle"
-          data-on={filtrelerAcik ? "1" : "0"}
-          aria-expanded={filtrelerAcik}
-        >
-          ⚙ {t("home.filtreler")} {filtrelerAcik ? "▲" : "▼"}
-        </button>
-
+        {/* Favori filtresi + sıralama + Şairin Frekansı */}
+        <div className="mb-4 flex flex-wrap items-center gap-3 text-xs">
+          <button
+            onClick={() => {
+              // 🌍 beni şaşırt: rastgele bir dünya ülkesi + rastgele istasyonu çal
+              const uks = doluUlkeler().filter((k) => k !== "tr");
+              const k = uks[Math.floor(Math.random() * uks.length)];
+              const adaylar = stations.filter((s) => istasyonUlkesi(s.slug) === k);
+              if (adaylar.length === 0) return;
+              setUlke(k); setRegion("all"); setSairMode(false);
+              toggle(adaylar[Math.floor(Math.random() * adaylar.length)]);
+            }}
+            className="chip"
+            title={t("home.beniSasirtIpucu")}
+          >
+            {t("home.beniSasirt")}
+          </button>
+          <button onClick={() => setSairMode((v) => !v)} className="chip" data-on={sairMode ? "1" : "0"}>
+            {t("home.sairinFrekansi")}
+          </button>
+          <button onClick={() => setFavOnly((v) => !v)} className="chip" data-on={favOnly ? "1" : "0"}>
+            {favOnly ? `★ ${t("home.favoriler")}` : `☆ ${t("home.favoriler")}`}
+          </button>
+          <button onClick={() => setSort((s) => (s === "liste" ? "az" : s === "az" ? "tur" : "liste"))} className="chip">
+            {t("home.sira")}: {sort === "liste" ? t("home.siraOne") : sort === "az" ? "A-Z" : t("home.siraTur")}
+          </button>
+        </div>
         {/* Ülke bayrakları — her zaman açık (27 Eki); bayrağa dokun: liste + kadran o ülkeye ayarlanır */}
         <div className="no-scrollbar mb-4 flex items-center gap-2 overflow-x-auto whitespace-nowrap text-sm">
           {doluUlkeler().map((k) => {
@@ -1718,38 +1734,6 @@ export default function NowList({ ilkIstasyonlar, ilkOzet }: { ilkIstasyonlar?: 
             </Link>
           )}
         </div>
-
-        {filtrelerAcik && (
-        <>
-        {/* Favori filtresi + sıralama + Şairin Frekansı */}
-        <div className="mb-4 flex flex-wrap items-center gap-3 text-xs">
-          <button
-            onClick={() => {
-              // 🌍 beni şaşırt: rastgele bir dünya ülkesi + rastgele istasyonu çal
-              const uks = doluUlkeler().filter((k) => k !== "tr");
-              const k = uks[Math.floor(Math.random() * uks.length)];
-              const adaylar = stations.filter((s) => istasyonUlkesi(s.slug) === k);
-              if (adaylar.length === 0) return;
-              setUlke(k); setRegion("all"); setSairMode(false);
-              toggle(adaylar[Math.floor(Math.random() * adaylar.length)]);
-            }}
-            className="chip"
-            title={t("home.beniSasirtIpucu")}
-          >
-            🌍 {t("home.beniSasirt")}
-          </button>
-          <button onClick={() => setSairMode((v) => !v)} className="chip" data-on={sairMode ? "1" : "0"}>
-            ✍ {t("home.sairinFrekansi")}
-          </button>
-          <button onClick={() => setFavOnly((v) => !v)} className="chip" data-on={favOnly ? "1" : "0"}>
-            {favOnly ? `★ ${t("home.favoriler")}` : `☆ ${t("home.favoriler")}`}
-          </button>
-          <button onClick={() => setSort((s) => (s === "liste" ? "az" : s === "az" ? "tur" : "liste"))} className="chip">
-            {t("home.sira")}: {sort === "liste" ? t("home.siraOne") : sort === "az" ? "A-Z" : t("home.siraTur")}
-          </button>
-        </div>
-        </>
-        )}
 
         {/* Tür filtresi çipleri (sayılı) */}
         {genres.length > 0 && (

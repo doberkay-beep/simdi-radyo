@@ -213,7 +213,7 @@ export default function FrekansFali() {
           <span className="flex items-center gap-3">
             <ThemeToggle />
             <Link href="/" className="text-sm underline" style={{ color: "var(--muted)" }}>
-              ← şimdi
+              ← nowby
             </Link>
           </span>
         </header>
@@ -230,7 +230,7 @@ export default function FrekansFali() {
                 background: ruh?.id === r.id ? `color-mix(in srgb, ${r.renk} 14%, transparent)` : "transparent",
               }}
             >
-              <span className="mr-2" aria-hidden>{r.emoji}</span>
+              
               {r.ad}
             </button>
           ))}
@@ -264,7 +264,7 @@ export default function FrekansFali() {
                 {caliyor ? "⏸ durdur" : "▶ dinle"}
               </button>
               <button onClick={() => kartIndir(true)} className="press hap-marka">
-                {indi ? "kart indi ✓" : "kartını al 🔮"}
+                {indi ? "kart indi ✓" : "kartını al"}
               </button>
               <button onClick={() => falCek(ruh)} className="text-sm underline" style={{ color: "var(--muted)" }}>
                 yeniden çek

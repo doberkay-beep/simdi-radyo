@@ -56,7 +56,7 @@ export default async function Sayfa() {
       <p className="mono text-[11px] uppercase tracking-[0.22em]" style={{ color: "var(--muted)" }}>
         <Link href="/" className="nav-link">nowby.</Link> · arşivin uç değerleri
       </p>
-      <h1 className="brand mt-2 text-4xl font-bold leading-tight">RADYO REKORLARI</h1>
+      <h1 className="brand mt-2 text-4xl font-bold leading-tight">Radyo Rekorları</h1>
       {r?.arsiv && (
         <p className="epigraf mt-3 text-base">
           {Number(r.arsiv.toplam).toLocaleString("tr-TR")} kayıtlı çalma üzerinden;
@@ -67,7 +67,7 @@ export default async function Sayfa() {
       <div className="mt-8 grid gap-4">
         {r?.gunRekoru && (
           <Kart
-            etiket="⚡ Bir günün rekoru"
+            etiket="Bir günün rekoru"
             deger={`${r.gunRekoru.artist} — ${r.gunRekoru.title}`}
             alt={`${gunYaz(r.gunRekoru.gun)} günü Türkiye radyolarında ${r.gunRekoru.kez} kez çaldı — 24 saatin zirvesi.`}
             artist={r.gunRekoru.artist}
@@ -75,7 +75,7 @@ export default async function Sayfa() {
         )}
         {r?.geceKrali && (
           <Kart
-            etiket="🌙 Gecenin kralı (00:00–06:00)"
+            etiket="Gecenin kralı (00:00–06:00)"
             deger={`${r.geceKrali.artist} — ${r.geceKrali.title}`}
             alt={`Son 30 gecede ${r.geceKrali.kez} kez — uykusuzların ortak şarkısı.`}
             artist={r.geceKrali.artist}
@@ -83,7 +83,7 @@ export default async function Sayfa() {
         )}
         {r?.sabahSampiyonu && (
           <Kart
-            etiket="☀️ Sabahın şampiyonu (06:00–10:00)"
+            etiket="Sabahın şampiyonu (06:00–10:00)"
             deger={`${r.sabahSampiyonu.artist} — ${r.sabahSampiyonu.title}`}
             alt={`Son 30 sabahta ${r.sabahSampiyonu.kez} kez — Türkiye işe bununla gidiyor.`}
             artist={r.sabahSampiyonu.artist}
@@ -91,7 +91,7 @@ export default async function Sayfa() {
         )}
         {r?.genisYayilim && (
           <Kart
-            etiket="📡 En geniş yayılım"
+            etiket="En geniş yayılım"
             deger={`${r.genisYayilim.artist} — ${r.genisYayilim.title}`}
             alt={`Son 30 günde ${r.genisYayilim.istasyon} farklı istasyonda çaldı — bantta kaçışı yok.`}
             artist={r.genisYayilim.artist}
@@ -99,7 +99,7 @@ export default async function Sayfa() {
         )}
         {r?.sadikIliski && (
           <Kart
-            etiket="💘 En sadık ilişki"
+            etiket="En sadık ilişki"
             deger={`${r.sadikIliski.istasyon} ↔ ${r.sadikIliski.title}`}
             alt={`${r.sadikIliski.istasyon}, ${r.sadikIliski.artist} — ${r.sadikIliski.title}'i son 30 günde ${r.sadikIliski.kez} kez çaldı. Bu bir aşk.`}
             artist={r.sadikIliski.artist}

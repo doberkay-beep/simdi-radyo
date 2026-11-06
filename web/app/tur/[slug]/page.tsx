@@ -76,7 +76,7 @@ export default async function TurPage({ params }: { params: Promise<{ slug: stri
       <div className="mx-auto max-w-2xl px-5 pb-24 pt-10">
         <header className="mb-6 flex items-center justify-between">
           <Link href="/" className="text-sm underline" style={{ color: "var(--muted)" }}>
-            ← şimdi
+            ← nowby
           </Link>
           <span className="brand text-sm font-bold tracking-tight">nowby.</span>
         </header>

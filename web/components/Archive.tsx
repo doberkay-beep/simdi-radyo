@@ -239,7 +239,7 @@ export default function Archive() {
             {/* O anın kaseti — ânı metin+link olarak paylaş */}
             {status === "idle" && rows.length > 0 && (
               <button onClick={kasetPaylas} className="press hap-marka text-xs">
-                {kasetKopyalandi ? "kaset kopyalandı ✓" : "⏳ bu ânı paylaş"}
+                {kasetKopyalandi ? "kaset kopyalandı ✓" : "bu ânı paylaş"}
               </button>
             )}
           </div>

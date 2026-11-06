@@ -63,7 +63,7 @@ export default function UlkeCanli({ sluglar, baslik = "şu an bu ülkede çalanl
             style={{ borderColor: "var(--line)", background: "color-mix(in srgb, var(--fg) 3%, transparent)", maxWidth: 260 }}
           >
             <span className="block truncate text-[13px] font-semibold" suppressHydrationWarning>{s.parca}</span>
-            <span className="block truncate text-xs" style={{ color: s.accentColor || "var(--muted)" }}>{s.name}</span>
+            <span className="block truncate text-xs" style={{ color: "var(--muted)" }}>{s.name}</span>
           </Link>
         ))}
       </div>

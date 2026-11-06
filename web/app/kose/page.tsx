@@ -34,7 +34,7 @@ export default function Page() {
           <span className="flex items-center gap-3">
             <ThemeToggle />
             <Link href="/" className="text-sm underline" style={{ color: "var(--muted)" }}>
-              ← şimdi
+              ← nowby
             </Link>
           </span>
         </header>

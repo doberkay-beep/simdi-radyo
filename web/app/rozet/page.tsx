@@ -61,7 +61,7 @@ export default async function RozetPage() {
             <DilToggle />
             <ThemeToggle />
             <Link href="/" className="text-sm underline" style={{ color: "var(--muted)" }}>
-              ← şimdi
+              ← nowby
             </Link>
           </span>
         </header>

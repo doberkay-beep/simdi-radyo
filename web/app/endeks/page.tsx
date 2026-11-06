@@ -30,7 +30,7 @@ export default async function Sayfa() {
       <p className="mono text-[11px] uppercase tracking-[0.22em]" style={{ color: "var(--muted)" }}>
         <Link href="/" className="nav-link">nowby.</Link> · resmi aylık rapor
       </p>
-      <h1 className="brand mt-2 text-4xl font-bold leading-tight">TÜRKİYE RADYO ENDEKSİ</h1>
+      <h1 className="brand mt-2 text-4xl font-bold leading-tight">Türkiye Radyo Endeksi</h1>
       <p className="epigraf mt-3 text-base">
         Listeler niyet sayar; endeks gerçeği. Yüzlerce istasyonu 25 saniyede bir dinleyip
         her parça değişimini arşivliyoruz — bu sayfa o arşivin aylık karnesi.
@@ -70,14 +70,14 @@ export default async function Sayfa() {
       {/* Yöntem notu: 1 Ekim 2026'dan önce toplayıcı aralıklı çalışıyordu (GitHub Actions,
           ~68 dk gecikme) ve bazı istasyonlar yanlışlıkla kapalıydı; 30 Eyl'de sunucuya taşındı. */}
       <p className="mt-4 rounded-2xl border p-4 text-sm leading-relaxed" style={{ borderColor: "var(--line)", color: "var(--muted)" }}>
-        <strong style={{ color: "var(--fg)" }}>📏 Yöntem notu:</strong> 1 Ekim 2026&apos;dan itibaren sayım
+        <strong style={{ color: "var(--fg)" }}>Yöntem notu:</strong> 1 Ekim 2026&apos;dan itibaren sayım
         7/24 kesintisiz yapılıyor. Ağustos ve Eylül 2026 sayımları aralıklı örneklemedir; bu yüzden
         ay toplamları birbiriyle karşılaştırılamaz, sıralamalar karşılaştırılabilir.
       </p>
 
       <section className="mt-10 rounded-2xl border p-5" style={{ borderColor: "var(--line-hi)" }}>
         <h2 className="mono text-[11px] font-bold uppercase tracking-[0.2em]" style={{ color: "var(--glow-hi)" }}>
-          📂 Açık veri
+          Açık veri
         </h2>
         <p className="mt-2 text-sm leading-relaxed" style={{ color: "var(--muted)" }}>
           Her ayın ham verisi herkese açık JSON olarak sunulur:{" "}

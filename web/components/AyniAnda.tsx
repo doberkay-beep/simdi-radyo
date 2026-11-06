@@ -6,7 +6,7 @@ import AyniAndaAbone from "./AyniAndaAbone";
 const METIN = {
   tr: {
     ust: "dünyanın rastlantıları",
-    baslik: "AYNI ANDA",
+    baslik: "Aynı Anda",
     giris: "Radyolar birbirini duymaz. Kopenhag'daki bir yayıncı Santiago'dakini tanımaz. Ama bazen, farklı kıtalarda, aynı dakikalarda aynı şarkı çalar. Kimse anlaşmamıştır; bir liste de, bir algoritma da değil. O anlar burada kayıtlı.",
     kural: (n: number) => `kural: aynı şarkı · 5 dakika içinde · en az 3 ülke, 2 kıta · hitler ve aynı yayın ağı sayılmaz · son 30 günde ${n} an`,
     saatNotu: "Saatler her radyonun kendi ülkesinde.",
@@ -16,7 +16,7 @@ const METIN = {
   },
   en: {
     ust: "the world's coincidences",
-    baslik: "SAME TIME",
+    baslik: "Same Time",
     giris: "Radio stations can't hear each other. A broadcaster in Copenhagen doesn't know the one in Santiago. But sometimes, on different continents, the same song plays within the same few minutes. No one agreed on it; not a chart, not an algorithm. Those moments are recorded here.",
     kural: (n: number) => `rule: same song · within 5 minutes · at least 3 countries, 2 continents · hits and shared networks don't count · ${n} in the last 30 days`,
     saatNotu: "Times are local to each station's country.",
@@ -34,7 +34,7 @@ export default function AyniAnda({ anlar, dil }: { anlar: DunyaAni[]; dil: "tr" 
       <p className="mono text-[11px] uppercase tracking-[0.22em]" style={{ color: "var(--muted)" }}>
         <Link href={dil === "tr" ? "/" : "/en"} className="nav-link">nowby.</Link> · {m.ust}
       </p>
-      <h1 className="brand mt-2 text-4xl font-bold leading-tight">🌍 {m.baslik}</h1>
+      <h1 className="brand mt-2 text-4xl font-bold leading-tight">{m.baslik}</h1>
       <p className="epigraf mt-3 text-base">{m.giris}</p>
       <p className="mono mt-3 text-[11px] uppercase tracking-[0.16em]" style={{ color: "var(--muted)" }}>{m.kural(ay)}</p>
       <AyniAndaAbone dil={dil} />

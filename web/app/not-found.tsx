@@ -17,7 +17,7 @@ export default function NotFound() {
           className="mt-8 inline-flex rounded-full px-6 py-3 text-sm font-semibold"
           style={{ background: "var(--fg)", color: "var(--bg)" }}
         >
-          ← şimdi
+          ← nowby
         </Link>
       </div>
     </div>

@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { parcaAdi } from "@/lib/cop";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { getSupabase } from "@/lib/supabase";
@@ -71,7 +72,7 @@ export default async function Sayfa({ params }: { params: Promise<{ slug: string
           <p className="mono text-[11px] uppercase tracking-[0.2em]" style={{ color: "var(--muted)" }}>
             şarkı sayacı · canlı arşivden
           </p>
-          <h1 className="brand mt-1 text-3xl font-bold tracking-tight">{o.ad}</h1>
+          <h1 className="brand mt-1 text-3xl font-bold tracking-tight">{parcaAdi(o.ad)}</h1>
           <p className="mt-1 text-lg">
             <Link href={`/sanatci/${aslug}`} className="underline underline-offset-2" style={{ color: "var(--muted)" }}>
               {o.sanatci}

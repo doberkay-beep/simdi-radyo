@@ -35,7 +35,7 @@ export default async function Hakkinda() {
             <DilToggle />
             <ThemeToggle />
             <Link href="/" className="text-sm underline" style={{ color: "var(--muted)" }}>
-              {en ? "← now" : "← şimdi"}
+              {en ? "← nowby" : "← nowby"}
             </Link>
           </span>
         </header>

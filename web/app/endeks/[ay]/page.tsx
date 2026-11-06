@@ -42,7 +42,7 @@ export default async function Sayfa({ params }: { params: Promise<{ ay: string }
       <p className="mono text-[11px] uppercase tracking-[0.22em]" style={{ color: "var(--muted)" }}>
         <Link href="/endeks" className="nav-link">TÜRKİYE RADYO ENDEKSİ</Link>
       </p>
-      <h1 className="brand mt-2 text-4xl font-bold leading-tight">{ayAdi(ay).toLocaleUpperCase("tr")}</h1>
+      <h1 className="brand mt-2 text-4xl font-bold leading-tight">{ayAdi(ay)}</h1>
       {o.devam && (
         <p className="epigraf mt-2 text-sm">sayım sürüyor — ay kapanınca bu sayfa resmileşir.</p>
       )}

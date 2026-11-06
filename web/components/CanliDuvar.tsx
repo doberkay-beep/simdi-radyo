@@ -1,6 +1,7 @@
 "use client";
 
 import { memo, useEffect, useMemo, useState } from "react";
+import { parcaAdi } from "@/lib/cop";
 
 // Açılış duvarı: radyoda gerçekten çalan şarkılar dev yazıyla, sırayla belirir.
 // Hiçbir satır uydurma değil; hepsi o an yayında olanın kendisi.
@@ -46,7 +47,7 @@ export const CanliDuvar = memo(function CanliDuvar({
   const calan = playing ? stations.find((s) => s.slug === playing && s.nowPlaying?.title) : null;
   const s = calan ?? (adaylar.length ? adaylar[sira % adaylar.length] : null);
   const artist = s?.nowPlaying?.artist?.trim() || "";
-  const title = s?.nowPlaying?.title?.trim() || "";
+  const title = parcaAdi(s?.nowPlaying?.title);
   const uzun = artist.length + title.length > 30;
 
   return (

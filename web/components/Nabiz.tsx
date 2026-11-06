@@ -61,7 +61,7 @@ export default function Nabiz() {
     if (!moods || !moods.length) return null;
     const DUYGULAR: { ad: { tr: string; en: string }; renk: string; desen: RegExp }[] = [
       { ad: { tr: "hüzünlü", en: "melancholic" }, renk: "#b06a3c", desen: /arabesk|slow|nostalji|damar/ },
-      { ad: { tr: "enerjik", en: "energetic" }, renk: "#e0475f", desen: /pop|dance|electronic|hit|rap/ },
+      { ad: { tr: "enerjik", en: "energetic" }, renk: "var(--glow)", desen: /pop|dance|electronic|hit|rap/ },
       { ad: { tr: "sakin", en: "calm" }, renk: "#5b8a72", desen: /klasik|caz|jazz|chill|lounge|akustik/ },
       { ad: { tr: "isyanda", en: "rebellious" }, renk: "#8a4fbf", desen: /rock|alternative|metal/ },
       { ad: { tr: "memlekette", en: "homesick" }, renk: "#c9a24b", desen: /türkü|turku|folk|halk/ },

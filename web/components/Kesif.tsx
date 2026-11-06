@@ -193,7 +193,7 @@ export default function Kesif() {
                       <div className="min-w-0 flex-1">
                         <Tile s={s} />
                       </div>
-                      <span className="shrink-0 text-sm font-semibold tabular-nums" style={{ color: "#e0475f" }}>
+                      <span className="shrink-0 text-sm font-semibold tabular-nums" style={{ color: "var(--glow)" }}>
                         ♥ {kalpler[s.slug]}
                       </span>
                     </div>

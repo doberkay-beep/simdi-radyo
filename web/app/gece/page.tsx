@@ -3,7 +3,7 @@ import Link from "next/link";
 import { getSupabase } from "@/lib/supabase";
 import { sarkiSlug } from "@/lib/seoslug";
 
-// 🌙 GECE 3 LİSTESİ — Uykusuzların Listesi: son 7 gecenin 02:00–04:59'u.
+// Gece 3 Listesi — Uykusuzların Listesi: son 7 gecenin 02:00–04:59'u.
 export const revalidate = 1800;
 
 export const metadata: Metadata = {
@@ -27,7 +27,7 @@ export default async function Sayfa() {
       <p className="mono text-[11px] uppercase tracking-[0.22em]" style={{ color: "var(--muted)" }}>
         <Link href="/" className="nav-link">nowby.</Link> · 02:00 – 05:00 · son 7 gece
       </p>
-      <h1 className="brand mt-2 text-4xl font-bold leading-tight">🌙 GECE 3 LİSTESİ</h1>
+      <h1 className="brand mt-2 text-4xl font-bold leading-tight">Gece 3 Listesi</h1>
       <p className="epigraf mt-3 text-base">
         Şehir uyurken radyolar susmaz. Bu liste, gece üçte uyanık olanların ortak şarkılarıdır:
         taksiciler, nöbetçiler, uykusuzlar ve radyoyu açık unutanlar.

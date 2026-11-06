@@ -13,7 +13,7 @@ export const SOZLUK: Record<string, { tr: string; en: string }> = {
   "nav.gelistirici": { tr: "hakkında", en: "about" },
   "nav.fal": { tr: "fal", en: "fortune" },
   "nav.liste": { tr: "liste", en: "chart" },
-  "nav.simdi": { tr: "← şimdi", en: "← now" },
+  "nav.simdi": { tr: "← nowby", en: "← nowby" },
   "nav.canli": { tr: "canlı", en: "live" },
   "nav.tumRadyolar": { tr: "← tüm radyolar", en: "← all stations" },
   // ana ekran

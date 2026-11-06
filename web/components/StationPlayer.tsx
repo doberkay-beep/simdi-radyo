@@ -145,7 +145,7 @@ export default function StationPlayer({
         onClick={kalpAt}
         aria-label={t("player.kalpGonder")}
         className="chip ml-auto"
-        style={kalp ? { color: "#e0475f" } : undefined}
+        style={kalp ? { color: "var(--glow)" } : undefined}
       >
         ♥ {kalp ?? ""}
       </button>

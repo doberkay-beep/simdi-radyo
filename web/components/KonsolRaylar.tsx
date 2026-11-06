@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo } from "react";
+import { memo, useMemo } from "react";
 import { useDil } from "@/lib/i18n";
 import { CanliSayac, CanliListe, type AnaOzet } from "./CanliVitrin";
 
@@ -27,7 +27,29 @@ function Baslik({ children }: { children: React.ReactNode }) {
   );
 }
 
-export default function KonsolRaylar({
+function Satir({ s, playing, onTune }: { s: Stn; playing: string | null; onTune: (slug: string) => void }) {
+  const c = s.accentColor || "var(--glow)";
+  const oynuyor = playing === s.slug;
+  return (
+    <button
+      onClick={() => onTune(s.slug)}
+      className="press flex w-full items-center gap-2.5 rounded-lg px-2 py-1.5 text-left"
+      style={{ background: oynuyor ? "color-mix(in srgb, var(--fg) 6%, transparent)" : "transparent" }}
+    >
+      <span className="h-2 w-2 shrink-0 rounded-full" style={{ background: c, boxShadow: oynuyor ? `0 0 8px ${c}` : "none" }} />
+      <span className="min-w-0 flex-1">
+        <span className="dial block truncate text-[13px] uppercase tracking-[0.02em]">{s.name}</span>
+        {s.nowPlaying?.title ? (
+          <span className="block truncate text-[11px]" style={{ color: "var(--muted)" }}>
+            {[s.nowPlaying.artist, s.nowPlaying.title].filter(Boolean).join(" — ")}
+          </span>
+        ) : null}
+      </span>
+    </button>
+  );
+}
+
+export default memo(function KonsolRaylar({
   stations,
   anaOzet,
   canliArtis,
@@ -55,28 +77,6 @@ export default function KonsolRaylar({
     [favSlugs, adMap]
   );
 
-  function Satir({ s }: { s: Stn }) {
-    const c = s.accentColor || "var(--glow)";
-    const oynuyor = playing === s.slug;
-    return (
-      <button
-        onClick={() => onTune(s.slug)}
-        className="press flex w-full items-center gap-2.5 rounded-lg px-2 py-1.5 text-left"
-        style={{ background: oynuyor ? "color-mix(in srgb, var(--fg) 6%, transparent)" : "transparent" }}
-      >
-        <span className="h-2 w-2 shrink-0 rounded-full" style={{ background: c, boxShadow: oynuyor ? `0 0 8px ${c}` : "none" }} />
-        <span className="min-w-0 flex-1">
-          <span className="dial block truncate text-[13px] uppercase tracking-[0.02em]">{s.name}</span>
-          {s.nowPlaying?.title ? (
-            <span className="block truncate text-[11px]" style={{ color: "var(--muted)" }}>
-              {[s.nowPlaying.artist, s.nowPlaying.title].filter(Boolean).join(" — ")}
-            </span>
-          ) : null}
-        </span>
-      </button>
-    );
-  }
-
   return (
     <>
       {/* SOL RAY — ayın canlı endeks sayacı */}
@@ -91,11 +91,11 @@ export default function KonsolRaylar({
           <section className="surf p-4">
             <Baslik>{en ? "your favorites ★" : "favorilerin ★"}</Baslik>
             <div className="flex flex-col gap-0.5">
-              {favStations.slice(0, 8).map((s) => <Satir key={s.slug} s={s} />)}
+              {favStations.slice(0, 8).map((s) => <Satir key={s.slug} s={s} playing={playing} onTune={onTune} />)}
             </div>
           </section>
         )}
       </aside>
     </>
   );
-}
+});

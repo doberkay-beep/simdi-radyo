@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useMemo, useRef, useState } from "react";
+import { memo, useEffect, useMemo, useRef, useState } from "react";
 import { useDil } from "@/lib/i18n";
 
 /* KADRAN — analog radyo ayar şeridi.
@@ -16,8 +16,47 @@ type KadranIstasyon = {
 };
 
 const ARALIK = 30; // çentikler arası px
+const BOS_CENTIK = "color-mix(in srgb, var(--fg) 34%, transparent)";
 
-export default function Kadran({
+// Tek çentik. memo: bant kayarken yalnız ibrenin geçtiği iki çentik yeniden çizilir.
+const Centik = memo(function Centik({
+  slug,
+  name,
+  renk,
+  i,
+  secili,
+  merkezde,
+  onTune,
+}: {
+  slug: string;
+  name: string;
+  renk: string | null;
+  i: number;
+  secili: boolean;
+  merkezde: boolean;
+  onTune: (slug: string) => void;
+}) {
+  return (
+    <button
+      onClick={() => onTune(slug)}
+      className="group absolute bottom-0 flex h-full w-[2px] items-end"
+      style={{ left: i * ARALIK }}
+      aria-label={`${name} — çal`}
+      title={name}
+    >
+      <span
+        className="mx-auto block w-[2px] rounded-t transition-all duration-200"
+        style={{
+          height: secili ? 44 : merkezde ? 36 : i % 5 === 0 ? 26 : 16,
+          background: secili || merkezde ? (renk || "var(--fg)") : BOS_CENTIK,
+          boxShadow: secili ? `0 0 10px ${renk || "var(--fg)"}` : undefined,
+        }}
+      />
+    </button>
+  );
+});
+
+export default memo(function Kadran({
   stations,
   playing,
   onTune,
@@ -156,23 +195,16 @@ export default function Kadran({
               const seçili = s.slug === playing;
               const merkezde = i === merkez;
               return (
-                <button
+                <Centik
                   key={s.slug}
-                  onClick={() => onTune(s.slug)}
-                  className="group absolute bottom-0 flex h-full w-[2px] items-end"
-                  style={{ left: i * ARALIK }}
-                  aria-label={`${s.name} — çal`}
-                  title={s.name}
-                >
-                  <span
-                    className="mx-auto block w-[2px] rounded-t transition-all duration-200"
-                    style={{
-                      height: seçili ? 44 : merkezde ? 36 : i % 5 === 0 ? 26 : 16,
-                      background: seçili || merkezde ? (s.accent_color || "var(--fg)") : "color-mix(in srgb, var(--fg) 34%, transparent)",
-                      boxShadow: seçili ? `0 0 10px ${s.accent_color || "var(--fg)"}` : undefined,
-                    }}
-                  />
-                </button>
+                  slug={s.slug}
+                  name={s.name}
+                  renk={s.accent_color}
+                  i={i}
+                  secili={seçili}
+                  merkezde={merkezde}
+                  onTune={onTune}
+                />
               );
             })}
             {/* Frekans rakamları — her 10 çentikte bir */}
@@ -207,4 +239,4 @@ export default function Kadran({
       </div>
     </div>
   );
-}
+});

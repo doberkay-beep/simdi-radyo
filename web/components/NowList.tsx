@@ -1,6 +1,6 @@
 "use client";
 
-import { Fragment, useEffect, useMemo, useRef, useState } from "react";
+import { Fragment, memo, useCallback, useEffect, useMemo, useRef, useState } from "react";
 import Link from "next/link";
 import ThemeToggle from "./ThemeToggle";
 import ToneToggle from "./ToneToggle";
@@ -8,7 +8,7 @@ import KonsolRaylar from "./KonsolRaylar";
 import { useAnaOzet, CanliSayac, CanliListe, type AnaOzet } from "./CanliVitrin";
 import { TurkiyeSuAn, KesifKarti, RuhKartlari, KESIF_ARALIK, KESIF_SAYI } from "./AnaSayfaZenginlik";
 import { kaynagiCalistir, hlsYik } from "@/lib/cal";
-import { dinleyiciKatil, simdiDinle, type CanliKanal } from "@/lib/canli";
+import { dinleyiciKatil, simdiDinle, type CanliKanal, type SimdiDegisim } from "@/lib/canli";
 import { temizMetin } from "@/lib/cop";
 import {
   selamla,
@@ -205,6 +205,167 @@ const KISAYOLLAR: { href: string; tr: string; en: string }[] = [
   { href: "/endeks", tr: "ENDEKS", en: "INDEX" },
   { href: "/arsiv", tr: "ARŞİV", en: "ARCHIVE" },
 ];
+
+// Tek istasyon satırı. memo: şarkısı, durumu ya da kalbi değişmeyen satır yeniden
+// çizilmez; liste 450+ satır olduğu için sayfanın akıcılığı buna bağlı.
+const IstasyonSatir = memo(function IstasyonSatir({
+  s,
+  sira,
+  isPlaying,
+  np,
+  taze,
+  isFav,
+  kalp,
+  showHeader,
+  durum,
+  sairEtiket,
+  onToggle,
+  onKalp,
+  onFav,
+}: {
+  s: Station;
+  sira: number;
+  isPlaying: boolean;
+  np: NowPlaying;
+  taze: boolean;
+  isFav: boolean;
+  kalp: number;
+  showHeader: boolean;
+  durum: string;
+  sairEtiket: string;
+  onToggle: (s: Station) => void;
+  onKalp: (slug: string) => void;
+  onFav: (slug: string) => void;
+}) {
+  const c = s.accentColor || DEFAULT_ACCENT;
+  const artist = np?.artist?.trim() || null;
+  const title = np?.title?.trim() || null;
+  const sameArtistTitle = artist && title && artist === title;
+  return (
+    <li className="istasyon-li">
+      {showHeader && (
+        <div
+          className="mb-1 mt-4 px-1 text-xs uppercase tracking-wide"
+          style={{ color: "var(--muted)" }}
+        >
+          {s.genre || "diğer"}
+        </div>
+      )}
+      <div
+        className={`station-card${sira < 18 ? " row-in" : ""} group flex w-full items-center px-2${taze ? " np-taze" : ""}`}
+        style={{
+          background: isPlaying
+            ? `color-mix(in srgb, ${c} 15%, transparent)`
+            : undefined,
+          borderColor: isPlaying ? `color-mix(in srgb, ${c} 45%, var(--line))` : undefined,
+          boxShadow: isPlaying ? `inset 3px 0 0 ${c}` : undefined,
+          animationDelay: sira < 18 ? `${sira * 22}ms` : undefined,
+          ["--taze-renk" as string]: c,
+        }}
+      >
+        <button
+          onClick={() => onToggle(s)}
+          className="press flex min-w-0 flex-1 items-center gap-4 py-3 pl-1.5 pr-2 text-left"
+        >
+          {/* İstasyonun renginden türeyen kapak karesi */}
+          <span
+            className="relative flex h-11 w-11 shrink-0 items-center justify-center overflow-hidden rounded-xl"
+            style={{
+              background: `linear-gradient(135deg, ${c}, color-mix(in srgb, ${c} 50%, #000))`,
+              ["--eq-color" as string]: readableOn(c),
+            }}
+          >
+            {isPlaying ? (
+              <span className="eq flex items-end gap-[2px]" aria-hidden>
+                <span /><span /><span /><span />
+              </span>
+            ) : (
+              <>
+                <span
+                  className="text-[15px] font-bold"
+                  style={{ color: readableOn(c), opacity: 0.92 }}
+                >
+                  {s.name.trim().charAt(0).toLocaleUpperCase("tr")}
+                </span>
+                {(s.logoUrl || faviconOf(s.homepage)) && (
+                  <img
+                    src={s.logoUrl || faviconOf(s.homepage)!}
+                    alt=""
+                    loading="lazy"
+                    className={s.logoUrl ? "absolute inset-0 h-full w-full rounded-[inherit] bg-white object-contain p-0.5" : "absolute inset-0 m-auto h-7 w-7 rounded-md object-contain"}
+                    onError={(e) => {
+                      e.currentTarget.style.display = "none";
+                    }}
+                  />
+                )}
+              </>
+            )}
+          </span>
+
+          {/* Parça ön planda, istasyon ikincil */}
+          <span className="min-w-0 flex-1">
+            {np ? (
+              sameArtistTitle ? (
+                <span className="block truncate text-[17px] font-semibold">{title}</span>
+              ) : (
+                <span className="block truncate text-[17px]">
+                  <span className="font-semibold">{artist ?? title}</span>
+                  {artist && title && (
+                    <span style={{ color: "var(--muted)" }}> — {title}</span>
+                  )}
+                </span>
+              )
+            ) : (
+              <span
+                className="block truncate text-[17px] italic"
+                style={{ color: "var(--muted)" }}
+              >
+                {tagline(s.genre, s.slug)}
+              </span>
+            )}
+            <span className="mono mt-1 block truncate text-[11px] tracking-[0.02em]" style={{ color: "var(--muted)" }}>
+              {SAIR_SET.has(s.slug) ? <span title={sairEtiket}>✍ </span> : ""}
+              {s.band === "int" ? `${bayrakEmoji(istasyonUlkesi(s.slug))} ` : ""}
+              <span style={{ color: c }}>{s.name}</span>
+              {s.frequency ? ` · ${s.frequency}` : ""}
+              {s.city ? ` · ${s.city}` : ""}
+              {durum}
+            </span>
+          </span>
+        </button>
+
+        {/* İstasyon sayfası (SEO/paylaş) — fareyle belirir */}
+        <Link
+          href={`/radyo/${s.slug}`}
+          aria-label={`${s.name} sayfası`}
+          className="shrink-0 px-1 py-4 text-sm leading-none opacity-0 transition-opacity group-hover:opacity-100"
+          style={{ color: "var(--muted)" }}
+        >
+          ↗
+        </Link>
+        {/* Anonim kalp — çalmayı tetiklemez */}
+        <button
+          onClick={() => onKalp(s.slug)}
+          aria-label="kalp gönder"
+          title="bu istasyona kalp gönder"
+          className="press shrink-0 px-1.5 py-4 text-sm leading-none"
+          style={{ color: kalp ? "#e0475f" : "var(--muted)" }}
+        >
+          ♥{kalp ? <span className="ml-0.5 text-xs tabular-nums">{kalp}</span> : ""}
+        </button>
+        {/* Favori yıldızı — ayrı düğme (çalmayı tetiklemez) */}
+        <button
+          onClick={() => onFav(s.slug)}
+          aria-label={isFav ? "favoriden çıkar" : "favorilere ekle"}
+          className="press shrink-0 px-2 py-4 text-lg leading-none transition-colors"
+          style={{ color: isFav ? "#ffcf4d" : "var(--muted)" }}
+        >
+          {isFav ? "★" : "☆"}
+        </button>
+      </div>
+    </li>
+  );
+});
 
 export default function NowList({ ilkIstasyonlar, ilkOzet }: { ilkIstasyonlar?: Station[]; ilkOzet?: AnaOzet | null } = {}) {
   const { t, dil } = useDil();
@@ -498,7 +659,21 @@ export default function NowList({ ilkIstasyonlar, ilkOzet }: { ilkIstasyonlar?: 
     try {
       const res = await fetch("/api/now", { cache: "no-store" });
       const data = await res.json();
-      setStations(data.stations ?? []);
+      const gelen: Station[] = data.stations ?? [];
+      setStations((prev) => {
+        const eski = new Map(prev.map((s) => [s.id, s]));
+        let ayni = prev.length === gelen.length;
+        const yeni = gelen.map((s, i) => {
+          const o = eski.get(s.id);
+          if (o && JSON.stringify(o) === JSON.stringify(s)) {
+            if (prev[i] !== o) ayni = false;
+            return o;
+          }
+          ayni = false;
+          return s;
+        });
+        return ayni ? prev : yeni;
+      });
       setStatus("idle");
     } catch {
       setStatus((s) => (s === "loading" ? "error" : "idle"));
@@ -518,43 +693,72 @@ export default function NowList({ ilkIstasyonlar, ilkOzet }: { ilkIstasyonlar?: 
     // yedek (60 sn), bağlantı yoksa eski sıklıkta (15 sn) çalışır.
     let bagli = false;
     const dataTimer = setInterval(() => {
+      if (document.hidden) return; // arka plandaki sekme yorulmasın
       if (!bagli || Date.now() % 60000 < 15000) load();
     }, 15000);
+    // Şarkı değişimleri saniyede birkaç kez düşebilir (450+ radyo). Her biri için
+    // sayfayı baştan çizmek yerine toplanır, 2,5 sn'de bir tek seferde işlenir.
+    let bekleyen: SimdiDegisim[] = [];
+    const bosalt = () => {
+      if (!bekleyen.length) return;
+      const gelen = bekleyen;
+      bekleyen = [];
+      const sonDeger = new Map<number, { artist: string | null; title: string | null }>();
+      for (const s of stationsRef.current) {
+        sonDeger.set(s.id, { artist: s.nowPlaying?.artist ?? null, title: s.nowPlaying?.title ?? null });
+      }
+      const bandi = new Map(stationsRef.current.map((s) => [s.id, s.band]));
+      let artis = 0;
+      const sonOlay = new Map<number, SimdiDegisim>();
+      for (const d of gelen) {
+        const title = temizMetin(d.title);
+        const artist = temizMetin(d.artist);
+        const once = sonDeger.get(d.station_id);
+        if (bandi.get(d.station_id) === "tr" && title && (once?.title !== title || once?.artist !== artist)) artis += 1;
+        sonDeger.set(d.station_id, { artist, title });
+        sonOlay.set(d.station_id, d);
+      }
+      if (artis) {
+        artisRef.current += artis;
+        setCanliArtis(artisRef.current);
+      }
+      const kimler = Array.from(sonOlay.keys());
+      setTazeler((t) => {
+        const y = { ...t };
+        for (const id of kimler) y[id] = Date.now();
+        return y;
+      });
+      setTimeout(() => {
+        setTazeler((t) => {
+          const y = { ...t };
+          for (const id of kimler) delete y[id];
+          return y;
+        });
+      }, 4200);
+      setStations((prev) =>
+        prev.map((s) => {
+          const d = sonOlay.get(s.id);
+          return d
+            ? {
+                ...s,
+                nowPlaying: {
+                  artist: temizMetin(d.artist),
+                  title: temizMetin(d.title),
+                  rawTitle: temizMetin(d.raw_title),
+                  updatedAt: d.updated_at,
+                },
+              }
+            : s;
+        }),
+      );
+    };
+    const bosaltTimer = setInterval(() => {
+      // Arka plandaki sekme çizim yapmasın; yine de biriken liste sınırsız büyümesin.
+      if (!document.hidden || bekleyen.length > 500) bosalt();
+    }, 2500);
     const ayril = simdiDinle(
       (d) => {
-        // "Şarkı değişti" vurgusu: karta kısa parlaması için işaretle.
-        setTazeler((t) => ({ ...t, [d.station_id]: Date.now() }));
-        setTimeout(() => {
-          setTazeler((t) => {
-            const y = { ...t };
-            delete y[d.station_id];
-            return y;
-          });
-        }, 4200);
-        setStations((prev) =>
-          prev.map((s) => {
-            if (
-              s.id === d.station_id &&
-              s.band === "tr" &&
-              temizMetin(d.title) &&
-              (s.nowPlaying?.title !== temizMetin(d.title) || s.nowPlaying?.artist !== temizMetin(d.artist))
-            ) {
-              artisRef.current += 1;
-              setTimeout(() => setCanliArtis(artisRef.current), 0);
-            }
-            return s.id === d.station_id
-              ? {
-                  ...s,
-                  nowPlaying: {
-                    artist: temizMetin(d.artist),
-                    title: temizMetin(d.title),
-                    rawTitle: temizMetin(d.raw_title),
-                    updatedAt: d.updated_at,
-                  },
-                }
-              : s;
-          }),
-        );
+        bekleyen.push(d);
       },
       (b) => {
         bagli = b;
@@ -563,6 +767,7 @@ export default function NowList({ ilkIstasyonlar, ilkOzet }: { ilkIstasyonlar?: 
     const clockTimer = setInterval(() => setNow(Date.now()), 20000);
     return () => {
       clearInterval(dataTimer);
+      clearInterval(bosaltTimer);
       clearInterval(clockTimer);
       ayril();
     };
@@ -649,6 +854,18 @@ export default function NowList({ ilkIstasyonlar, ilkOzet }: { ilkIstasyonlar?: 
   const grouped = sort === "tur" && !genre && !favOnly && !query.trim() && !sairMode;
 
   // Ülkeye göre sayılar (segment etiketleri için).
+  const kadranListesi = useMemo(
+    () =>
+      shown.map((s) => ({
+        slug: s.slug,
+        name: s.name,
+        accent_color: s.accentColor,
+        nowText: s.nowPlaying?.title
+          ? [s.nowPlaying.artist, s.nowPlaying.title].filter(Boolean).join(" — ")
+          : null,
+      })),
+    [shown],
+  );
   const trCount = useMemo(() => stations.filter((s) => s.band !== "int").length, [stations]);
   const intCount = useMemo(() => stations.filter((s) => s.band === "int").length, [stations]);
 
@@ -1073,8 +1290,26 @@ export default function NowList({ ilkIstasyonlar, ilkOzet }: { ilkIstasyonlar?: 
   // Kadran sırasında bir sonraki/önceki istasyona zapla (kilit ekranı ve jest).
   const toggleRef = useRef(toggle);
   toggleRef.current = toggle;
+  const kalpAtRef = useRef(kalpAt);
+  kalpAtRef.current = kalpAt;
+  const toggleFavRef = useRef(toggleFav);
+  toggleFavRef.current = toggleFav;
+  const satirCal = useCallback((s: Station) => toggleRef.current(s), []);
+  const satirKalp = useCallback((slug: string) => kalpAtRef.current(slug), []);
+  const satirFav = useCallback((slug: string) => toggleFavRef.current(slug), []);
+  const shownRef = useRef<Station[]>([]);
+  const konsolAyar = useCallback((slug: string) => {
+    const st = stationsRef.current.find((x) => x.slug === slug);
+    if (st) toggleRef.current(st);
+  }, []);
+  const kadranAyar = useCallback((slug: string) => {
+    const st = shownRef.current.find((x) => x.slug === slug);
+    if (st) toggleRef.current(st);
+  }, []);
   const stationsRef = useRef(stations);
   stationsRef.current = stations;
+  const favListesi = useMemo(() => Array.from(favs), [favs]);
+  const sairEtiket = t("home.sairinFrekansi");
   function zapla(delta: number) {
     const liste = stationsRef.current;
     if (!liste.length) return;
@@ -1166,6 +1401,7 @@ export default function NowList({ ilkIstasyonlar, ilkOzet }: { ilkIstasyonlar?: 
   }, []);
 
   // Alt çubuktaki parça metni (canlı bilgi öncelikli).
+  shownRef.current = shown;
   const barNp = current ? liveNP ?? current.nowPlaying : null;
   const barQuery = trackQuery(barNp);
 
@@ -1185,12 +1421,9 @@ export default function NowList({ ilkIstasyonlar, ilkOzet }: { ilkIstasyonlar?: 
         stations={stations}
         anaOzet={anaOzet}
         canliArtis={canliArtis}
-        favSlugs={Array.from(favs)}
+        favSlugs={favListesi}
         playing={playing}
-        onTune={(slug) => {
-          const st = stations.find((x) => x.slug === slug);
-          if (st) toggle(st);
-        }}
+        onTune={konsolAyar}
       />
 
       {/* Geniş ekranda yan boşluklara çok soluk dev kelime işareti (ambient). */}
@@ -1584,19 +1817,9 @@ export default function NowList({ ilkIstasyonlar, ilkOzet }: { ilkIstasyonlar?: 
         {/* KADRAN — analog ayar bandı (yalnız geniş ekranda; mobilde oynatıcı yeter) */}
         <div className="hidden pt-3 sm:block">
         <Kadran
-          stations={shown.map((s) => ({
-            slug: s.slug,
-            name: s.name,
-            accent_color: s.accentColor,
-            nowText: s.nowPlaying?.title
-              ? [s.nowPlaying.artist, s.nowPlaying.title].filter(Boolean).join(" — ")
-              : null,
-          }))}
+          stations={kadranListesi}
           playing={playing}
-          onTune={(slug) => {
-            const st = shown.find((x) => x.slug === slug);
-            if (st) toggle(st);
-          }}
+          onTune={kadranAyar}
         />
         </div>
 
@@ -1802,11 +2025,17 @@ export default function NowList({ ilkIstasyonlar, ilkOzet }: { ilkIstasyonlar?: 
           {shown.map((s, i) => {
             const isPlaying = playing === s.slug;
             const np = isPlaying && liveNP ? liveNP : s.nowPlaying;
-            const c = s.accentColor || DEFAULT_ACCENT;
-            const artist = np?.artist?.trim() || null;
-            const title = np?.title?.trim() || null;
-            const sameArtistTitle = artist && title && artist === title;
-            const isFav = favs.has(s.slug);
+            const rel = np?.updatedAt && now > 0 ? since(np.updatedAt, now) : ""; // sunucu HTML'inde göreli zaman yok
+            const durum =
+              isPlaying && phase === "connecting"
+                ? ` · ${t("player.baglaniyor")}`
+                : np
+                  ? isPlaying && liveNP
+                    ? ` · ${t("radyo.canli")}`
+                    : rel
+                      ? ` · ${rel}`
+                      : ""
+                  : "";
             const showHeader = grouped && shown[i - 1]?.genre !== s.genre;
 
             // Keşif kartı: filtre/arama yokken her KESIF_ARALIK radyoda bir
@@ -1814,137 +2043,21 @@ export default function NowList({ ilkIstasyonlar, ilkOzet }: { ilkIstasyonlar?: 
 
             return (
               <Fragment key={s.slug}>
-              <li>
-                {showHeader && (
-                  <div
-                    className="mb-1 mt-4 px-1 text-xs uppercase tracking-wide"
-                    style={{ color: "var(--muted)" }}
-                  >
-                    {s.genre || "diğer"}
-                  </div>
-                )}
-                <div
-                  className={`station-card row-in group flex w-full items-center px-2${tazeler[s.id] && !isPlaying ? " np-taze" : ""}`}
-                  style={{
-                    background: isPlaying
-                      ? `color-mix(in srgb, ${c} 15%, transparent)`
-                      : undefined,
-                    borderColor: isPlaying ? `color-mix(in srgb, ${c} 45%, var(--line))` : undefined,
-                    boxShadow: isPlaying ? `inset 3px 0 0 ${c}` : undefined,
-                    animationDelay: `${Math.min(i, 18) * 22}ms`,
-                    ["--taze-renk" as string]: c,
-                  }}
-                >
-                  <button
-                    onClick={() => toggle(s)}
-                    className="press flex min-w-0 flex-1 items-center gap-4 py-3 pl-1.5 pr-2 text-left"
-                  >
-                    {/* İstasyonun renginden türeyen kapak karesi */}
-                    <span
-                      className="relative flex h-11 w-11 shrink-0 items-center justify-center overflow-hidden rounded-xl"
-                      style={{
-                        background: `linear-gradient(135deg, ${c}, color-mix(in srgb, ${c} 50%, #000))`,
-                        ["--eq-color" as string]: readableOn(c),
-                      }}
-                    >
-                      {isPlaying ? (
-                        <span className="eq flex items-end gap-[2px]" aria-hidden>
-                          <span /><span /><span /><span />
-                        </span>
-                      ) : (
-                        <>
-                          <span
-                            className="text-[15px] font-bold"
-                            style={{ color: readableOn(c), opacity: 0.92 }}
-                          >
-                            {s.name.trim().charAt(0).toLocaleUpperCase("tr")}
-                          </span>
-                          {(s.logoUrl || faviconOf(s.homepage)) && (
-                            <img
-                              src={s.logoUrl || faviconOf(s.homepage)!}
-                              alt=""
-                              loading="lazy"
-                              className={s.logoUrl ? "absolute inset-0 h-full w-full rounded-[inherit] bg-white object-contain p-0.5" : "absolute inset-0 m-auto h-7 w-7 rounded-md object-contain"}
-                              onError={(e) => {
-                                e.currentTarget.style.display = "none";
-                              }}
-                            />
-                          )}
-                        </>
-                      )}
-                    </span>
-
-                    {/* Parça ön planda, istasyon ikincil */}
-                    <span className="min-w-0 flex-1">
-                      {np ? (
-                        sameArtistTitle ? (
-                          <span className="block truncate text-[17px] font-semibold">{title}</span>
-                        ) : (
-                          <span className="block truncate text-[17px]">
-                            <span className="font-semibold">{artist ?? title}</span>
-                            {artist && title && (
-                              <span style={{ color: "var(--muted)" }}> — {title}</span>
-                            )}
-                          </span>
-                        )
-                      ) : (
-                        <span
-                          className="block truncate text-[17px] italic"
-                          style={{ color: "var(--muted)" }}
-                        >
-                          {tagline(s.genre, s.slug)}
-                        </span>
-                      )}
-                      <span className="mono mt-1 block truncate text-[11px] tracking-[0.02em]" style={{ color: "var(--muted)" }}>
-                        {SAIR_SET.has(s.slug) ? <span title={t("home.sairinFrekansi")}>✍ </span> : ""}
-                        {s.band === "int" ? `${bayrakEmoji(istasyonUlkesi(s.slug))} ` : ""}
-                        <span style={{ color: c }}>{s.name}</span>
-                        {s.frequency ? ` · ${s.frequency}` : ""}
-                        {s.city ? ` · ${s.city}` : ""}
-                        {isPlaying && phase === "connecting"
-                          ? ` · ${t("player.baglaniyor")}`
-                          : np
-                            ? isPlaying && liveNP
-                              ? ` · ${t("radyo.canli")}`
-                              : (() => {
-                                  const rel = np.updatedAt && now > 0 ? since(np.updatedAt, now) : ""; // sunucu HTML'inde göreli zaman yok (hydration)
-                                  return rel ? ` · ${rel}` : "";
-                                })()
-                            : ""}
-                      </span>
-                    </span>
-                  </button>
-
-                  {/* İstasyon sayfası (SEO/paylaş) — fareyle belirir */}
-                  <Link
-                    href={`/radyo/${s.slug}`}
-                    aria-label={`${s.name} sayfası`}
-                    className="shrink-0 px-1 py-4 text-sm leading-none opacity-0 transition-opacity group-hover:opacity-100"
-                    style={{ color: "var(--muted)" }}
-                  >
-                    ↗
-                  </Link>
-                  {/* Anonim kalp — çalmayı tetiklemez */}
-                  <button
-                    onClick={() => kalpAt(s.slug)}
-                    aria-label="kalp gönder"
-                    title="bu istasyona kalp gönder"
-                    className="press shrink-0 px-1.5 py-4 text-sm leading-none"
-                    style={{ color: kalpler[s.slug] ? "#e0475f" : "var(--muted)" }}
-                  >
-                    ♥{kalpler[s.slug] ? <span className="ml-0.5 text-xs tabular-nums">{kalpler[s.slug]}</span> : ""}
-                  </button>
-                  {/* Favori yıldızı — ayrı düğme (çalmayı tetiklemez) */}
-                  <button
-                    onClick={() => toggleFav(s.slug)}
-                    aria-label={isFav ? "favoriden çıkar" : "favorilere ekle"}
-                    className="press shrink-0 px-2 py-4 text-lg leading-none transition-colors"
-                    style={{ color: isFav ? "#ffcf4d" : "var(--muted)" }}
-                  >
-                    {isFav ? "★" : "☆"}
-                  </button>
-                </div>
-              </li>
+              <IstasyonSatir
+                s={s}
+                sira={Math.min(i, 18)}
+                isPlaying={isPlaying}
+                np={np}
+                taze={Boolean(tazeler[s.id]) && !isPlaying}
+                isFav={favs.has(s.slug)}
+                kalp={kalpler[s.slug] || 0}
+                showHeader={showHeader}
+                durum={durum}
+                sairEtiket={sairEtiket}
+                onToggle={satirCal}
+                onKalp={satirKalp}
+                onFav={satirFav}
+              />
               {kesifVar && (
                 <KesifKarti
                   sira={(i + 1) / KESIF_ARALIK - 1}

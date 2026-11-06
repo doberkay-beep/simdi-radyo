@@ -173,7 +173,7 @@ body {
     radial-gradient(120% 62% at 50% 120%, color-mix(in srgb, var(--glow) 30%, transparent), transparent 64%),
     radial-gradient(140% 120% at 50% 45%, color-mix(in srgb, var(--glow) 9%, transparent), transparent 72%),
     var(--bg);
-  transition: --accent 800ms ease;
+  isolation: isolate;
 }
 
 /* Açık temada aynı kor daha nazik olsun (parlak renkler beyaz üstünde
@@ -189,12 +189,18 @@ body {
 
 /* Hiçbir şey çalmazken zemin ölü kalmasın: renk yumuşakça gezinsin (aurora).
    Yumuşak, doygunluğu düşük tonlar — sakin bir lav lambası gibi. */
+/* Renk, sayfadaki her öğeye miras kalan --accent değiştirilerek değil, ayrı bir
+   katmanın saydamlığıyla gezinir: --accent'i canlandırmak binlerce öğenin stilini
+   her karede yeniden hesaplatıyordu. Saydamlık ana iş parçacığını yormaz. */
 @keyframes aurora {
-  0% { --accent: var(--glow); }
-  50% { --accent: var(--glow-hi); }
-  100% { --accent: var(--glow); }
+  0%, 100% { opacity: 0; }
+  50% { opacity: 1; }
 }
-.spread.aurora { animation: aurora 26s ease-in-out infinite; }
+.spread.aurora::before {
+  content: ""; position: fixed; inset: 0; z-index: -1; pointer-events: none;
+  background: radial-gradient(125% 70% at 50% -18%, color-mix(in srgb, var(--glow-hi) 24%, transparent), transparent 66%);
+  animation: aurora 26s ease-in-out infinite;
+}
 
 /* Çalan parçanın yanındaki ekolayzır çubukları. */
 @keyframes eq {
@@ -559,17 +565,30 @@ body {
   from { opacity: 0; transform: translateY(6px); }
   to { opacity: 1; transform: translateY(0); }
 }
-.row-in { animation: rowIn 360ms ease both; }
+.row-in { animation: rowIn 360ms ease backwards; }
+
+/* Ekran dışındaki satırların stili, yerleşimi ve boyası atlanır; bulunduğunda çizilir. */
+.istasyon-li {
+  content-visibility: auto;
+  contain-intrinsic-size: auto 78px;
+  overflow-clip-margin: 48px;
+}
+.istasyon-li:hover { position: relative; z-index: 1; }
 
 /* "Şarkı değişti" ânı — Realtime'dan yeni parça düşen kart, istasyonun
    renginde bir kez yumuşakça parlar (--taze-renk kart üstünde tanımlı). */
+/* Parlama ayrı katmanda ve yalnız saydamlıkla: satır her karede yeniden boyanmaz. */
 @keyframes npTaze {
-  0% { background: color-mix(in srgb, var(--taze-renk) 26%, var(--panel));
-       border-color: color-mix(in srgb, var(--taze-renk) 65%, var(--line-hi)); }
-  100% { background: color-mix(in srgb, var(--glow) 7%, var(--panel));
-         border-color: var(--line-hi); }
+  from { opacity: 1; }
+  to { opacity: 0; }
 }
-.np-taze { animation: npTaze 4.2s ease-out both; }
+.np-taze { position: relative; }
+.np-taze::after {
+  content: ""; position: absolute; inset: -1px; border-radius: inherit; pointer-events: none;
+  background: color-mix(in srgb, var(--taze-renk) 22%, transparent);
+  box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--taze-renk) 65%, transparent);
+  animation: npTaze 4.2s ease-out both;
+}
 
 /* Klavye odak halkası (erişilebilirlik). */
 :focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; border-radius: 4px; }
@@ -728,10 +747,12 @@ body {
   .skeleton,
   .nowbar-float,
   .row-in,
-  .np-taze,
+  .np-taze::after,
   .breathe,
   .fade-in,
-  .spread.aurora { animation: none !important; }
+  .spread.aurora::before { animation: none !important; }
+  .np-taze::after { opacity: 0; }
+  .spread.aurora::before { opacity: 0; }
   .press:active { transform: none; }
   .spread,
   .station-row,
@@ -790,6 +811,10 @@ body {
   background: color-mix(in srgb, var(--fg) 3%, transparent);
   -webkit-backdrop-filter: blur(14px); backdrop-filter: blur(14px);
   box-shadow: inset 0 1px 0 color-mix(in srgb, #fff 6%, transparent);
+}
+/* Yan raylarda arkada akan içerik yok: bulanıklık maliyet, görüntüye katkısı yok. */
+:root:not([data-tone]) .konsol-ray .surf {
+  -webkit-backdrop-filter: none; backdrop-filter: none;
 }
 :root:not([data-tone]) .station-card {
   border-color: var(--line);

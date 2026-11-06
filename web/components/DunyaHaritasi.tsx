@@ -73,7 +73,7 @@ export default function DunyaHaritasi({ dil = "tr" }: { dil?: "tr" | "en" }) {
               if (start + uz <= W) parcalar.push([start, uz]);
               else { parcalar.push([start, W - start]); parcalar.push([0, uz - (W - start)]); }
               return parcalar.map(([x, w], i) => (
-                <rect key={i} x={x} y={0} width={w} height={H} fill="#000" opacity={0.42} />
+                <rect key={i} x={x} y={0} width={w} height={H} fill="var(--line)" opacity={0.5} />
               ));
             })()}
           </g>
@@ -93,8 +93,8 @@ export default function DunyaHaritasi({ dil = "tr" }: { dil?: "tr" | "en" }) {
               onKeyDown={(e) => { if (e.key === "Enter") router.push(dil === "en" ? `/en/country/${ulkeSlugEn(k)}` : `/ulke/${ulkeSlug(k)}`); }}
             >
               <title>{`${bayrakEmoji(k)} ${dil === "en" ? ULKELER[k].en : ULKELER[k].tr} · ${n}`}</title>
-              <circle cx={x} cy={y} r={r + 6} fill="#3ddc84" opacity={0.09} />
-              <circle cx={x} cy={y} r={r} fill="#3ddc84" opacity={0.9}>
+              <circle cx={x} cy={y} r={r + 6} fill="#e5382c" opacity={0.09} />
+              <circle cx={x} cy={y} r={r} fill="#e5382c" opacity={0.9}>
                 <animate attributeName="opacity" values="0.9;0.5;0.9" dur="3s" repeatCount="indefinite" begin={`${(x / W) * 2}s`} />
               </circle>
               {/* dokunma alanı */}

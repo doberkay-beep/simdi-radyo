@@ -230,10 +230,10 @@ export default function GununFrekansi() {
                     className="press rounded-xl border px-4 py-3.5 text-left text-[15px] font-semibold"
                     style={{
                       borderColor:
-                        (bitti && dogruMu) ? "#3ddc84" : denendi ? "#e0475f" : "var(--line)",
+                        (bitti && dogruMu) ? "#e5382c" : denendi ? "#e0475f" : "var(--line)",
                       background:
                         bitti && dogruMu
-                          ? "color-mix(in srgb, #3ddc84 15%, transparent)"
+                          ? "color-mix(in srgb, #e5382c 15%, transparent)"
                           : denendi
                             ? "color-mix(in srgb, #e0475f 12%, transparent)"
                             : "transparent",

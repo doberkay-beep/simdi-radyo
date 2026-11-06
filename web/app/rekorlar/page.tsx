@@ -56,7 +56,7 @@ export default async function Sayfa() {
       <p className="mono text-[11px] uppercase tracking-[0.22em]" style={{ color: "var(--muted)" }}>
         <Link href="/" className="nav-link">nowby.</Link> · arşivin uç değerleri
       </p>
-      <h1 className="brand mt-2 text-4xl font-bold leading-tight">🏆 RADYO REKORLARI</h1>
+      <h1 className="brand mt-2 text-4xl font-bold leading-tight">RADYO REKORLARI</h1>
       {r?.arsiv && (
         <p className="epigraf mt-3 text-base">
           {Number(r.arsiv.toplam).toLocaleString("tr-TR")} kayıtlı çalma üzerinden;

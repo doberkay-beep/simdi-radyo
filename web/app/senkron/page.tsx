@@ -39,7 +39,7 @@ export default async function Sayfa() {
           className="senkron-bant press mt-8 block rounded-2xl border p-5"
         >
           <span className="mono block text-[11px] font-bold uppercase tracking-[0.2em]" style={{ color: "var(--glow-hi)" }}>
-            🏆 rekor · {rekor.sayi} radyo aynı anda
+            rekor · {rekor.sayi} radyo aynı anda
           </span>
           <span className="mt-1 block text-lg font-bold">{rekor.artist} — {rekor.title}</span>
           <span className="mt-0.5 block text-sm" style={{ color: "var(--muted)" }}>

@@ -80,7 +80,7 @@ export default async function Sayfa({ params }: { params: Promise<{ slug: string
         </header>
 
         {o.suan && o.suan.length > 0 && (
-          <div className="mb-6 rounded-2xl border p-5" style={{ borderColor: "var(--accent, #3ddc84)" }}>
+          <div className="mb-6 rounded-2xl border p-5" style={{ borderColor: "var(--accent, #e5382c)" }}>
             <p className="text-sm font-semibold">
               🔴 ŞU AN ÇALIYOR:{" "}
               {o.suan.map((s, i) => (

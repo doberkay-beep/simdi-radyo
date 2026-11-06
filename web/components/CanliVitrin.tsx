@@ -176,7 +176,7 @@ export function CanliListe({ veri, kisa = false }: { veri: AnaOzet | null; kisa?
               <span className="min-w-0 flex-1 truncate">
                 <strong>{s.artist}</strong> <span style={{ color: "var(--muted)" }}>— {s.title}</span>
               </span>
-              <span className="mono w-6 shrink-0 text-right text-[10px]" style={{ color: d > 0 ? "#3ddc84" : d < 0 ? "#e5382c" : "var(--faint)" }}>
+              <span className="mono w-6 shrink-0 text-right text-[10px]" style={{ color: d > 0 ? "#e5382c" : d < 0 ? "#e5382c" : "var(--faint)" }}>
                 {d === 99 ? (en ? "new" : "yeni") : d > 0 ? `▲${d}` : d < 0 ? `▼${-d}` : "·"}
               </span>
             </li>

@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { temizMetin } from "@/lib/cop";
 import Link from "next/link";
 import ThemeToggle from "./ThemeToggle";
 import DilToggle from "./DilToggle";
@@ -109,7 +110,7 @@ export default function Nabiz() {
     };
   }, []);
 
-  const top = data?.simultaneous?.[0];
+  const top = data?.simultaneous?.find((s) => temizMetin(s.title) && (!s.artist || temizMetin(s.artist)));
   const maxSong = data?.todaySongs?.[0]?.adet ?? 1;
   const maxArtist = data?.todayArtists?.[0]?.adet ?? 1;
 
@@ -143,12 +144,12 @@ export default function Nabiz() {
         {duygu && (
           <div
             className="surf fade-in mb-6 p-6 text-center"
-            style={{ borderColor: "var(--line)", background: `color-mix(in srgb, ${duygu.renk} 12%, transparent)` }}
+            style={{ borderColor: "var(--line)", background: "transparent" }}
           >
             <div className="text-xs uppercase tracking-[0.3em]" style={{ color: "var(--muted)" }}>
               {dil === "en" ? "TÜRKİYE, RIGHT NOW" : "TÜRKİYE ŞU AN"}
             </div>
-            <div className="mt-2 text-5xl font-bold tracking-tight" style={{ color: duygu.renk }}>
+            <div className="mt-2 text-5xl font-bold tracking-tight" style={{ color: "var(--fg)" }}>
               %{duygu.yuzde} {duygu.ad}
             </div>
             <p className="epigraf mt-3 text-sm">
@@ -163,7 +164,7 @@ export default function Nabiz() {
         {top && (
           <div
             className="surf fade-in mb-8 p-5"
-            style={{ borderColor: "var(--line)", background: "color-mix(in srgb, var(--accent) 10%, transparent)" }}
+            style={{ borderColor: "var(--line)", background: "transparent" }}
           >
             <div className="text-xs uppercase tracking-wide" style={{ color: "var(--muted)" }}>
               {dil === "en"
@@ -183,7 +184,7 @@ export default function Nabiz() {
               {t("nabiz.ruhHali")}
             </h2>
             {/* Tek çubukta oranlı şerit */}
-            <div className="flex h-3 w-full overflow-hidden rounded-full" style={{ background: "var(--line)" }}>
+            <div className="tur-bar flex h-3 w-full overflow-hidden rounded-full" style={{ background: "var(--line)" }}>
               {data.moods.map((m) => (
                 <div
                   key={m.tur}
@@ -297,7 +298,7 @@ export default function Nabiz() {
               {t("nabiz.eszamanli")}
             </h2>
             <ul className="flex flex-col gap-3">
-              {data.simultaneous.map((g, i) => (
+              {data.simultaneous.filter((s) => temizMetin(s.title) && (!s.artist || temizMetin(s.artist))).map((g, i) => (
                 <li key={i} className="surf p-4">
                   <div className="flex items-baseline justify-between gap-3">
                     <span className="min-w-0 truncate text-[17px] font-semibold">

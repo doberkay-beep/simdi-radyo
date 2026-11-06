@@ -51,7 +51,7 @@ export default function UlkeCanli({ sluglar, baslik = "şu an bu ülkede çalanl
   return (
     <section className="mt-6">
       <h2 className="mb-2 flex items-center gap-2 text-xs uppercase tracking-wide" style={{ color: "var(--muted)" }}>
-        <span className="live-dot inline-block h-2 w-2 rounded-full" style={{ background: "#3ddc84" }} />
+        <span className="live-dot inline-block h-2 w-2 rounded-full" style={{ background: "#e5382c" }} />
         {baslik}
       </h2>
       <div className="no-scrollbar flex gap-2 overflow-x-auto pb-1">

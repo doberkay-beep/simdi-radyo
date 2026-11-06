@@ -5,10 +5,10 @@ import { sarkiSlug } from "@/lib/seoslug";
 // Haftalık rapor gövdesi — /rapor ve /rapor/[hafta] ortak.
 function Degisim({ sira, onceki, karsilastir }: { sira: number; onceki: number | null | undefined; karsilastir: boolean }) {
   if (!karsilastir) return <span className="mono w-9 shrink-0 text-right text-[10px]" style={{ color: "var(--faint)" }}>·</span>;
-  if (onceki == null) return <span className="mono w-9 shrink-0 text-right text-[10px] font-bold" style={{ color: "#3ddc84" }}>YENİ</span>;
+  if (onceki == null) return <span className="mono w-9 shrink-0 text-right text-[10px] font-bold" style={{ color: "#e5382c" }}>YENİ</span>;
   const d = onceki - sira;
   return (
-    <span className="mono w-9 shrink-0 text-right text-[11px]" style={{ color: d > 0 ? "#3ddc84" : d < 0 ? "#e5382c" : "var(--muted)" }}>
+    <span className="mono w-9 shrink-0 text-right text-[11px]" style={{ color: d > 0 ? "#e5382c" : d < 0 ? "#e5382c" : "var(--muted)" }}>
       {d > 0 ? `▲${d}` : d < 0 ? `▼${-d}` : "="}
     </span>
   );
@@ -81,7 +81,7 @@ export default function RaporGovde({ hafta, r }: { hafta: string; r: Rapor | nul
               <section className="rounded-2xl border p-4" style={{ borderColor: "var(--line)" }}>
                 {r.yukselen.length > 0 && (
                   <>
-                    <h2 className="mono mb-2 text-[10px] uppercase tracking-[0.2em]" style={{ color: "#3ddc84" }}>▲ en çok yükselenler</h2>
+                    <h2 className="mono mb-2 text-[10px] uppercase tracking-[0.2em]" style={{ color: "#e5382c" }}>▲ en çok yükselenler</h2>
                     {r.yukselen.map((s) => (
                       <p key={`${s.artist}-${s.title}`} className="truncate text-[13px]"><strong>{adDuzelt(s.artist)}</strong> — {s.title} <span style={{ color: "var(--muted)" }}>{s.onceki}→{s.kez}</span></p>
                     ))}

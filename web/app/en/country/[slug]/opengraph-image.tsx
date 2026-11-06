@@ -33,7 +33,7 @@ export default async function OG({ params }: { params: Promise<{ slug: string }>
         </div>
         <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", fontSize: 28, color: "#8f8f96" }}>
           <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
-            <div style={{ display: "flex", width: 14, height: 14, borderRadius: 7, background: "#3ddc84" }} />
+            <div style={{ display: "flex", width: 14, height: 14, borderRadius: 7, background: "#e5382c" }} />
             {adet > 0 ? `${adet} stations · live · now playing` : "live · now playing"}
           </div>
           <div style={{ display: "flex", color: "#fafafa" }}>listen →</div>

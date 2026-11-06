@@ -200,7 +200,7 @@ export default function CanliHarita({ embed = false }: { embed?: boolean }) {
             )}
             <span>{noktalar.length} istasyon · {ulkeSayisi} ülke</span>
             <span className="flex items-center gap-1.5">
-              <span className="live-dot inline-block h-2 w-2 rounded-full" style={{ background: "#3ddc84" }} />
+              <span className="live-dot inline-block h-2 w-2 rounded-full" style={{ background: "#e5382c" }} />
               canlı
             </span>
             <button onClick={tamEkran} className="press rounded-full border px-3 py-1" style={{ borderColor: "#43201a", color: "#e9b9a4" }}>

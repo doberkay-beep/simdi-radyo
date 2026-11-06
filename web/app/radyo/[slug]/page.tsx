@@ -329,7 +329,7 @@ export default async function StationPage({ params }: { params: Promise<{ slug: 
               <span
                 className="dial tabular-nums"
                 style={{
-                  color: accent, fontWeight: 500, lineHeight: 0.82,
+                  color: "var(--fg)", fontWeight: 500, lineHeight: 0.82,
                   fontSize: s.frequency ? "clamp(44px, 11vw, 84px)" : "clamp(28px, 7vw, 52px)",
                   textShadow: `0 0 34px color-mix(in srgb, ${accent} 45%, transparent)`,
                 }}
@@ -340,7 +340,7 @@ export default async function StationPage({ params }: { params: Promise<{ slug: 
                 ) : null}
               </span>
               {s.frequency ? (
-                <span className="dial min-w-0 truncate pb-1 text-right text-lg uppercase tracking-[0.03em]" style={{ color: accent, fontWeight: 500 }}>
+                <span className="dial min-w-0 truncate pb-1 text-right text-lg uppercase tracking-[0.03em]" style={{ color: "var(--fg)", fontWeight: 500 }}>
                   {s.name}
                 </span>
               ) : null}
@@ -359,8 +359,8 @@ export default async function StationPage({ params }: { params: Promise<{ slug: 
                   className="block w-px"
                   style={{
                     height: i === 14 ? 22 : i % 4 === 0 ? 12 : 7,
-                    background: i === 14 ? accent : "color-mix(in srgb, var(--fg) 26%, transparent)",
-                    boxShadow: i === 14 ? `0 0 10px ${accent}` : undefined,
+                    background: i === 14 ? "var(--glow)" : "color-mix(in srgb, var(--fg) 26%, transparent)",
+                    boxShadow: undefined,
                   }}
                 />
               ))}
@@ -368,7 +368,7 @@ export default async function StationPage({ params }: { params: Promise<{ slug: 
           </div>
           {/* Şimdi çalan — VU + canlı parça */}
           <div className="flex items-center gap-3 px-5 pb-4 pt-2 sm:px-6">
-            <span className="eq shrink-0" aria-hidden style={{ ["--eq-color" as string]: accent }}>
+            <span className="eq shrink-0" aria-hidden style={{ ["--eq-color" as string]: "var(--fg)" }}>
               <span></span><span></span><span></span><span></span>
             </span>
             <div className="min-w-0 flex-1">
@@ -386,16 +386,16 @@ export default async function StationPage({ params }: { params: Promise<{ slug: 
           <Link
             href={`/tur/${turSlug(s.genre)}`}
             className="mb-2 inline-block text-sm underline"
-            style={{ color: accent }}
+            style={{ color: "var(--fg)" }}
           >
             {dil === "en" ? `all ${turAdi(dil, s.genre)} stations →` : `tüm ${s.genre} radyoları →`}
           </Link>
         )}
 
-        <StationPlayer slug={slug} name={s.name} accent={accent} />
+        <StationPlayer slug={slug} name={s.name} accent="#e5382c" />
 
         {/* Defter — birinci sınıf: oynatıcının hemen altında, göz önünde */}
-        <Notlar slug={slug} accent={accent} />
+        <Notlar slug={slug} accent="#e5382c" />
 
         {/* 📻 İstasyon rozeti — radyonun haftalık karnesi (radyolar kendi hesaplarında paylaşsın) */}
         {karne && karne.kez7 > 0 && (

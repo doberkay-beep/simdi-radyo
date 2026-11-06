@@ -224,3 +224,10 @@ h1, h2, .manset-kart { font-family: var(--font-baslik), Georgia, serif; }
 .nowbar-float, .nowbar-float * { --pa: var(--fg) !important; --accent: var(--fg) !important; }
 .nowbar-float input[type="range"] { accent-color: var(--fg) !important; }
 .nowbar-float .eq { --eq-color: var(--fg) !important; }
+
+
+/* İkinci tur: veri sayfaları da tek dil */
+[style*="color-mix(in srgb, var(--glow)"] { background: transparent !important; }
+[style*="var(--glow-hi)"] { color: var(--muted) !important; }
+.tur-bar { filter: grayscale(1) contrast(1.2); }
+.tur-bar + div span[style*="background"] { filter: grayscale(1); }

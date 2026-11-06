@@ -192,11 +192,11 @@ export async function generateMetadata({
   params: Promise<{ slug: string }>;
 }): Promise<Metadata> {
   const { slug } = await params;
-  const s = await getStation(slug);
+  const s = await getStationC(slug);
   const dil = await dilSunucu();
   const en = dil === "en";
   if (!s) return { title: en ? "Station not found — nowby." : "İstasyon bulunamadı — nowby." };
-  const np = s.meta_gizli ? null : await getNowPlaying(slug);
+  const np = s.meta_gizli ? null : await getNowPlayingC(slug);
   const track = trackText(np);
   const bits = [s.frequency, s.city].filter(Boolean).join(" · ");
   const desc = en
@@ -224,6 +224,8 @@ export async function generateMetadata({
 
 // Sayfa dil çerezi okuduğu için dinamik (her ziyarette çalışır). Ağır sorgular
 // bu yüzden veri katmanında önbelleklenir (7 Eki 2026 Disk IO kesintisi).
+const getStationC = unstable_cache(getStation, ["radyo-istasyon"], { revalidate: 600 });
+const getNowPlayingC = unstable_cache(getNowPlaying, ["radyo-calan"], { revalidate: 30 });
 const getSimilarC = unstable_cache(getSimilar, ["radyo-benzer"], { revalidate: 21600 });
 const getTopArtistsC = unstable_cache(getTopArtists, ["radyo-sanatci"], { revalidate: 3600 });
 const getRecentPlaysC = unstable_cache(getRecentPlays, ["radyo-son"], { revalidate: 300 });
@@ -231,11 +233,11 @@ const getKarneC = unstable_cache(getKarne, ["radyo-karne"], { revalidate: 3600 }
 
 export default async function StationPage({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params;
-  const s = await getStation(slug);
+  const s = await getStationC(slug);
   if (!s) notFound();
   // meta_gizli: radyo şu an çalan / geçmişin gösterilmesini istemedi (Vanilla Radio koşulu, 28 Eki).
   const gizli = s.meta_gizli === true;
-  const np = gizli ? null : await getNowPlaying(slug);
+  const np = gizli ? null : await getNowPlayingC(slug);
   const track = trackText(np);
   const accent = s.accent_color || DEFAULT_ACCENT;
   const [similar, topArtists, recent, karne] = await Promise.all([

@@ -237,7 +237,7 @@ export default function CanliHarita({ embed = false }: { embed?: boolean }) {
 
         {/* İstasyon ışıkları — dokun, BURADA çalsın */}
         {noktalar.map((n) => {
-          const renk = n.accentColor || "#ff9b76";
+          const renk = "#e5382c";
           const canliMi = !!(n.nowPlaying && (n.nowPlaying.artist || n.nowPlaying.title));
           const taze = !!tazeler[n.id];
           const buCaliyor = calan?.slug === n.slug;

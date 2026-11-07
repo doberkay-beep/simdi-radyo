@@ -1,5 +1,6 @@
 "use client";
 
+import { gercekParca } from "@/lib/cop";
 import Link from "next/link";
 import { useEffect, useRef, useState } from "react";
 import { getSupabase } from "@/lib/supabase";
@@ -101,7 +102,7 @@ export function CanliSayac({ veri, artis, kisa = false }: { veri: AnaOzet | null
   const hedef = taban.current ? taban.current.toplam + Math.max(0, artis - taban.current.artis) : 0;
   const sayi = useAkanSayi(hedef);
   if (!veri?.ay_toplam) return null;
-  const ilk = (veri.ay_ilk5 ?? []).slice(0, kisa ? 3 : 5);
+  const ilk = (veri.ay_ilk5 ?? []).filter(gercekParca).slice(0, kisa ? 3 : 5);
 
   return (
     <section lang={dil} className="surf p-4">

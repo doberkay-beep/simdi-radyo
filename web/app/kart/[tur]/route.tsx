@@ -1,3 +1,4 @@
+import { gercekParca } from "@/lib/cop";
 import { ImageResponse } from "next/og";
 import { getSupabase } from "@/lib/supabase";
 import { BOYUT, boyutAl, RENK, kes, fontlar, KART_ONBELLEK, zemin, STORY_DOLGU } from "@/lib/kart-ortak";
@@ -50,7 +51,7 @@ async function govde(tur: Tur, og: boolean, ay: string | null) {
       <div style={{ display: "flex", flexDirection: "column", flex: 1, justifyContent: "center" }}>
         <Sinyal olcek={og ? 1.4 : 2.4} />
         <div style={{ display: "flex", fontSize: 30, letterSpacing: 0, color: RENK.sicak, marginTop: og ? 24 : 60 }}>Yeni hesap</div>
-        <div style={{ display: "flex", fontFamily: "Baslik", fontSize: og ? 84 : 124, letterSpacing: -3, marginTop: 10 }}>@necaliyor.co</div>
+        <div style={{ display: "flex", fontFamily: "Baslik", fontSize: og ? 84 : 124, letterSpacing: -3, marginTop: 10 }}>@made.by.berkay</div>
         <div style={{ display: "flex", fontFamily: "Siir", fontSize: og ? 32 : 46, color: RENK.soluk, marginTop: og ? 14 : 28, lineHeight: 1.3 }}>
           Türk radyolarında şu an ne çalıyor? Biz sayıyoruz.
         </div>
@@ -83,7 +84,7 @@ async function govde(tur: Tur, og: boolean, ay: string | null) {
             </div>
           ))}
         </div>
-        {o.liste.slice(0, 5).map((x, i) => (
+        {o.liste.filter(gercekParca).slice(0, 5).map((x, i) => (
           <div key={i} style={{ display: "flex", alignItems: "baseline", marginTop: 34 }}>
             <div style={{ display: "flex", fontFamily: "Baslik", fontSize: 52, color: i < 3 ? RENK.sicak : RENK.soluk, width: 80 }}>{i + 1}</div>
             <div style={{ display: "flex", flexDirection: "column", flex: 1 }}>
@@ -182,7 +183,7 @@ async function govde(tur: Tur, og: boolean, ay: string | null) {
 
 const ADRES: Record<Tur, string> = {
   tanisma: "nowby.co", nasil: "nowby.co", rekorlar: "nowby.co/rekorlar", gece: "nowby.co/gece",
-  duyuru: "instagram.com/necaliyor.co", endeks: "nowby.co/endeks",
+  duyuru: "instagram.com/made.by.berkay", endeks: "nowby.co/endeks",
 };
 
 export async function GET(req: Request, ctx: { params: Promise<{ tur: string }> }) {

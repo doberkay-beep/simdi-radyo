@@ -1,3 +1,4 @@
+import { ozetSuz } from "@/lib/cop";
 import { getSupabase } from "@/lib/supabase";
 import { json } from "@/lib/json";
 import { endeksAylari, type EndeksOzet } from "@/lib/endeks";
@@ -12,7 +13,7 @@ export async function GET() {
     aylar.map(async (ay) => {
       try {
         const { data } = await getSupabase().rpc("endeks_ozet", { p_ay: ay });
-        return (data as EndeksOzet | null) ?? null;
+        return data ? ozetSuz(data as EndeksOzet) : null;
       } catch {
         return null;
       }

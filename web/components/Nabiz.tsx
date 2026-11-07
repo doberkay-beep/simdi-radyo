@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { temizMetin } from "@/lib/cop";
+import { gercekParca, temizMetin } from "@/lib/cop";
 import Link from "next/link";
 import ThemeToggle from "./ThemeToggle";
 import DilToggle from "./DilToggle";
@@ -222,7 +222,7 @@ export default function Nabiz() {
               {t("nabiz.yukselen")}
             </h2>
             <ul className="flex flex-col gap-2">
-              {data.trend.map((it, i) => (
+              {data.trend.filter(gercekParca).map((it, i) => (
                 <li key={i} className="flex items-center gap-3">
                   <span className="text-sm" style={{ color: "var(--accent)" }}>
                     ↑
@@ -314,7 +314,7 @@ export default function Nabiz() {
                         key={s.slug}
                         href={`/radyo/${s.slug}`}
                         className="rounded-full border px-2.5 py-0.5 text-xs"
-                        style={{ borderColor: "var(--line)", color: s.accentColor || DEFAULT_ACCENT }}
+                        style={{ borderColor: "var(--line)", color: "var(--muted)" }}
                       >
                         {s.name}
                       </Link>
@@ -333,7 +333,7 @@ export default function Nabiz() {
               {t("nabiz.enCok")}
             </h2>
             <ol className="flex flex-col gap-2">
-              {data.todaySongs.map((s, i) => {
+              {data.todaySongs.filter(gercekParca).map((s, i) => {
                 const q = ara(`${s.artist ?? ""} ${s.title}`.trim());
                 return (
                   <li key={i} className="flex items-center gap-3">

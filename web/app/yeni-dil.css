@@ -313,3 +313,8 @@ main h1, h1.brand, h1.dial { font-weight: 400 !important; letter-spacing: -.02em
 .rozet-dugmeler button:first-child { border-bottom-color: var(--glow); }
 .rozet-dugmeler button:hover, .rozet-dugmeler a:hover { color: var(--glow); }
 .rozet-dugmeler p { margin: 0; font-style: italic; font-size: 15px; color: var(--muted); }
+
+/* Yukarı çık: köşeli, sade */
+.yukari-cik { border-radius: 0 !important; background: var(--bg) !important; color: var(--fg) !important; border: 1px solid var(--line-hi) !important; box-shadow: none !important; -webkit-backdrop-filter: none !important; backdrop-filter: none !important; }
+.yukari-cik:hover { color: var(--glow) !important; border-color: var(--glow) !important; }
+

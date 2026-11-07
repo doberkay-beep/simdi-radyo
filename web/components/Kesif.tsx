@@ -28,10 +28,10 @@ function readableOn(hex: string): string {
 
 // Ruh hali → hangi türler. Kullanıcının dilediği "havaya göre" keşif.
 const RUHLAR: { key: string; ad: string; alt: string; turler: string[]; accent: string }[] = [
-  { key: "sakin", ad: "sakin", alt: "yavaşla, derin bir nefes", turler: ["klasik", "caz", "tsm"], accent: "#6a86b8" },
-  { key: "enerjik", ad: "enerjik", alt: "sesi aç, hızlan", turler: ["rock", "elektronik", "pop", "metal"], accent: "#c6503a" },
-  { key: "hüzünlü", ad: "hüzünlü", alt: "biraz dert, biraz şehir", turler: ["arabesk", "türkü", "nostalji", "tsm"], accent: "#9c5f7c" },
-  { key: "odak", ad: "odak", alt: "çalış, oku, dal", turler: ["klasik", "elektronik", "caz"], accent: "#5f8f8a" },
+  { key: "sakin", ad: "sakin", alt: "yavaşla, derin bir nefes", turler: ["klasik", "caz", "tsm"], accent: "#e5382c" },
+  { key: "enerjik", ad: "enerjik", alt: "sesi aç, hızlan", turler: ["rock", "elektronik", "pop", "metal"], accent: "#e5382c" },
+  { key: "hüzünlü", ad: "hüzünlü", alt: "biraz dert, biraz şehir", turler: ["arabesk", "türkü", "nostalji", "tsm"], accent: "#e5382c" },
+  { key: "odak", ad: "odak", alt: "çalış, oku, dal", turler: ["klasik", "elektronik", "caz"], accent: "#e5382c" },
 ];
 
 // Bir türü Türkçe okunur başlığa çevir (görsel için).
@@ -40,7 +40,6 @@ function turBaslik(t: string): string {
 }
 
 function Tile({ s }: { s: Station }) {
-  const accent = s.accentColor || DEFAULT_ACCENT;
   return (
     <Link
       href={`/?ist=${s.slug}`}
@@ -50,8 +49,8 @@ function Tile({ s }: { s: Station }) {
       <span
         className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl text-lg font-bold"
         style={{
-          background: `linear-gradient(135deg, ${accent}, color-mix(in srgb, ${accent} 50%, #000))`,
-          color: readableOn(accent),
+          border: "1px solid var(--line)",
+          color: "var(--fg)",
         }}
       >
         {s.name.trim().charAt(0).toLocaleUpperCase("tr")}
@@ -215,7 +214,7 @@ export default function Kesif() {
                     className="chip"
                     style={ruh === r.key ? {
                       borderColor: r.accent,
-                      background: `color-mix(in srgb, ${r.accent} 16%, transparent)`,
+                      background: "transparent",
                       color: "var(--fg)",
                     } : undefined}
                   >

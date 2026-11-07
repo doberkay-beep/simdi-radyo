@@ -10,12 +10,12 @@ type Station = { slug: string; name: string; genre: string | null; accentColor: 
 
 /* Ruh hâlleri — korpus temalarına ve istasyon türlerine köprü. */
 const RUHLAR = [
-  { id: "kirik", ad: "kalbim kırık", emoji: "💔", temalar: ["ask", "karanlik"], turler: ["arabesk", "tsm"], renk: "#c04a55" },
-  { id: "baslangic", ad: "yeni bir başlangıç", emoji: "🌅", temalar: ["umut", "yikim"], turler: ["türkçe pop", "pop"], renk: "#e08a3c" },
-  { id: "yalniz", ad: "yalnızım bu gece", emoji: "🌙", temalar: ["yalnizlik"], turler: ["caz", "nostalji"], renk: "#5a6fd0" },
-  { id: "yangin", ad: "içimde bir yangın", emoji: "🔥", temalar: ["yikim", "ozgurluk"], turler: ["rock", "metal"], renk: "#d45230" },
-  { id: "ozlem", ad: "özledim", emoji: "🍂", temalar: ["zaman", "sehir"], turler: ["nostalji", "türkü"], renk: "#a8794e" },
-  { id: "sukunet", ad: "sükûnet arıyorum", emoji: "🕯", temalar: ["hayat", "sanat"], turler: ["klasik"], renk: "#6f9a78" },
+  { id: "kirik", ad: "kalbim kırık", emoji: "💔", temalar: ["ask", "karanlik"], turler: ["arabesk", "tsm"], renk: "#e5382c" },
+  { id: "baslangic", ad: "yeni bir başlangıç", emoji: "🌅", temalar: ["umut", "yikim"], turler: ["türkçe pop", "pop"], renk: "#e5382c" },
+  { id: "yalniz", ad: "yalnızım bu gece", emoji: "🌙", temalar: ["yalnizlik"], turler: ["caz", "nostalji"], renk: "#e5382c" },
+  { id: "yangin", ad: "içimde bir yangın", emoji: "🔥", temalar: ["yikim", "ozgurluk"], turler: ["rock", "metal"], renk: "#e5382c" },
+  { id: "ozlem", ad: "özledim", emoji: "🍂", temalar: ["zaman", "sehir"], turler: ["nostalji", "türkü"], renk: "#e5382c" },
+  { id: "sukunet", ad: "sükûnet arıyorum", emoji: "🕯", temalar: ["hayat", "sanat"], turler: ["klasik"], renk: "#e5382c" },
 ] as const;
 type Ruh = (typeof RUHLAR)[number];
 
@@ -176,7 +176,7 @@ export default function FrekansFali() {
     ctx.fillText("nowby.", W / 2, H - 210);
     ctx.fillStyle = "#e9b9a4";
     ctx.font = `700 28px ${fMono}`;
-    ctx.fillText("n e c a l i y o r . c o / f a l", W / 2, H - 150);
+    ctx.fillText("n o w b y . c o / f a l", W / 2, H - 150);
 
     cv.toBlob(async (blob) => {
       if (!blob) return;
@@ -227,7 +227,7 @@ export default function FrekansFali() {
               className="press rounded-xl border px-4 py-4 text-left text-[15px] font-semibold"
               style={{
                 borderColor: ruh?.id === r.id ? r.renk : "var(--line)",
-                background: ruh?.id === r.id ? `color-mix(in srgb, ${r.renk} 14%, transparent)` : "transparent",
+                background: "transparent",
               }}
             >
               

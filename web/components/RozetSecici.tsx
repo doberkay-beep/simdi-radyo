@@ -58,9 +58,9 @@ export default function RozetSecici({ list }: { list: Ist[] }) {
               onClick={() => setSel(s.slug)}
               className="press rounded-full border px-3 py-1.5 text-sm"
               style={{
-                borderColor: aktif ? s.accent : "var(--line)",
-                background: aktif ? s.accent : "transparent",
-                color: aktif ? readableOn(s.accent) : "var(--fg)",
+                borderColor: aktif ? "#e5382c" : "var(--line)",
+                background: aktif ? "#e5382c" : "transparent",
+                color: aktif ? "#fff" : "var(--fg)",
               }}
             >
               {s.name}
@@ -86,9 +86,9 @@ export default function RozetSecici({ list }: { list: Ist[] }) {
               onClick={() => setBoy(b)}
               className="press rounded-full border px-3 py-1.5 text-sm"
               style={{
-                borderColor: boy === b ? secili.accent : "var(--line)",
-                background: boy === b ? secili.accent : "transparent",
-                color: boy === b ? readableOn(secili.accent) : "var(--fg)",
+                borderColor: boy === b ? "#e5382c" : "var(--line)",
+                background: boy === b ? "#e5382c" : "transparent",
+                color: boy === b ? "#fff" : "var(--fg)",
               }}
             >
               {EMBED_BOYLAR[b].ad}
@@ -127,7 +127,7 @@ export default function RozetSecici({ list }: { list: Ist[] }) {
         <button
           onClick={kopyala}
           className="press mt-2 rounded-md px-5 py-2 text-sm font-semibold"
-          style={{ background: secili.accent, color: readableOn(secili.accent) }}
+          style={{ background: "#e5382c", color: "#fff" }}
         >
           {kop ? "kopyalandı ✓" : "kodu kopyala"}
         </button>

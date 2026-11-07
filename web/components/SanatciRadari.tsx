@@ -29,7 +29,7 @@ export default function SanatciRadari({ stations, onTune }: { stations: Ist[]; o
     if (!izlenenler.length) return null;
     for (const s of stations) {
       if (s.nowPlaying?.artist && izleniyorMu(izlenenler, s.nowPlaying.artist)) {
-        return { slug: s.slug, istasyon: s.name, accent: s.accentColor, artist: s.nowPlaying.artist, title: s.nowPlaying.title };
+        return { slug: s.slug, istasyon: s.name, accent: null as string | null, artist: s.nowPlaying.artist, title: s.nowPlaying.title };
       }
     }
     return null;

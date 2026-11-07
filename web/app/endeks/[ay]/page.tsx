@@ -1,3 +1,4 @@
+import { ozetSuz } from "@/lib/cop";
 import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
@@ -12,7 +13,7 @@ async function ozet(ay: string): Promise<EndeksOzet | null> {
   if (!/^\d{4}-\d{2}$/.test(ay)) return null;
   try {
     const { data } = await getSupabase().rpc("endeks_ozet", { p_ay: ay });
-    return (data as EndeksOzet | null) ?? null;
+    return data ? ozetSuz(data as EndeksOzet) : null;
   } catch { return null; }
 }
 

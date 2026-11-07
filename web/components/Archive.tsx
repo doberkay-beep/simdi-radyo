@@ -322,7 +322,7 @@ export default function Archive() {
             {araStatus === "idle" && araRows.length > 0 && (
               <ul className="flex flex-col">
                 {araRows.map((r, i) => {
-                  const c = r.accentColor || DEFAULT_ACCENT;
+                  const c = "var(--muted)";
                   const t = new Date(r.startedAt);
                   const when = `${pad(t.getDate())}.${pad(t.getMonth() + 1)} ${pad(t.getHours())}:${pad(t.getMinutes())}`;
                   return (
@@ -373,7 +373,7 @@ export default function Archive() {
         {status === "idle" && (
           <ul className="flex flex-col">
             {rows.map((r) => {
-              const c = r.accentColor || DEFAULT_ACCENT;
+              const c = "var(--muted)";
               const artist = r.artist?.trim() || null;
               const title = r.title?.trim() || null;
               const same = artist && title && artist === title;
@@ -388,8 +388,8 @@ export default function Archive() {
                     <span
                       className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl text-sm font-bold"
                       style={{
-                        background: `linear-gradient(135deg, ${c}, color-mix(in srgb, ${c} 50%, #000))`,
-                        color: readableOn(c),
+                        border: "1px solid var(--line)",
+                        color: "var(--fg)",
                       }}
                     >
                       {r.name.trim().charAt(0).toLocaleUpperCase("tr")}

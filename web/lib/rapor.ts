@@ -1,3 +1,4 @@
+import { gercekParca } from "@/lib/cop";
 // Haftalık Türkiye Radyo Raporu — yardımcılar. Veri: hafta_raporu(p_bas) RPC (rapor.sql).
 import { getSupabase } from "./supabase";
 
@@ -52,7 +53,14 @@ export async function raporGetir(bas: string): Promise<Rapor | null> {
     const { data, error } = await getSupabase().rpc("hafta_raporu", { p_bas: bas });
     if (error || !data) return null;
     const r = data as Rapor;
-    return r.gun_sayisi > 0 ? r : null;
+    if (r.gun_sayisi <= 0) return null;
+    return {
+      ...r,
+      ilk20: (r.ilk20 ?? []).filter(gercekParca),
+      yukselen: (r.yukselen ?? []).filter(gercekParca),
+      yeni: (r.yeni ?? []).filter(gercekParca),
+      sanatcilar: (r.sanatcilar ?? []).filter((s) => gercekParca({ artist: s.ad })),
+    };
   } catch {
     return null;
   }

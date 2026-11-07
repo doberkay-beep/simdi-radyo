@@ -9,7 +9,7 @@ import { useAnaOzet, CanliSayac, CanliListe, type AnaOzet } from "./CanliVitrin"
 import { TurkiyeSuAn, RuhKartlari } from "./AnaSayfaZenginlik";
 import { kaynagiCalistir, hlsYik } from "@/lib/cal";
 import { dinleyiciKatil, simdiDinle, type CanliKanal, type SimdiDegisim } from "@/lib/canli";
-import { temizMetin } from "@/lib/cop";
+import { gercekParca, temizMetin } from "@/lib/cop";
 import {
   selamla,
   EPIGRAFLAR,
@@ -245,8 +245,8 @@ const EserKart = memo(function EserKart({
   onKalp: (slug: string) => void;
   onFav: (slug: string) => void;
 }) {
-  const artist = np?.artist?.trim() || null;
-  const title = np?.title?.trim() || null;
+  const artist = temizMetin(np?.artist);
+  const title = temizMetin(np?.title);
   const ayni = artist && title && artist === title;
   const yer = [s.band === "int" ? bayrakEmoji(istasyonUlkesi(s.slug)) : null, s.frequency, s.city].filter(Boolean).join(" · ");
   return (
@@ -996,7 +996,7 @@ export default function NowList({ ilkIstasyonlar, ilkOzet }: { ilkIstasyonlar?: 
 
   // "Şu an çalanlar" şeridi — gerçekten parça bilgisi olan istasyonlar.
   const nowStrip = useMemo(
-    () => stations.filter((s) => s.nowPlaying && (s.nowPlaying.title || s.nowPlaying.artist)).slice(0, 14),
+    () => stations.filter((s) => s.nowPlaying && (s.nowPlaying.title || s.nowPlaying.artist) && gercekParca(s.nowPlaying)).slice(0, 14),
     [stations],
   );
 
@@ -1878,22 +1878,14 @@ export default function NowList({ ilkIstasyonlar, ilkOzet }: { ilkIstasyonlar?: 
         {/* "Ne dinlesem?" — boştayken rastgele bir istasyon öner */}
         {!playing && featured && (
           (() => {
-            const fc = featured.accentColor || DEFAULT_ACCENT;
             return (
               <div
-                className="mb-6 flex items-center gap-4 rounded-2xl border p-5"
-                style={{
-                  borderColor: `color-mix(in srgb, ${fc} 32%, var(--line))`,
-                  background: `radial-gradient(120% 150% at 0% 0%, color-mix(in srgb, ${fc} 26%, transparent), transparent 58%), linear-gradient(180deg, var(--panel-hi), var(--panel))`,
-                }}
+                className="mb-6 flex items-center gap-4 py-5"
+                style={{ borderTop: "1px solid var(--line)", borderBottom: "1px solid var(--line)" }}
               >
                 <span
-                  className="flex h-16 w-16 shrink-0 items-center justify-center rounded-2xl text-2xl font-bold"
-                  style={{
-                    background: `linear-gradient(135deg, ${fc}, color-mix(in srgb, ${fc} 50%, #000))`,
-                    color: readableOn(fc),
-                    boxShadow: `0 10px 26px color-mix(in srgb, ${fc} 40%, transparent)`,
-                  }}
+                  className="flex h-16 w-16 shrink-0 items-center justify-center text-2xl"
+                  style={{ border: "1px solid var(--line)", fontFamily: "var(--font-baslik), Georgia, serif", fontStyle: "italic" }}
                 >
                   {featured.name.trim().charAt(0).toLocaleUpperCase("tr")}
                 </span>
@@ -1911,8 +1903,8 @@ export default function NowList({ ilkIstasyonlar, ilkOzet }: { ilkIstasyonlar?: 
                 </span>
                 <button
                   onClick={() => toggle(featured)}
-                  className="dial press shrink-0 rounded-full px-6 py-3 text-sm uppercase tracking-[0.08em]"
-                  style={{ background: fc, color: readableOn(fc), fontWeight: 500, boxShadow: `0 8px 22px color-mix(in srgb, ${fc} 38%, transparent)` }}
+                  className="press shrink-0"
+                  style={{ color: "var(--fg)", borderBottom: "1px solid var(--glow)", padding: "2px 0", fontSize: 18 }}
                 >
                   ▶ {t("home.cal")}
                 </button>

@@ -168,7 +168,7 @@ export default async function Sayfa({ params }: { params: Promise<{ slug: string
         {o.suan && o.suan.length > 0 && (
           <div className="mb-6 rounded-2xl border p-5" style={{ borderColor: "var(--accent, #e5382c)" }}>
             <p className="text-sm font-semibold">
-              🔴 ŞU AN ÇALIYOR:{" "}
+              Şu an çalıyor:{" "}
               {o.suan.map((s, i) => (
                 <span key={s.slug}>
                   {i > 0 && " · "}
@@ -200,7 +200,7 @@ export default async function Sayfa({ params }: { params: Promise<{ slug: string
             {trend.hafta_sira && (
               <Link prefetch={false} href="/rapor" className="mb-4 flex items-baseline justify-between gap-3">
                 <span className="text-sm">
-                  📊 Bu hafta <strong>Türkiye Radyo Raporu</strong>'nda{" "}
+                  Bu hafta <strong>Türkiye Radyo Raporu</strong>'nda{" "}
                   <strong style={{ color: "var(--glow-hi)" }}>{trend.hafta_sira}. sırada</strong>
                   <span style={{ color: "var(--muted)" }}> · {trend.hafta_sanatci} sanatçı arasında</span>
                 </span>
@@ -233,11 +233,11 @@ export default async function Sayfa({ params }: { params: Promise<{ slug: string
         {(o.kez7 > 0 || o.kez30 > 0) && (
           <RozetPaylas
             taban={`/sanatci/${slug}/rozet`}
-            dosyaAdi={`simdi-${slug}`}
-            etiket="📣 radyo rozeti"
+            dosyaAdi={`nowby-${slug}`}
+            etiket="radyo rozeti"
             baslik="Sanatçısı, menajeri ya da hayranı mısın? Bunu paylaş."
             aciklama={`Anket değil, gerçek sayım: ${o.ad} ${o.kez7 > 0 ? "son 7 günde" : "son 30 günde"} Türkiye radyolarında ${o.kez7 > 0 ? o.kez7 : o.kez30} kez çaldı. Rozet her saat tazelenir.`}
-            metin={`${o.ad} ${o.kez7 > 0 ? "son 7 günde" : "son 30 günde"} Türkiye radyolarında ${o.kez7 > 0 ? o.kez7 : o.kez30} kez çaldı 📻 Gerçek sayım: https://nowby.co/sanatci/${slug}`}
+            metin={`${o.ad} ${o.kez7 > 0 ? "son 7 günde" : "son 30 günde"} Türkiye radyolarında ${o.kez7 > 0 ? o.kez7 : o.kez30} kez çaldı Gerçek sayım: https://nowby.co/sanatci/${slug}`}
           />
         )}
 
@@ -304,11 +304,11 @@ export default async function Sayfa({ params }: { params: Promise<{ slug: string
         {/* CTA'lar */}
         <div className="rounded-2xl border p-5" style={{ borderColor: "var(--line)" }}>
           <p className="text-sm">
-            🔔 <strong>{o.ad}</strong> bir radyoda çalmaya başladığı an haber almak ister misin?
+            <strong>{o.ad}</strong> bir radyoda çalmaya başladığı an haber almak ister misin?
           </p>
           <SanatciTakipDugme ad={o.ad} />
           <p className="mt-3 text-sm" style={{ color: "var(--muted)" }}>
-            Haftanın tam listesi: <Link href="/liste" className="underline">nowby. LİSTESİ →</Link>
+            Haftanın tam listesi: <Link href="/liste" className="underline">nowby. Listesi →</Link>
           </p>
         </div>
       </div>

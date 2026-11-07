@@ -35,7 +35,7 @@ function yerelSaat(kod: UlkeKodu): { saat: string; not: string } | null {
   }).format(new Date());
   const h = Number(saat.slice(0, 2));
   const not =
-    h >= 21 || h < 5 ? "pencereler yanıyor 🕯" : h < 9 ? "sabahın körü" : h < 18 ? "gün ışığı" : "akşam iniyor";
+    h >= 21 || h < 5 ? "pencereler yanıyor" : h < 9 ? "sabahın körü" : h < 18 ? "gün ışığı" : "akşam iniyor";
   return { saat, not };
 }
 
@@ -166,7 +166,7 @@ export default function NeredenCaliyor() {
                 {durum === "dinle"
                   ? "dinle — dil, tür, hava… hangi ülke?"
                   : secilen === cevap.ulke
-                    ? "doğru! 🌍"
+                    ? "doğru!"
                     : "olmadı — doğrusu aşağıda"}
               </span>
             </div>

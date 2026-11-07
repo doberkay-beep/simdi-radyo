@@ -91,7 +91,7 @@ export default function SanatciTakip({
   const radariAc = async () => {
     if (iosKurulmamis) { kapat(); kurAc(); return; }
     const s = await radarAc();
-    if (s === "acik") { setRadar(true); setRadarMesaj(en ? "Notifications on 🔔" : "Bildirimler açık 🔔"); }
+    if (s === "acik") { setRadar(true); setRadarMesaj(en ? "Notifications on" : "Bildirimler açık"); }
     else if (s === "izin-yok") setRadarMesaj(en ? "Notification permission was denied — allow it in browser settings." : "Bildirim izni verilmedi — tarayıcı ayarlarından izin ver.");
     else if (s === "desteklenmiyor") setRadarMesaj(en ? "This browser can't receive notifications." : "Bu tarayıcı bildirim alamıyor.");
     else setRadarMesaj(en ? "Couldn't turn on, try again." : "Açılamadı, birazdan yine dene.");
@@ -113,7 +113,7 @@ export default function SanatciTakip({
       <div className="menu-sayfa absolute inset-x-0 bottom-0 flex max-h-[88vh] flex-col rounded-t-2xl p-5 pb-8 sm:inset-x-auto sm:bottom-auto sm:left-1/2 sm:top-1/2 sm:w-[520px] sm:-translate-x-1/2 sm:-translate-y-1/2 sm:rounded-2xl sm:border">
         <div className="mb-3 flex items-center justify-between">
           <span className="mono text-[11px] font-bold uppercase tracking-[0.2em]" style={{ color: "var(--muted)" }}>
-            🔔 {en ? "FOLLOW ARTISTS" : "SANATÇI TAKİP"}
+            {en ? "Follow artists" : "Sanatçı takip"}
           </span>
           <button onClick={kapat} className="press text-xl leading-none" aria-label={en ? "close" : "kapat"}>×</button>
         </div>
@@ -193,16 +193,16 @@ export default function SanatciTakip({
         {/* Bildirim durumu — takip ancak bildirimle anlam kazanır */}
         <div className="mt-4 rounded-xl border p-3 text-sm" style={{ borderColor: "var(--line-hi)" }}>
           {radar ? (
-            <span>🔔 {en ? "Notifications are on — even when the site is closed." : "Bildirimler açık — site kapalıyken bile haber gelir."}</span>
+            <span>{en ? "Notifications are on — even when the site is closed." : "Bildirimler açık — site kapalıyken bile haber gelir."}</span>
           ) : iosKurulmamis ? (
             <span className="flex flex-wrap items-center justify-between gap-2">
               <span style={{ color: "var(--muted)" }}>{en ? "On iPhone, install nowby to the home screen first for notifications." : "iPhone'da bildirim için önce nowby'yi ana ekrana kur."}</span>
-              <button onClick={() => { kapat(); kurAc(); }} className="hap-marka press !py-1.5 text-xs">📲 {en ? "how?" : "nasıl?"}</button>
+              <button onClick={() => { kapat(); kurAc(); }} className="hap-marka press !py-1.5 text-xs">{en ? "how?" : "nasıl?"}</button>
             </span>
           ) : radarDestekleniyor() ? (
             <span className="flex flex-wrap items-center justify-between gap-2">
               <span style={{ color: "var(--muted)" }}>{en ? "Notifications are off." : "Bildirimler kapalı."}</span>
-              <button onClick={radariAc} className="hap-marka press !py-1.5 text-xs">🔔 {en ? "turn on" : "bildirimleri aç"}</button>
+              <button onClick={radariAc} className="hap-marka press !py-1.5 text-xs">{en ? "turn on" : "bildirimleri aç"}</button>
             </span>
           ) : (
             <span style={{ color: "var(--muted)" }}>{en ? "This browser can't receive notifications; you'll still see a banner while the site is open." : "Bu tarayıcı bildirim alamıyor; site açıkken yine de ana sayfada bant düşer."}</span>

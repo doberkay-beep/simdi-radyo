@@ -168,8 +168,8 @@ export default function FrekansKarti({
         x.font = "italic 400 38px Georgia, serif";
         x.fillText(
           en
-            ? `${Math.round(ozet.geceOran * 100)}% of your listening happens after dark 🌙`
-            : `Dinlemelerinin %${Math.round(ozet.geceOran * 100)}'i gece 🌙`,
+            ? `${Math.round(ozet.geceOran * 100)}% of your listening happens after dark`
+            : `Dinlemelerinin %${Math.round(ozet.geceOran * 100)}'i gece`,
           540,
           y + 300,
         );

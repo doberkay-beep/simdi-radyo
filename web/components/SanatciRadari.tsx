@@ -45,7 +45,6 @@ export default function SanatciRadari({ stations, onTune }: { stations: Ist[]; o
       style={{ borderColor: bulunan.accent || "var(--line)" }}
       role="status"
     >
-      <span aria-hidden className="text-lg leading-none">🎣</span>
       <div className="min-w-0 flex-1">
         <p className="text-[11px] font-semibold uppercase tracking-[0.14em]" style={{ color: "var(--muted)" }}>
           {t("av.radar")}

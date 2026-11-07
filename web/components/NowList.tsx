@@ -337,17 +337,17 @@ export default function NowList({ ilkIstasyonlar, ilkOzet }: { ilkIstasyonlar?: 
   const [avAcik, setAvAcik] = useState(false); // müzik defteri (şarkı yakala)
   const [notAcik, setNotAcik] = useState(false); // kalp defteri — not bırakma modalı
   const [muzikKart, setMuzikKart] = useState<{ artist: string; title: string | null } | null>(null); // ♪ müzik kartı
-  const [navAcik, setNavAcik] = useState(false); // mobil ☰ menü sayfası
+  const [navAcik, setNavAcik] = useState(false); // mobil menü sayfası
   const [cipMenu, setCipMenu] = useState(false); // mobil oynatıcı ⋯ menüsü
-  const [kurAcik, setKurAcik] = useState(false); // 📲 uygulama kur sihirbazı
-  const [takipAcik, setTakipAcik] = useState(false); // 🔔 sanatçı ara + takip
-  const [kasaAcik, setKasaAcik] = useState(false); // 🔐 hafıza kodu
-  const [siirAcik, setSiirAcik] = useState(false); // 📖 şiir köşesi (Şiir Rafım Radyosu)
+  const [kurAcik, setKurAcik] = useState(false); // uygulama kur sihirbazı
+  const [takipAcik, setTakipAcik] = useState(false); // sanatçı ara + takip
+  const [kasaAcik, setKasaAcik] = useState(false); // hafıza kodu
+  const [siirAcik, setSiirAcik] = useState(false); // şiir köşesi (Şiir Rafım Radyosu)
   // Canlı vitrin: ana_ozet satırı + sayfa açıkken gelen gerçek şarkı değişimleri (TR bandı)
   const anaOzet = useAnaOzet(ilkOzet ?? null);
   const [canliArtis, setCanliArtis] = useState(0);
   const artisRef = useRef(0);
-  const [surus, setSurus] = useState(false); // 🚗 sürüş modu
+  const [surus, setSurus] = useState(false); // sürüş modu
   const [turHepsi, setTurHepsi] = useState(false); // tür çiplerinin hepsi açık mı
   const [takipSay, setTakipSay] = useState(0); // takip edilen sanatçı sayısı (hap parlasın)
   useEffect(() => {
@@ -1509,7 +1509,7 @@ export default function NowList({ ilkIstasyonlar, ilkOzet }: { ilkIstasyonlar?: 
           {oda && (
             <>
               <button onClick={() => davetKopyala(oda.kod)} className="on" data-kod={oda.kod} title={t("oda.baslik")}>
-                👥 {dil === "en" ? "PARTY" : "PARTİ"} · {odaSayi}
+                {dil === "en" ? "Party" : "Parti"} · {odaSayi}
               </button>
               {["🔥", "❤️", "🎶"].map((ch) => (
                 <button
@@ -1531,12 +1531,12 @@ export default function NowList({ ilkIstasyonlar, ilkOzet }: { ilkIstasyonlar?: 
           )}
           {sleepUntil && (
             <button onClick={cycleSleep} className="on" title={t("home.uykuZamanlayici")}>
-              🌙 {sleepRemain} DK
+              {sleepRemain} dk
             </button>
           )}
           {yolculuk && (
             <button onClick={() => setYolculuk(false)} className="on" title="gezintiyi durdur">
-              🧭 {dil === "en" ? "DRIFT" : "GEZİNTİ"} ×
+              {dil === "en" ? "Drift" : "Gezinti"} ×
             </button>
           )}
         </nav>
@@ -1557,7 +1557,6 @@ export default function NowList({ ilkIstasyonlar, ilkOzet }: { ilkIstasyonlar?: 
             className="press mb-5 flex w-full items-center gap-3 rounded-lg border px-4 py-3 text-left"
             style={{ borderColor: "var(--line)" }}
           >
-            <span aria-hidden className="text-lg leading-none">🏆</span>
             <span className="min-w-0 flex-1">
               <span className="block text-[11px] font-semibold uppercase tracking-[0.18em]" style={{ color: "var(--fg)" }}>
                 {t("wrapped.baslik")}
@@ -1586,7 +1585,7 @@ export default function NowList({ ilkIstasyonlar, ilkOzet }: { ilkIstasyonlar?: 
               <span className="text-xs" style={{ color: "var(--muted)" }}>
                 {t("alarm.istasyon")}:{" "}
                 {alarmRastgele
-                  ? "🎲"
+                  ? (dil === "en" ? "random" : "rastgele")
                   : stations.find((s) => s.slug === (playing || [...favs][0] || stations[0]?.slug))?.name || "—"}
               </span>
               <label className="flex items-center gap-1.5 text-xs" style={{ color: "var(--muted)" }}>
@@ -1615,7 +1614,6 @@ export default function NowList({ ilkIstasyonlar, ilkOzet }: { ilkIstasyonlar?: 
         {/* Birlikte dinle — davet bandı */}
         {odaDavet && !oda && (
           <div className="mb-5 flex flex-wrap items-center gap-3 rounded-lg border px-4 py-3" style={{ borderColor: "var(--fg)" }}>
-            <span aria-hidden className="text-lg leading-none">🎧</span>
             <p className="min-w-0 flex-1 text-sm" style={{ color: "var(--fg)" }}>{t("oda.davet")}</p>
             <button onClick={() => odayaKatil(odaDavet)} className="press shrink-0 rounded-full px-3.5 py-1.5 text-xs font-semibold" style={{ background: "var(--fg)", color: "var(--bg)" }}>
               {t("oda.katil")}
@@ -1780,7 +1778,7 @@ export default function NowList({ ilkIstasyonlar, ilkOzet }: { ilkIstasyonlar?: 
         {/* Şairin Frekansı — girişte edebi tanıtım */}
         {sairMode && (
           <div className="fade-in mb-6">
-            <h2 className="brand text-2xl font-bold">✍ {SAIRIN.baslik}</h2>
+            <h2 className="brand text-2xl font-bold">{SAIRIN.baslik}</h2>
             <p className="epigraf mt-1 text-base">{SAIRIN.alt}</p>
           </div>
         )}
@@ -1901,7 +1899,7 @@ export default function NowList({ ilkIstasyonlar, ilkOzet }: { ilkIstasyonlar?: 
                 </span>
                 <span className="min-w-0 flex-1">
                   <span className="mono block text-[10px] uppercase tracking-[0.2em]" style={{ color: "var(--muted)" }}>
-                    🎧 {t("home.neDinlesem")}{" "}
+                    {t("home.neDinlesem")}{" "}
                     <button onClick={suggestAnother} className="nav-link">
                       {t("home.baskaOner")} ↻
                     </button>
@@ -2049,7 +2047,7 @@ export default function NowList({ ilkIstasyonlar, ilkOzet }: { ilkIstasyonlar?: 
 
         {/* Kitap köprüsü — tek satır, sayfanın dibinde */}
         <p className="mt-10 text-center text-xs" style={{ color: "var(--muted)" }}>
-          📖 {t("kopru.kitap")}{" "}
+          {t("kopru.kitap")}{" "}
           <a
             href="https://www.berkaydogan.co/kitaplar/tasfiye"
             target="_blank"
@@ -2641,7 +2639,7 @@ export default function NowList({ ilkIstasyonlar, ilkOzet }: { ilkIstasyonlar?: 
             style={{ background: "var(--bg)", borderColor: "var(--line)" }}
           >
             <div className="mb-3 flex items-center justify-between">
-              <span className="text-sm font-semibold">✍ {t("defter.baslik")}</span>
+              <span className="text-sm font-semibold">{t("defter.baslik")}</span>
               <button onClick={() => setNotAcik(false)} className="press rounded-full border px-3 py-1 text-xs" style={{ borderColor: "var(--line)", color: "var(--muted)" }}>
                 {t("frekans.kapat")}
               </button>
@@ -2690,7 +2688,6 @@ export default function NowList({ ilkIstasyonlar, ilkOzet }: { ilkIstasyonlar?: 
             bottom: "calc(84px + env(safe-area-inset-bottom))",
           }}
         >
-          <span aria-hidden>📱</span>
           <span className="flex-1">
             nowby&apos;yi uygulama yap: <b>Paylaş</b> → <b>Ana Ekrana Ekle</b>
           </span>

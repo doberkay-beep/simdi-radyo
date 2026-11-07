@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 
-// 📣 Kart/rozet paylaşım paneli — sanatçı rozeti, istasyon rozeti, senkron
+// Kart/rozet paylaşım paneli — sanatçı rozeti, istasyon rozeti, senkron
 // kartı hepsi bunu kullanır. `taban` görsel rotasıdır (?boyut=post|story eklenir).
 // Telefonda sistem paylaşımı (IG story'ye tek dokunuş), masaüstünde indirme,
 // X intent ve metni kopyala.
@@ -47,22 +47,20 @@ export default function RozetPaylas({
   };
 
   return (
-    <section className="mb-10 rounded-2xl border p-5" style={{ borderColor: "color-mix(in srgb, var(--glow) 45%, var(--line-hi))", background: "color-mix(in srgb, var(--glow) 5%, var(--panel))" }}>
-      <p className="mono text-[11px] font-bold uppercase tracking-[0.2em]" style={{ color: "var(--glow-hi)" }}>{etiket}</p>
-      <h2 className="mt-1 text-lg font-bold">{baslik}</h2>
-      <p className="mt-1 text-sm" style={{ color: "var(--muted)" }}>{aciklama}</p>
+    <section className="rozet-paylas">
+      <p className="rozet-etiket">{etiket}</p>
+      <h2 className="rozet-baslik">{baslik}</h2>
+      <p className="rozet-aciklama">{aciklama}</p>
 
-      <div className="mt-4 flex gap-4">
+      <div className="rozet-govde">
         {/* eslint-disable-next-line @next/next/no-img-element */}
-        <img src={gorsel("post")} alt={baslik} width={216} height={270} className="w-[132px] shrink-0 rounded-xl border sm:w-[180px]" style={{ borderColor: "var(--line-hi)" }} loading="lazy" />
-        <div className="flex min-w-0 flex-1 flex-col gap-2">
-          <button onClick={() => paylas("story")} className="hap-marka press text-left">📲 story için paylaş</button>
-          <button onClick={() => paylas("post")} className="hap press text-left">🖼 gönderi görseli</button>
-          <a className="hap press text-left" href={`https://x.com/intent/post?text=${encodeURIComponent(metin)}`} target="_blank" rel="noopener noreferrer">
-            𝕏 X&apos;te paylaş
-          </a>
-          <button onClick={kopyala} className="hap press text-left">🔗 metni kopyala</button>
-          {durum && <p className="mono text-xs" style={{ color: "var(--muted)" }}>{durum}</p>}
+        <img src={gorsel("post")} alt={baslik} width={216} height={270} loading="lazy" />
+        <div className="rozet-dugmeler">
+          <button onClick={() => paylas("story")}>story için paylaş</button>
+          <button onClick={() => paylas("post")}>gönderi görseli</button>
+          <a href={`https://x.com/intent/post?text=${encodeURIComponent(metin)}`} target="_blank" rel="noopener noreferrer">X&apos;te paylaş</a>
+          <button onClick={kopyala}>metni kopyala</button>
+          {durum && <p>{durum}</p>}
         </div>
       </div>
     </section>

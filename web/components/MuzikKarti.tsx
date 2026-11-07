@@ -102,7 +102,7 @@ export default function MuzikKarti({
           style={{ borderColor: accent }}
         >
           <span className="min-w-0 text-sm">
-            📊 <strong>{artist}</strong> radyoda kaç kez çaldı?
+            <strong>{artist}</strong> radyoda kaç kez çaldı?
           </span>
           <span className="mono shrink-0 text-[11px] uppercase tracking-[0.14em]" style={{ color: accent }}>
             sanatçı sayfası →
@@ -143,7 +143,7 @@ export default function MuzikKarti({
                 <p className="text-[15px] font-semibold" style={{ color: accent }}>{kart.artist}</p>
                 {kart.album && (
                   <p className="mt-1 text-xs" style={{ color: "var(--muted)" }}>
-                    💿 {kart.album}
+                    {kart.album}
                     {kart.yil ? ` · ${kart.yil}` : ""}
                   </p>
                 )}
@@ -168,7 +168,7 @@ export default function MuzikKarti({
             {/* Konserler */}
             <div className="mt-5 border-t pt-4" style={{ borderColor: "var(--line)" }}>
               <p className="mono mb-2 text-[10px] font-bold uppercase tracking-[0.22em]" style={{ color: "var(--muted)" }}>
-                🎤 yaklaşan konserler
+                yaklaşan konserler
               </p>
               {kart.konserler.length > 0 ? (
                 <ul className="flex flex-col gap-2">

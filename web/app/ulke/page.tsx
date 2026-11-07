@@ -77,9 +77,7 @@ export default async function AtlasPage() {
                 {b ? (
                   // eslint-disable-next-line @next/next/no-img-element
                   <img src={b} alt="" width={32} height={24} className="rounded-[3px] border" style={{ borderColor: "var(--line)" }} loading="lazy" />
-                ) : (
-                  <span className="text-2xl" aria-hidden>🌐</span>
-                )}
+                ) : null}
                 <span className="min-w-0">
                   <span className="block truncate text-[15px] font-semibold">{ULKELER[k][dil]}</span>
                   <span className="block text-xs" style={{ color: "var(--muted)" }}>

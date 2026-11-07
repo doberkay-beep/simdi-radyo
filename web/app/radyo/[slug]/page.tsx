@@ -344,11 +344,11 @@ export default async function StationPage({ params }: { params: Promise<{ slug: 
           <div className="mt-8">
             <RozetPaylas
               taban={`/radyo/${slug}/rozet`}
-              dosyaAdi={`simdi-${slug}-karne`}
-              etiket="📻 haftalık karne"
+              dosyaAdi={`nowby-${slug}-karne`}
+              etiket="Haftalık karne"
               baslik={`${s.name} son 7 günde ${karne.farkliSarki.toLocaleString("tr-TR")} farklı şarkı çaldı.`}
               aciklama={`Radyoda çalışıyor musun, dinleyicisi misin? Karneyi paylaş.${karne.sarki ? ` En sevdiği şarkı: “${karne.sarki.title}” — ${karne.sarki.artist}.` : ""}`}
-              metin={`📻 ${s.name} son 7 günde ${karne.farkliSarki.toLocaleString("tr-TR")} farklı şarkı çaldı${karne.sarki ? `; en sevdiği “${karne.sarki.title}” (${karne.sarki.artist})` : ""}. Haftalık karne: https://nowby.co/radyo/${slug}`}
+              metin={`${s.name} son 7 günde ${karne.farkliSarki.toLocaleString("tr-TR")} farklı şarkı çaldı${karne.sarki ? `; en sevdiği “${karne.sarki.title}” (${karne.sarki.artist})` : ""}. Haftalık karne: https://nowby.co/radyo/${slug}`}
             />
           </div>
         )}
@@ -400,7 +400,7 @@ export default async function StationPage({ params }: { params: Promise<{ slug: 
               {topArtists.map((a) => (
                 <span
                   key={a.artist}
-                  className="rounded-full border px-3 py-1 text-sm"
+                  className="text-sm"
                   style={{
                     borderColor: "var(--line)",
                     fontSize: `${Math.max(0.8, Math.min(1.3, 0.8 + (a.adet / topArtists[0].adet) * 0.5))}rem`,

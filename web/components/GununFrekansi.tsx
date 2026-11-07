@@ -155,7 +155,7 @@ export default function GununFrekansi() {
     if (!cevap) return "";
     const kutular = tahminler.map((t) => (t === cevap.ulke ? "🟩" : "⬛")).join("");
     const skor = kazandi ? `${tahminler.length}/3` : "X/3";
-    return `🌍 Günün Frekansı #${no}\n${kutular} ${skor}\nnowby.co/oyun/gunun-frekansi`;
+    return `Günün Frekansı #${no}\n${kutular} ${skor}\nnowby.co/oyun/gunun-frekansi`;
   }, [cevap, tahminler, kazandi, no]);
 
   function kopyala() {
@@ -201,19 +201,19 @@ export default function GununFrekansi() {
                 <span /><span /><span /><span /><span />
               </span>
               <span className="text-sm" style={{ color: "var(--muted)" }}>
-                {bitti ? (kazandi ? "buldun! 🌍" : "olmadı — yarın yenisi") : "hangi ülkeden yayında?"}
+                {bitti ? (kazandi ? "buldun!" : "olmadı — yarın yenisi") : "hangi ülkeden yayında?"}
               </span>
             </div>
 
             {/* İpuçları — her yanlıştan sonra biri açılır */}
             {!bitti && tahminler.length >= 1 && (
               <p className="mb-2 text-sm" style={{ color: "var(--muted)" }}>
-                💡 ipucu 1: {kita(cevap.ulke)}
+                ipucu 1: {kita(cevap.ulke)}
               </p>
             )}
             {!bitti && tahminler.length >= 2 && (
               <p className="mb-2 text-sm" style={{ color: "var(--muted)" }}>
-                💡 ipucu 2: orada saat şu an {yerelSaat(cevap.ulke)}
+                ipucu 2: orada saat şu an {yerelSaat(cevap.ulke)}
               </p>
             )}
 
@@ -279,7 +279,7 @@ export default function GununFrekansi() {
                   </a>
                 </div>
                 <p className="mt-4 text-sm" style={{ color: "var(--muted)" }}>
-                  Türkiye saatiyle gece yarısı yeni frekans. 🕯
+                  Türkiye saatiyle gece yarısı yeni frekans.
                 </p>
               </div>
             )}

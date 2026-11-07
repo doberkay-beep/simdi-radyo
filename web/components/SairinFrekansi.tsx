@@ -20,7 +20,7 @@ export default function SairinFrekansi({ stations, onTune }: { stations: Ist[]; 
       style={{ borderColor: "var(--line)" }}
     >
       <p className="text-[11px] font-semibold uppercase tracking-[0.18em]" style={{ color: ist.accentColor || "var(--fg)" }}>
-        ❋ {t("sair.baslik")}
+        {t("sair.baslik")}
       </p>
       <p className="epigraf mt-1 text-[15px]">“{secki.not}”</p>
       <button

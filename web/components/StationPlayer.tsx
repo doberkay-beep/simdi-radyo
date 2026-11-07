@@ -138,7 +138,7 @@ export default function StationPlayer({
           : phase === "error"
             ? t("player.ulasilamadi")
             : dinleyici > 1
-              ? `🎧 ${t("player.birlikte").replace("{n}", String(dinleyici))}`
+              ? `${t("player.birlikte").replace("{n}", String(dinleyici))}`
               : ""}
       </span>
       <button

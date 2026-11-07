@@ -26,7 +26,7 @@ export default function SenkronBandi() {
 
   return (
     <Link href={`/senkron/${an.id}`} className={`ince-bant press ${taze ? "np-taze" : ""}`}>
-      <span className="etiket">⚡ {an.sayi} RADYO<span className="hidden sm:inline"> AYNI ANDA</span></span>
+      <span className="etiket">{an.sayi} RADYO<span className="hidden sm:inline"> AYNI ANDA</span></span>
       <span className="metin">
         <strong>{an.artist} — {an.title}</strong>{" "}
         <span style={{ color: "var(--muted)" }}>· {an.istasyonlar.map((s) => s.name).join(" · ")}</span>

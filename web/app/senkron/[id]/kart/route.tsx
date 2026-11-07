@@ -23,7 +23,7 @@ export async function GET(req: Request, ctx: { params: Promise<{ id: string }> }
       padding: og ? "56px 72px" : story ? STORY_DOLGU : "96px 90px 84px",
     }}>
       <div style={{ display: "flex", flexDirection: "column", maxWidth: og ? 600 : "100%" }}>
-        <div style={{ display: "flex", fontSize: og ? 22 : 30, letterSpacing: 8, color: RENK.sicak }}>⚡ SENKRON ANI</div>
+        <div style={{ display: "flex", fontSize: og ? 22 : 30, letterSpacing: 0, color: RENK.sicak }}>Senkron anı</div>
         <div style={{ display: "flex", alignItems: "flex-end", marginTop: og ? 12 : 26 }}>
           <div style={{ display: "flex", fontFamily: "Baslik", fontSize: og ? 130 : story ? 300 : 240, lineHeight: 0.95, color: RENK.sicak, letterSpacing: -6 }}>
             {an.sayi}
@@ -58,7 +58,7 @@ export async function GET(req: Request, ctx: { params: Promise<{ id: string }> }
       {!og && (
         <div style={{ display: "flex", flexDirection: "column", borderTop: `2px solid ${RENK.cizgi}`, paddingTop: 34 }}>
           <div style={{ display: "flex", fontSize: 30, color: RENK.soluk }}>{trZaman(an.ilk)}</div>
-          <div style={{ display: "flex", fontSize: 34, letterSpacing: 4, color: RENK.sicak, marginTop: 8 }}>nowby.co/senkron</div>
+          <div style={{ display: "flex", fontSize: 34, letterSpacing: 0, color: RENK.sicak, marginTop: 8 }}>nowby.co/senkron</div>
         </div>
       )}
     </div>

@@ -99,9 +99,7 @@ export default async function UlkeSayfasi({ kod, dil }: { kod: UlkeKodu; dil: "t
           {bayrak ? (
             // eslint-disable-next-line @next/next/no-img-element
             <img src={bayrak} alt="" width={40} height={30} className="rounded-[4px] border" style={{ borderColor: "var(--line)" }} />
-          ) : (
-            <span className="text-3xl" aria-hidden>🌐</span>
-          )}
+          ) : null}
           <h1 className="brand text-4xl font-bold tracking-tight">{baslik}</h1>
         </div>
         {SAAT_DILIMI[kod] && (
@@ -176,9 +174,7 @@ export default async function UlkeSayfasi({ kod, dil }: { kod: UlkeKodu; dil: "t
                   {b ? (
                     // eslint-disable-next-line @next/next/no-img-element
                     <img src={b} alt="" width={18} height={13} className="rounded-[2px]" loading="lazy" />
-                  ) : (
-                    <span aria-hidden>🌐</span>
-                  )}
+                  ) : null}
                   {en ? ULKELER[k].en : ULKELER[k].tr}
                 </Link>
               );

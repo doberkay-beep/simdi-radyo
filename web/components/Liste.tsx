@@ -24,7 +24,7 @@ const TOPLAM = Object.values(SAYI).reduce((t, n) => t + n, 0);
 type Dil = "tr" | "en";
 const METIN = {
   tr: {
-    baslik: "nowby. LİSTESİ", geri: "← nowby", dunya: "Dünya",
+    baslik: "nowby. Listesi", geri: "← nowby", dunya: "Dünya",
     alt: (yer: string | null) => `${yer ? `${yer} radyolarında` : "Dünyanın radyolarında"} gerçekte ne çalıyor — canlı sayım, itiraz kabul etmez.`,
     gun: "son 24 saat", hafta: "bu hafta", yukleniyor: "sayım sürüyor…", hata: "liste ısınıyor — birazdan yeniden dene.",
     bosTr: "henüz veri yok.", bos: "bu ülkede henüz yeterince çalma yok — biraz sonra yine bak.",
@@ -47,7 +47,7 @@ const METIN = {
   },
 } as const;
 
-// nowby. LİSTESİ — radyoların canlı hit listesi, ülke ülke. Veri: plays arşivi.
+// nowby. Listesi — radyoların canlı hit listesi, ülke ülke. Veri: plays arşivi.
 export default function Liste({ dil = "tr" }: { dil?: Dil }) {
   const m = METIN[dil];
   // İngilizcede resmî adı "Türkiye" (ULKELER.en "Turkey" kalır; /en/country/turkey adresi ondan üretiliyor).
@@ -100,7 +100,7 @@ export default function Liste({ dil = "tr" }: { dil?: Dil }) {
   const araliktext = aralik === "gun" ? "son 24 saatte" : "bu hafta";
 
   function sanatciKarnesi() {
-    const metin = `📻 ${satirlar[0]?.artist ?? aranan} ${araliktext} Türkiye radyolarında ${toplamKez} kez çaldı.\nCanlı sayım: nowby.co/liste`;
+    const metin = `${satirlar[0]?.artist ?? aranan} ${araliktext} Türkiye radyolarında ${toplamKez} kez çaldı.\nCanlı sayım: nowby.co/liste`;
     navigator.clipboard?.writeText(metin).then(() => {
       setKopyalandi(true);
       setTimeout(() => setKopyalandi(false), 2000);
@@ -205,7 +205,7 @@ export default function Liste({ dil = "tr" }: { dil?: Dil }) {
               onClick={sanatciKarnesi}
               className="press hap-dolu mt-3"
             >
-              {kopyalandi ? "kopyalandı ✓" : "sayacı kopyala 📻"}
+              {kopyalandi ? "kopyalandı ✓" : "sayacı kopyala"}
             </button>
           </div>
         )}
@@ -216,7 +216,7 @@ export default function Liste({ dil = "tr" }: { dil?: Dil }) {
         )}
         {durum === "bos" && (
           <p className="epigraf">
-            {aranan ? `"${aranan}" ${araliktext} radyolarda hiç çalmamış. 🤫` : ulke === "tr" ? m.bosTr : m.bos}
+            {aranan ? `"${aranan}" ${araliktext} radyolarda hiç çalmamış.` : ulke === "tr" ? m.bosTr : m.bos}
           </p>
         )}
 

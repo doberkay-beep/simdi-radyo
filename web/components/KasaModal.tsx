@@ -49,7 +49,7 @@ export default function KasaModal({ acik, kapat, dil }: { acik: boolean; kapat: 
       <div className="menu-sayfa absolute inset-x-0 bottom-0 rounded-t-2xl p-5 pb-8 sm:inset-x-auto sm:bottom-auto sm:left-1/2 sm:top-1/2 sm:w-[440px] sm:-translate-x-1/2 sm:-translate-y-1/2 sm:rounded-2xl sm:border">
         <div className="mb-3 flex items-center justify-between">
           <span className="mono text-[11px] font-bold uppercase tracking-[0.2em]" style={{ color: "var(--muted)" }}>
-            🔐 {en ? "MEMORY CODE" : "HAFIZA KODU"}
+            {en ? "Memory code" : "Hafıza kodu"}
           </span>
           <button onClick={kapat} className="press text-xl leading-none" aria-label={en ? "close" : "kapat"}>×</button>
         </div>
@@ -93,7 +93,7 @@ export default function KasaModal({ acik, kapat, dil }: { acik: boolean; kapat: 
             </button>
           </div>
           {durum === "tamam" && (
-            <p className="mt-2 text-sm font-semibold">🎉 {en ? "Restored — merged with what you had here." : "Geldi! Buradakilerle birleştirildi, hiçbir şey silinmedi."}</p>
+            <p className="mt-2 text-sm font-semibold">{en ? "Restored — merged with what you had here." : "Geldi! Buradakilerle birleştirildi, hiçbir şey silinmedi."}</p>
           )}
           {durum === "yok" && <p className="mt-2 text-sm" style={{ color: "var(--muted)" }}>{en ? "No memory found for that code." : "Bu koda ait bir hafıza bulunamadı."}</p>}
           {durum === "hata" && <p className="mt-2 text-sm" style={{ color: "var(--muted)" }}>{en ? "Couldn't reach the vault, try again." : "Kasaya ulaşılamadı, birazdan yine dene."}</p>}

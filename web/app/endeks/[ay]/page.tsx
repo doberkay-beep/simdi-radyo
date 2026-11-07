@@ -48,7 +48,7 @@ export default async function Sayfa({ params }: { params: Promise<{ ay: string }
       )}
       {ay < "2026-10" && (
         <p className="mt-2 text-sm" style={{ color: "var(--muted)" }}>
-          📏 Bu ayın sayımı aralıklı örneklemedir (kesintisiz sayım 1 Ekim 2026&apos;da başladı): toplam,
+          Bu ayın sayımı aralıklı örneklemedir (kesintisiz sayım 1 Ekim 2026&apos;da başladı): toplam,
           sonraki aylarla karşılaştırılamaz; sıralama karşılaştırılabilir.
         </p>
       )}
@@ -109,7 +109,7 @@ export default async function Sayfa({ params }: { params: Promise<{ ay: string }
       </ol>
 
       <section className="mt-8 rounded-2xl border p-4 text-sm" style={{ borderColor: "var(--line-hi)", color: "var(--muted)" }}>
-        📂 Bu ayın ham verisi:{" "}
+        Bu ayın ham verisi:{" "}
         <a href={`/endeks/${ay}/veri`} className="nav-link mono">/endeks/{ay}/veri</a> (JSON, açık veri).
         Alıntı: <em>&quot;nowby.co Türkiye Radyo Endeksi&quot;</em>
       </section>

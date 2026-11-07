@@ -65,7 +65,7 @@ export default function SurusModu({
     <div className="surus fixed inset-0 z-[90] flex flex-col p-4 sm:p-8" role="dialog" aria-label={en ? "drive mode" : "sürüş modu"}>
       <div className="flex items-center justify-between">
         <span className="mono text-sm font-bold uppercase tracking-[0.2em]" style={{ color: "var(--muted)" }}>
-          🚗 {en ? "DRIVE MODE" : "SÜRÜŞ MODU"}
+          {en ? "Drive mode" : "Sürüş modu"}
         </span>
         <button onClick={kapat} className="surus-kucuk press" aria-label={en ? "exit drive mode" : "sürüş modundan çık"}>
           {en ? "exit" : "çık"} ✕

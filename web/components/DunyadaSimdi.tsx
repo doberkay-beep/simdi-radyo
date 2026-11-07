@@ -63,7 +63,7 @@ export default function DunyadaSimdi({ stations, onTune }: { stations: Ist[]; on
   return (
     <div className="mb-4">
       <h2 className="mb-2 flex items-center gap-2 text-xs uppercase tracking-wide" style={{ color: "var(--muted)" }}>
-        <span aria-hidden>🌍</span> dünyada şu an
+dünyada şu an
       </h2>
       <div className="no-scrollbar flex gap-2 overflow-x-auto pb-1">
         {kartlar.map(({ k, s }) => (

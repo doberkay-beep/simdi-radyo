@@ -17,22 +17,21 @@ export function boyutAl(req: Request): Boyut {
 }
 
 export const RENK = {
-  zemin1: "#16090f", zemin2: "#070405", kor: "#e5382c", sicak: "#ff9b76",
-  metin: "#f2e6da", soluk: "#a08574", cizgi: "#3a1d19",
+  zemin1: "#0a0a0a", zemin2: "#0a0a0a", kor: "#e5382c", sicak: "#e5382c",
+  metin: "#f5f3ef", soluk: "#9b9a96", cizgi: "#2a2a2a",
 };
 
 export const kes = (t: string, n: number) => (t.length > n ? t.slice(0, n - 1) + "…" : t);
 
 export async function fontlar() {
-  const [baslik, govde, siir] = await Promise.all([
-    readFile(join(process.cwd(), "assets/BricolageGrotesque-Bold.ttf")),
-    readFile(join(process.cwd(), "assets/LiberationSans-Bold.ttf")),
-    readFile(join(process.cwd(), "assets/Lora-Italic.ttf")),
+  const [baslik, yazi] = await Promise.all([
+    readFile(join(process.cwd(), "assets/BodoniModa-Regular.ttf")),
+    readFile(join(process.cwd(), "assets/Newsreader-Italic.ttf")),
   ]);
   return [
-    { name: "Baslik", data: baslik, weight: 700 as const, style: "normal" as const },
-    { name: "Govde", data: govde, weight: 700 as const, style: "normal" as const },
-    { name: "Siir", data: siir, weight: 400 as const, style: "italic" as const },
+    { name: "Baslik", data: baslik, weight: 400 as const, style: "normal" as const },
+    { name: "Govde", data: yazi, weight: 400 as const, style: "normal" as const },
+    { name: "Siir", data: yazi, weight: 400 as const, style: "italic" as const },
   ];
 }
 
@@ -42,9 +41,6 @@ export const STORY_DOLGU = "250px 90px 420px";
 
 export const KART_ONBELLEK = { "Cache-Control": "public, s-maxage=3600, stale-while-revalidate=86400" };
 
-export function zemin(og: boolean) {
-  return {
-    backgroundColor: RENK.zemin2,
-    backgroundImage: `radial-gradient(circle at 50% ${og ? "0%" : "8%"}, #3a120f 0%, ${RENK.zemin1} 45%, ${RENK.zemin2} 100%)`,
-  };
+export function zemin(_og: boolean) {
+  return { backgroundColor: RENK.zemin2 };
 }

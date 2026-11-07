@@ -95,7 +95,7 @@ export default function Archive() {
     const satirlar = rows
       .filter((r) => r.artist || r.title)
       .slice(0, 12)
-      .map((r) => `📻 ${r.name}: ${[r.artist, r.title].filter(Boolean).join(" — ")}`);
+      .map((r) => `${r.name}: ${[r.artist, r.title].filter(Boolean).join(" — ")}`);
     const metin = `⏳ ${baslikTarih} — o anda radyoda çalanlar:\n\n${satirlar.join("\n")}\n\nBu âna ışınlan: nowby.co/arsiv?t=${date}T${time}`;
     // Paylaşım sayfası olan cihazlarda (mobil) yerel paylaşım; masaüstünde kopya.
     if (navigator.share && window.matchMedia("(max-width: 639px)").matches) {

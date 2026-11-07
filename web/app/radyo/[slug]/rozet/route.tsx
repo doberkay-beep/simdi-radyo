@@ -33,7 +33,7 @@ export async function GET(req: Request, ctx: { params: Promise<{ slug: string }>
       padding: og ? "56px 72px" : story ? STORY_DOLGU : "96px 90px 84px",
     }}>
       <div style={{ display: "flex", flexDirection: "column", maxWidth: og ? 560 : "100%" }}>
-        <div style={{ display: "flex", fontSize: og ? 22 : 30, letterSpacing: 8, color: RENK.sicak }}>📻 SON 7 GÜNDE</div>
+        <div style={{ display: "flex", fontSize: og ? 22 : 30, letterSpacing: 0, color: RENK.sicak }}>Son 7 günde</div>
         <div style={{ display: "flex", fontFamily: "Baslik", fontSize: adBoy, lineHeight: 1.02, marginTop: og ? 16 : 28, letterSpacing: -2 }}>
           {kes(o.ad, 26)}
         </div>
@@ -54,7 +54,7 @@ export async function GET(req: Request, ctx: { params: Promise<{ slug: string }>
         </div>
         {o.sarki && (
           <div style={{ display: "flex", flexDirection: "column", marginTop: og ? 14 : 40, alignItems: og ? "flex-end" : "flex-start" }}>
-            <div style={{ display: "flex", fontSize: og ? 20 : 28, letterSpacing: 5, color: RENK.soluk }}>EN SEVDİĞİ ŞARKI</div>
+            <div style={{ display: "flex", fontSize: og ? 20 : 28, letterSpacing: 0, color: RENK.soluk }}>En sevdiği şarkı</div>
             <div style={{ display: "flex", fontFamily: "Siir", fontSize: og ? 30 : 46, marginTop: 8 }}>
               “{kes(o.sarki.title, 28)}” — {kes(o.sarki.artist, 22)}
             </div>
@@ -63,7 +63,7 @@ export async function GET(req: Request, ctx: { params: Promise<{ slug: string }>
         {!og && o.sanatcilar.length > 0 && (
           <div style={{ display: "flex", flexWrap: "wrap", marginTop: 30 }}>
             {o.sanatcilar.map((s) => (
-              <div key={s.ad} style={{ display: "flex", fontSize: 28, padding: "12px 22px", marginRight: 14, marginBottom: 14, borderRadius: 999, border: `2px solid ${RENK.cizgi}`, color: RENK.soluk }}>
+              <div key={s.ad} style={{ display: "flex", fontSize: 28, padding: "12px 22px", marginRight: 14, marginBottom: 14, borderRadius: 0, border: `2px solid ${RENK.cizgi}`, color: RENK.soluk }}>
                 {kes(s.ad, 20)} · {s.kez}
               </div>
             ))}
@@ -73,7 +73,7 @@ export async function GET(req: Request, ctx: { params: Promise<{ slug: string }>
 
       {!og && (
         <div style={{ display: "flex", flexDirection: "column", borderTop: `2px solid ${RENK.cizgi}`, paddingTop: 34 }}>
-          <div style={{ display: "flex", fontSize: 34, letterSpacing: 4, color: RENK.sicak }}>nowby.co/radyo/{kes(slug, 22)}</div>
+          <div style={{ display: "flex", fontSize: 34, letterSpacing: 0, color: RENK.sicak }}>nowby.co/radyo/{kes(slug, 22)}</div>
           <div style={{ display: "flex", fontFamily: "Siir", fontSize: 28, color: RENK.soluk, marginTop: 10 }}>
             nowby. · radyonun haftalık karnesi — canlı arşivden
           </div>

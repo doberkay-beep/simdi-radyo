@@ -43,11 +43,6 @@ export default function GeceNobeti() {
       const h = new Date().getHours();
       if (h >= 2 && h < 5) nobetIsaretle();
     }
-    const eski = document.title;
-    if (!eski.startsWith("🌙")) document.title = `🌙 ${eski}`;
-    return () => {
-      document.title = document.title.replace(/^🌙 /, "");
-    };
   }, [aktif]);
 
   if (!aktif) return null;

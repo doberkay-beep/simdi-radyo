@@ -59,8 +59,8 @@ export async function GET(req: Request, ctx: { params: Promise<{ slug: string }>
     >
       {/* Üst: künye + sanatçı */}
       <div style={{ display: "flex", flexDirection: "column", maxWidth: og ? 560 : "100%" }}>
-        <div style={{ display: "flex", fontSize: og ? 22 : 30, letterSpacing: 8, color: RENK.sicak }}>
-          📻 TÜRKİYE RADYOLARINDA
+        <div style={{ display: "flex", fontSize: og ? 22 : 30, letterSpacing: 0, color: RENK.sicak }}>
+          Türkiye radyolarında
         </div>
         <div style={{ display: "flex", fontFamily: "Baslik", fontSize: adBoy, lineHeight: 1.02, marginTop: og ? 18 : 30, letterSpacing: -2 }}>
           {kes(adDuzelt(o.ad), 28)}
@@ -74,7 +74,7 @@ export async function GET(req: Request, ctx: { params: Promise<{ slug: string }>
 
       {/* Orta: dev sayı */}
       <div style={{ display: "flex", flexDirection: "column", alignItems: og ? "flex-end" : "flex-start", marginTop: og ? 0 : 20 }}>
-        <div style={{ display: "flex", fontSize: og ? 24 : 34, letterSpacing: 6, color: RENK.soluk }}>{donem}</div>
+        <div style={{ display: "flex", fontSize: og ? 24 : 34, letterSpacing: 0, color: RENK.soluk }}>{donem}</div>
         <div style={{ display: "flex", alignItems: "flex-end" }}>
           <div style={{ display: "flex", fontFamily: "Baslik", fontSize: sayiBoy, lineHeight: 0.95, color: RENK.sicak, letterSpacing: -6 }}>
             {sayi}
@@ -93,7 +93,7 @@ export async function GET(req: Request, ctx: { params: Promise<{ slug: string }>
                 key={s.name}
                 style={{
                   display: "flex", fontSize: 28, padding: "12px 22px", marginRight: 14, marginBottom: 14,
-                  borderRadius: 999, border: `2px solid ${RENK.cizgi}`, color: RENK.soluk,
+                  borderRadius: 0, border: `2px solid ${RENK.cizgi}`, color: RENK.soluk,
                 }}
               >
                 {kes(s.name, 22)} · {s.kez}
@@ -106,7 +106,7 @@ export async function GET(req: Request, ctx: { params: Promise<{ slug: string }>
       {/* Alt: imza */}
       {!og && (
         <div style={{ display: "flex", flexDirection: "column", borderTop: `2px solid ${RENK.cizgi}`, paddingTop: 34 }}>
-          <div style={{ display: "flex", fontSize: 34, letterSpacing: 4, color: RENK.sicak }}>
+          <div style={{ display: "flex", fontSize: 34, letterSpacing: 0, color: RENK.sicak }}>
             nowby.co/sanatci/{kes(slug, 24)}
           </div>
           <div style={{ display: "flex", fontFamily: "Siir", fontSize: 28, color: RENK.soluk, marginTop: 10 }}>

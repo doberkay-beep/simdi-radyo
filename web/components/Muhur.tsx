@@ -6,7 +6,7 @@ export default function Muhur({ dize }: { dize?: string }) {
     <div className="mt-16 border-t pt-6" style={{ borderColor: "var(--line)" }}>
       {dize && (
         <p className="read text-base italic" style={{ color: "var(--muted)" }}>
-          ❧ {dize}
+          {dize}
         </p>
       )}
       <p className="mt-3 text-sm" style={{ color: "var(--muted)" }}>

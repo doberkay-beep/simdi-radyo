@@ -13,7 +13,7 @@ export async function generateMetadata({ searchParams }: PageProps<"/liste">): P
 
   if (k === "hepsi") {
     return {
-      title: "nowby. LİSTESİ — Dünyanın radyolarında en çok çalanlar",
+      title: "nowby. Listesi — Dünyanın radyolarında en çok çalanlar",
       description: `${ULKE_SAYISI} ülkeden ${TOPLAM} radyonun canlı yayın arşivinden sayım: bugün ve bu hafta dünyada en çok çalan şarkılar.`,
       alternates: { canonical: "/liste?ulke=hepsi", languages: { tr: "/liste?ulke=hepsi", en: "/en/chart" } },
     };
@@ -22,13 +22,13 @@ export async function generateMetadata({ searchParams }: PageProps<"/liste">): P
     const ad = ULKELER[k as UlkeKodu].tr;
     const n = ulkeIstasyonSluglari(k as UlkeKodu).length;
     return {
-      title: `nowby. LİSTESİ — ${ad} radyolarında en çok çalanlar`,
+      title: `nowby. Listesi — ${ad} radyolarında en çok çalanlar`,
       description: `${ad} radyolarında gerçekte en çok çalan şarkılar: ${n} istasyonun canlı yayın arşivinden saat saat sayım.`,
       alternates: { canonical: `/liste?ulke=${k}`, languages: { tr: `/liste?ulke=${k}`, en: `/en/chart?ulke=${k}` } },
     };
   }
   return {
-    title: "nowby. LİSTESİ — Türkiye'nin ve dünyanın radyolarında en çok çalanlar",
+    title: "nowby. Listesi — Türkiye'nin ve dünyanın radyolarında en çok çalanlar",
     description: `Radyolarda gerçekte en çok çalan şarkılar: Türkiye ve ${ULKE_SAYISI - 1} ülkeden ${TOPLAM} istasyonun canlı yayın arşivinden saat saat sayım. Ülke seç, sanatçını ara: bu hafta kaç kez çaldı?`,
     alternates: { canonical: "/liste", languages: { tr: "/liste", en: "/en/chart?ulke=tr" } },
   };

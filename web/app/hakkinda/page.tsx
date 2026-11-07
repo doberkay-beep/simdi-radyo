@@ -103,7 +103,7 @@ export default async function Hakkinda() {
           <h2 className="brand text-2xl font-bold tracking-tight">
             {en ? "Night Windows" : "Gece Pencereleri"}{" "}
             <span className="text-base font-normal" style={{ color: "var(--muted)" }}>
-              · {en ? "the film" : "film"} 🕯
+              · {en ? "the film" : "film"}
             </span>
           </h2>
           <p className="epigraf mt-2 text-[15px]">

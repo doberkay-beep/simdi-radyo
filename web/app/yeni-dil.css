@@ -301,3 +301,15 @@ main h1, h1.brand, h1.dial { font-weight: 400 !important; letter-spacing: -.02em
   .sergi > .salon:first-child { min-height: 0; padding-top: clamp(20px,3vw,40px); }
 }
 
+/* Karne ve rozet kartı: kutu değil, sayfa */
+.rozet-paylas { margin: 0 0 clamp(36px,7vh,70px); padding-top: 22px; border-top: 1px solid var(--line); }
+.rozet-etiket { margin: 0; font-style: italic; font-size: 16px; color: var(--muted); }
+.rozet-baslik { margin: 6px 0 0; font-family: var(--font-baslik), Georgia, serif; font-weight: 400; font-size: clamp(1.6rem,3.4vw,2.4rem); line-height: 1.12; letter-spacing: -.015em; }
+.rozet-aciklama { margin: 10px 0 0; font-size: 17px; line-height: 1.5; color: var(--muted); }
+.rozet-govde { margin-top: 20px; display: flex; gap: clamp(18px,3vw,32px); align-items: flex-start; }
+.rozet-govde img { width: clamp(132px,24vw,200px); height: auto; flex: none; }
+.rozet-dugmeler { display: flex; flex-direction: column; align-items: flex-start; gap: 12px; min-width: 0; }
+.rozet-dugmeler button, .rozet-dugmeler a { background: none; border: 0; border-bottom: 1px solid currentColor; padding: 2px 0; color: var(--fg); font: inherit; font-size: 17px; cursor: pointer; text-align: left; text-decoration: none; }
+.rozet-dugmeler button:first-child { border-bottom-color: var(--glow); }
+.rozet-dugmeler button:hover, .rozet-dugmeler a:hover { color: var(--glow); }
+.rozet-dugmeler p { margin: 0; font-style: italic; font-size: 15px; color: var(--muted); }

@@ -38,13 +38,13 @@ export default function AltBilgi() {
             {en ? "about" : "hakkında"}
           </Link>
           <Link href="/hakkinda#film" className="underline">
-            {en ? "the film 🕯" : "film 🕯"}
+            {en ? "the film" : "film"}
           </Link>
           <Link href="/oyun" className="underline">
             {en ? "games" : "oyunlar"}
           </Link>
           <Link href="/fal" className="underline">
-            {en ? "fortune 🔮" : "fal 🔮"}
+            {en ? "fortune" : "fal"}
           </Link>
           <Link href="/liste" className="underline">
             {en ? "the chart" : "liste"}

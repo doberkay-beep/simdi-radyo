@@ -9,13 +9,13 @@ import { BOYUT, boyutAl, RENK, kes, fontlar, KART_ONBELLEK, zemin, STORY_DOLGU }
 const TURLER = ["tanisma", "nasil", "rekorlar", "gece", "duyuru", "endeks"] as const;
 type Tur = (typeof TURLER)[number];
 
-// Marka işareti: sinyal çubukları (kor → krem) — profil resmiyle aynı.
+// Marka işareti: sinyal çubukları.
 function Sinyal({ olcek = 1 }: { olcek?: number }) {
-  const boy = [30, 42, 56, 38, 48], renk = ["#e5382c", "#ee5a3f", "#ff9b76", "#f6b896", "#f2e6da"];
+  const boy = [30, 42, 56, 38, 48], renk = ["#e5382c", "#f5f3ef", "#f5f3ef", "#f5f3ef", "#f5f3ef"];
   return (
     <div style={{ display: "flex", alignItems: "flex-end", height: 56 * olcek }}>
       {boy.map((h, i) => (
-        <div key={i} style={{ display: "flex", width: 8 * olcek, height: h * olcek, borderRadius: 4 * olcek, background: renk[i], marginRight: i < 4 ? 6 * olcek : 0 }} />
+        <div key={i} style={{ display: "flex", width: 8 * olcek, height: h * olcek, background: renk[i], marginRight: i < 4 ? 6 * olcek : 0 }} />
       ))}
     </div>
   );
@@ -25,7 +25,7 @@ function Alt({ adres }: { adres: string }) {
   return (
     <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", borderTop: `2px solid ${RENK.cizgi}`, paddingTop: 30 }}>
       <div style={{ display: "flex", flexDirection: "column" }}>
-        <div style={{ display: "flex", fontSize: 32, letterSpacing: 4, color: RENK.sicak }}>{adres}</div>
+        <div style={{ display: "flex", fontSize: 32, letterSpacing: 0, color: RENK.sicak }}>{adres}</div>
         <div style={{ display: "flex", fontFamily: "Siir", fontSize: 26, color: RENK.soluk, marginTop: 8 }}>bir yazarın radyo projesi</div>
       </div>
       <Sinyal olcek={1.1} />
@@ -49,7 +49,7 @@ async function govde(tur: Tur, og: boolean, ay: string | null) {
     return (
       <div style={{ display: "flex", flexDirection: "column", flex: 1, justifyContent: "center" }}>
         <Sinyal olcek={og ? 1.4 : 2.4} />
-        <div style={{ display: "flex", fontSize: 30, letterSpacing: 8, color: RENK.sicak, marginTop: og ? 24 : 60 }}>YENİ HESAP</div>
+        <div style={{ display: "flex", fontSize: 30, letterSpacing: 0, color: RENK.sicak, marginTop: og ? 24 : 60 }}>Yeni hesap</div>
         <div style={{ display: "flex", fontFamily: "Baslik", fontSize: og ? 84 : 124, letterSpacing: -3, marginTop: 10 }}>@necaliyor.co</div>
         <div style={{ display: "flex", fontFamily: "Siir", fontSize: og ? 32 : 46, color: RENK.soluk, marginTop: og ? 14 : 28, lineHeight: 1.3 }}>
           Türk radyolarında şu an ne çalıyor? Biz sayıyoruz.
@@ -73,13 +73,13 @@ async function govde(tur: Tur, og: boolean, ay: string | null) {
       .format(new Date(Date.UTC(yy, mm - 1, 15))).toLocaleUpperCase("tr");
     return (
       <div style={{ display: "flex", flexDirection: "column", flex: 1, justifyContent: "center" }}>
-        <div style={{ display: "flex", fontSize: 28, letterSpacing: 8, color: RENK.sicak }}>TÜRKİYE RADYO ENDEKSİ</div>
+        <div style={{ display: "flex", fontSize: 28, letterSpacing: 0, color: RENK.sicak }}>Türkiye Radyo Endeksi</div>
         <div style={{ display: "flex", fontFamily: "Baslik", fontSize: 104, letterSpacing: -2, marginTop: 10 }}>{ayAdi}</div>
         <div style={{ display: "flex", marginTop: 26 }}>
           {[[Number(o.toplam).toLocaleString("tr-TR"), "kayıtlı çalma"], [o.sanatci?.ad ?? "—", "ayın sanatçısı"]].map(([d1, d2]) => (
             <div key={d2} style={{ display: "flex", flexDirection: "column", marginRight: 60 }}>
               <div style={{ display: "flex", fontFamily: "Baslik", fontSize: 54, color: RENK.sicak }}>{kes(d1, 14)}</div>
-              <div style={{ display: "flex", fontSize: 24, letterSpacing: 3, color: RENK.soluk }}>{d2.toLocaleUpperCase("tr")}</div>
+              <div style={{ display: "flex", fontSize: 24, letterSpacing: 0, color: RENK.soluk }}>{d2}</div>
             </div>
           ))}
         </div>
@@ -118,7 +118,7 @@ async function govde(tur: Tur, og: boolean, ay: string | null) {
     ];
     return (
       <div style={{ display: "flex", flexDirection: "column", flex: 1, justifyContent: "center" }}>
-        <div style={{ display: "flex", fontSize: 30, letterSpacing: 8, color: RENK.sicak }}>NASIL ÇALIŞIYOR?</div>
+        <div style={{ display: "flex", fontSize: 30, letterSpacing: 0, color: RENK.sicak }}>Nasıl çalışıyor?</div>
         {adimlar.map(([no, bas, ac]) => (
           <div key={no} style={{ display: "flex", marginTop: 54 }}>
             <div style={{ display: "flex", fontFamily: "Baslik", fontSize: 64, color: RENK.sicak, width: 120 }}>{no}</div>
@@ -138,9 +138,9 @@ async function govde(tur: Tur, og: boolean, ay: string | null) {
     if (!r) throw new Error("rekorlar verisi gelmedi");
     const satir: [string, Rekor | null | undefined, (x: Rekor) => string][] = [
       ["⚡ BİR GÜNÜN REKORU", r?.gunRekoru, (x) => `tek günde ${x.kez} kez`],
-      ["🌙 GECENİN KRALI", r?.geceKrali, (x) => `30 gecede ${x.kez} kez`],
-      ["☀️ SABAHIN ŞAMPİYONU", r?.sabahSampiyonu, (x) => `30 sabahta ${x.kez} kez`],
-      ["📡 EN GENİŞ YAYILIM", r?.genisYayilim, (x) => `${x.istasyon} farklı radyoda`],
+      ["Gecenin kralı", r?.geceKrali, (x) => `30 gecede ${x.kez} kez`],
+      ["Sabahın şampiyonu", r?.sabahSampiyonu, (x) => `30 sabahta ${x.kez} kez`],
+      ["En geniş yayılım", r?.genisYayilim, (x) => `${x.istasyon} farklı radyoda`],
       ["💘 EN SADIK İLİŞKİ", r?.sadikIliski, (x) => `${x.istasyon}: ${x.kez} kez`],
     ];
     return (
@@ -149,7 +149,7 @@ async function govde(tur: Tur, og: boolean, ay: string | null) {
         <div style={{ display: "flex", fontFamily: "Siir", fontSize: 36, color: RENK.soluk, marginTop: 10 }}>son 30 günün uç değerleri — türk radyoları</div>
         {satir.filter(([, x]) => x).map(([et, x, alt]) => (
           <div key={et} style={{ display: "flex", flexDirection: "column", marginTop: 40 }}>
-            <div style={{ display: "flex", fontSize: 24, letterSpacing: 5, color: RENK.sicak }}>{et}</div>
+            <div style={{ display: "flex", fontSize: 24, letterSpacing: 0, color: RENK.sicak }}>{et}</div>
             <div style={{ display: "flex", fontFamily: "Baslik", fontSize: 44, marginTop: 6 }}>{kes(`${x!.artist} — ${x!.title}`, 34)}</div>
             <div style={{ display: "flex", fontSize: 28, color: RENK.soluk, marginTop: 4 }}>{alt(x!)}</div>
           </div>
@@ -163,7 +163,7 @@ async function govde(tur: Tur, og: boolean, ay: string | null) {
   if (!liste.length) throw new Error("gece listesi verisi gelmedi");
   return (
     <div style={{ display: "flex", flexDirection: "column", flex: 1, justifyContent: "center" }}>
-      <div style={{ display: "flex", fontSize: 30, letterSpacing: 8, color: RENK.sicak }}>🌙 02:00 – 05:00 · SON 7 GECE</div>
+      <div style={{ display: "flex", fontSize: 30, letterSpacing: 0, color: RENK.sicak }}>02:00 – 05:00 · son 7 gece</div>
       <div style={{ display: "flex", fontFamily: "Baslik", fontSize: 104, letterSpacing: -2, marginTop: 14 }}>Gece 3 Listesi</div>
       <div style={{ display: "flex", fontFamily: "Siir", fontSize: 36, color: RENK.soluk, marginTop: 10 }}>şehir uyurken radyolar bunu çaldı</div>
       {liste.map((s, i) => (

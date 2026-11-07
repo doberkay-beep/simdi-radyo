@@ -89,14 +89,14 @@ export default function AyniAndaAbone({ dil }: { dil: "tr" | "en" }) {
     <div className="mt-6 rounded-2xl border px-4 py-4" style={{ borderColor: "var(--line-hi)" }}>
       {durum === "acik" ? (
         <p className="text-sm">
-          🔔 {m.acik}{" "}
+          {m.acik}{" "}
           <button type="button" onClick={birak} className="nav-link underline" style={{ color: "var(--muted)" }}>{m.birak}</button>
         </p>
       ) : (
         <>
           <button type="button" onClick={ac} disabled={durum === "bekliyor"} className="press rounded-full px-4 py-2 text-sm font-bold"
             style={{ background: "none", color: "var(--fg)", border: 0, borderBottom: "1px solid var(--glow)", borderRadius: 0, padding: "2px 0", opacity: durum === "bekliyor" ? 0.6 : 1 }}>
-            🌍 {m.dugme}
+            {m.dugme}
           </button>
           <p className="mt-2 text-xs" style={{ color: "var(--muted)" }}>{m.not}</p>
           {(durum === "izinYok" || durum === "destekYok" || durum === "hata") && (

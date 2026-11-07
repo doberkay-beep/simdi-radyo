@@ -83,7 +83,7 @@ export default async function Sayfa({ params }: { params: Promise<{ slug: string
         {o.suan && o.suan.length > 0 && (
           <div className="mb-6 rounded-2xl border p-5" style={{ borderColor: "var(--accent, #e5382c)" }}>
             <p className="text-sm font-semibold">
-              🔴 ŞU AN ÇALIYOR:{" "}
+              Şu an çalıyor:{" "}
               {o.suan.map((s, i) => (
                 <span key={s.slug}>
                   {i > 0 && " · "}
@@ -131,11 +131,11 @@ export default async function Sayfa({ params }: { params: Promise<{ slug: string
 
         <div className="rounded-2xl border p-5" style={{ borderColor: "var(--line)" }}>
           <p className="text-sm">
-            🔔 <strong>{o.sanatci}</strong> yine çalınca haber almak için{" "}
+            <strong>{o.sanatci}</strong> yine çalınca haber almak için{" "}
             <Link href="/" className="underline">nowby&apos;de</Link> izlemeye al, radar zilini kur.
           </p>
           <p className="mt-2 text-sm" style={{ color: "var(--muted)" }}>
-            Haftanın tam listesi: <Link href="/liste" className="underline">nowby. LİSTESİ →</Link>
+            Haftanın tam listesi: <Link href="/liste" className="underline">nowby. Listesi →</Link>
           </p>
         </div>
       </div>

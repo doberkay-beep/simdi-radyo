@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 
-/* Gömülebilir nowby. LİSTESİ rozeti — haftanın en çok çalan 5 şarkısı, canlı.
+/* Gömülebilir nowby. Listesi rozeti — haftanın en çok çalan 5 şarkısı, canlı.
    ?boy=genis → 728×90 yatay (ilk 3). Varsayılan: 300×250 dikey kart.
    Her gömme nowby.co/liste'ye gerçek bağlantı taşır. */
 
@@ -60,7 +60,7 @@ export default function EmbedListe({ boy }: { boy: "kart" | "genis" }) {
     <a href="https://nowby.co/liste" target="_blank" rel="noopener" style={{ textDecoration: "none" }}>
       <div style={{ ...govde, width: 300, height: 250, padding: "12px 14px", display: "flex", flexDirection: "column" }}>
         <div style={{ display: "flex", alignItems: "baseline", justifyContent: "space-between", marginBottom: 8 }}>
-          <span style={{ fontWeight: 800, fontSize: 14, letterSpacing: "0.08em", color: "#ff9b76" }}>nowby. LİSTESİ</span>
+          <span style={{ fontWeight: 800, fontSize: 14, letterSpacing: "0.08em", color: "#ff9b76" }}>nowby. Listesi</span>
           <span style={{ fontSize: 10, color: "#8d6f63" }}>bu hafta · canlı</span>
         </div>
         <div style={{ flex: 1, display: "flex", flexDirection: "column", gap: 6 }}>

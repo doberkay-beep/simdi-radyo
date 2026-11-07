@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import EmbedListe from "@/components/EmbedListe";
 
-// Gömülebilir nowby. LİSTESİ — iframe ile başka sitelere konur.
+// Gömülebilir nowby. Listesi — iframe ile başka sitelere konur.
 export const metadata: Metadata = { robots: { index: false, follow: true } };
 
 export default async function Page({ searchParams }: { searchParams: Promise<{ boy?: string }> }) {

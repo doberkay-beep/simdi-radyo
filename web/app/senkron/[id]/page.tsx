@@ -12,7 +12,7 @@ export async function generateMetadata({ params }: { params: Promise<{ id: strin
   const { id } = await params;
   const an = await senkronAl(Number(id));
   if (!an) return { title: "Senkron anı bulunamadı | nowby." };
-  const baslik = `⚡ ${an.sayi} radyo aynı anda: ${an.artist} — ${an.title}`;
+  const baslik = `${an.sayi} radyo aynı anda: ${an.artist} — ${an.title}`;
   return {
     title: `${baslik} | nowby.`,
     description: `${trZaman(an.ilk)} — ${an.istasyonlar.map((s) => s.name).join(", ")} birbirinden habersiz, ${yayilma(an)} aynı şarkıyı çalmaya başladı.`,
@@ -30,7 +30,7 @@ export default async function Sayfa({ params }: { params: Promise<{ id: string }
   return (
     <main className="mx-auto max-w-2xl px-5 py-10">
       <p className="mono text-[11px] uppercase tracking-[0.22em]" style={{ color: "var(--muted)" }}>
-        <Link href="/senkron" className="nav-link">⚡ SENKRON DEFTERİ</Link> · #{an.id}
+        <Link href="/senkron" className="nav-link">Senkron Defteri</Link> · #{an.id}
       </p>
       <h1 className="brand mt-2 text-4xl font-bold leading-tight">
         {an.sayi} radyo, aynı anda
@@ -61,11 +61,11 @@ export default async function Sayfa({ params }: { params: Promise<{ id: string }
       <div className="mt-8">
         <RozetPaylas
           taban={`/senkron/${an.id}/kart`}
-          dosyaAdi={`simdi-senkron-${an.id}`}
-          etiket="⚡ senkron kartı"
+          dosyaAdi={`nowby-senkron-${an.id}`}
+          etiket="senkron kartı"
           baslik="Bu nadir anı paylaş."
           aciklama={`${an.artist} — ${an.title}: ${an.sayi} radyo, ${yayilma(an)}. Radyolar anlaşmadı; şarkı kendi buldu.`}
-          metin={`⚡ Senkron anı: ${an.sayi} radyo birbirinden habersiz aynı anda "${an.title}" (${an.artist}) çalmaya başladı. https://nowby.co/senkron/${an.id}`}
+          metin={`Senkron anı: ${an.sayi} radyo birbirinden habersiz aynı anda "${an.title}" (${an.artist}) çalmaya başladı. https://nowby.co/senkron/${an.id}`}
         />
       </div>
     </main>

@@ -56,14 +56,14 @@ export default function KurSihirbazi({ acik, kapat, dil }: { acik: boolean; kapa
       <div className="menu-sayfa absolute inset-x-0 bottom-0 rounded-t-2xl p-5 pb-8 sm:inset-x-auto sm:left-1/2 sm:top-1/2 sm:bottom-auto sm:w-[420px] sm:-translate-x-1/2 sm:-translate-y-1/2 sm:rounded-2xl sm:border" >
         <div className="mb-3 flex items-center justify-between">
           <span className="mono text-[11px] font-bold uppercase tracking-[0.2em]" style={{ color: "var(--muted)" }}>
-            📲 {en ? "INSTALL nowby." : "nowby'yi kur"}
+            {en ? "Install nowby." : "nowby'yi kur"}
           </span>
           <button onClick={kapat} className="press text-xl leading-none" aria-label={en ? "close" : "kapat"}>×</button>
         </div>
 
         {sonuc === "kuruldu" ? (
           <p className="text-base font-semibold">
-            🎉 {en ? "Installed! nowby now lives on your home screen." : "Kuruldu! nowby artık ana ekranında yaşıyor."}
+            {en ? "Installed! nowby now lives on your home screen." : "Kuruldu! nowby artık ana ekranında yaşıyor."}
           </p>
         ) : (
           <>

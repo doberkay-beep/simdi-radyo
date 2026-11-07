@@ -65,7 +65,7 @@ export default function AvDefteri({ onClose }: { onClose: () => void }) {
         style={{ background: "var(--bg)", borderColor: "var(--line)" }}
       >
         <div className="mb-3 flex items-center justify-between">
-          <span className="text-sm font-semibold">🎣 {t("av.baslik")}</span>
+          <span className="text-sm font-semibold">{t("av.baslik")}</span>
           <button onClick={onClose} className="press rounded-full border px-3 py-1 text-xs" style={{ borderColor: "var(--line)", color: "var(--muted)" }}>
             {t("frekans.kapat")}
           </button>
@@ -101,8 +101,8 @@ export default function AvDefteri({ onClose }: { onClose: () => void }) {
                   {radar === "mesgul"
                     ? "…"
                     : radar === "acik"
-                      ? en ? "🔔 radar on — tap to turn off" : "🔔 radar açık — kapatmak için dokun"
-                      : en ? "🔕 notify me when they play" : "🔕 çalınca bana haber ver"}
+                      ? en ? "radar on — tap to turn off" : "radar açık — kapatmak için dokun"
+                      : en ? "notify me when they play" : "çalınca bana haber ver"}
                 </button>
                 {radarNot && (
                   <p className="mt-1.5 text-[11px]" style={{ color: "var(--muted)" }}>
@@ -113,8 +113,8 @@ export default function AvDefteri({ onClose }: { onClose: () => void }) {
             ) : (
               <p className="mt-3 text-[11px]" style={{ color: "var(--muted)" }}>
                 {en
-                  ? "📲 for push alerts on iPhone, add nowby to your home screen"
-                  : "📲 iPhone'da bildirim için nowby'yi ana ekrana ekle"}
+                  ? "for push alerts on iPhone, add nowby to your home screen"
+                  : "iPhone'da bildirim için nowby'yi ana ekrana ekle"}
               </p>
             )}
           </div>

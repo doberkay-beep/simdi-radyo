@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { senkronDefteri, senkronRekoru, yayilma, trZaman } from "@/lib/senkron";
 
-// ⚡ SENKRON DEFTERİ — aynı şarkının birbirinden habersiz radyolarda aynı
+// ⚡ Senkron Defteri — aynı şarkının birbirinden habersiz radyolarda aynı
 // anda başladığı nadir anların kaydı.
 export const revalidate = 120;
 

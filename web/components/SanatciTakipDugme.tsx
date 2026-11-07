@@ -34,7 +34,7 @@ export default function SanatciTakipDugme({ ad }: { ad: string }) {
     if (!radarDestekleniyor()) { setMesaj("Takiptesin. Bu tarayıcı bildirim alamıyor; nowby açıkken bant düşer."); return; }
     const s = await radarAc();
     setMesaj(
-      s === "acik" ? `🔔 Tamam — ${ad} bir radyoda çaldığı an telefonuna düşecek.`
+      s === "acik" ? `Tamam — ${ad} bir radyoda çaldığı an telefonuna düşecek.`
       : s === "izin-yok" ? "Takiptesin, ama bildirim izni verilmedi — tarayıcı ayarlarından açabilirsin."
       : "Takiptesin. Bildirimler şu an açılamadı, sonra yeniden dene.",
     );
@@ -48,7 +48,7 @@ export default function SanatciTakipDugme({ ad }: { ad: string }) {
         style={takipte ? { background: "linear-gradient(180deg, var(--glow-hi), var(--glow))", color: "var(--bg)" } : undefined}
         aria-pressed={takipte}
       >
-        {takipte ? "✓ takiptesin — radyoda çalınca haber gelir" : "🔔 takip et — radyoda çalınca haber al"}
+        {takipte ? "✓ takiptesin — radyoda çalınca haber gelir" : "takip et — radyoda çalınca haber al"}
       </button>
       {mesaj && <p className="mt-2 text-sm" style={{ color: "var(--muted)" }}>{mesaj}</p>}
       <KurSihirbazi acik={kurAcik} kapat={() => setKurAcik(false)} dil="tr" />

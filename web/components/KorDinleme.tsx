@@ -134,7 +134,7 @@ export default function KorDinleme() {
                 <span /><span /><span /><span /><span />
               </span>
               <span className="text-sm" style={{ color: "var(--muted)" }}>
-                {durum === "dinle" ? "dinle ve tahmin et…" : secilen === cevap.slug ? "doğru! 🎯" : "olmadı — doğrusu aşağıda"}
+                {durum === "dinle" ? "dinle ve tahmin et…" : secilen === cevap.slug ? "doğru!" : "olmadı — doğrusu aşağıda"}
               </span>
             </div>
 

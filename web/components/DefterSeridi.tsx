@@ -52,7 +52,7 @@ export default function DefterSeridi({ stations }: { stations: Ist[] }) {
             style={{ color: "var(--muted)" }}
           >
             <span className="italic" style={{ color: "var(--fg)" }}>“{n.not}”</span>
-            <span style={{ color: n.ist!.accentColor || "var(--fg)" }}> — {n.ist!.name}</span>
+            <span style={{ color: "var(--muted)" }}> — {n.ist!.name}</span>
             {(n.kalp || 0) > 1 ? <span> ♥{n.kalp}</span> : null}
           </Link>
         ))}

@@ -1928,9 +1928,8 @@ export default function NowList({ ilkIstasyonlar, ilkOzet }: { ilkIstasyonlar?: 
               {t("home.simdiCalanlar")}
             </p>
             <div className="no-scrollbar -mx-5 overflow-x-auto px-5">
-              <div className="flex gap-2 pb-1">
+              <div className="flex gap-5 pb-1">
                 {nowStrip.map((s) => {
-                  const c = s.accentColor || DEFAULT_ACCENT;
                   const np = s.nowPlaying!;
                   const txt =
                     np.artist && np.title && np.artist !== np.title
@@ -1940,15 +1939,11 @@ export default function NowList({ ilkIstasyonlar, ilkOzet }: { ilkIstasyonlar?: 
                     <button
                       key={s.slug}
                       onClick={() => toggle(s)}
-                      className="shrink-0 rounded-xl border px-3 py-2 text-left"
-                      style={{
-                        borderColor: "var(--line)",
-                        background: `color-mix(in srgb, ${c} 8%, transparent)`,
-                        maxWidth: 230,
-                      }}
+                      className="shrink-0 py-2 text-left"
+                      style={{ borderTop: "1px solid var(--line)", maxWidth: 230 }}
                     >
                       <span className="block truncate text-xs font-semibold">{txt}</span>
-                      <span className="mt-0.5 block truncate text-[11px]" style={{ color: c }}>
+                      <span className="mt-0.5 block truncate text-[11px]" style={{ color: "var(--muted)" }}>
                         {s.name}
                       </span>
                     </button>

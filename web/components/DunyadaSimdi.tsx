@@ -80,7 +80,7 @@ dünyada şu an
             <span className="block truncate text-[13px] font-semibold" suppressHydrationWarning>
               {[s.nowPlaying!.artist, s.nowPlaying!.title].filter(Boolean).join(" — ")}
             </span>
-            <span className="block truncate text-xs" style={{ color: s.accentColor || "var(--muted)" }}>{s.name}</span>
+            <span className="block truncate text-xs" style={{ color: "var(--muted)" }}>{s.name}</span>
           </button>
         ))}
       </div>

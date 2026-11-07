@@ -48,14 +48,16 @@ export const CanliDuvar = memo(function CanliDuvar({
   const s = calan ?? (adaylar.length ? adaylar[sira % adaylar.length] : null);
   const artist = s?.nowPlaying?.artist?.trim() || "";
   const title = parcaAdi(s?.nowPlaying?.title);
-  const uzun = artist.length + title.length > 30;
+  // Yazı boyu en uzun satıra göre: dizi ekrana sığsın, taşmasın.
+  const enUzun = Math.max(artist.length, title.length);
+  const boy = enUzun <= 9 ? "" : enUzun <= 16 ? " boy2" : enUzun <= 24 ? " boy3" : " boy4";
 
   return (
     <section className="canli-duvar">
       <h1 className="canli-soru">{soru}</h1>
       {s ? (
         <div key={s.slug + title} className="canli-sarki">
-          <p className={uzun ? "canli-ad uzun" : "canli-ad"}>
+          <p className={"canli-ad" + boy}>
             <span>{artist && artist !== title ? artist : title}</span>
             {artist && artist !== title ? <em>{title}</em> : null}
           </p>

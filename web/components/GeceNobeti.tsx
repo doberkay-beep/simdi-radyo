@@ -62,7 +62,7 @@ export default function GeceNobeti() {
         style={{ background: "radial-gradient(120% 100% at 50% 0%, transparent 52%, rgba(2,2,12,0.38))" }}
       />
       <div className="ince-bant">
-        <span className="etiket">🌙 {dil === "en" ? "NIGHT WATCH" : "GECE NÖBETİ"}</span>
+        <span className="etiket">{dil === "en" ? "Night watch" : "Gece nöbeti"}</span>
         <span className="metin epigraf text-[14px]" key={c.tr}>{dil === "en" ? c.en : c.tr}</span>
       </div>
     </>

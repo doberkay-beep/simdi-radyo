@@ -290,7 +290,7 @@ export default async function StationPage({ params }: { params: Promise<{ slug: 
     <div className="min-h-screen" style={{ background: "var(--bg)" }}>
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
       <div className="mx-auto max-w-2xl px-5 pb-24 pt-10">
-        <header className="mb-10 flex items-center justify-between">
+        <header className="ust-cubuk radyo-ust flex items-center justify-between">
           <Link href="/" className="text-sm underline" style={{ color: "var(--muted)" }}>
             {T("nav.tumRadyolar")}
           </Link>
@@ -312,75 +312,19 @@ export default async function StationPage({ params }: { params: Promise<{ slug: 
           </div>
         ) : null}
 
-        {/* KADRAN enstrümanı — bu istasyon (büyük frekans + ibre bandı + VU) */}
-        <div
-          className="mb-5 overflow-hidden rounded-2xl border"
-          style={{
-            borderColor: "var(--line-hi)",
-            background: `radial-gradient(130% 100% at 50% 0%, color-mix(in srgb, ${accent} 20%, transparent), transparent 62%), linear-gradient(180deg, var(--panel-hi), var(--panel))`,
-            boxShadow: "inset 0 1px 0 color-mix(in srgb, #fff 8%, transparent), 0 22px 52px -30px #000",
-          }}
-        >
-          <div className="px-5 pt-4 sm:px-6">
-            <div className="mono text-[10px] uppercase tracking-[0.22em]" style={{ color: "var(--muted)" }}>
-              {T("kadran.simdiKadranda")}
-            </div>
-            <div className="mt-1 flex items-end justify-between gap-3">
-              <span
-                className="dial tabular-nums"
-                style={{
-                  color: "var(--fg)", fontWeight: 500, lineHeight: 0.82,
-                  fontSize: s.frequency ? "clamp(44px, 11vw, 84px)" : "clamp(28px, 7vw, 52px)",
-                  textShadow: `0 0 34px color-mix(in srgb, ${accent} 45%, transparent)`,
-                }}
-              >
-                {s.frequency || s.name}
-                {s.frequency && /^[\d.]+$/.test(s.frequency) ? (
-                  <span className="mono align-baseline text-[0.24em]" style={{ color: "var(--muted)" }}> FM</span>
-                ) : null}
-              </span>
-              {s.frequency ? (
-                <span className="dial min-w-0 truncate pb-1 text-right text-lg uppercase tracking-[0.03em]" style={{ color: "var(--fg)", fontWeight: 500 }}>
-                  {s.name}
-                </span>
-              ) : null}
-            </div>
-            <p className="mono mt-1 text-[11px]" style={{ color: "var(--muted)" }}>
-              {[turAdi(dil, s.genre), s.city].filter(Boolean).join(" · ") || T("radyo.canliRadyo")}
-            </p>
+        {/* Sahne: ilk ekranın tamamı bu radyo */}
+        <section className="radyo-sahne">
+          <p className="radyo-kunye">
+            {[s.frequency && /^[\d.]+$/.test(s.frequency) ? `${s.frequency} FM` : s.frequency, turAdi(dil, s.genre), s.city].filter(Boolean).join(" · ") || T("radyo.canliRadyo")}
+          </p>
+          <h1 className={s.name.length > 26 ? "radyo-ad enuzun" : s.name.length > 13 ? "radyo-ad uzun" : "radyo-ad"}>{s.name}</h1>
+          {istasyonTanimi(slug, dil) && <p className="radyo-tanim">{istasyonTanimi(slug, dil)}</p>}
+          <div className="radyo-calan">
+            <CanliParca slug={slug} initial={track} initialArtist={np?.artist ?? null} etiket={T("radyo.simdiCaliyor")} bosMetin={T("radyo.canliYayin")} />
           </div>
-          {/* Statik ayar bandı — ortada ibre */}
-          <div className="relative mt-3 h-8" aria-hidden>
-            <div className="absolute left-0 right-0 top-1/2 h-px -translate-y-1/2" style={{ background: "var(--line-hi)" }} />
-            <div className="absolute inset-0 flex items-center justify-between px-5 sm:px-6">
-              {Array.from({ length: 29 }).map((_, i) => (
-                <span
-                  key={i}
-                  className="block w-px"
-                  style={{
-                    height: i === 14 ? 22 : i % 4 === 0 ? 12 : 7,
-                    background: i === 14 ? "var(--glow)" : "color-mix(in srgb, var(--fg) 26%, transparent)",
-                    boxShadow: undefined,
-                  }}
-                />
-              ))}
-            </div>
-          </div>
-          {/* Şimdi çalan — VU + canlı parça */}
-          <div className="flex items-center gap-3 px-5 pb-4 pt-2 sm:px-6">
-            <span className="eq shrink-0" aria-hidden style={{ ["--eq-color" as string]: "var(--fg)" }}>
-              <span></span><span></span><span></span><span></span>
-            </span>
-            <div className="min-w-0 flex-1">
-              <CanliParca slug={slug} initial={track} initialArtist={np?.artist ?? null} etiket={T("radyo.simdiCaliyor")} bosMetin={T("radyo.canliYayin")} />
-            </div>
-            <YanlisSarki slug={slug} />
-          </div>
-        </div>
-
-        {istasyonTanimi(slug, dil) && (
-          <p className="epigraf mb-3 text-[15px]">{istasyonTanimi(slug, dil)}</p>
-        )}
+          <StationPlayer slug={slug} name={s.name} accent="#e5382c" />
+          <div className="radyo-yanlis"><YanlisSarki slug={slug} /></div>
+        </section>
 
         {turSlug(s.genre) && (
           <Link
@@ -391,8 +335,6 @@ export default async function StationPage({ params }: { params: Promise<{ slug: 
             {dil === "en" ? `all ${turAdi(dil, s.genre)} stations →` : `tüm ${s.genre} radyoları →`}
           </Link>
         )}
-
-        <StationPlayer slug={slug} name={s.name} accent="#e5382c" />
 
         {/* Defter — birinci sınıf: oynatıcının hemen altında, göz önünde */}
         <Notlar slug={slug} accent="#e5382c" />

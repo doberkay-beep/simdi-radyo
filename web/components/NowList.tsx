@@ -201,9 +201,9 @@ const low = (s: string) => s.toLocaleLowerCase("tr");
 
 // Ana sayfa kısayolları — sade tutulur (27 Eki): Aynı anda ve Gece 3 ruh kartlarında, gerisi ☰ menüde.
 const KISAYOLLAR: { href: string; tr: string; en: string }[] = [
-  { href: "/liste", tr: "LİSTE", en: "CHART" },
-  { href: "/endeks", tr: "ENDEKS", en: "INDEX" },
-  { href: "/arsiv", tr: "ARŞİV", en: "ARCHIVE" },
+  { href: "/liste", tr: "Liste", en: "Chart" },
+  { href: "/endeks", tr: "Endeks", en: "Index" },
+  { href: "/arsiv", tr: "Arşiv", en: "Archive" },
 ];
 
 const ILK_SATIR = 36; // süzülmüş listede ilk çizilen eser; gerisi kaydırdıkça eklenir
@@ -1470,7 +1470,7 @@ export default function NowList({ ilkIstasyonlar, ilkOzet }: { ilkIstasyonlar?: 
               aria-haspopup="dialog"
               aria-expanded={navAcik}
             >
-              ☰ {dil === "en" ? "MENU" : "MENÜ"}
+              {dil === "en" ? "Menu" : "Menü"}
             </button>
           </div>
         </header>
@@ -1499,7 +1499,7 @@ export default function NowList({ ilkIstasyonlar, ilkOzet }: { ilkIstasyonlar?: 
             className={takipSay ? "on" : ""}
             title={dil === "en" ? "search artists, get notified when they play" : "sanatçını ara, radyoda çalınca haber al"}
           >
-            {dil === "en" ? "FOLLOW" : "TAKİP"}
+            {dil === "en" ? "Follow" : "Takip"}
           </button>
           {alarm && (
             <button onClick={() => setAlarmAcik((v) => !v)} className="on" title={t("alarm.baslik")}>
@@ -2308,7 +2308,7 @@ export default function NowList({ ilkIstasyonlar, ilkOzet }: { ilkIstasyonlar?: 
           <div className="menu-sayfa absolute inset-x-0 bottom-0 rounded-t-2xl p-5 pb-8 sm:inset-x-auto sm:bottom-auto sm:left-1/2 sm:top-1/2 sm:w-[560px] sm:-translate-x-1/2 sm:-translate-y-1/2 sm:rounded-2xl sm:border">
             <div className="mb-3 flex items-center justify-between">
               <span className="mono text-[11px] font-bold uppercase tracking-[0.2em]" style={{ color: "var(--muted)" }}>
-                nowby. · {dil === "en" ? "MENU" : "MENÜ"}
+                nowby. · {dil === "en" ? "Menu" : "Menü"}
               </span>
               <button onClick={() => setNavAcik(false)} className="press text-xl leading-none" aria-label="kapat">×</button>
             </div>

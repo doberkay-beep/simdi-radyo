@@ -2,22 +2,16 @@ import { ImageResponse } from "next/og";
 import { readFile } from "node:fs/promises";
 import { join } from "node:path";
 
-// Paylaşım görseli (WhatsApp/X/iMessage önizlemesi).
+// Paylaşım görseli (WhatsApp/X/iMessage önizlemesi): film başlığı gibi, tek kelime.
 export const alt = "nowby. — radyoda şu an ne çalıyor";
 export const size = { width: 1200, height: 630 };
 export const contentType = "image/png";
 
-// Marka işareti "sinyal çubukları" (kor → krem) — profil resmi ve site ikonuyla aynı.
-const BARS = [
-  { h: 150, c: "#e5382c" },
-  { h: 250, c: "#ee5a3f" },
-  { h: 340, c: "#ff9b76" },
-  { h: 200, c: "#f6b896" },
-  { h: 290, c: "#f2e6da" },
-];
-
 export default async function Image() {
-  const font = await readFile(join(process.cwd(), "assets/LiberationSans-Bold.ttf"));
+  const [baslik, yazi] = await Promise.all([
+    readFile(join(process.cwd(), "assets/BodoniModa-Regular.ttf")),
+    readFile(join(process.cwd(), "assets/Newsreader-Italic.ttf")),
+  ]);
 
   return new ImageResponse(
     (
@@ -28,33 +22,26 @@ export default async function Image() {
           display: "flex",
           flexDirection: "column",
           justifyContent: "center",
-          background: "#0b0708",
-          color: "#ececee",
-          padding: "0 96px",
-          fontFamily: "Liberation Sans",
+          alignItems: "center",
+          background: "#0a0a0a",
+          color: "#f5f3ef",
+          fontFamily: "Baslik",
         }}
       >
-        <div style={{ display: "flex", alignItems: "flex-end", gap: 16, height: 360 }}>
-          {BARS.map((b, i) => (
-            <div
-              key={i}
-              style={{ width: 46, height: b.h, background: b.c, borderRadius: 23 }}
-            />
-          ))}
+        <div style={{ display: "flex", fontSize: 220, lineHeight: 1, letterSpacing: -6 }}>
+          nowby<span style={{ color: "#e5382c" }}>.</span>
         </div>
-        <div style={{ display: "flex", flexDirection: "column", marginTop: 40 }}>
-          <div style={{ fontSize: 128, fontWeight: 700, letterSpacing: -4, lineHeight: 1 }}>
-            nowby.
-          </div>
-          <div style={{ fontSize: 40, color: "#8a8a92", marginTop: 16 }}>
-            radyoda şu an ne çalıyor
-          </div>
+        <div style={{ display: "flex", fontFamily: "Yazi", fontSize: 44, color: "#9b9a96", marginTop: 58 }}>
+          Radyoda şu an ne çalıyor?
         </div>
       </div>
     ),
     {
       ...size,
-      fonts: [{ name: "Liberation Sans", data: font, weight: 700, style: "normal" }],
+      fonts: [
+        { name: "Baslik", data: baslik, weight: 400, style: "normal" },
+        { name: "Yazi", data: yazi, weight: 400, style: "normal" },
+      ],
     },
   );
 }

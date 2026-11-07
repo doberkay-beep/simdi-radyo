@@ -72,7 +72,7 @@ export function probeIcy(streamUrl, { timeout = 8000, redirects = 3 } = {}) {
     const request =
       `GET ${path} HTTP/1.0\r\n` +
       `Host: ${u.host}\r\n` +
-      `User-Agent: Simdi/0.1\r\n` +
+      `User-Agent: nowby/1.0 (+https://nowby.co)\r\n` +
       `Icy-MetaData: 1\r\n` +
       `Accept: */*\r\n` +
       `Connection: close\r\n\r\n`;

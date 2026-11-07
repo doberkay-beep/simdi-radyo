@@ -117,6 +117,64 @@ async function somaTur(stations) {
   }
 }
 
+// AzuraCast (7 Kas): Radio Armisa'nın sorusu üzerine. Yayın adresi /listen/<kısa-ad>/ biçimindeyse
+// aynı sunucunun herkese açık /api/nowplaying/<kısa-ad> ucu denenir; dakikada tek istekle okunur ve
+// o radyonun yayınına 10 sn'de bir bağlanılmaz. Uç çalışmıyorsa ya da AzuraCast değilse ICY sürer.
+const AZURA_MS = Number(process.env.AZURA_MS) || 60_000;
+const AZURA_HATA = 3; // üst üste bu kadar hatada ICY'ye dön
+const azuraAktif = new Set(); // API'si doğrulanan station_id'ler (ana turda ICY yoklanmaz)
+const azuraHata = new Map(); // station_id → üst üste hata
+const azuraKapali = new Set(); // ucu çalışmayan station_id'ler (yeniden başlatılana kadar ICY)
+function azuraAdres(station) {
+  try {
+    const u = new URL(station.meta_url || station.stream_url);
+    const m = /^\/listen\/([^/]+)\//.exec(u.pathname);
+    return m ? `https://${u.host}/api/nowplaying/${m[1]}` : null;
+  } catch {
+    return null;
+  }
+}
+async function azuraTur(stations) {
+  const liste = stations
+    .filter((s) => !azuraKapali.has(s.id) && !somaKanal(s.stream_url))
+    .map((s) => [s, azuraAdres(s)])
+    .filter(([, a]) => a);
+  for (const [station, adres] of liste) {
+    if ((bekle.get(station.id) || 0) > Date.now()) continue;
+    try {
+      const r = await fetch(adres, {
+        headers: { "User-Agent": "nowby/1.0 (+https://nowby.co)", Accept: "application/json" },
+        signal: AbortSignal.timeout(8_000),
+      });
+      if (r.status === 429) {
+        await isle(station, { status: "none", reason: "http-429" });
+        continue;
+      }
+      if (!r.ok) throw new Error(`http-${r.status}`);
+      const veri = await r.json();
+      const sarki = veri?.now_playing?.song;
+      if (!sarki) throw new Error("now_playing-yok");
+      if (!azuraAktif.has(station.id)) log(`AzuraCast: ${station.slug} dakikada bir API'den okunacak`);
+      azuraAktif.add(station.id);
+      azuraHata.delete(station.id);
+      if (veri.is_online === false) continue; // yayın kapalı: önceki başlık kalır, başarısızlık sayılmaz
+      const title =
+        (sarki.text || "").trim() ||
+        [sarki.artist, sarki.title].filter(Boolean).join(" - ").trim();
+      await isle(station, title ? { status: "ok", title } : { status: "none", reason: "azura-baslik-yok" });
+    } catch (err) {
+      const c = (azuraHata.get(station.id) || 0) + 1;
+      azuraHata.set(station.id, c);
+      if (c >= AZURA_HATA) {
+        azuraKapali.add(station.id);
+        azuraAktif.delete(station.id);
+        azuraHata.delete(station.id);
+        log(`AzuraCast yok: ${station.slug} (${err.message}), ICY ile devam`);
+      }
+    }
+  }
+}
+
 async function probeAndStore(station) {
   if ((bekle.get(station.id) || 0) > Date.now()) return;
   let res;
@@ -260,6 +318,13 @@ async function main() {
       await somaTur(guncelIstasyonlar).catch((err) => log("! SomaFM turu:", err.message));
     }
   })();
+  // AzuraCast döngüsü de ana turdan bağımsız, dakikada bir.
+  (async () => {
+    for (;;) {
+      await azuraTur(guncelIstasyonlar).catch((err) => log("! AzuraCast turu:", err.message));
+      await delay(AZURA_MS);
+    }
+  })();
   let stations = [];
   let stationsAt = 0;
   for (;;) {
@@ -285,7 +350,7 @@ async function main() {
       }
     }
     guncelIstasyonlar = stations;
-    if (stations.length) await cycle(stations.filter((s) => !somaKanal(s.stream_url)));
+    if (stations.length) await cycle(stations.filter((s) => !somaKanal(s.stream_url) && !azuraAktif.has(s.id)));
 
     // Zamanlanmış çalışmada süre dolduysa temiz çık.
     if (RUN_DURATION_MS && Date.now() - startedAt >= RUN_DURATION_MS) {

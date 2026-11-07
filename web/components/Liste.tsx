@@ -139,7 +139,7 @@ export default function Liste({ dil = "tr" }: { dil?: Dil }) {
                   : { borderColor: "var(--line)" }
               }
             >
-              <span aria-hidden>{k === "hepsi" ? "🌍" : bayrakEmoji(k)}</span>
+              <span aria-hidden>{k === "hepsi" ? null : bayrakEmoji(k)}</span>
               {ad(k)}
               {k !== "hepsi" && <span className="mono text-xs opacity-60">{SAYI[k]}</span>}
             </button>

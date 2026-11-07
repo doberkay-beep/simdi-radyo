@@ -133,9 +133,9 @@ export function TurkiyeSuAn({ stations, onTune }: { stations: Stn[]; onTune: (sl
 
 /* RUH — nowby'ın kalbi: Aynı anda ve Gece 3. Ana sayfanın üstünde, yan yana (27 Eki, Berkay).
    Oyunlar listeden çıktı, ☰ menüde "Oyunlar" altında. */
-const RUH: { href: string; ikon: string; tr: [string, string]; en: [string, string] }[] = [
-  { href: "/ayni-anda", ikon: "🌍", tr: ["Aynı anda", "Farklı kıtalarda, aynı dakikalarda aynı şarkı."], en: ["Same time", "Different continents, the same song, the same minutes."] },
-  { href: "/gece", ikon: "🌙", tr: ["Gece 3", "Türkiye uyurken radyolar ne çalıyor?"], en: ["3 AM", "What do stations play while Turkey sleeps?"] },
+const RUH: { href: string; tr: [string, string]; en: [string, string] }[] = [
+  { href: "/ayni-anda", tr: ["Aynı anda", "Farklı kıtalarda, aynı dakikalarda aynı şarkı."], en: ["Same time", "Different continents, the same song, the same minutes."] },
+  { href: "/gece", tr: ["Gece 3", "Türkiye uyurken radyolar ne çalıyor?"], en: ["3 AM", "What do stations play while Turkey sleeps?"] },
 ];
 
 export function RuhKartlari() {
@@ -146,7 +146,7 @@ export function RuhKartlari() {
         const [ad, alt] = dil === "en" ? k.en : k.tr;
         return (
           <Link key={k.href} prefetch={false} href={k.href} lang={dil} className="ruh-kart press flex min-w-0 flex-col gap-2 px-4 py-4">
-            <span className="kicker flex items-center gap-2"><span className="no">№ 0{i + 1}</span><span aria-hidden>{k.ikon}</span></span>
+            <span className="kicker flex items-center gap-2"><span className="no">№ 0{i + 1}</span></span>
             <span className="manset-kart block">{ad}</span>
             <span className="block text-[12.5px] leading-snug" style={{ color: "var(--muted)" }}>{alt}</span>
           </Link>
@@ -157,15 +157,15 @@ export function RuhKartlari() {
 }
 
 /* KEŞİF KARTLARI — istasyon listesinin arasına serpiştirilir (her 8 radyoda bir). */
-type Kart = { href?: string; eylem?: "siir"; ikon: string; tr: [string, string, string]; en: [string, string, string] };
+type Kart = { href?: string; eylem?: "siir"; tr: [string, string, string]; en: [string, string, string] };
 const KARTLAR: Kart[] = [
-  { href: "/fal", ikon: "🔮", tr: ["Frekans Falı", "Ruh hâlini seç: sana bir dize ve bir radyo çıksın.", "Falına bak"], en: ["Frequency Fortune", "Pick a mood: get a line of poetry and a station.", "Read it"] },
-  { href: "/rekorlar", ikon: "🎖", tr: ["Rekorlar", "En çok çalan, en uzun, en sadık radyo.", "Rekorlara bak"], en: ["Records", "Most played, longest, most loyal.", "See records"] },
-  { eylem: "siir", ikon: "📖", tr: ["Şiir Köşesi", "Şiir Rafım Radyosu'ndan sesli şiirler.", "Dinle"], en: ["Poetry Corner", "Spoken poems from Şiir Rafım Radio.", "Listen"] },
-  { href: "/arsiv", ikon: "⏳", tr: ["Zaman Makinesi", "Geçmişte o saatte hangi radyo ne çaldı?", "Geçmişe git"], en: ["Time Machine", "What played on which station back then?", "Go back"] },
-  { href: "/senkron", ikon: "⚡", tr: ["Senkron Defteri", "Birbirinden habersiz radyolar, aynı şarkı, aynı dakika.", "Defteri aç"], en: ["Sync Moments", "Unconnected stations, same song, same minute.", "Open"] },
-  { href: "/rapor", ikon: "📊", tr: ["Haftalık Radyo Raporu", "Bu hafta Türkiye radyolarında en çok çalan 20 şarkı.", "Rapora bak"], en: ["Weekly Radio Report", "This week's top 20 on Turkish radio.", "See report"] },
-  { href: "/endeks", ikon: "📰", tr: ["Radyo Endeksi", "Ayın gerçek listesi: 7/24 sayımla.", "Endekse bak"], en: ["Radio Index", "The month's real chart, counted 24/7.", "See index"] },
+  { href: "/fal", tr: ["Frekans Falı", "Ruh hâlini seç: sana bir dize ve bir radyo çıksın.", "Falına bak"], en: ["Frequency Fortune", "Pick a mood: get a line of poetry and a station.", "Read it"] },
+  { href: "/rekorlar", tr: ["Rekorlar", "En çok çalan, en uzun, en sadık radyo.", "Rekorlara bak"], en: ["Records", "Most played, longest, most loyal.", "See records"] },
+  { eylem: "siir", tr: ["Şiir Köşesi", "Şiir Rafım Radyosu'ndan sesli şiirler.", "Dinle"], en: ["Poetry Corner", "Spoken poems from Şiir Rafım Radio.", "Listen"] },
+  { href: "/arsiv", tr: ["Zaman Makinesi", "Geçmişte o saatte hangi radyo ne çaldı?", "Geçmişe git"], en: ["Time Machine", "What played on which station back then?", "Go back"] },
+  { href: "/senkron", tr: ["Senkron Defteri", "Birbirinden habersiz radyolar, aynı şarkı, aynı dakika.", "Defteri aç"], en: ["Sync Moments", "Unconnected stations, same song, same minute.", "Open"] },
+  { href: "/rapor", tr: ["Haftalık Radyo Raporu", "Bu hafta Türkiye radyolarında en çok çalan 20 şarkı.", "Rapora bak"], en: ["Weekly Radio Report", "This week's top 20 on Turkish radio.", "See report"] },
+  { href: "/endeks", tr: ["Radyo Endeksi", "Ayın gerçek listesi: 7/24 sayımla.", "Endekse bak"], en: ["Radio Index", "The month's real chart, counted 24/7.", "See index"] },
 ];
 export const KESIF_ARALIK = 8;
 export const KESIF_SAYI = KARTLAR.length; // her kart bir kez (ilk ~80 radyonun arasına)
@@ -176,7 +176,6 @@ export function KesifKarti({ sira, onSiir }: { sira: number; onSiir: () => void 
   const [ad, alt, cta] = dil === "en" ? k.en : k.tr;
   const govde = (
     <>
-      <span aria-hidden className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl text-xl" style={{ background: "color-mix(in srgb, var(--glow) 12%, var(--panel))" }}>{k.ikon}</span>
       <span className="min-w-0 flex-1">
         <span className="dial block text-[16px] uppercase tracking-[0.03em]">{ad}</span>
         <span className="block text-[12px] leading-snug" style={{ color: "var(--muted)" }}>{alt}</span>

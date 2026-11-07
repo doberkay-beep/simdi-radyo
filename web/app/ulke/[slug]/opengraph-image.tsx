@@ -28,7 +28,7 @@ export default async function OG({ params }: { params: Promise<{ slug: string }>
           <div style={{ display: "flex", fontSize: 24, color: "#8f8f96" }}>nowby.co</div>
         </div>
         <div style={{ display: "flex", flexDirection: "column", gap: 18 }}>
-          <div style={{ display: "flex", fontSize: 120, lineHeight: 1 }}>{kod ? bayrakEmoji(kod) : "🌍"}</div>
+          <div style={{ display: "flex", fontSize: 120, lineHeight: 1 }}>{kod ? bayrakEmoji(kod) : ""}</div>
           <div style={{ display: "flex", fontSize: 84, fontWeight: 800, letterSpacing: -3, lineHeight: 1.05 }}>{baslik}</div>
         </div>
         <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", fontSize: 28, color: "#8f8f96" }}>

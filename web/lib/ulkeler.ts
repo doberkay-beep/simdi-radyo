@@ -133,7 +133,7 @@ export const SAAT_DILIMI: Record<UlkeKodu, string | null> = {
 
 /* Emoji bayrak — ISO kodundan bölgesel gösterge harfleriyle üretilir. */
 export function bayrakEmoji(kod: UlkeKodu): string {
-  if (kod === "www") return "🌐";
+  if (kod === "www") return "";
   return String.fromCodePoint(...[...kod].map((c) => 0x1f1e6 + c.charCodeAt(0) - 97));
 }
 

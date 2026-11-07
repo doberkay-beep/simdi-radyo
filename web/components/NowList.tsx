@@ -1713,7 +1713,7 @@ export default function NowList({ ilkIstasyonlar, ilkOzet }: { ilkIstasyonlar?: 
                 title={ULKELER[k].tr}
                 aria-pressed={aktif}
               >
-                {bayrakEmoji(k)}{aktif ? ` ${ULKELER[k].tr}` : ""}
+                {bayrakEmoji(k) || (aktif ? "" : ULKELER[k].tr)}{aktif ? ` ${ULKELER[k].tr}` : ""}
               </button>
             );
           })}

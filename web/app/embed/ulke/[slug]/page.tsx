@@ -30,7 +30,7 @@ export default async function UlkeEmbedPage({ params }: { params: Promise<{ slug
 
   return (
     <div style={{ padding: 6, background: "transparent" }}>
-      <UlkeRozet sluglar={sluglar} baslikDa={da(ad)} bayrak={kod ? bayrakEmoji(kod) : "🌍"} ulkeSlugu={slug} />
+      <UlkeRozet sluglar={sluglar} baslikDa={da(ad)} bayrak={kod ? bayrakEmoji(kod) : ""} ulkeSlugu={slug} />
     </div>
   );
 }

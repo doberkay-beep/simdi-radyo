@@ -31,6 +31,7 @@ function readableOn(hex: string): string {
 }
 
 type Station = {
+  app_izinli?: boolean | null;
   slug: string;
   name: string;
   city: string | null;
@@ -47,7 +48,7 @@ async function getStation(slug: string): Promise<Station | null> {
     const supa = getSupabase();
     const { data } = await supa
       .from("stations")
-      .select("slug, name, city, frequency, accent_color, genre, homepage, meta_gizli, logo_url")
+      .select("slug, name, city, frequency, accent_color, genre, homepage, meta_gizli, logo_url, app_izinli")
       .eq("slug", slug)
       .eq("is_active", true)
       .maybeSingle();
@@ -219,6 +220,8 @@ export async function generateMetadata({
       images: [{ url: `/api/kart/${slug}`, width: 1200, height: 630, alt: `${s.name} — şimdi çalıyor` }],
     },
     twitter: { card: "summary_large_image", images: [`/api/kart/${slug}`] },
+    // iPhone Safari'de "Uygulamada aç" şeridi: yalnız izinli radyolar; dokununca bu radyoyu çalar.
+    ...(s.app_izinli ? { other: { "apple-itunes-app": `app-id=6825787056, app-argument=nowby://cal/${slug}` } } : {}),
   };
 }
 
@@ -320,7 +323,7 @@ export default async function StationPage({ params }: { params: Promise<{ slug: 
           <h1 className={s.name.length > 26 ? "radyo-ad enuzun" : s.name.length > 13 ? "radyo-ad uzun" : "radyo-ad"}>{s.name}</h1>
           {istasyonTanimi(slug, dil) && <p className="radyo-tanim">{istasyonTanimi(slug, dil)}</p>}
           <div className="radyo-calan">
-            <CanliParca slug={slug} initial={track} initialArtist={np?.artist ?? null} etiket={T("radyo.simdiCaliyor")} bosMetin={T("radyo.canliYayin")} />
+            <CanliParca slug={slug} initial={track} initialArtist={np?.artist ?? null} etiket={T("radyo.simdiCaliyor")} canliEtiket={T("radyo.canli")} bosMetin={T("radyo.canliYayin")} />
           </div>
           <StationPlayer slug={slug} name={s.name} accent="#e5382c" />
           <div className="radyo-yanlis"><YanlisSarki slug={slug} /></div>
@@ -340,15 +343,16 @@ export default async function StationPage({ params }: { params: Promise<{ slug: 
         <Notlar slug={slug} accent="#e5382c" />
 
         {/* 📻 İstasyon rozeti — radyonun haftalık karnesi (radyolar kendi hesaplarında paylaşsın) */}
-        {karne && karne.kez7 > 0 && (
+        {/* Şarkı bilgisini ayrı yayınlamayan radyoda sayım yanıltır ("2 farklı şarkı"): karne çıkmaz. */}
+        {karne && karne.kez7 >= 100 && (
           <div className="mt-8">
             <RozetPaylas
               taban={`/radyo/${slug}/rozet`}
               dosyaAdi={`nowby-${slug}-karne`}
-              etiket="Haftalık karne"
-              baslik={`${s.name} son 7 günde ${karne.farkliSarki.toLocaleString("tr-TR")} farklı şarkı çaldı.`}
-              aciklama={`Radyoda çalışıyor musun, dinleyicisi misin? Karneyi paylaş.${karne.sarki ? ` En sevdiği şarkı: “${karne.sarki.title}” — ${karne.sarki.artist}.` : ""}`}
-              metin={`${s.name} son 7 günde ${karne.farkliSarki.toLocaleString("tr-TR")} farklı şarkı çaldı${karne.sarki ? `; en sevdiği “${karne.sarki.title}” (${karne.sarki.artist})` : ""}. Haftalık karne: https://nowby.co/radyo/${slug}`}
+              etiket={dil === "en" ? "Weekly report" : "Haftalık karne"}
+              baslik={dil === "en" ? `${s.name} played ${karne.farkliSarki.toLocaleString("en-GB")} different songs in the last 7 days.` : `${s.name} son 7 günde ${karne.farkliSarki.toLocaleString("tr-TR")} farklı şarkı çaldı.`}
+              aciklama={dil === "en" ? `Work in radio or listen to this station? Share the report.${karne.sarki ? ` Most played: “${karne.sarki.title}” — ${karne.sarki.artist}.` : ""}` : `Radyoda çalışıyor musun, dinleyicisi misin? Karneyi paylaş.${karne.sarki ? ` En sevdiği şarkı: “${karne.sarki.title}” — ${karne.sarki.artist}.` : ""}`}
+              metin={dil === "en" ? `${s.name} played ${karne.farkliSarki.toLocaleString("en-GB")} different songs in the last 7 days${karne.sarki ? `; most played “${karne.sarki.title}” (${karne.sarki.artist})` : ""}. https://nowby.co/radyo/${slug}` : `${s.name} son 7 günde ${karne.farkliSarki.toLocaleString("tr-TR")} farklı şarkı çaldı${karne.sarki ? `; en sevdiği “${karne.sarki.title}” (${karne.sarki.artist})` : ""}. Haftalık karne: https://nowby.co/radyo/${slug}`}
             />
           </div>
         )}

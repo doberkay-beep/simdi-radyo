@@ -22,12 +22,14 @@ export default function CanliParca({
   initial,
   initialArtist = null,
   etiket,
+  canliEtiket = "canlı",
   bosMetin,
 }: {
   slug: string;
   initial: string | null;
   initialArtist?: string | null;
   etiket: string;
+  canliEtiket?: string;
   bosMetin: string;
 }) {
   const [track, setTrack] = useState<string | null>(initial);
@@ -75,7 +77,7 @@ export default function CanliParca({
             <span
               style={{ width: 6, height: 6, borderRadius: 999, background: "var(--glow)", display: "inline-block" }}
             />
-            canlı
+            {canliEtiket}
           </span>
         )}
       </div>

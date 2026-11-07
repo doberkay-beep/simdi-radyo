@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { useDil } from "@/lib/i18n";
 
 // Kart/rozet paylaşım paneli — sanatçı rozeti, istasyon rozeti, senkron
 // kartı hepsi bunu kullanır. `taban` görsel rotasıdır (?boyut=post|story eklenir).
@@ -17,10 +18,11 @@ export default function RozetPaylas({
   metin: string;
 }) {
   const [durum, setDurum] = useState("");
+  const en = useDil().dil === "en";
   const gorsel = (b: "post" | "story") => `${taban}?boyut=${b}`;
 
   const paylas = async (b: "post" | "story") => {
-    setDurum("hazırlanıyor…");
+    setDurum(en ? "preparing…" : "hazırlanıyor…");
     try {
       const blob = await fetch(gorsel(b)).then((r) => r.blob());
       const dosya = new File([blob], `${dosyaAdi}-${b}.png`, { type: "image/png" });
@@ -35,15 +37,15 @@ export default function RozetPaylas({
       a.download = dosya.name;
       a.click();
       setTimeout(() => URL.revokeObjectURL(a.href), 4000);
-      setDurum("indirildi ✓");
+      setDurum(en ? "downloaded ✓" : "indirildi ✓");
     } catch (e) {
-      setDurum((e as Error)?.name === "AbortError" ? "" : "olmadı, bir daha dene");
+      setDurum((e as Error)?.name === "AbortError" ? "" : en ? "that didn't work, try again" : "olmadı, bir daha dene");
     }
   };
 
   const kopyala = async () => {
-    try { await navigator.clipboard.writeText(metin); setDurum("metin kopyalandı ✓"); }
-    catch { setDurum("kopyalanamadı"); }
+    try { await navigator.clipboard.writeText(metin); setDurum(en ? "text copied ✓" : "metin kopyalandı ✓"); }
+    catch { setDurum(en ? "couldn't copy" : "kopyalanamadı"); }
   };
 
   return (
@@ -56,10 +58,10 @@ export default function RozetPaylas({
         {/* eslint-disable-next-line @next/next/no-img-element */}
         <img src={gorsel("post")} alt={baslik} width={216} height={270} loading="lazy" />
         <div className="rozet-dugmeler">
-          <button onClick={() => paylas("story")}>story için paylaş</button>
-          <button onClick={() => paylas("post")}>gönderi görseli</button>
-          <a href={`https://x.com/intent/post?text=${encodeURIComponent(metin)}`} target="_blank" rel="noopener noreferrer">X&apos;te paylaş</a>
-          <button onClick={kopyala}>metni kopyala</button>
+          <button onClick={() => paylas("story")}>{en ? "share to story" : "story için paylaş"}</button>
+          <button onClick={() => paylas("post")}>{en ? "post image" : "gönderi görseli"}</button>
+          <a href={`https://x.com/intent/post?text=${encodeURIComponent(metin)}`} target="_blank" rel="noopener noreferrer">{en ? "share on X" : "X'te paylaş"}</a>
+          <button onClick={kopyala}>{en ? "copy text" : "metni kopyala"}</button>
           {durum && <p>{durum}</p>}
         </div>
       </div>

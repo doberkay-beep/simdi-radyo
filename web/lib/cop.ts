@@ -1,6 +1,6 @@
 // Çöp metadata süzgeci — bazı istasyonlar parça yerine URL, reklam ya da
 // ham XML/HTML döndürür; bunlar hiçbir yüzeyde "çalan parça" olarak basılmaz.
-export const COP_PARCA = /use http|www\.|https?:|\.com|\.net\b|^\s*<|<\?xml|<[a-z!/][^>]*>|now playing info|\bjingle\b(?!\s*(bell|all the way))|\breklam\b/i;
+export const COP_PARCA = /use http|www\.|https?:|\.com|\.net\b|^\s*<|<\?xml|<[a-z!/][^>]*>|now playing info|(^|[^a-zçğıöşü])j[iı]ngles?\b(?!\s*(bell|all the way))|\breklam(lar)?\b/i;
 
 // Listelerde yayın dolgusu şarkı gibi görünmesin. Kayıtlara dokunmaz, yalnız gösterimi süzer.
 export function gercekParca(s: { artist?: string | null; title?: string | null }): boolean {
@@ -35,3 +35,5 @@ export function parcaAdi(t: string | null | undefined): string {
   return s || t.trim();
 }
 
+// Sanatçı adresi yayın dolgusu mu ("jingle", "10-00-reklam")?
+export const DOLGU_SLUG = /(^|-)(jingle|reklam)(-|$)/;

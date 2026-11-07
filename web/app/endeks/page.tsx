@@ -85,7 +85,8 @@ export default async function Sayfa() {
           <code className="mono text-xs">nowby.co/endeks/YYYY-AA/veri</code>. Gazeteciler ve
           araştırmacılar serbestçe kullanabilir; kaynak gösterimi:{" "}
           <em>&quot;nowby.co Türkiye Radyo Endeksi&quot;</em>. Yöntem: yalnız Türkiye bandı,
-          en az 2 istasyonda çalınan şarkılar; jingle ve tekrar otomasyonları elenir.
+          en az 2 istasyonda çalınan şarkılar; jingle, reklam ve tekrar otomasyonları sıralamadan elenir.
+          Toplam çalma sayısı ise süzülmemiş tüm kayıtlardır.
           İletişim: hello@berkaydogan.co
         </p>
       </section>

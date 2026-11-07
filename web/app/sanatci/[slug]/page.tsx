@@ -1,3 +1,4 @@
+import { DOLGU_SLUG } from "@/lib/cop";
 import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
@@ -77,6 +78,7 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
   const { slug } = await params;
   const o = await ozetAl(slug);
   if (!o) return { title: "Sanatçı bulunamadı | nowby." };
+  if (DOLGU_SLUG.test(slug)) return { title: `${o.ad} | nowby.`, robots: { index: false, follow: false } };
   const enCok = o.sarkilar[0];
   const haftaVar = o.kez7 > 0;
   return {

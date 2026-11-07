@@ -114,7 +114,7 @@ export function CanliSayac({ veri, artis, kisa = false }: { veri: AnaOzet | null
           {sayi.toLocaleString("tr-TR")}
         </span>
         <span className="mt-1 block text-[12px]" style={{ color: "var(--muted)" }}>
-          {en ? "songs played on Turkish radio this month" : "bu ay Türkiye radyolarında çalınan şarkı"}
+          {en ? "plays logged on Turkish radio this month" : "bu ay Türkiye radyolarında kayıtlı çalma"}
         </span>
       </Link>
       {ilk.length > 0 && (

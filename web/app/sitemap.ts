@@ -1,3 +1,4 @@
+import { DOLGU_SLUG } from "@/lib/cop";
 import type { MetadataRoute } from "next";
 import { getSupabase } from "@/lib/supabase";
 import { DENEMELER } from "@/lib/denemeler";
@@ -23,7 +24,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     for (const [bas, son] of [[0, 999], [1000, 1999]]) {
       const { data: kat, error } = await supa.rpc("seo_katalog").range(bas, son);
       if (error) break;
-      const parca = ((kat ?? []) as { slug: string }[]).map((r) => r.slug).filter(Boolean);
+      const parca = ((kat ?? []) as { slug: string }[]).map((r) => r.slug).filter((s) => s && !DOLGU_SLUG.test(s));
       sanatcilar.push(...parca);
       if (parca.length < 1000) break;
     }

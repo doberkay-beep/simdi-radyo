@@ -16,3 +16,6 @@ begin
 end $$;
 revoke all on function public.uygulama_dinleme(text, text) from public;
 grant execute on function public.uygulama_dinleme(text, text) to anon, authenticated;
+
+-- 8 Kas 2026: gizlilik sayfasındaki "en fazla 24 ay" sözü için aylık temizlik (pg_cron, canlıda kuruldu).
+select cron.schedule('dinlemeler-24-ay-temizlik', '30 3 1 * *', $$delete from public.dinlemeler where t < now() - interval '24 months'$$);

@@ -124,7 +124,8 @@ const AZURA_MS = Number(process.env.AZURA_MS) || 60_000;
 const AZURA_HATA = 3; // üst üste bu kadar hatada ICY'ye dön
 const azuraAktif = new Set(); // API'si doğrulanan station_id'ler (ana turda ICY yoklanmaz)
 const azuraHata = new Map(); // station_id → üst üste hata
-const azuraKapali = new Set(); // ucu çalışmayan station_id'ler (yeniden başlatılana kadar ICY)
+const azuraKapali = new Map(); // ucu çalışmayan station_id → yeniden denenecek zaman (o zamana kadar ICY)
+const AZURA_YENIDEN_MS = 30 * 60_000; // 9 Kas: Armisa'nın ucu geçici 530 verdi ve kalıcı ICY'ye düşmüştü
 function azuraAdres(station) {
   try {
     const u = new URL(station.meta_url || station.stream_url);
@@ -136,7 +137,7 @@ function azuraAdres(station) {
 }
 async function azuraTur(stations) {
   const liste = stations
-    .filter((s) => !azuraKapali.has(s.id) && !somaKanal(s.stream_url))
+    .filter((s) => (azuraKapali.get(s.id) || 0) <= Date.now() && !somaKanal(s.stream_url))
     .map((s) => [s, azuraAdres(s)])
     .filter(([, a]) => a);
   for (const [station, adres] of liste) {
@@ -166,10 +167,10 @@ async function azuraTur(stations) {
       const c = (azuraHata.get(station.id) || 0) + 1;
       azuraHata.set(station.id, c);
       if (c >= AZURA_HATA) {
-        azuraKapali.add(station.id);
+        azuraKapali.set(station.id, Date.now() + AZURA_YENIDEN_MS);
         azuraAktif.delete(station.id);
         azuraHata.delete(station.id);
-        log(`AzuraCast yok: ${station.slug} (${err.message}), ICY ile devam`);
+        log(`AzuraCast yok: ${station.slug} (${err.message}), 30 dk ICY, sonra yeniden denenecek`);
       }
     }
   }

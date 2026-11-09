@@ -1,5 +1,6 @@
 import { getSupabase } from "@/lib/supabase";
 import { json } from "@/lib/json";
+import { izinliKume, uygulamaIstegi } from "@/lib/uygulama";
 
 export const dynamic = "force-dynamic";
 
@@ -53,10 +54,14 @@ export async function GET(request: Request) {
   // Son 24 saatte nerede çaldı (eski uygulamalar "rows" alanını kullanıyor).
   const like = `%${q.replace(/[%_,()]/g, "")}%`;
   const sinir = new Date(Date.now() - 24 * 3600 * 1000).toISOString();
-  const { data: plays } = await supabase
+  // Uygulama (1.0.2+): "nerede çaldı" yalnız izinli radyolardan.
+  const izinliIdler = uygulamaIstegi(request) ? (await izinliKume()).idler : null;
+  let playsSorgu = supabase
     .from("plays")
     .select("station_id, artist, title, raw_title, started_at")
-    .gte("started_at", sinir)
+    .gte("started_at", sinir);
+  if (izinliIdler) playsSorgu = playsSorgu.in("station_id", izinliIdler);
+  const { data: plays } = await playsSorgu
     .or(`title.ilike.${like},artist.ilike.${like}`)
     .order("started_at", { ascending: false })
     .limit(30);

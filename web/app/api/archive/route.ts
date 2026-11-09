@@ -1,5 +1,6 @@
 import { getSupabase } from "@/lib/supabase";
 import { json } from "@/lib/json";
+import { izinliKume, uygulamaIstegi } from "@/lib/uygulama";
 
 export const dynamic = "force-dynamic";
 
@@ -40,7 +41,8 @@ export async function GET(request: Request) {
     raw_title: string | null;
     started_at: string;
   };
-  const stations = ((data ?? []) as Row[]).map((r) => ({
+  const izinli = uygulamaIstegi(request) ? (await izinliKume()).sluglar : null;
+  const stations = ((data ?? []) as Row[]).filter((r) => !izinli || izinli.has(r.slug)).map((r) => ({
     slug: r.slug,
     name: r.name,
     accentColor: r.accent_color,

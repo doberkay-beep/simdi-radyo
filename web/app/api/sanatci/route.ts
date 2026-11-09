@@ -1,6 +1,7 @@
 import { getSupabase } from "@/lib/supabase";
 import { json } from "@/lib/json";
 import { adDuzelt } from "@/lib/rapor";
+import { izinliKume, uygulamaIstegi } from "@/lib/uygulama";
 
 // GET /api/sanatci?s=<slug> — sanatçı sayfası verisi (özet + trend + benzer sanatçılar), mobil uygulama için.
 // Ağır RPC'ler; CDN'de 6 saat önbellekli (sitedeki /sanatci/[slug] sayfasıyla aynı tazelik).
@@ -48,7 +49,18 @@ export async function GET(request: Request) {
   ]);
   const o = ozet as ({ ad: string; sarkilar?: Sarki[] } & Record<string, unknown>) | null;
   const sonlar = ((o?.sonlar as { title: string }[] | undefined) ?? []).map((x) => ({ ...x, title: baslikDuzelt(x.title, o!.ad) }));
-  const temiz = o ? { ...o, ad: adDuzelt(o.ad), sarkilar: birlestir(o.sarkilar ?? [], o.ad), sonlar } : null;
+  let temiz: Record<string, unknown> | null = o ? { ...o, ad: adDuzelt(o.ad), sarkilar: birlestir(o.sarkilar ?? [], o.ad), sonlar } : null;
+  if (temiz && uygulamaIstegi(request)) {
+    // Uygulama (1.0.2+): radyo adı geçen alanlar yalnız izinli radyolardan.
+    const { sluglar } = await izinliKume();
+    const izinli = (x: unknown) => typeof x === "object" && x !== null && sluglar.has(String((x as { slug?: string }).slug));
+    temiz = {
+      ...temiz,
+      istasyonlar: ((temiz.istasyonlar as unknown[]) ?? []).filter(izinli),
+      sonlar: ((temiz.sonlar as unknown[]) ?? []).filter(izinli),
+      suan: Array.isArray(temiz.suan) ? temiz.suan.filter(izinli) : izinli(temiz.suan) ? temiz.suan : null,
+    };
+  }
   const b = ((benzer as { slug: string; ad: string; ortak: number }[]) ?? [])
     .filter((x) => x.slug && x.ad).map((x) => ({ ...x, ad: adDuzelt(x.ad) }));
   return json(

@@ -46,6 +46,12 @@ async function istasyonListesi(): Promise<Istasyon[]> {
   return liste;
 }
 
+// App Store uygulamaları (Apple 5.2.3): yalnız yazılı izinli radyolar. Diğer uçlar (arşiv,
+// arama, sanatçı, senkron, rekorlar, liste) ?uygulama=1 ile gelince bu kümeyle süzülür.
+export async function izinliIstasyonlar(): Promise<{ id: number; slug: string; name: string }[]> {
+  return (await istasyonListesi()).filter((s) => s.appIzinli).map(({ id, slug, name }) => ({ id, slug, name }));
+}
+
 // onbellekli: ana sayfa içindir. "no-store" sayfayı her ziyarette yeniden ürettirip
 // önbelleğini kapatıyordu; canlı akış zaten istemcide sürer.
 async function anlikDurum(onbellekli: boolean): Promise<Record<string, Calan> | null> {

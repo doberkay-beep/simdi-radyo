@@ -2,6 +2,7 @@ import { gercekParca } from "@/lib/cop";
 import { getSupabase } from "@/lib/supabase";
 import { json } from "@/lib/json";
 import { ULKELER, ulkeIstasyonSluglari, type UlkeKodu } from "@/lib/ulkeler";
+import { izinliKume, uygulamaIstegi } from "@/lib/uygulama";
 
 export const dynamic = "force-dynamic";
 
@@ -20,6 +21,18 @@ export async function GET(request: Request) {
   const ulke = ulkeParam === "hepsi" ? "hepsi" : ulkeParam in ULKELER ? (ulkeParam as UlkeKodu) : "tr";
 
   const supabase = getSupabase();
+  if (!q && uygulamaIstegi(request)) {
+    // Uygulama (1.0.2+): liste yalnız izinli radyoların çalmalarından sayılır.
+    const izinli = [...(await izinliKume()).sluglar];
+    const sluglar = ulke === "hepsi" ? izinli : izinli.filter((s) => ulkeIstasyonSluglari(ulke).includes(s));
+    if (!sluglar.length) return json({ aralik, ulke, q: null, satirlar: [] });
+    const { data, error } = await supabase.rpc("liste_ulke", { bastan: bastan.toISOString(), sona: sona.toISOString(), sluglar, adet: 50 });
+    if (error) return json({ error: error.message }, { status: 500 });
+    return json(
+      { aralik, ulke, q: null, satirlar: ((data ?? []) as { artist: string; title: string }[]).filter(gercekParca) },
+      { headers: { "Cache-Control": "public, s-maxage=600, stale-while-revalidate=1800" } },
+    );
+  }
   if (!q && ulke !== "tr") {
     const { data, error } = await supabase.rpc("liste_ulke", {
       bastan: bastan.toISOString(),

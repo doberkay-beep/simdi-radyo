@@ -166,7 +166,11 @@ async function azuraTur(stations) {
     } catch (err) {
       const c = (azuraHata.get(station.id) || 0) + 1;
       azuraHata.set(station.id, c);
-      if (c >= AZURA_HATA) {
+      // API'si bir kez doğrulanmış radyo yayına geri bağlanılmaz (Armisa'nın isteği): uç düzelene
+      // kadar dakikada bir API denenir, eski başlık kalır. Yalnız hiç doğrulanmamış uçlar ICY'ye döner.
+      if (azuraAktif.has(station.id)) {
+        if (c === AZURA_HATA) log(`AzuraCast geçici hata: ${station.slug} (${err.message}), API denenmeye devam`);
+      } else if (c >= AZURA_HATA) {
         azuraKapali.set(station.id, Date.now() + AZURA_YENIDEN_MS);
         azuraAktif.delete(station.id);
         azuraHata.delete(station.id);

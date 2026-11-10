@@ -15,7 +15,8 @@ const TIMEOUT = 8000;
 const BAYAT_SAAT = 48; // metadata bu kadar saattir kıpırdamıyorsa "bayat"
 
 const seed = JSON.parse(await readFile(join(here, "../collector/seed.json"), "utf8"));
-const stations = Array.isArray(seed) ? seed : seed.stations;
+// Pasif (katalogdan çıkarılmış) istasyonlar yoklanmaz; her raporda "ölü" diye geri gelmesinler.
+const stations = (Array.isArray(seed) ? seed : seed.stations).filter((s) => s.is_active !== false);
 
 async function probeHls(url) {
   const ctrl = new AbortController();

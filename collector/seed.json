@@ -1142,7 +1142,7 @@
  {
   "band": "tr",
   "metadata_quality": "good",
-  "is_active": true,
+  "is_active": false,
   "city": null,
   "frequency": null,
   "homepage": null,
@@ -5904,7 +5904,7 @@
   "accent_color": "#3aa8a0",
   "band": "int",
   "metadata_quality": "good",
-  "is_active": true,
+  "is_active": false,
   "sort_order": 5038,
   "genre": "pop",
   "country": "ke"

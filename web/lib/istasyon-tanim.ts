@@ -2,6 +2,8 @@
 // Katalog metnidir; iddia değil atmosfer taşır. Burada olmayan istasyonda satır görünmez.
 
 const TANIMLAR: Record<string, { tr: string; en?: string }> = {
+  // Künye: radyonun isteğiyle (Issa Hassan, 10 Kas 2026 e-postası).
+  "kurd1-fm": { tr: "Institut kurde de Paris'in radyosu. Müdür ve müzik programcısı: Issa Hassan.", en: "The radio of the Institut kurde de Paris. Director and music programmer: Issa Hassan." },
   "arabesk-fm": { tr: "Gece yarısı damar; direksiyon başı arabesk.", en: "Midnight arabesk for the long drive home." },
   "virgin-radio": { tr: "İstanbul'un cilalı pop vitrini.", en: "Istanbul's polished pop storefront." },
   "damar-turk-fm": { tr: "Adı üstünde: damardan, sulandırmadan.", en: "Heartbreak straight from the vein." },

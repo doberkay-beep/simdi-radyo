@@ -338,6 +338,11 @@ export default function NowList({ ilkIstasyonlar, ilkOzet }: { ilkIstasyonlar?: 
   const [notAcik, setNotAcik] = useState(false); // kalp defteri — not bırakma modalı
   const [muzikKart, setMuzikKart] = useState<{ artist: string; title: string | null } | null>(null); // ♪ müzik kartı
   const [navAcik, setNavAcik] = useState(false); // mobil menü sayfası
+  // 10 Kasım: yalnız o gün (İstanbul saatiyle) üstte küçük bir bağlantı. Tarih istemcide okunur.
+  const [onKasim, setOnKasim] = useState(false);
+  useEffect(() => {
+    setOnKasim(new Date().toLocaleDateString("en-CA", { timeZone: "Europe/Istanbul" }).endsWith("-11-10"));
+  }, []);
   const [cipMenu, setCipMenu] = useState(false); // mobil oynatıcı ⋯ menüsü
   const [kurAcik, setKurAcik] = useState(false); // uygulama kur sihirbazı
   const [takipAcik, setTakipAcik] = useState(false); // sanatçı ara + takip
@@ -1474,6 +1479,12 @@ export default function NowList({ ilkIstasyonlar, ilkOzet }: { ilkIstasyonlar?: 
             </button>
           </div>
         </header>
+
+        {onKasim && (
+          <Link href="/10-kasim" className="mb-4 block text-sm" style={{ color: "var(--muted)" }}>
+            <span style={{ color: "var(--glow)" }}>10 Kasım, 09.05</span> · radyolar ne çaldı →
+          </Link>
+        )}
 
         {/* Açılış duvarı: o an radyoda çalan gerçek şarkılar */}
         <CanliDuvar stations={stations} playing={playing} onTune={konsolAyar} soru={(() => { const a = t("home.altyazi"); return a.charAt(0).toLocaleUpperCase(dil === "en" ? "en" : "tr") + a.slice(1) + "?"; })()} en={dil === "en"} />

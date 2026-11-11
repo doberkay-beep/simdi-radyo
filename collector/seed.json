@@ -550,7 +550,7 @@
   "band": "tr",
   "genre": "elektronik",
   "metadata_quality": "good",
-  "is_active": true,
+  "is_active": false,
   "sort_order": 360,
   "country": "tr"
  },
@@ -1277,7 +1277,7 @@
  {
   "band": "tr",
   "metadata_quality": "good",
-  "is_active": true,
+  "is_active": false,
   "city": null,
   "frequency": null,
   "homepage": null,

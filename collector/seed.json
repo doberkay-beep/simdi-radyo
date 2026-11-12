@@ -4380,6 +4380,21 @@
   "country": "de"
  },
  {
+  "slug": "0n-soft-rock",
+  "name": "0N Soft Rock",
+  "city": "Bayern",
+  "frequency": null,
+  "stream_url": "https://0n-softrock.radionetz.de/0n-softrock.mp3",
+  "homepage": "http://www.0nradio.com/",
+  "accent_color": "#b0704a",
+  "band": "int",
+  "genre": "rock",
+  "metadata_quality": "good",
+  "is_active": true,
+  "sort_order": 942,
+  "country": "de"
+ },
+ {
   "slug": "rmfm-trance",
   "name": "rm.fm Trance",
   "city": "North Rhine-Westphalia",

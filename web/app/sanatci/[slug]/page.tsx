@@ -79,6 +79,8 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
   const o = await ozetAl(slug);
   if (!o) return { title: "Sanatçı bulunamadı | nowby." };
   if (DOLGU_SLUG.test(slug)) return { title: `${o.ad} | nowby.`, robots: { index: false, follow: false } };
+  // Son 30 günde 10'dan az çalan sanatçının sayfası ince: dizine alınmaz, bağlantıları izlenir (13 Kas 2026).
+  const ince = o.kez30 < 10;
   const enCok = o.sarkilar[0];
   const haftaVar = o.kez7 > 0;
   return {
@@ -86,6 +88,7 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
     title: `${o.ad} şarkıları radyoda — ${haftaVar ? `bu hafta ${o.kez7}` : `${o.kez30}`} kez | nowby.`,
     description: `${enCok ? `Radyoda en çok çalan ${o.ad} şarkısı "${enCok.title}" (${enCok.kez} kez). ` : ""}Son 7 günde Türkiye radyolarında ${o.kez7} kez çaldı (${otuzGunEtiketi()} ${o.kez30} kez, ${o.istasyonSay} istasyon)${o.istasyonlar.length ? `; en çok ${o.istasyonlar.slice(0, 3).map((s) => s.name).join(", ")}` : ""}. Canlı sayım.`,
     alternates: { canonical: `/sanatci/${slug}` },
+    ...(ince ? { robots: { index: false, follow: true } } : {}),
     // Link paylaşılınca önizleme = sanatçının radyo rozeti.
     openGraph: {
       title: `${o.ad} — Türkiye radyolarında ${o.kez7 || o.kez30} kez`,

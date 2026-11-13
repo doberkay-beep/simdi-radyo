@@ -25,6 +25,10 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     sanatcilar = ((kat ?? []) as { slug: string }[]).map((r) => r.slug).filter((s) => s && !DOLGU_SLUG.test(s));
     // Eşit sayılı sanatçıların sırası sabit değil; parça sınırında tekrar olabilir.
     sanatcilar = [...new Set(sanatcilar)];
+    // 13 Kas 2026: Search Console'da ~1.640 sanatçı sayfası "tarandı, dizine eklenmedi".
+    // Az çalan sanatçının sayfası ince kalıyor ve tarama bütçesini radyo sayfalarından çalıyor;
+    // haritaya yalnız en çok çalan 300 sanatçı girer (seo_katalog çalma sayısına göre sıralı).
+    sanatcilar = sanatcilar.slice(0, 300);
   } catch {
     // veritabanı okunamazsa sadece sabit sayfalar
   }

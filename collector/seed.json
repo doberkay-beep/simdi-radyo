@@ -2266,7 +2266,7 @@
  },
  {
   "slug": "70-80-hits-hq",
-  "name": "NBC Milano",
+  "name": "70 80 Hits HQ",
   "city": "Milano",
   "frequency": null,
   "stream_url": "https://nr8.newradio.it:19574/stream",
@@ -2277,6 +2277,21 @@
   "metadata_quality": "good",
   "is_active": true,
   "sort_order": 526,
+  "country": "it"
+ },
+ {
+  "slug": "nbc-milano",
+  "name": "NBC Milano",
+  "city": "Milano",
+  "frequency": null,
+  "stream_url": "https://nr7.newradio.it:19350/stream",
+  "homepage": "https://www.nbcmilano.it/",
+  "accent_color": "#c0563a",
+  "band": "int",
+  "genre": "pop",
+  "metadata_quality": "good",
+  "is_active": true,
+  "sort_order": 666,
   "country": "it"
  },
  {

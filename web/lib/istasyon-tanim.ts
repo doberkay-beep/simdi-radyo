@@ -157,7 +157,7 @@ const TANIMLAR: Record<string, { tr: string; en?: string }> = {
   "z-92-miami-92-3-fm-wcmq-fm-spanish-broad": { tr: "Miami'nin İspanyolca ritim kanalı.", en: "Miami's Spanish-language rhythm channel." },
   "classic-hits-radio-70-80-discofunk-moder": { tr: "Disko-funk'tan modern soul'a köprü.", en: "A bridge from disco-funk to modern soul." },
   "radio-armisa": { tr: "İtalya'dan elektronik el işçiliği.", en: "Electronic craftsmanship from Italy." },
-  "70-80-hits-hq": { tr: "Milano'dan yüksek kalite retro hit.", en: "High-fidelity retro hits from Milan." },
+  "70-80-hits-hq": { tr: "Milano'dan, yalnız 1970–1989 arasının Top 40 hitleri. Sloganı: We Play Again!", en: "From Milan, only Top 40 hits from 1970 to 1989. Its motto: We Play Again!" },
   "classic-hits-radio-italia": { tr: "İtalyan klasik hit deposu.", en: "Italy's classic-hit depot." },
   "italia-italia-70": { tr: "Yetmişlerin İtalya'sına açılan pencere.", en: "A window onto 1970s Italy." },
   "new-hits-radio-italia": { tr: "İtalyan pop'unun taze rafı.", en: "The fresh shelf of Italian pop." },

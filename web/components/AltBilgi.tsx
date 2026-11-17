@@ -62,6 +62,19 @@ export default function AltBilgi() {
         <p className="mt-2" style={{ color: "var(--muted)" }}>
           {en ? "Words first, then frequencies." : "Önce kelimeler, sonra frekanslar."}
         </p>
+        {/* Uygulama — 17 Kas 2026 (Berkay): App Store bağlantısı her sayfanın altında. Android henüz kapalı testte, bağlanmaz. */}
+        <p className="mt-3">
+          <a
+            href="https://apps.apple.com/app/id6825787056"
+            target="_blank"
+            rel="noopener"
+            className="underline"
+            style={{ color: "var(--fg)" }}
+          >
+            {en ? "Get nowby. on the App Store" : "nowby. App Store'da"}
+          </a>{" "}
+          — {en ? "for iPhone and Apple TV, free, no ads." : "iPhone ve Apple TV için, ücretsiz, reklamsız."}
+        </p>
         {/* Hak sahipleri için — 27 Eki (Berkay onayladı): aktarma yok, istenen radyo aynı gün çıkar */}
         <p className="mt-4 text-[12.5px] leading-relaxed" style={{ color: "var(--muted)" }}>
           <span className="kicker mr-2" style={{ color: "var(--fg)" }}>{en ? "For rights holders" : "Hak sahipleri için"}</span>

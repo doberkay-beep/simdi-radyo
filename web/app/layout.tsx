@@ -35,6 +35,9 @@ export const metadata = {
     canonical: "/",
     languages: { "tr-TR": "/", "en": "/", "x-default": "/" },
   },
+  // iPhone Safari'de üstte "nowby uygulaması" şeridi (17 Kas 2026). İzinli radyo sayfaları
+  // aynı alanı app-argument ile ezer: dokununca o radyo çalar.
+  itunes: { appId: "6825787056" },
   appleWebApp: {
     capable: true,
     title: "nowby.",

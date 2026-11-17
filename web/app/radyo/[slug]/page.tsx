@@ -221,7 +221,7 @@ export async function generateMetadata({
     },
     twitter: { card: "summary_large_image", images: [`/api/kart/${slug}`] },
     // iPhone Safari'de "Uygulamada aç" şeridi: yalnız izinli radyolar; dokununca bu radyoyu çalar.
-    ...(s.app_izinli ? { other: { "apple-itunes-app": `app-id=6825787056, app-argument=nowby://cal/${slug}` } } : {}),
+    ...(s.app_izinli ? { itunes: { appId: "6825787056", appArgument: `nowby://cal/${slug}` } } : {}),
   };
 }
 

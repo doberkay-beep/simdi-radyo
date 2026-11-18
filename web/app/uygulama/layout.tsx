@@ -1,4 +1,5 @@
 import type { ReactNode } from "react";
+import "./uygulama.css";
 
 // /uygulama — mağaza paketlerinin (Microsoft Store, ileride başka PWA mağazaları) açtığı kabuk.
 // Yalnız yazılı izinli radyolar (stations.app_izinli). Kendi manifesti var: kapsamı /uygulama,

@@ -600,6 +600,21 @@
   "country": "tr"
  },
  {
+  "slug": "romantik-ses-sakarya",
+  "name": "Romantik Ses Sakarya",
+  "city": "Sakarya",
+  "frequency": null,
+  "stream_url": "https://radyo.romantikses.com/romantiksessakary/stream",
+  "homepage": null,
+  "accent_color": "#a8577a",
+  "band": "tr",
+  "genre": "nostalji",
+  "metadata_quality": "good",
+  "is_active": true,
+  "sort_order": 391,
+  "country": "tr"
+ },
+ {
   "slug": "slow-fm",
   "name": "Slow FM",
   "city": null,

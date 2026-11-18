@@ -27,6 +27,8 @@ const baslik = Bodoni_Moda({
 
 export const metadata = {
   metadataBase: new URL("https://nowby.co"),
+  // Kök manifest; /uygulama kendi manifestiyle ezer (app/uygulama/layout.tsx).
+  manifest: "/manifest.webmanifest",
   title: "nowby. — radyoda şu an ne çalıyor",
   description:
     "Türkiye'deki (ve seçili yabancı) radyolarda şu an çalan parçalar, canlı. What's playing right now on Turkish radio.",

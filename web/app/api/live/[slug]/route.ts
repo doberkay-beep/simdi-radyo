@@ -1,6 +1,7 @@
 import { getSupabase } from "@/lib/supabase";
 import { probeIcy } from "@/lib/icy";
 import { json } from "@/lib/json";
+import { uygulamaIstegi } from "@/lib/uygulama";
 
 // Ham soket + canlı yoklama → Node runtime, istek anında, cache yok.
 export const dynamic = "force-dynamic";
@@ -55,12 +56,14 @@ export async function GET(request: Request, ctx: { params: Promise<{ slug: strin
 
   const { data, error } = await supabase
     .from("stations")
-    .select("stream_url, meta_url, is_active, name, meta_gizli")
+    .select("stream_url, meta_url, is_active, name, meta_gizli, app_izinli")
     .eq("slug", slug)
     .maybeSingle();
 
   if (error) return json({ error: "sunucu hatası" }, { status: 500 });
   if (!data || !data.is_active) return json({ error: "istasyon bulunamadı" }, { status: 404 });
+  // Mağaza uygulamaları (?uygulama=1): izinsiz radyonun verisi verilmez (Apple 5.2.3, Microsoft Store).
+  if (uygulamaIstegi(request) && data.app_izinli !== true) return json({ error: "istasyon bulunamadı" }, { status: 404 });
 
   const headers = { "Cache-Control": "no-store" };
   // Radyo şu an çalanın gösterilmesini istemedi (meta_gizli) — başlık çekilmez.

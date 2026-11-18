@@ -12,7 +12,8 @@ export default function AltBilgi() {
   const yol = usePathname();
   const { dil } = useDil();
   const en = dil === "en";
-  if (yol?.startsWith("/embed")) return null;
+  // Mağaza kabuğunda (/uygulama) da yok: oradan site sayfalarına bağlantı verilmez.
+  if (yol?.startsWith("/embed") || yol?.startsWith("/uygulama")) return null;
 
   return (
     <footer className="mx-auto max-w-2xl px-5 pb-16 pt-4 text-sm" style={{ color: "var(--muted)" }}>

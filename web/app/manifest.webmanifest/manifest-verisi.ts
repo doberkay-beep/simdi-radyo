@@ -1,6 +1,9 @@
 import type { MetadataRoute } from "next";
 
 // Ana ekrana ekle / masaüstüne kur (Windows, Android, iOS) için manifest.
+// Rota dosyası (route.ts) olarak sunulur, Next'in manifest.ts kuralıyla değil: o kural her sayfaya
+// kök manifest bağlantısını zorla ekliyor, /uygulama ise kendi manifestine bağlanmalı.
+// Bağlantı layout.tsx'teki metadata.manifest ile verilir.
 // 18 Kas 2026 (Windows hazırlığı):
 // - id "/": kurulu uygulamanın kalıcı kimliği. Eskiden açık yazılmıyordu ve start_url'den ("/")
 //   türüyordu; aynı değer, kurulu olanlar etkilenmez. Bundan sonra DEĞİŞTİRİLMEZ.
@@ -8,7 +11,7 @@ import type { MetadataRoute } from "next";
 // - lang: site arayüzü tr + en; birincil dil tr. (30 dil iOS uygulamasında, web'de değil.)
 // - Windows karoları için 44/150/310 kare + 310x150 geniş ikon; Edge/Chrome'un zengin kurulum
 //   penceresi için dar + geniş ekran görüntüsü.
-export default function manifest(): MetadataRoute.Manifest {
+export function siteManifesti(): MetadataRoute.Manifest {
   return {
     id: "/",
     name: "nowby. — radyoda şu an ne çalıyor",

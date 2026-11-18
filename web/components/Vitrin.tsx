@@ -83,6 +83,7 @@ export default function Vitrin({ izinliSayi }: { izinliSayi: number }) {
               ? "nowby. shows what stations are playing this very minute and lets you listen with one tap. On iPhone, iPad, Mac, Apple TV and Apple Watch; free, no ads, no account."
               : "nowby. radyolarda tam bu dakika ne çaldığını gösterir, tek dokunuşla dinletir. iPhone, iPad, Mac, Apple TV ve Apple Watch'ta; ücretsiz, reklamsız, hesapsız."}
           </p>
+          <p className="vt-yakinda">{en ? "Coming soon to Windows and Android." : "Yakında Windows ve Android'de de."}</p>
           <div className="vt-dugmeler">
             <a className="vt-dugme dolu" href={APP_STORE}>
               {en ? "Download on the App Store" : "App Store'dan indir"}

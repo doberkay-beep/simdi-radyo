@@ -16,6 +16,7 @@
 .vt-acilis { padding: clamp(56px, 9vw, 120px) 0 clamp(40px, 6vw, 72px); }
 .vt-acilis h1 { font-family: var(--font-display); font-weight: 400; font-size: clamp(44px, 7vw, 92px); line-height: 1; letter-spacing: -0.015em; max-width: 14ch; }
 .vt-giris { max-width: 640px; color: var(--fg); opacity: 0.86; font-size: 19px; line-height: 1.55; margin-top: 18px; }
+.vt-yakinda { margin-top: 12px; font-size: 13px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--muted); }
 .vt-dugmeler { margin-top: 30px; display: flex; flex-wrap: wrap; gap: 12px; }
 .vt-dugme { display: inline-block; padding: 13px 22px; border-radius: 999px; font-weight: 500; font-size: 16px; text-decoration: none; }
 .vt-dugme.dolu { background: var(--fg); color: var(--bg) !important; }

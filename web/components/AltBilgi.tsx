@@ -74,7 +74,7 @@ export default function AltBilgi() {
           >
             {en ? "Get nowby. on the App Store" : "nowby. App Store'da"}
           </a>{" "}
-          — {en ? "for iPhone, Mac and Apple TV, free, no ads." : "iPhone, Mac ve Apple TV için, ücretsiz, reklamsız."}
+          — {en ? "for iPhone, Mac and Apple TV, free, no ads. Coming soon to Windows and Android." : "iPhone, Mac ve Apple TV için, ücretsiz, reklamsız. Yakında Windows ve Android'de de."}
         </p>
         {/* Hak sahipleri için — 27 Eki (Berkay onayladı): aktarma yok, istenen radyo aynı gün çıkar */}
         <p className="mt-4 text-[12.5px] leading-relaxed" style={{ color: "var(--muted)" }}>

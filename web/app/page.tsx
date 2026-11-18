@@ -1,23 +1,12 @@
-import NowList from "@/components/NowList";
+import Vitrin from "@/components/Vitrin";
 import { aktifIstasyonlar } from "@/lib/now";
-import { getSupabase } from "@/lib/supabase";
-import type { AnaOzet } from "@/components/CanliVitrin";
+import "./vitrin.css";
 
-// Sayfa 30 sn'de bir verisiyle birlikte üretilir: ziyaretçi ilk anda dolu sayfa
-// görür (istasyonlar, sayaç, liste); canlı akış istemcide sürer. Veritabanına
-// ziyaretçi başına değil 30 sn'de bir sorgu gider.
-export const revalidate = 30;
+// 19 Kas 2026 (Berkay): ana sayfa uygulamaların vitrini oldu. Bütün radyoların canlı listesi
+// gizli /canli adresine taşındı (bağlantı yok, arama motorlarına kapalı).
+// İzinli radyo sayısı elle yazılmaz: uygulamaların gösterdiği listeden (app_izinli) okunur.
+export const revalidate = 300;
 
-async function anaOzet(): Promise<AnaOzet | null> {
-  try {
-    const { data } = await getSupabase().from("ana_ozet").select("veri").eq("id", 1).maybeSingle();
-    return (data?.veri as AnaOzet) ?? null;
-  } catch {
-    return null;
-  }
-}
-
-// Ana sayfa yapılandırılmış verisi — arama motorlarına site kimliği.
 const jsonLd = {
   "@context": "https://schema.org",
   "@type": "WebSite",
@@ -25,16 +14,16 @@ const jsonLd = {
   alternateName: "nowby.co",
   url: "https://nowby.co",
   inLanguage: "tr-TR",
-  description: "Türkiye'deki ve dünyadan seçili radyolarda şu an çalan parçalar, canlı.",
+  description: "Radyolarda şu an çalan parçalar, canlı. iPhone, iPad, Mac, Apple TV ve Apple Watch için nowby. uygulaması.",
   creator: { "@type": "Person", name: "Berkay Doğan", url: "https://berkaydogan.co" },
 };
 
 export default async function Home() {
-  const [ilkIstasyonlar, ilkOzet] = await Promise.all([aktifIstasyonlar({ onbellekli: true }).catch(() => []), anaOzet()]);
+  const izinli = await aktifIstasyonlar({ uygulama: true, onbellekli: true }).catch(() => []);
   return (
     <>
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
-      <NowList ilkIstasyonlar={ilkIstasyonlar} ilkOzet={ilkOzet} />
+      <Vitrin izinliSayi={izinli.length} />
     </>
   );
 }

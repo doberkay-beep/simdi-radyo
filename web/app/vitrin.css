@@ -1,0 +1,78 @@
+/* Ana sayfa vitrini (components/Vitrin.tsx) — 19 Kas 2026. Sitenin yeni dili: Bodoni başlık,
+   Newsreader metin, tek kızıl (--glow). Renkler tema değişkenlerinden: aydınlık temada da çalışır. */
+
+.vt { color: var(--fg); font-family: var(--font-read); }
+.vt-kap { max-width: 1180px; margin: 0 auto; padding: 0 clamp(20px, 4vw, 48px); }
+.vt a { color: inherit; }
+
+.vt-ust { display: flex; justify-content: space-between; align-items: center; gap: 16px; padding: 22px 0; border-bottom: 1px solid var(--line); }
+.vt-logo { font-family: var(--font-display); font-size: 26px; font-weight: 500; text-decoration: none; }
+.vt-logo b { color: var(--glow); font-weight: 500; }
+.vt-nav { display: flex; align-items: center; gap: 22px; font-size: 15px; color: var(--muted); }
+.vt-nav a { text-decoration: none; }
+.vt-nav a:hover { color: var(--fg); }
+.vt-ayar { display: inline-flex; gap: 10px; align-items: center; }
+
+.vt-acilis { padding: clamp(56px, 9vw, 120px) 0 clamp(40px, 6vw, 72px); }
+.vt-acilis h1 { font-family: var(--font-display); font-weight: 400; font-size: clamp(44px, 7vw, 92px); line-height: 1; letter-spacing: -0.015em; max-width: 14ch; }
+.vt-giris { max-width: 640px; color: var(--fg); opacity: 0.86; font-size: 19px; line-height: 1.55; margin-top: 18px; }
+.vt-dugmeler { margin-top: 30px; display: flex; flex-wrap: wrap; gap: 12px; }
+.vt-dugme { display: inline-block; padding: 13px 22px; border-radius: 999px; font-weight: 500; font-size: 16px; text-decoration: none; }
+.vt-dugme.dolu { background: var(--fg); color: var(--bg) !important; }
+.vt-dugme.bos { border: 1px solid var(--line-hi); }
+.vt-dugme.bos:hover { border-color: var(--fg); }
+
+.vt-bolum { padding: clamp(56px, 8vw, 104px) 0; border-top: 1px solid var(--line); }
+.vt-etiket { font-size: 12px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--muted); }
+.vt h2 { font-family: var(--font-display); font-weight: 400; font-size: clamp(34px, 4.6vw, 58px); line-height: 1.05; margin: 14px 0 6px; letter-spacing: -0.01em; }
+.vt h2 i { color: var(--glow); font-style: italic; }
+
+/* Web çalar */
+.vt-calar iframe { display: block; width: 100%; height: min(720px, 78vh); margin-top: 18px; border: 1px solid var(--line); border-radius: 14px; background: var(--bg); }
+.vt-not { margin-top: 10px; font-size: 15px; color: var(--muted); text-align: right; }
+.vt-not a { text-decoration: none; }
+
+/* 01 · cihazlar */
+.vt-cihazlar { margin-top: 40px; display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 1px; background: var(--line); border: 1px solid var(--line); }
+.vt-cihaz { background: var(--bg); padding: 26px 22px 22px; display: flex; flex-direction: column; gap: 10px; min-height: 200px; text-decoration: none; transition: background 0.2s; }
+a.vt-cihaz:hover { background: var(--bg2); }
+.vt-cihaz svg { width: 34px; height: 34px; stroke: var(--fg); fill: none; stroke-width: 1.3; }
+.vt-cihaz .ad { font-family: var(--font-display); font-size: 24px; }
+.vt-cihaz .ne { color: var(--muted); font-size: 15px; line-height: 1.4; }
+.vt-cihaz .durum { margin-top: auto; font-size: 11.5px; letter-spacing: 0.1em; text-transform: uppercase; }
+.vt-cihaz .durum.var { color: var(--fg); }
+.vt-cihaz .durum.var::before { content: ""; display: inline-block; width: 7px; height: 7px; border-radius: 50%; background: var(--glow); margin-right: 8px; vertical-align: 1px; }
+.vt-cihaz .durum.yakin { color: var(--muted); }
+.vt-cihaz.burada { background: var(--bg2); }
+
+/* 02 · özellikler */
+.vt-ozellikler { margin-top: 40px; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 28px 36px; }
+.vt-oz { border-top: 1px solid var(--line); padding-top: 18px; }
+.vt-oz .no { font-size: 12px; color: var(--glow); letter-spacing: 0.1em; }
+.vt-oz h3 { font-family: var(--font-display); font-weight: 400; font-size: 27px; margin: 10px 0 6px; }
+.vt-oz p { opacity: 0.84; font-size: 16.5px; line-height: 1.5; }
+.vt-oz .yer { margin-top: 10px; font-size: 12px; color: var(--muted); letter-spacing: 0.06em; }
+
+/* 03 · radyolar */
+.vt-radyolar { display: grid; grid-template-columns: 1.1fr 1fr; gap: 56px; align-items: start; }
+.vt-sayi { font-family: var(--font-display); font-size: clamp(56px, 7vw, 92px); line-height: 1; margin-top: 26px; }
+.vt-sayi small { display: block; font-family: var(--font-read); font-size: 16px; color: var(--muted); margin-top: 8px; }
+.vt-liste3 { margin-top: 30px; }
+.vt-liste3 a { display: flex; justify-content: space-between; gap: 20px; padding: 20px 0; border-top: 1px solid var(--line); text-decoration: none; }
+.vt-liste3 a:last-child { border-bottom: 1px solid var(--line); }
+.vt-liste3 b { font-family: var(--font-display); font-weight: 400; font-size: 23px; display: block; }
+.vt-liste3 span { color: var(--muted); font-size: 15.5px; }
+.vt-liste3 em { font-style: normal; color: var(--glow); align-self: center; }
+
+@media (max-width: 900px) {
+  .vt-cihazlar { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .vt-ozellikler { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .vt-radyolar { grid-template-columns: 1fr; gap: 12px; }
+  .vt-nav > a { display: none; }
+}
+@media (max-width: 560px) {
+  .vt-cihaz { min-height: 0; padding: 20px 16px; }
+  .vt-cihaz .ad { font-size: 21px; }
+  .vt-ozellikler { grid-template-columns: 1fr; }
+  .vt-calar iframe { height: 640px; }
+}

@@ -38,6 +38,8 @@ const CIHAZLAR: Cihaz[] = [
     ikon: ikon(<path d="M4 7l10-1.5v10H4zM16 5.2L28 3.5v12H16zM4 17.5h10v9.8L4 26zM16 17.5h12v11L16 26.8z" />) },
   { ad: "Android", tr: "Google Play'de testte; yakında herkese açık.", en: "In testing on Google Play; open to everyone soon.", durum: "yakin", trD: "Testte", enD: "In testing",
     ikon: ikon(<><rect x="8" y="9" width="16" height="17" rx="2" /><path d="M11 9a5 5 0 0 1 10 0M12 4l2 3M20 4l-2 3" /></>) },
+  { ad: "CarPlay", tr: "Arabada: şimdi çalanlar ve favorilerin; dokun, dinle.", en: "In the car: what's playing now and your favorites; tap and listen.", durum: "yakin", trD: "Yakında", enD: "Coming soon",
+    ikon: ikon(<><path d="M5 20l2.5-7.5A3 3 0 0 1 10.3 10.5h11.4a3 3 0 0 1 2.8 2l2.5 7.5" /><rect x="3" y="20" width="26" height="6" rx="2" /><circle cx="9" cy="23" r="1.2" /><circle cx="23" cy="23" r="1.2" /></>) },
   { ad: "Web", tr: "Şu an buradasın. Hiçbir şey kurmadan dinle.", en: "You are here. Listen without installing anything.", durum: "var", trD: "Aşağıda, açık", enD: "Below, open", href: "#dinle", burada: true,
     ikon: ikon(<><circle cx="16" cy="16" r="12" /><path d="M4 16h24M16 4c4 4 4 20 0 24M16 4c-4 4-4 20 0 24" /></>) },
 ];
@@ -137,6 +139,29 @@ export default function Vitrin({ izinliSayi }: { izinliSayi: number }) {
               );
             })}
           </div>
+        </section>
+
+        {/* ARABADA — CarPlay (19 Kas 2026: Apple izni geldi, iOS 1.0.3 incelemede) */}
+        <section className="vt-bolum vt-araba">
+          <div className="vt-etiket">{en ? "In the car" : "Arabada"}</div>
+          <h2>
+            {en ? "The same frequency, " : "Yol boyunca "}
+            <i>{en ? "all the way." : "aynı frekans."}</i>
+          </h2>
+          <p className="vt-giris">
+            {en
+              ? "nowby. is coming to CarPlay: what stations are playing right now and your favorites, on the car screen. Tap a station and it plays. No typing, eyes stay on the road."
+              : "nowby. CarPlay'e geliyor: radyolarda şu an çalanlar ve favorilerin, araba ekranında. Bir radyoya dokun, çalsın. Yazı yok, göz yolda kalır."}
+          </p>
+          <div className="vt-araba-gorseller">
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img src="/carplay/carplay-simdi.jpg" alt={en ? "nowby. on CarPlay: playing now" : "nowby. CarPlay'de: şimdi çalanlar"} width={1400} height={845} loading="lazy" />
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img src="/carplay/carplay-favoriler.jpg" alt={en ? "nowby. on CarPlay: favorites" : "nowby. CarPlay'de: favoriler"} width={1400} height={845} loading="lazy" />
+          </div>
+          <p className="vt-not" style={{ textAlign: "left" }}>
+            {en ? "In Apple review; it arrives with the iPhone update once approved." : "Apple incelemesinde; onaylanınca iPhone güncellemesiyle gelir."}
+          </p>
         </section>
 
         {/* 02 · YALNIZ UYGULAMADA */}

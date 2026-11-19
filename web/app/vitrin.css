@@ -34,7 +34,7 @@
 .vt-not a { text-decoration: none; }
 
 /* 01 · cihazlar */
-.vt-cihazlar { margin-top: 40px; display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 1px; background: var(--line); border: 1px solid var(--line); }
+.vt-cihazlar { margin-top: 40px; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 1px; background: var(--line); border: 1px solid var(--line); }
 .vt-cihaz { background: var(--bg); padding: 26px 22px 22px; display: flex; flex-direction: column; gap: 10px; min-height: 200px; text-decoration: none; transition: background 0.2s; }
 a.vt-cihaz:hover { background: var(--bg2); }
 .vt-cihaz svg { width: 34px; height: 34px; stroke: var(--fg); fill: none; stroke-width: 1.3; }
@@ -45,6 +45,11 @@ a.vt-cihaz:hover { background: var(--bg2); }
 .vt-cihaz .durum.var::before { content: ""; display: inline-block; width: 7px; height: 7px; border-radius: 50%; background: var(--glow); margin-right: 8px; vertical-align: 1px; }
 .vt-cihaz .durum.yakin { color: var(--muted); }
 .vt-cihaz.burada { background: var(--bg2); }
+
+/* Arabada */
+.vt-araba-gorseller { margin-top: 32px; display: grid; gap: 16px; grid-template-columns: repeat(2, minmax(0, 1fr)); }
+.vt-araba-gorseller img { width: 100%; height: auto; display: block; border-radius: 16px; border: 1px solid var(--line); }
+@media (max-width: 760px) { .vt-araba-gorseller { grid-template-columns: 1fr; } }
 
 /* 02 · özellikler */
 .vt-ozellikler { margin-top: 40px; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 28px 36px; }

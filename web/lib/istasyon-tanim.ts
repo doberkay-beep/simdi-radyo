@@ -355,7 +355,6 @@ const TANIMLAR: Record<string, { tr: string; en?: string }> = {
   "colombia-salsa-dura": { tr: "Sert salsa: yumuşatılmamış.", en: "Salsa dura: unsoftened." },
   "la-mega-peru": { tr: "Lima'nın mega hit dalgası.", en: "Lima's mega hit wave." },
   "studio-92-lima": { tr: "Lima gençliğinin stüdyosu.", en: "The studio of Lima's youth." },
-  "hod-radio": { tr: "Nijerya'dan afrobeats nabzı.", en: "An afrobeats pulse from Nigeria." },
   "kameme-fm": { tr: "Kenya'nın Kikuyu dilli sesi.", en: "Kenya's Kikuyu-language voice." },
   "at254-radio": { tr: "Nairobi'nin +254 kodlu yayını.", en: "Nairobi broadcasting on code +254." },
   "arirang-radio": { tr: "Kore'nin dünyaya açılan K-pop kanalı.", en: "Korea's K-pop channel to the world." },

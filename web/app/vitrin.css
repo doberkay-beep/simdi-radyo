@@ -82,3 +82,9 @@ a.vt-cihaz:hover { background: var(--bg2); }
   .vt-ozellikler { grid-template-columns: 1fr; }
   .vt-calar iframe { height: 640px; }
 }
+
+/* Mevsimlik duyuru: yılbaşı "Gece yarısı ne çalıyordu?" (15 Kas – 31 Oca) */
+.vt-duyuru { display: inline-block; margin-top: 26px; font-size: 16px; color: var(--muted); text-decoration: none; border-bottom: 1px solid var(--line-hi); padding-bottom: 3px; }
+.vt-duyuru i { font-family: var(--font-display); font-size: 18px; color: var(--fg); }
+.vt-duyuru:hover, .vt-duyuru:hover i { color: var(--glow); border-color: var(--glow); }
+.vt-duyuru .nokta { width: 7px; height: 7px; border-radius: 50%; background: var(--glow); margin-right: 10px; display: inline-block; vertical-align: 2px; }

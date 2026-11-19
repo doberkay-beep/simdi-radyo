@@ -53,6 +53,12 @@ const OZELLIKLER = [
   { tr: ["Bileğinde, kadranında", "Apple Watch'ta radyo, kadranda günün 1 numarası; ana ekranda widget."], en: ["On your wrist", "Radio on Apple Watch, today's number one on the face, a widget on the home screen."], yer: "Apple Watch · widget" },
 ];
 
+// "Gece yarısı ne çalıyordu?" (yılbaşı) bağlantısı yalnız mevsiminde: 15 Kasım – 31 Ocak.
+function yilbasiMevsimi(t = new Date()) {
+  const ay = t.getMonth(), gun = t.getDate();
+  return ay === 11 || ay === 0 || (ay === 10 && gun >= 15);
+}
+
 export default function Vitrin({ izinliSayi }: { izinliSayi: number }) {
   const { dil } = useDil();
   const en = dil === "en";
@@ -94,6 +100,13 @@ export default function Vitrin({ izinliSayi }: { izinliSayi: number }) {
               {en ? "Listen on the web" : "Web'de dinle"}
             </a>
           </div>
+          {yilbasiMevsimi() && (
+            <Link className="vt-duyuru" href={en ? "/en/midnight" : "/gece-yarisi"}>
+              <span className="nokta" aria-hidden="true" />
+              {en ? "New Year's Eve: " : "Yılbaşı gecesi: "}
+              <i>{en ? "What was playing at midnight?" : "Gece yarısı ne çalıyordu?"}</i> →
+            </Link>
+          )}
         </section>
 
         {/* WEB ÇALAR — /uygulama kabuğu, yalnız izinli radyolar */}

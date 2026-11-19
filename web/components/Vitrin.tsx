@@ -1,7 +1,7 @@
 "use client";
 
 // Ana sayfa vitrini — 19 Kas 2026 (Berkay onayı). nowby. artık beş Apple platformunda;
-// Windows ve Android yolda. Bütün radyoların canlı listesi gizli /canli adresinde çalışır.
+// 20 Kas: Windows Microsoft Store'da; Android yolda. Bütün radyoların canlı listesi gizli /canli adresinde çalışır.
 // Web çalar (/uygulama) ve uygulamalar yalnız yazılı izinli radyoları gösterir.
 // Ünlem yok; Android kapalı testte olduğu için bağlantı verilmez.
 
@@ -11,6 +11,7 @@ import DilToggle from "@/components/DilToggle";
 import ThemeToggle from "@/components/ThemeToggle";
 
 const APP_STORE = "https://apps.apple.com/app/id6825787056";
+const MS_STORE = "https://apps.microsoft.com/detail/9PFGNB14G620";
 const IZIN_MAIL = "mailto:hello@berkaydogan.co?subject=nowby.%20izin";
 const KALDIR_MAIL = "mailto:hello@berkaydogan.co?subject=nowby.%20kald%C4%B1rma%20iste%C4%9Fi";
 
@@ -34,7 +35,7 @@ const CIHAZLAR: Cihaz[] = [
     ikon: ikon(<><rect x="3" y="6" width="26" height="16" rx="1.5" /><line x1="11" y1="26" x2="21" y2="26" /></>) },
   { ad: "Apple Watch", tr: "Bileğinde radyo; kadranda günün 1 numarası.", en: "Radio on your wrist; today's number one on the face.", durum: "var", trD: "iPhone ile gelir", enD: "Comes with iPhone", href: APP_STORE,
     ikon: ikon(<><rect x="9" y="8" width="14" height="16" rx="4" /><path d="M12 8l1-5h6l1 5M12 24l1 5h6l1-5" /></>) },
-  { ad: "Windows", tr: "Microsoft Store'dan, bilgisayarına kurulan nowby.", en: "nowby. for your PC, from the Microsoft Store.", durum: "yakin", trD: "Yakında", enD: "Coming soon",
+  { ad: "Windows", tr: "Microsoft Store'dan, bilgisayarına kurulan nowby.", en: "nowby. for your PC, from the Microsoft Store.", durum: "var", trD: "Microsoft Store'da", enD: "On the Microsoft Store", href: MS_STORE,
     ikon: ikon(<path d="M4 7l10-1.5v10H4zM16 5.2L28 3.5v12H16zM4 17.5h10v9.8L4 26zM16 17.5h12v11L16 26.8z" />) },
   { ad: "Android", tr: "Google Play'de testte; yakında herkese açık.", en: "In testing on Google Play; open to everyone soon.", durum: "yakin", trD: "Testte", enD: "In testing",
     ikon: ikon(<><rect x="8" y="9" width="16" height="17" rx="2" /><path d="M11 9a5 5 0 0 1 10 0M12 4l2 3M20 4l-2 3" /></>) },
@@ -88,10 +89,10 @@ export default function Vitrin({ izinliSayi }: { izinliSayi: number }) {
           <h1>{en ? "What is playing on the radio right now?" : "Radyoda şu an ne çalıyor?"}</h1>
           <p className="vt-giris">
             {en
-              ? "nowby. shows what stations are playing this very minute and lets you listen with one tap. On iPhone, iPad, Mac, Apple TV and Apple Watch; free, no ads, no account."
-              : "nowby. radyolarda tam bu dakika ne çaldığını gösterir, tek dokunuşla dinletir. iPhone, iPad, Mac, Apple TV ve Apple Watch'ta; ücretsiz, reklamsız, hesapsız."}
+              ? "nowby. shows what stations are playing this very minute and lets you listen with one tap. On iPhone, iPad, Mac, Apple TV, Apple Watch and Windows; free, no ads, no account."
+              : "nowby. radyolarda tam bu dakika ne çaldığını gösterir, tek dokunuşla dinletir. iPhone, iPad, Mac, Apple TV, Apple Watch ve Windows'ta; ücretsiz, reklamsız, hesapsız."}
           </p>
-          <p className="vt-yakinda">{en ? "Coming soon to Windows and Android." : "Yakında Windows ve Android'de de."}</p>
+          <p className="vt-yakinda">{en ? "Coming soon to Android." : "Yakında Android'de de."}</p>
           <div className="vt-dugmeler">
             <a className="vt-dugme dolu" href={APP_STORE}>
               {en ? "Download on the App Store" : "App Store'dan indir"}

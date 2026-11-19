@@ -74,7 +74,18 @@ export default function AltBilgi() {
           >
             {en ? "Get nowby. on the App Store" : "nowby. App Store'da"}
           </a>{" "}
-          — {en ? "for iPhone, Mac and Apple TV, free, no ads. Coming soon to Windows and Android." : "iPhone, Mac ve Apple TV için, ücretsiz, reklamsız. Yakında Windows ve Android'de de."}
+          — {en ? "for iPhone, Mac and Apple TV, free, no ads. " : "iPhone, Mac ve Apple TV için, ücretsiz, reklamsız. "}
+          {/* 20 Kas 2026: Windows Microsoft Store'da (9PFGNB14G620). */}
+          <a
+            href="https://apps.microsoft.com/detail/9PFGNB14G620"
+            target="_blank"
+            rel="noopener"
+            className="underline"
+            style={{ color: "var(--fg)" }}
+          >
+            {en ? "For Windows, on the Microsoft Store" : "Windows için Microsoft Store'da"}
+          </a>
+          {en ? ". Coming soon to Android." : ". Yakında Android'de de."}
         </p>
         {/* Hak sahipleri için — 27 Eki (Berkay onayladı): aktarma yok, istenen radyo aynı gün çıkar */}
         <p className="mt-4 text-[12.5px] leading-relaxed" style={{ color: "var(--muted)" }}>

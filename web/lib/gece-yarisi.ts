@@ -167,10 +167,13 @@ const sehirAdi = (tz: string) => tz.split("/").pop()!.replace(/_/g, " ");
 // Birden çok saat dilimine yayılan ülkelerde (ABD, Avustralya…) her yerin yanında şehir yazılır.
 const COK_DILIMLI = new Set(Object.keys(dilimVeri).map((s) => (ulkeVeri as Record<string, string>)[s]));
 
-export async function geceYarisi(tarih: string, simdi = Date.now()): Promise<GyVeri> {
+/** izinli verilirse (App Store uygulaması, Apple 5.2.3) yalnız o radyolar: gruplar, yerler ve sayılar
+ *  onlara göre kurulur; izinli radyosu olmayan saat dilimi grubu hiç oluşmaz. */
+export async function geceYarisi(tarih: string, simdi = Date.now(), izinli: Set<string> | null = null): Promise<GyVeri> {
   // Katalogdaki radyolar, gece yarısı anına göre gruplanır.
   const gruplar = new Map<number, { yerler: Map<string, { ulke: string; sehir: string | null }>; radyolar: { slug: string; ulke: string; sehir: string | null }[] }>();
   for (const [slug, ulke] of Object.entries(ulkeVeri as Record<string, string>)) {
+    if (izinli && !izinli.has(slug)) continue;
     const tz = istasyonDilimi(slug);
     if (!tz) continue;
     const an = geceYarisiAni(tarih, tz);

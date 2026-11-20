@@ -8,9 +8,9 @@ export function gercekParca(s: { artist?: string | null; title?: string | null }
 }
 
 // Yalnız LİSTELER için ek süzgeç (20 Kas): radyoların reklam/program kuşaklarını şarkı gibi sayan kayıtlar —
-// telefon numarası ("0331593377 - 0", "0331 45 21 83 - 0") ya da başlıkta site adı ("…di 70-80.it - 2022"). Çalan şarkı gösteriminde
+// telefon numarası ("0331593377 - 0", "0331 45 21 83 - 0") ya da başlıkta site adı ("…di 70-80.it - 2022"), " - 0" ile biten reklam kuşakları ve alt çizgili reklam kodları ("187683_RGI_ANI_20_…"). Çalan şarkı gösteriminde
 // kullanılmaz: orada adında kimlik ya da site geçen gerçek şarkılar var ("Couci Couca §2973505").
-const LISTE_COP = /\d{7,}|(^|\s)0\d{2,3}[\s.]\d{2,3}[\s.]\d{2}[\s.]?\d{2}\b|\b[\w-]+\.(it|de|fr|es|nl|pl|ru|tr|fm|eu|org|info|uk|co)\b(?!\.)/i;
+const LISTE_COP = /\d{7,}|\s-\s0\s*$|[A-Za-z0-9]+_[A-Za-z0-9]+_[A-Za-z0-9]+|(^|\s)0\d{2,3}[\s.]\d{2,3}[\s.]\d{2}[\s.]?\d{2}\b|\b[\w-]+\.(it|de|fr|es|nl|pl|ru|tr|fm|eu|org|info|uk|co)\b(?!\.)/i;
 export function listeParcasi(s: { artist?: string | null; title?: string | null }): boolean {
   return gercekParca(s) && !LISTE_COP.test(`${s.artist ?? ""} ${s.title ?? ""}`);
 }

@@ -62,7 +62,7 @@ begin
     elsif v_gun is not null then
       -- Adlı kapsam (ör. uygulamanın izinli radyoları): küme sırasız karşılaştırılır.
       select k.ad into v_kapsam from liste_kapsam k
-      where (select array_agg(x order by x) from unnest(k.sluglar) x) = (select array_agg(x order by x) from unnest(sluglar) x)
+      where (select array_agg(x order by x) from unnest(k.sluglar) x) = (select array_agg(x order by x) from unnest(liste_ulke.sluglar) x)  -- parametre (sütunla karışmasın)
       limit 1;
       if v_kapsam is not null then
         return query

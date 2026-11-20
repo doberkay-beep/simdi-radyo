@@ -11,8 +11,12 @@ export function gercekParca(s: { artist?: string | null; title?: string | null }
 // telefon numarası ("0331593377 - 0", "0331 45 21 83 - 0") ya da başlıkta site adı ("…di 70-80.it - 2022"), " - 0" ile biten reklam kuşakları ve alt çizgili reklam kodları ("187683_RGI_ANI_20_…"). Çalan şarkı gösteriminde
 // kullanılmaz: orada adında kimlik ya da site geçen gerçek şarkılar var ("Couci Couca §2973505").
 const LISTE_COP = /\d{7,}|\s-\s0\s*$|[A-Za-z0-9]+_[A-Za-z0-9]+_[A-Za-z0-9]+|(^|\s)0\d{2,3}[\s.]\d{2,3}[\s.]\d{2}[\s.]?\d{2}\b|\b[\w-]+\.(it|de|fr|es|nl|pl|ru|tr|fm|eu|org|info|uk|co)\b(?!\.)/i;
+// 70 80 Hits HQ / NBC Milano (aynı yayın) program kuşaklarını "sanatçı — başlık - yıl" diye gönderiyor
+// ("Dieci di noi — Le canzoni che ci somigliano - 2026"). Gerçek şarkılarına da yıl eklediği için genel kural
+// olmaz; programlar BAŞLIKLARIYLA tek tek (sanatçı adı "Behind", "Neverland" gibi gerçek adlarla karışmasın).
+const PROGRAM = /^(le canzoni che ci somigliano|un artista in tre brani|dietro le storie della musica|we mix again|du gusti is megl che one|settantaxottanta\b.*|dieci over the top à la carte)(\s-\s(19|20)\d\d)?\s*$/i;
 export function listeParcasi(s: { artist?: string | null; title?: string | null }): boolean {
-  return gercekParca(s) && !LISTE_COP.test(`${s.artist ?? ""} ${s.title ?? ""}`);
+  return gercekParca(s) && !LISTE_COP.test(`${s.artist ?? ""} ${s.title ?? ""}`) && !PROGRAM.test((s.title ?? "").trim());
 }
 
 // Aylık özet: dolgu satırları çıkar; zirvedeki sanatçı dolguysa listeden yeniden bulunur.

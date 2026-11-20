@@ -7,6 +7,14 @@ export function gercekParca(s: { artist?: string | null; title?: string | null }
   return !COP_PARCA.test(`${s.artist ?? ""} ${s.title ?? ""}`);
 }
 
+// Yalnız LİSTELER için ek süzgeç (20 Kas): radyoların reklam/program kuşaklarını şarkı gibi sayan kayıtlar —
+// telefon numarası ("0331593377 - 0") ya da başlıkta site adı ("…di 70-80.it - 2022"). Çalan şarkı gösteriminde
+// kullanılmaz: orada adında kimlik ya da site geçen gerçek şarkılar var ("Couci Couca §2973505").
+const LISTE_COP = /\d{7,}|\b[\w-]+\.(it|de|fr|es|nl|pl|ru|tr|fm|eu|org|info|uk|co)\b(?!\.)/i;
+export function listeParcasi(s: { artist?: string | null; title?: string | null }): boolean {
+  return gercekParca(s) && !LISTE_COP.test(`${s.artist ?? ""} ${s.title ?? ""}`);
+}
+
 // Aylık özet: dolgu satırları çıkar; zirvedeki sanatçı dolguysa listeden yeniden bulunur.
 export function ozetSuz<T extends { sanatci: { ad: string; kez: number } | null; liste: { artist: string; title: string; kez: number }[] }>(o: T): T {
   const liste = o.liste.filter(gercekParca);

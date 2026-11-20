@@ -1,4 +1,4 @@
-import { gercekParca } from "@/lib/cop";
+import { listeParcasi } from "@/lib/cop";
 import { getSupabase } from "@/lib/supabase";
 import { json } from "@/lib/json";
 import { ULKELER, ulkeIstasyonSluglari, type UlkeKodu } from "@/lib/ulkeler";
@@ -29,7 +29,7 @@ export async function GET(request: Request) {
     const { data, error } = await supabase.rpc("liste_ulke", { bastan: bastan.toISOString(), sona: sona.toISOString(), sluglar, adet: 50 });
     if (error) return json({ error: error.message }, { status: 500 });
     return json(
-      { aralik, ulke, q: null, satirlar: ((data ?? []) as { artist: string; title: string }[]).filter(gercekParca) },
+      { aralik, ulke, q: null, satirlar: ((data ?? []) as { artist: string; title: string }[]).filter(listeParcasi) },
       { headers: { "Cache-Control": "public, s-maxage=600, stale-while-revalidate=1800" } },
     );
   }
@@ -42,7 +42,7 @@ export async function GET(request: Request) {
     });
     if (error) return json({ error: error.message }, { status: 500 });
     return json(
-      { aralik, ulke, q: null, satirlar: data ?? [] },
+      { aralik, ulke, q: null, satirlar: ((data ?? []) as { artist: string; title: string }[]).filter(listeParcasi) },
       { headers: { "Cache-Control": "public, s-maxage=600, stale-while-revalidate=1800" } },
     );
   }
@@ -60,7 +60,7 @@ export async function GET(request: Request) {
 
   if (error) return json({ error: error.message }, { status: 500 });
   return json(
-    { aralik, ulke: "tr", q: q || null, satirlar: ((data ?? []) as { artist: string; title: string }[]).filter(gercekParca) },
+    { aralik, ulke: "tr", q: q || null, satirlar: ((data ?? []) as { artist: string; title: string }[]).filter(listeParcasi) },
     { headers: { "Cache-Control": "public, s-maxage=120, stale-while-revalidate=300" } },
   );
 }

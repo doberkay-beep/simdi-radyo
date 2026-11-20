@@ -1,6 +1,6 @@
 # "Sevdiğin şarkı çalıyor" — Hetzner kurulumu (nowby 1.1)
 
-**Durum:** kod hazır, canlıda DEĞİL. Aşağıdakiler Berkay'ın onayıyla yapılır.
+**Durum (20 Kas 2026):** CANLI. Anahtar ARLL69WH9Q (Team 8G5S22XSBZ) /opt/simdi/sevilen'de; servis gerçek kipte; ilk deneme bildirimi Berkay'ın iPhone'una gitti (APNs 200). Deneme: `node dene.mjs` (son görülen aboneye tek bildirim).
 
 ## 1. APNs anahtarı (Berkay, Apple Developer)
 Certificates, Identifiers & Profiles → Keys → **+** → "Apple Push Notifications service (APNs)" → indir (`AuthKey_XXXX.p8`, yalnız bir kez inebilir).

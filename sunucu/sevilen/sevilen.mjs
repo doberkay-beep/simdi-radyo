@@ -144,8 +144,20 @@ async function izinliYukle() {
   if (Date.now() - izinliZaman < 10 * 60_000 && izinli.size) return;
   const r = await fetch("https://nowby.co/api/now?uygulama=1", { signal: AbortSignal.timeout(15_000) });
   const { stations } = await r.json();
-  if (stations?.length) { izinli = new Map(stations.map((s) => [s.slug, s.name])); izinliZaman = Date.now(); }
+  if (stations?.length) {
+    izinli = new Map(stations.map((s) => [s.slug, s.name])); izinliZaman = Date.now();
+    // Uygulamanın "Hepsi" listesi önbelleği için izinli küme (sunucu/arsiv/liste-kapsam.sql); yalnız değişince yazar.
+    const sluglar = [...izinli.keys()].sort();
+    if (sluglar.join(",") !== kapsamSon) {
+      try {
+        await db.query(`insert into liste_kapsam (ad, sluglar, guncel) values ('izinli', $1, now())
+                        on conflict (ad) do update set sluglar = excluded.sluglar, guncel = now()`, [sluglar]);
+        kapsamSon = sluglar.join(",");
+      } catch (e) { log("! kapsam:", e.message); }
+    }
+  }
 }
+let kapsamSon = "";
 
 function sessizMi(tz) {
   const saat = Number(new Intl.DateTimeFormat("en-GB", { timeZone: tz, hour: "2-digit", hour12: false }).format(new Date()));

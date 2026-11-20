@@ -61,6 +61,7 @@ const sunucu = http.createServer(async (req, res) => {
   for await (const p of req) { govde += p; if (govde.length > 200_000) return cevap(res, 413, { hata: "büyük" }); }
   let j;
   try { j = JSON.parse(govde); } catch { return cevap(res, 400, { hata: "gövde" }); }
+  log("istek", req.url, String(j.token || "").slice(0, 8), `len=${String(j.token || "").length}`);
   if (!jetonGecerli(j.token)) return cevap(res, 400, { hata: "jeton" });
   try {
     if (req.url === "/bildirim/sil") {
@@ -82,6 +83,7 @@ const sunucu = http.createServer(async (req, res) => {
          sanatcilar=excluded.sanatcilar, sarkilar=excluded.sarkilar, son_gorulme=now()`,
       [j.token, ortam, dil, tz, sanatcilar, sarkilar]);
     aboneZaman = 0; // bir sonraki turda yeniden yükle
+    log("kayıt", j.token.slice(0, 8), ortam, `${sanatcilar.length} sanatçı, ${sarkilar.length} şarkı`);
     return cevap(res, 200, { ok: true, sanatci: sanatcilar.length, sarki: sarkilar.length });
   } catch (e) {
     log("! kayıt:", e.message);

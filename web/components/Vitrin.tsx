@@ -52,6 +52,9 @@ const OZELLIKLER = [
   { tr: ["Frekansım", "Bu ay ne dinledin? Ay sonunda sana özel bir karne."], en: ["My frequency", "What did you listen to this month? A report card just for you."], yer: "iPhone · iPad · Mac" },
   { tr: ["Birlikte dinle", "Bir oda aç, arkadaşına gönder; aynı radyoyu aynı anda dinleyin."], en: ["Listen together", "Open a room, send it to a friend, hear the same station at the same moment."], yer: "iPhone · iPad · Mac" },
   { tr: ["Bileğinde, kadranında", "Apple Watch'ta radyo, kadranda günün 1 numarası; ana ekranda widget."], en: ["On your wrist", "Radio on Apple Watch, today's number one on the face, a widget on the home screen."], yer: "Apple Watch · widget" },
+  { tr: ["Widget ve Canlı Etkinlik", "Favori radyolarında ne çalıyor, uygulamayı açmadan gör ve dinle; çalan şarkı kilit ekranında ve Dinamik Ada'da."], en: ["Widgets and Live Activity", "See what's playing on your favourite stations and listen without opening the app; the song on your Lock Screen and in the Dynamic Island."], yer: "iPhone" },
+  { tr: ["Bugün nasılsın?", "Sakin, enerjik, hüzünlü, odak ya da neşeli: ruh haline uyan, şu an çalan radyolar."], en: ["How are you today?", "Calm, energetic, melancholic, focus or cheerful: stations playing right now that fit your mood."], yer: "iPhone" },
+  { tr: ["Siri ile", "\"nowby'da Radyo Eksen'i aç\", \"nowby'da ne çalıyor?\", \"nowby'da şarkıyı yakala\"."], en: ["With Siri", "\"Play KEXP on nowby\", \"What's playing on nowby?\", \"Catch this song in nowby\"."], yer: "iPhone · Siri" },
 ];
 
 // "Gece yarısı ne çalıyordu?" (yılbaşı) bağlantısı yalnız mevsiminde: 15 Kasım – 31 Ocak.

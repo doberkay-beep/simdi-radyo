@@ -1,0 +1,802 @@
+{
+  "interactionModel": {
+    "languageModel": {
+      "invocationName": "now by",
+      "intents": [
+        {
+          "name": "RadyoCalIntent",
+          "slots": [
+            {
+              "name": "radyo",
+              "type": "RADYO"
+            }
+          ],
+          "samples": [
+            "play {radyo}",
+            "put on {radyo}",
+            "start {radyo}",
+            "listen to {radyo}",
+            "play the station {radyo}",
+            "switch to {radyo}"
+          ]
+        },
+        {
+          "name": "SimdiNeCaliyorIntent",
+          "slots": [],
+          "samples": [
+            "what's playing",
+            "what is playing",
+            "what song is this",
+            "what's this song",
+            "who is singing",
+            "what's on",
+            "what song is playing",
+            "name this song"
+          ]
+        },
+        {
+          "name": "AMAZON.CancelIntent",
+          "samples": []
+        },
+        {
+          "name": "AMAZON.HelpIntent",
+          "samples": []
+        },
+        {
+          "name": "AMAZON.StopIntent",
+          "samples": []
+        },
+        {
+          "name": "AMAZON.NavigateHomeIntent",
+          "samples": []
+        },
+        {
+          "name": "AMAZON.FallbackIntent",
+          "samples": []
+        },
+        {
+          "name": "AMAZON.PauseIntent",
+          "samples": []
+        },
+        {
+          "name": "AMAZON.ResumeIntent",
+          "samples": []
+        },
+        {
+          "name": "AMAZON.NextIntent",
+          "samples": []
+        },
+        {
+          "name": "AMAZON.PreviousIntent",
+          "samples": []
+        },
+        {
+          "name": "AMAZON.LoopOffIntent",
+          "samples": []
+        },
+        {
+          "name": "AMAZON.LoopOnIntent",
+          "samples": []
+        },
+        {
+          "name": "AMAZON.RepeatIntent",
+          "samples": []
+        },
+        {
+          "name": "AMAZON.ShuffleOffIntent",
+          "samples": []
+        },
+        {
+          "name": "AMAZON.ShuffleOnIntent",
+          "samples": []
+        },
+        {
+          "name": "AMAZON.StartOverIntent",
+          "samples": []
+        }
+      ],
+      "types": [
+        {
+          "name": "RADYO",
+          "values": [
+            {
+              "id": "show-radyo",
+              "name": {
+                "value": "Show Radyo",
+                "synonyms": [
+                  "Show"
+                ]
+              }
+            },
+            {
+              "id": "radyo-viva",
+              "name": {
+                "value": "Radyo Viva",
+                "synonyms": [
+                  "Viva"
+                ]
+              }
+            },
+            {
+              "id": "joy-turk",
+              "name": {
+                "value": "Joy Türk",
+                "synonyms": [
+                  "Joy Turk"
+                ]
+              }
+            },
+            {
+              "id": "damar-turk-fm",
+              "name": {
+                "value": "Damar Türk FM",
+                "synonyms": [
+                  "Damar Turk FM",
+                  "Damar Türk",
+                  "Damar Turk"
+                ]
+              }
+            },
+            {
+              "id": "pop-90",
+              "name": {
+                "value": "Pop 90",
+                "synonyms": []
+              }
+            },
+            {
+              "id": "kurd1-fm",
+              "name": {
+                "value": "Kurd1 Radyo",
+                "synonyms": [
+                  "Kurd1"
+                ]
+              }
+            },
+            {
+              "id": "joyturk-rock",
+              "name": {
+                "value": "JoyTürk Rock",
+                "synonyms": [
+                  "JoyTurk Rock"
+                ]
+              }
+            },
+            {
+              "id": "turk-rock-fm",
+              "name": {
+                "value": "Türk Rock FM",
+                "synonyms": [
+                  "Turk Rock FM",
+                  "Türk Rock",
+                  "Turk Rock"
+                ]
+              }
+            },
+            {
+              "id": "romantik-ses-isparta",
+              "name": {
+                "value": "Romantik Ses Isparta",
+                "synonyms": []
+              }
+            },
+            {
+              "id": "romantik-ses-sakarya",
+              "name": {
+                "value": "Romantik Ses Sakarya",
+                "synonyms": []
+              }
+            },
+            {
+              "id": "borusan-klasik",
+              "name": {
+                "value": "Borusan Klasik",
+                "synonyms": []
+              }
+            },
+            {
+              "id": "baba-radyo",
+              "name": {
+                "value": "Baba Radyo",
+                "synonyms": [
+                  "Baba"
+                ]
+              }
+            },
+            {
+              "id": "real-love-music-radio-future-funk",
+              "name": {
+                "value": "Future Funk Radio",
+                "synonyms": [
+                  "Future Funk"
+                ]
+              }
+            },
+            {
+              "id": "radio-70-80-90-marche",
+              "name": {
+                "value": "Radio 70 80 90",
+                "synonyms": [
+                  "70 80 90"
+                ]
+              }
+            },
+            {
+              "id": "radio-antalya",
+              "name": {
+                "value": "Radio Antalya",
+                "synonyms": [
+                  "Antalya"
+                ]
+              }
+            },
+            {
+              "id": "0-n-80s-on-radio",
+              "name": {
+                "value": "0N 80s",
+                "synonyms": []
+              }
+            },
+            {
+              "id": "italian-radio-only-romantic-italian-musi",
+              "name": {
+                "value": "Italian Radio",
+                "synonyms": [
+                  "Italian"
+                ]
+              }
+            },
+            {
+              "id": "100-acid-jazz",
+              "name": {
+                "value": "100% Acid Jazz",
+                "synonyms": []
+              }
+            },
+            {
+              "id": "dkfm-shoegaze-radio",
+              "name": {
+                "value": "DKFM Shoegaze Radio",
+                "synonyms": [
+                  "DKFM Shoegaze"
+                ]
+              }
+            },
+            {
+              "id": "real-hardstyle-radio",
+              "name": {
+                "value": "Real Hardstyle Radio",
+                "synonyms": [
+                  "Real Hardstyle"
+                ]
+              }
+            },
+            {
+              "id": "sa-rock-radio",
+              "name": {
+                "value": "SA Rock Radio",
+                "synonyms": [
+                  "SA Rock"
+                ]
+              }
+            },
+            {
+              "id": "jazz-sakura",
+              "name": {
+                "value": "Jazz Sakura",
+                "synonyms": []
+              }
+            },
+            {
+              "id": "j-rock-powerplay-asia-dream-radio",
+              "name": {
+                "value": "J-Rock Powerplay",
+                "synonyms": []
+              }
+            },
+            {
+              "id": "funky-corner-radio-spain",
+              "name": {
+                "value": "Funky Corner Radio",
+                "synonyms": [
+                  "Funky Corner"
+                ]
+              }
+            },
+            {
+              "id": "0-n-70s-on-radio",
+              "name": {
+                "value": "0N 70s",
+                "synonyms": []
+              }
+            },
+            {
+              "id": "groove-wave-lounge",
+              "name": {
+                "value": "GrooveWave Lounge",
+                "synonyms": []
+              }
+            },
+            {
+              "id": "dunyadan-sesler",
+              "name": {
+                "value": "Dünyadan Sesler",
+                "synonyms": [
+                  "Dunyadan Sesler"
+                ]
+              }
+            },
+            {
+              "id": "bodrum-fm",
+              "name": {
+                "value": "Bodrum FM",
+                "synonyms": [
+                  "Bodrum"
+                ]
+              }
+            },
+            {
+              "id": "sensual-lounge",
+              "name": {
+                "value": "Sensual Lounge",
+                "synonyms": []
+              }
+            },
+            {
+              "id": "100-covers-lounge",
+              "name": {
+                "value": "100% Covers Lounge",
+                "synonyms": []
+              }
+            },
+            {
+              "id": "smooth-jazz-deluxe",
+              "name": {
+                "value": "Smooth Jazz Deluxe",
+                "synonyms": []
+              }
+            },
+            {
+              "id": "a-mississippi-blues",
+              "name": {
+                "value": "A Mississippi Blues",
+                "synonyms": []
+              }
+            },
+            {
+              "id": "love-radio-only-love-songs-70s80s90s",
+              "name": {
+                "value": "LOVE.radio Only Love Songs 70s80s90s",
+                "synonyms": [
+                  "LOVE. Only Love Songs 70s80s90s"
+                ]
+              }
+            },
+            {
+              "id": "funky-radio-only-funk-music-60-s-70-s",
+              "name": {
+                "value": "FUNKY RADIO - Only Funk Music (60's 70's)",
+                "synonyms": [
+                  "FUNKY - Only Funk Music (60's 70's)"
+                ]
+              }
+            },
+            {
+              "id": "radio-armisa",
+              "name": {
+                "value": "Radio Armisa",
+                "synonyms": [
+                  "Armisa"
+                ]
+              }
+            },
+            {
+              "id": "kiyi-caz",
+              "name": {
+                "value": "Kıyı Caz",
+                "synonyms": [
+                  "Kiyi Caz"
+                ]
+              }
+            },
+            {
+              "id": "70-80-hits-hq",
+              "name": {
+                "value": "70 80 Hits HQ",
+                "synonyms": []
+              }
+            },
+            {
+              "id": "radio-mydonose",
+              "name": {
+                "value": "Mydonose",
+                "synonyms": []
+              }
+            },
+            {
+              "id": "classic-hits-radio-italia",
+              "name": {
+                "value": "CLASSIC HITS RADIO Italia",
+                "synonyms": [
+                  "CLASSIC HITS Italia"
+                ]
+              }
+            },
+            {
+              "id": "max-fm",
+              "name": {
+                "value": "Max FM",
+                "synonyms": [
+                  "Max"
+                ]
+              }
+            },
+            {
+              "id": "new-hits-radio-italia",
+              "name": {
+                "value": "NEW HITS RADIO Italia",
+                "synonyms": [
+                  "NEW HITS Italia"
+                ]
+              }
+            },
+            {
+              "id": "turkiyem-fm",
+              "name": {
+                "value": "Türkiyem FM",
+                "synonyms": [
+                  "Turkiyem FM",
+                  "Türkiyem",
+                  "Turkiyem"
+                ]
+              }
+            },
+            {
+              "id": "radio-planeta-costa-del-sol",
+              "name": {
+                "value": "Radio Planeta Costa del Sol",
+                "synonyms": [
+                  "Planeta Costa del Sol"
+                ]
+              }
+            },
+            {
+              "id": "intense-radio-we-love-dance-256k",
+              "name": {
+                "value": "Intense Radio - We love Dance 256K",
+                "synonyms": [
+                  "Intense - We love Dance 256K"
+                ]
+              }
+            },
+            {
+              "id": "retro-turk",
+              "name": {
+                "value": "Retro Türk",
+                "synonyms": [
+                  "Retro Turk"
+                ]
+              }
+            },
+            {
+              "id": "joyturk-akustik",
+              "name": {
+                "value": "JoyTürk Akustik",
+                "synonyms": [
+                  "JoyTurk Akustik"
+                ]
+              }
+            },
+            {
+              "id": "fm4-orf",
+              "name": {
+                "value": "FM4",
+                "synonyms": []
+              }
+            },
+            {
+              "id": "orf-hitradio-o3-hq",
+              "name": {
+                "value": "ORF Hitradio Ö3 | HQ",
+                "synonyms": [
+                  "ORF Hitradio O3 | HQ"
+                ]
+              }
+            },
+            {
+              "id": "scenesat-radio-mp3",
+              "name": {
+                "value": "SceneSat Radio",
+                "synonyms": [
+                  "SceneSat"
+                ]
+              }
+            },
+            {
+              "id": "wmr-world-music-radio",
+              "name": {
+                "value": "World Music Radio (WMR)",
+                "synonyms": [
+                  "World Music (WMR)"
+                ]
+              }
+            },
+            {
+              "id": "8radio",
+              "name": {
+                "value": "8radio",
+                "synonyms": []
+              }
+            },
+            {
+              "id": "phever-radio",
+              "name": {
+                "value": "PHEVER Radio",
+                "synonyms": [
+                  "PHEVER"
+                ]
+              }
+            },
+            {
+              "id": "radio-paradise",
+              "name": {
+                "value": "Radio Paradise",
+                "synonyms": [
+                  "Paradise"
+                ]
+              }
+            },
+            {
+              "id": "j-pop-powerplay",
+              "name": {
+                "value": "J-POP Powerplay",
+                "synonyms": []
+              }
+            },
+            {
+              "id": "radio-paradise-rock",
+              "name": {
+                "value": "Radio Paradise Rock",
+                "synonyms": [
+                  "Paradise Rock"
+                ]
+              }
+            },
+            {
+              "id": "roca-fm-clasicos-mexico",
+              "name": {
+                "value": "Roca Fm Clasicos Mexico",
+                "synonyms": [
+                  "Roca Clasicos Mexico"
+                ]
+              }
+            },
+            {
+              "id": "reggae-chill-cafe",
+              "name": {
+                "value": "Reggae Chill Cafe",
+                "synonyms": []
+              }
+            },
+            {
+              "id": "70-80-90-vibrazioni-rock-radio",
+              "name": {
+                "value": "70 80 90 Vibrazioni Rock Radio",
+                "synonyms": [
+                  "70 80 90 Vibrazioni Rock"
+                ]
+              }
+            },
+            {
+              "id": "nature-radio-rain",
+              "name": {
+                "value": "Nature Radio Rain",
+                "synonyms": [
+                  "Nature Rain"
+                ]
+              }
+            },
+            {
+              "id": "the-prog-rock-machine",
+              "name": {
+                "value": "The Prog Rock Machine",
+                "synonyms": []
+              }
+            },
+            {
+              "id": "free-fm-rock-austral",
+              "name": {
+                "value": "Free FM Rock Austral",
+                "synonyms": [
+                  "Free Rock Austral"
+                ]
+              }
+            },
+            {
+              "id": "ubuntufm",
+              "name": {
+                "value": "UbuntuFM",
+                "synonyms": []
+              }
+            },
+            {
+              "id": "nbc-milano",
+              "name": {
+                "value": "NBC Milano",
+                "synonyms": []
+              }
+            },
+            {
+              "id": "radio-paradise-mellow",
+              "name": {
+                "value": "Radio Paradise Mellow",
+                "synonyms": [
+                  "Paradise Mellow"
+                ]
+              }
+            },
+            {
+              "id": "0n-classic-rock",
+              "name": {
+                "value": "0N Classic Rock",
+                "synonyms": []
+              }
+            },
+            {
+              "id": "0n-soft-rock",
+              "name": {
+                "value": "0N Soft Rock",
+                "synonyms": []
+              }
+            },
+            {
+              "id": "badrock-hard-heavy",
+              "name": {
+                "value": "BadRock Hard & Heavy",
+                "synonyms": []
+              }
+            },
+            {
+              "id": "badrock-national",
+              "name": {
+                "value": "BadRock National",
+                "synonyms": []
+              }
+            },
+            {
+              "id": "badrock-classic-rock",
+              "name": {
+                "value": "BadRock Classic Rock",
+                "synonyms": []
+              }
+            },
+            {
+              "id": "badrock-golden-era",
+              "name": {
+                "value": "BadRock Golden Era",
+                "synonyms": []
+              }
+            },
+            {
+              "id": "christmas-fm-ie",
+              "name": {
+                "value": "Christmas FM",
+                "synonyms": [
+                  "Christmas"
+                ]
+              }
+            },
+            {
+              "id": "christmas-fm-classics-ie",
+              "name": {
+                "value": "Christmas FM Classics",
+                "synonyms": [
+                  "Christmas Classics"
+                ]
+              }
+            },
+            {
+              "id": "christmas-fm-classical-carols-ie",
+              "name": {
+                "value": "Christmas FM Classical & Carols",
+                "synonyms": [
+                  "Christmas Classical & Carols"
+                ]
+              }
+            },
+            {
+              "id": "christmas-fm-rewind-ie",
+              "name": {
+                "value": "Rewind (Christmas FM)",
+                "synonyms": [
+                  "Rewind (Christmas )"
+                ]
+              }
+            },
+            {
+              "id": "free-fm-80-tokyo-jp",
+              "name": {
+                "value": "Free FM 80 Tokyo",
+                "synonyms": [
+                  "Free 80 Tokyo"
+                ]
+              }
+            },
+            {
+              "id": "100-greatest-heavy-metal-ca",
+              "name": {
+                "value": "# 100 GREATEST HEAVY METAL",
+                "synonyms": []
+              }
+            },
+            {
+              "id": "airport-lounge-radio-ca",
+              "name": {
+                "value": "AIRPORT LOUNGE RADIO",
+                "synonyms": [
+                  "AIRPORT LOUNGE"
+                ]
+              }
+            },
+            {
+              "id": "urban-radio-enugu-ng",
+              "name": {
+                "value": "URBAN RADIO ENUGU",
+                "synonyms": [
+                  "URBAN ENUGU"
+                ]
+              }
+            },
+            {
+              "id": "radio-britannia",
+              "name": {
+                "value": "Radio Britannia",
+                "synonyms": [
+                  "Britannia"
+                ]
+              }
+            },
+            {
+              "id": "kiyi-muzik",
+              "name": {
+                "value": "Kıyı Müzik",
+                "synonyms": [
+                  "Kiyi Muzik"
+                ]
+              }
+            },
+            {
+              "id": "kiyi-turkce",
+              "name": {
+                "value": "Kıyı Türkçe",
+                "synonyms": [
+                  "Kiyi Turkce"
+                ]
+              }
+            },
+            {
+              "id": "kiyi-gece",
+              "name": {
+                "value": "Kıyı Gece",
+                "synonyms": [
+                  "Kiyi Gece"
+                ]
+              }
+            },
+            {
+              "id": "radio-citta-fujiko",
+              "name": {
+                "value": "Radio Città Fujiko",
+                "synonyms": [
+                  "Radio Citta Fujiko",
+                  "Città Fujiko",
+                  "Citta Fujiko"
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    }
+  }
+}

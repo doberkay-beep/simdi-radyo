@@ -8248,5 +8248,20 @@
   "sort_order": 7047,
   "genre": "klasik",
   "country": "us"
+ },
+ {
+  "slug": "radio-citta-fujiko",
+  "name": "Radio Città Fujiko",
+  "city": "Bologna",
+  "frequency": "103.1",
+  "stream_url": "https://streaming.radiocittafujiko.it:8000/rcf.mp3",
+  "homepage": "https://www.radiocittafujiko.it/",
+  "accent_color": "#b8452f",
+  "band": "int",
+  "metadata_quality": "good",
+  "is_active": true,
+  "sort_order": 7048,
+  "genre": "alternatif",
+  "country": "it"
  }
 ]

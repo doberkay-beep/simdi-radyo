@@ -17,7 +17,14 @@ function esler(ad) {
   e.delete(ad); e.delete("");
   return [...e].filter((x) => x.length > 1);
 }
-const degerler = liste.map((s) => ({ id: s.slug, name: { value: s.name, synonyms: esler(s.name) } }));
+// Alexa yuva değerlerinde "|", "#", parantez gibi işaretler derlemeyi bozabilir: harf, rakam, boşluk,
+// kesme, nokta, tire ve "&" kalır. Konsol adı yine radyonun asıl adıyla eşleşir (id = slug).
+const temiz = (x) => x.replace(/[^\p{L}\p{N}\s'&.\-%]/gu, " ").replace(/\s+/g, " ").trim();
+const degerler = liste.map((s) => {
+  const ad = temiz(s.name);
+  const es = [...new Set(esler(s.name).map(temiz))].filter((x) => x && x !== ad && x.length > 1);
+  return { id: s.slug, name: { value: ad, synonyms: es } };
+});
 
 const ornek = {
   en: {

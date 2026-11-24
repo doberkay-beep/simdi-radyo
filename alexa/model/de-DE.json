@@ -374,9 +374,9 @@
             {
               "id": "funky-radio-only-funk-music-60-s-70-s",
               "name": {
-                "value": "FUNKY RADIO - Only Funk Music (60's 70's)",
+                "value": "FUNKY RADIO - Only Funk Music 60's 70's",
                 "synonyms": [
-                  "FUNKY - Only Funk Music (60's 70's)"
+                  "FUNKY - Only Funk Music 60's 70's"
                 ]
               }
             },
@@ -496,9 +496,9 @@
             {
               "id": "orf-hitradio-o3-hq",
               "name": {
-                "value": "ORF Hitradio Ö3 | HQ",
+                "value": "ORF Hitradio Ö3 HQ",
                 "synonyms": [
-                  "ORF Hitradio O3 | HQ"
+                  "ORF Hitradio O3 HQ"
                 ]
               }
             },
@@ -514,9 +514,9 @@
             {
               "id": "wmr-world-music-radio",
               "name": {
-                "value": "World Music Radio (WMR)",
+                "value": "World Music Radio WMR",
                 "synonyms": [
-                  "World Music (WMR)"
+                  "World Music WMR"
                 ]
               }
             },
@@ -706,9 +706,9 @@
             {
               "id": "christmas-fm-rewind-ie",
               "name": {
-                "value": "Rewind (Christmas FM)",
+                "value": "Rewind Christmas FM",
                 "synonyms": [
-                  "Rewind (Christmas )"
+                  "Rewind Christmas"
                 ]
               }
             },
@@ -724,7 +724,7 @@
             {
               "id": "100-greatest-heavy-metal-ca",
               "name": {
-                "value": "# 100 GREATEST HEAVY METAL",
+                "value": "100 GREATEST HEAVY METAL",
                 "synonyms": []
               }
             },

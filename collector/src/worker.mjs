@@ -7,6 +7,7 @@
 
 import "./env.mjs"; // .env.local'i (varsa) supabase.mjs'den ÖNCE yükle
 import { probeIcy } from "./icy.mjs";
+import { probeHls, hlsBaslikli } from "./hls.mjs";
 import { parseTitle, normalizeTitle } from "./parse.mjs";
 import {
   loadActiveStations,
@@ -185,7 +186,10 @@ async function probeAndStore(station) {
   let res;
   try {
     // meta_url: dinleyici HLS/https'e bağlanırken başlık eski ICY kaynağından okunur (aktarma yok, yalnız başlık).
-    res = await probeIcy(station.meta_url || station.stream_url, { timeout: PROBE_TIMEOUT_MS });
+    const kaynak = station.meta_url || station.stream_url;
+    res = hlsBaslikli(kaynak)
+      ? await probeHls(kaynak, { timeout: PROBE_TIMEOUT_MS })
+      : await probeIcy(kaynak, { timeout: PROBE_TIMEOUT_MS });
   } catch (err) {
     res = { status: "dead", reason: err?.message || "hata" };
   }

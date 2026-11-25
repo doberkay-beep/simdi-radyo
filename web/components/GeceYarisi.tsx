@@ -5,6 +5,8 @@ import { useEffect, useMemo, useState } from "react";
 import type { GyVeri, GyGrup, GySatir } from "@/lib/gece-yarisi";
 import { ULKELER, bayrakEmoji, type UlkeKodu } from "@/lib/ulkeler";
 import { yilaEk } from "@/lib/yil-ek";
+import YilinKareleri from "./YilinKareleri";
+import type { Kare } from "@/lib/yilin-kareleri";
 
 type Dil = "tr" | "en";
 
@@ -105,18 +107,32 @@ function sure(ms: number, dil: Dil) {
 }
 
 export default function GeceYarisi({
-  ilk, dil, sorgu, deneme,
-}: { ilk: GyVeri; dil: Dil; sorgu: string; deneme: boolean }) {
+  ilk, dil, sorgu, deneme, kareler,
+}: { ilk: GyVeri; dil: Dil; sorgu: string; deneme: boolean; kareler?: Kare[] }) {
   const m = METIN[dil];
   const [veri, setVeri] = useState(ilk);
   // Sunucu saati kaydırılmışsa (yerel sınama) istemci saati de aynı farkla ilerler.
   const [fark] = useState(() => Date.parse(ilk.simdi) - Date.now());
   const [simdi, setSimdi] = useState(() => Date.parse(ilk.simdi));
 
+  // Yerel geliştirmede ?hiz=60 saati 60 kat hızlandırır (Yılın on iki karesi önizlemesi için).
+  const [hiz, setHiz] = useState(1);
+  const [yerelGeceYarisi, setYerelGeceYarisi] = useState<number | null>(null);
+  const [karelerKapali, setKarelerKapali] = useState(false);
   useEffect(() => {
-    const t = setInterval(() => setSimdi(Date.now() + fark), 1000);
+    if (process.env.NODE_ENV !== "production") {
+      const h = Number(new URLSearchParams(location.search).get("hiz"));
+      if (h > 1 && h <= 600) setHiz(h);
+    }
+    // İzleyicinin kendi saatiyle gece yarısı (tarayıcının saat dilimi).
+    const [y, a, g] = ilk.tarih.split("-").map(Number);
+    setYerelGeceYarisi(new Date(y, a - 1, g).getTime());
+  }, [ilk.tarih]);
+  useEffect(() => {
+    const bas = Date.now(), sunucu = bas + fark;
+    const t = setInterval(() => setSimdi(hiz === 1 ? Date.now() + fark : sunucu + (Date.now() - bas) * hiz), hiz === 1 ? 1000 : 250);
     return () => clearInterval(t);
-  }, [fark]);
+  }, [fark, hiz]);
 
   // Gece boyunca: gece yarısı geçmiş ama henüz hazır olmayan grup varsa dakikada bir yeniden sor.
   const bekleyen = veri.gruplar.some((g) => g.durum !== "hazir" && Date.parse(g.an) <= simdi);
@@ -163,6 +179,10 @@ export default function GeceYarisi({
         </h1>
         {deneme && <p className="gy-alt">{m.denemeBaslik(tarihAdi)}</p>}
         <p className="gy-giris">{m.giris(toplam.katalog)}</p>
+
+        {kareler && kareler.length === 12 && yerelGeceYarisi && !karelerKapali && (
+          <YilinKareleri kareler={kareler} dil={dil} simdi={simdi} geceYarisi={yerelGeceYarisi} yil={yil} onKapat={() => setKarelerKapali(true)} />
+        )}
 
         <section className="gy-durum" aria-live="polite">
           {evre === "once" && gruplar[0] && (

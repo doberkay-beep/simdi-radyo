@@ -9,7 +9,11 @@ export const dynamic = "force-dynamic";
 export async function GET(req: Request) {
   try {
     const uygulama = new URL(req.url).searchParams.get("uygulama") === "1";
-    const stations = await aktifIstasyonlar({ uygulama });
+    // ?s=slug1,slug2 — yalnız bu radyolar (gece yarısı "Yılın on iki karesi" hapı gibi küçük istemciler için).
+    const secili = new URL(req.url).searchParams.get("s");
+    const kume = secili ? new Set(secili.split(",").slice(0, 20)) : null;
+    const tum = await aktifIstasyonlar({ uygulama });
+    const stations = kume ? tum.filter((s) => kume.has(s.slug)) : tum;
     return json(
       { stations },
       { headers: { "Cache-Control": "public, s-maxage=3, stale-while-revalidate=5" } },

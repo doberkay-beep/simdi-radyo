@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import GeceYarisi from "@/components/GeceYarisi";
 import { geceYarisi, istekCoz } from "@/lib/gece-yarisi";
+import { yilinKareleri } from "@/lib/yilin-kareleri";
 import "../../gece-yarisi.css";
 
 // English twin of /gece-yarisi.
@@ -22,7 +23,7 @@ export async function generateMetadata({ searchParams }: { searchParams: Promise
 export default async function Page({ searchParams }: { searchParams: Promise<Q> }) {
   const q = await searchParams;
   const { tarih, simdi, deneme } = istekCoz(q);
-  const veri = await geceYarisi(tarih, simdi);
+  const [veri, { kareler }] = await Promise.all([geceYarisi(tarih, simdi), yilinKareleri()]);
   const sorgu = new URLSearchParams(Object.entries({ tarih: q.tarih, yil: q.yil }).filter(([, v]) => v) as [string, string][]).toString();
-  return <GeceYarisi ilk={veri} dil="en" sorgu={sorgu} deneme={deneme} />;
+  return <GeceYarisi ilk={veri} dil="en" sorgu={sorgu} deneme={deneme} kareler={kareler} />;
 }

@@ -67,7 +67,7 @@ export default function RootLayout({ children }: { children: ReactNode }) {
             kalınca İngilizce metinde CSS uppercase "i"yi "İ" yapıyordu (PLAYİNG). */}
         <script
           dangerouslySetInnerHTML={{
-            __html: `try{var t=localStorage.getItem('tema');if(t==='light')document.documentElement.dataset.theme='light'}catch(e){}try{var d=localStorage.getItem('dil');if(d!=='en'&&d!=='tr')d=(navigator.language||'tr').toLowerCase().indexOf('tr')===0?'tr':'en';document.documentElement.lang=d}catch(e){}`,
+            __html: `try{var t=localStorage.getItem('tema');if(t==='light')document.documentElement.dataset.theme='light'}catch(e){}try{var d=localStorage.getItem('dil');if(!d)d=(navigator.language||'tr').toLowerCase().indexOf('tr')===0?'tr':(navigator.language||'en');document.documentElement.lang=d}catch(e){}`,
           }}
         />
       </head>

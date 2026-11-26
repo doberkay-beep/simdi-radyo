@@ -3,6 +3,54 @@
 
 export type Dil = "tr" | "en";
 
+// Yerel dil: SOZLUK'taki metinler bu dillerde de gösterilir (lib/diller/<kod>.json).
+// Satır içi `dil === "en" ? … : …` ayrımları taban dile (tr/en) göre kalır: Türkçe olmayan herkes
+// o metinleri İngilizce görür, SOZLUK'tan gelenleri kendi dilinde. Eksik anahtar İngilizceye düşer.
+export const YEREL_DILLER = [
+  "ar", "az", "bg", "bn", "ca", "cs", "da", "de", "el", "es", "fa", "fi", "fr", "gu", "he", "hi", "hr", "hu",
+  "id", "it", "ja", "kk", "kn", "ko", "lt", "ml", "mr", "ms", "nb", "nl", "or", "pa", "pl", "pt-BR", "pt-PT",
+  "ro", "ru", "sk", "sl", "sv", "ta", "te", "th", "uk", "ur", "vi", "zh-Hans", "zh-Hant",
+] as const;
+
+export function tabanDil(yerel: string): Dil {
+  return yerel === "tr" ? "tr" : "en";
+}
+
+/** Tarayıcı dil etiketlerinden (ör. "pt-PT", "zh-TW", "de-AT") desteklenen ilk yerel kod; yoksa "en". */
+export function yerelSec(etiketler: readonly string[]): string {
+  for (const ham of etiketler) {
+    const e = ham.trim().split(";")[0].replace("_", "-").toLowerCase();
+    if (!e) continue;
+    const [ana, bolge = ""] = e.split("-");
+    if (ana === "tr") return "tr";
+    if (ana === "en") return "en";
+    if (ana === "zh") return ["tw", "hk", "mo", "hant"].includes(bolge) ? "zh-Hant" : "zh-Hans";
+    if (ana === "pt") return bolge === "" || bolge === "br" ? "pt-BR" : "pt-PT";
+    if (ana === "no" || ana === "nn" || ana === "nb") return "nb";
+    if (ana === "iw") return "he";
+    if (ana === "in") return "id";
+    if ((YEREL_DILLER as readonly string[]).includes(ana)) return ana;
+  }
+  return "en";
+}
+
+export function yerelGecerli(v: string | null | undefined): v is string {
+  return !!v && (v === "tr" || v === "en" || (YEREL_DILLER as readonly string[]).includes(v));
+}
+
+const EK: Record<string, Record<string, string>> = {};
+
+/** Yerel sözlüğü bir kez yükler (her dil ayrı parça; yalnız gereken iner). */
+export async function sozlukYukle(yerel: string): Promise<void> {
+  if (yerel === "tr" || yerel === "en" || EK[yerel] || !yerelGecerli(yerel)) return;
+  try {
+    const m = await import(`./diller/${yerel}.json`);
+    EK[yerel] = (m.default ?? m) as Record<string, string>;
+  } catch {
+    // sözlük inmezse İngilizce kalır
+  }
+}
+
 export const SOZLUK: Record<string, { tr: string; en: string }> = {
   // gezinme
   "nav.kesif": { tr: "keşif", en: "discover" },
@@ -189,10 +237,12 @@ export const SOZLUK: Record<string, { tr: string; en: string }> = {
   "player.kalpGonder": { tr: "kalp gönder", en: "send a heart" },
 };
 
-export function ceviri(dil: Dil, anahtar: string): string {
+export function ceviri(dil: string, anahtar: string): string {
   const e = SOZLUK[anahtar];
   if (!e) return anahtar;
-  return dil === "en" ? e.en : e.tr;
+  if (dil === "tr") return e.tr;
+  if (dil === "en") return e.en;
+  return EK[dil]?.[anahtar] ?? e.en;
 }
 
 // İstasyon türü → görünen ad (dile göre). Veri Türkçe; yalnızca etiket çevrilir.
